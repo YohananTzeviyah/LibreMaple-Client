@@ -41,6 +41,7 @@
 
 ## CMake stuff ##
 build/
+build-*/
 cmake-build-debug/
 
 ## Includes ##

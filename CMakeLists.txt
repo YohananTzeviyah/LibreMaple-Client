@@ -1,9 +1,30 @@
 ## CMake file for the JourneyClient from-scratch Maplestory client ##
-cmake_minimum_required (VERSION 3.8)
-project (JourneyClient)
+cmake_minimum_required(VERSION 3.10)
+project(JourneyClient)
+
+# Set default build type as "Debug" if not specified
+if(NOT CMAKE_BUILD_TYPE)
+    SET(CMAKE_BUILD_TYPE Debug)
+endif()
 
 # Set compiler flags
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -O -g -DASIO_STANDALONE -DGLEW_NO_GLU -lglut -lGL -ldl -lXinerama -lXext -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -pthread -ftrapv -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare")
+SET(REQUIRED_FLAGS "-std=c++17 -pipe -DASIO_STANDALONE -DGLEW_NO_GLU -lglut -lGL -ldl -lXinerama -lXext -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -pthread -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare")
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    SET(CMAKE_CXX_FLAGS "-O -g -ftrapv ${REQUIRED_FLAGS}")
+elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+    SET(CMAKE_CXX_FLAGS "-O3 -flto=full -DNDEBUG ${REQUIRED_FLAGS}")
+elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
+    SET(CMAKE_CXX_FLAGS "-Os -DNDEBUG ${REQUIRED_FLAGS}")
+elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    SET(CMAKE_CXX_FLAGS "-O3 -flto=full -g ${REQUIRED_FLAGS}")
+else()
+    SET(CMAKE_CXX_FLAGS "-O -g -ftrapv ${REQUIRED_FLAGS}")
+endif()
+
+if(NATIVE_BUILD)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+endif()
 
 # Globbing together each src folder's top-level *.cpp files to each form
 # their own libraries
