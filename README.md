@@ -32,7 +32,7 @@ The client is currently compatible with GMS version 83 servers. For the UI file
 
 ## How to compile/install
 
-### [Unix-like systems](https://en.wikipedia.org/wiki/Unix-like) (GNU+Linux, FreeBSD, etc.) (may also work for [Unix-like](https://en.wikipedia.org/wiki/Unix-like) Windows subsystems like [Cygwin](https://en.wikipedia.org/wiki/Cygwin), [MinGW](https://en.wikipedia.org/wiki/MinGW), or [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux))
+### [Unix-like systems](https://en.wikipedia.org/wiki/Unix-like) (GNU+Linux, FreeBSD, etc.) (may also work for Unix-like Windows subsystems like [Cygwin](https://en.wikipedia.org/wiki/Cygwin), [MinGW](https://en.wikipedia.org/wiki/MinGW), or [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux))
 
 #### Dependencies
 
@@ -75,7 +75,7 @@ $ git clone https://github.com/NoLifeDev/NoLifeNx.git nlnx
 # The next command is probably best replaced by navigating to
 # https://sourceforge.net/projects/asio/files/latest/download
 # and downloading from there to get the latest stable version of ASIO.
-$ wget https://downloads.sourceforge.net/project/asio/asio/1.10.8%20%28Stable%29/asio-1.10.8.tar.bz2
+$ wget https://downloads.sourceforge.net/project/asio/asio/1.12.1%20%28Stable%29/asio-1.12.1.tar.bz2
 $ mkdir asio
 $ tar xf asio-* --strip-components=1 -C asio/
 $ rm asio-*
@@ -195,8 +195,7 @@ LibreMaple uses crypto (`JOURNEY_USE_CRYPTO`), and also uses ASIO
     [LZ4](https://github.com/lz4/lz4))
 * Graphics:
     [GLFW3](http://www.glfw.org/download.html),
-    [GLEW](http://glew.sourceforge.net/),
-    [FreeType](http://www.freetype.org/)
+    [GLEW](http://glew.sourceforge.net/), [FreeType](http://www.freetype.org/)
 * Audio:
     [Bass](http://www.un4seen.com/)
 * Utility:
