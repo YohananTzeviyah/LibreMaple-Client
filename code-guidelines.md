@@ -256,10 +256,11 @@
     #define MY_MACRO "don't use macros, ya silly goose."
     ```
 
-* Use initializer lists, and use them like array literals:
+* Use brace initialization and initializer lists, and use them like array
+  literals:
 
     ```cpp
-    const std::tuple<uint64_t, std::string, bool> = {137, "1/137", true};
+    const std::tuple<uint64_t, std::string, bool> my_tuple{137, "1/137", true};
     ```
 
 ## Method
