@@ -495,7 +495,7 @@
   unless you are a super wizard whom'st knows **exactly** what they are doing.
 * If you find that for some reason you need some kind of class
   hierarchy/subtyping, **keep hierarchies as shallow as you possibly can**, and
-  **use pure virtual/abstract classes as interfaces rather than extending
+  **use pure virtual/abstract classes as interfaces rather than extending**
   **other, less general kinds of classes**. Use pure virt class/interfaces as
   if they are typeclasses/traits.
 * If you do find yourself writing a pure virt/abstract class, include a
