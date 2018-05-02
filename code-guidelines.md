@@ -260,7 +260,7 @@
   literals:
 
     ```cpp
-    const std::tuple<uint64_t, std::string, bool> my_tuple{137, "1/137", true};
+    const std::tuple<uint64_t, std::string, bool> my_tuple{137, "1/137"s, true};
     ```
 
 ## Method
@@ -485,7 +485,7 @@
 
     ```cpp
     const int32_t x = 15;
-    const int64_t y = {x};
+    const int64_t y{x};
     ```
 
 * To convert from one numeric type to another that *does* possibly lose
