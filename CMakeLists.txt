@@ -26,6 +26,8 @@ if(NATIVE_BUILD)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
 endif()
 
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Globbing together each src folder's top-level *.cpp files to each form
 # their own libraries
 FILE(GLOB Root_CPP       "./*.cpp")
