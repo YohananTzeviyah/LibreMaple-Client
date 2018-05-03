@@ -50,8 +50,8 @@ bool Session::init(const char* host, const char* port)
 
 Error Session::init()
 {
-    std::string HOST = Setting<ServerIP>::get().load();
-    std::string PORT = "8484";
+    const std::string HOST = Setting<ServerIP>::get().load();
+    const std::string PORT = "8484";
 
     if (!init(HOST.c_str(), PORT.c_str())) {
         return Error::CONNECTION;
@@ -108,7 +108,7 @@ void Session::process(const int8_t* bytes, size_t available)
         length = 0;
 
         // Check if there is more available.
-        size_t remaining = available - towrite;
+        const size_t remaining = available - towrite;
 
         if (remaining >= MIN_PACKET_LENGTH) {
             // More packets are available, so we start over.

@@ -20,6 +20,7 @@
 #include "PacketError.h"
 
 #include <cstdint>
+#include <optional>
 
 namespace jrc
 {
@@ -44,7 +45,7 @@ public:
     int8_t read_byte();
     /// Read a short.
     int16_t read_short();
-    /// Read a int.
+    /// Read an int.
     int32_t read_int();
     /// Read a long.
     int64_t read_long();
@@ -74,7 +75,7 @@ private:
     /// Read a number and advance the buffer position.
     T read()
     {
-        size_t count = sizeof(T) / sizeof(int8_t);
+        constexpr size_t count = sizeof(T) / sizeof(int8_t);
         T all = 0;
         for (size_t i = 0; i < count; ++i) {
             T val = static_cast<uint8_t>(bytes[pos]);
@@ -82,6 +83,7 @@ private:
 
             skip(1);
         }
+
         return all;
     }
 

@@ -53,9 +53,9 @@ void AttackHandler::handle(InPacket& recv) const
 
     attack.bullet = recv.read_int();
 
-    attack.mobcount = (count >> 4) & 0xF;
-    attack.hitcount = count & 0xF;
-    for (uint8_t i = 0; i < attack.mobcount; i++) {
+    attack.mobcount = (count >> 4) & 0x0F;
+    attack.hitcount = count & 0x0F;
+    for (uint8_t i = 0; i < attack.mobcount; ++i) {
         int32_t oid = recv.read_int();
 
         recv.skip(1);
@@ -63,7 +63,7 @@ void AttackHandler::handle(InPacket& recv) const
         uint8_t length = (attack.skill == SkillId::MESO_EXPLOSION)
                              ? recv.read_byte()
                              : attack.hitcount;
-        for (uint8_t j = 0; j < length; j++) {
+        for (uint8_t j = 0; j < length; ++j) {
             int32_t damage = recv.read_int();
             bool critical = false; // todo
             auto singledamage = std::make_pair(damage, critical);

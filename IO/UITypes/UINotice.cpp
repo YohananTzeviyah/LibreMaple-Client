@@ -179,17 +179,20 @@ Button::State UIEnterNumber::button_pressed(uint16_t buttonid)
     return Button::PRESSED;
 }
 
-void UIEnterNumber::handlestring(std::string numstr)
+void UIEnterNumber::handlestring(const std::string& numstr)
 {
     if (numstr.size() > 0) {
-        int32_t num;
-        try {
-            num = std::stoi(numstr);
-            if (num >= min && num <= max) {
-                numhandler(num);
-                active = false;
+        const auto num = [&]() -> int32_t {
+            try {
+                return std::stoi(numstr);
+            } catch (const std::exception&) {
             }
-        } catch (const std::exception&) {
+            return INT32_MIN;
+        }();
+
+        if (num >= min && num <= max) {
+            numhandler(num);
+            active = false;
         }
     }
 

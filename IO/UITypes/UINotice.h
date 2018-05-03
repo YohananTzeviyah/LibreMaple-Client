@@ -84,7 +84,7 @@ protected:
     Button::State button_pressed(uint16_t buttonid) override;
 
 private:
-    void handlestring(std::string numstr);
+    void handlestring(const std::string& numstr);
 
     enum Buttons : int16_t { OK, CANCEL };
 
