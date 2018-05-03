@@ -43,7 +43,7 @@ UINotice::UINotice(std::string q)
         Point<int16_t>(400 - dimension.x() / 2, 240 - dimension.y() / 2);
 }
 
-void UINotice::draw(bool textfield) const
+void UINotice::draw_notice(bool textfield) const
 {
     Point<int16_t> start = position;
 
@@ -63,6 +63,7 @@ void UINotice::draw(bool textfield) const
         box2.draw(start);
         start.shift_y(box2.height());
     }
+
     box.draw(start);
     start.shift_y(box.height());
     bottombox.draw(start);

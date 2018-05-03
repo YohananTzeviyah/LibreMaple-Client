@@ -230,6 +230,8 @@ void UIItemInventory::doubleclick(Point<int16_t> cursorpos)
                     UseItemPacket(slot, item_id).dispatch();
                 }
                 break;
+            default:
+                break;
             }
         }
     }
@@ -479,17 +481,20 @@ void UIItemInventory::ItemIcon::drop_on_equips(Equipslot::Id eqslot) const
     case InventoryType::USE:
         ScrollEquipPacket(source, eqslot).dispatch();
         break;
+    default:
+        break;
     }
 }
 
-void UIItemInventory::ItemIcon::drop_on_items(InventoryType::Id tab,
+void UIItemInventory::ItemIcon::drop_on_items(InventoryType::Id tab_id,
                                               Equipslot::Id,
                                               int16_t slot,
                                               bool) const
 {
-    if (tab != sourcetab || slot == source)
+    if (tab_id != sourcetab || slot == source) {
         return;
+    }
 
-    MoveItemPacket(tab, source, slot, 1).dispatch();
+    MoveItemPacket(tab_id, source, slot, 1).dispatch();
 }
 } // namespace jrc

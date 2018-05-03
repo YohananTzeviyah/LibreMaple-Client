@@ -170,7 +170,7 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst, Point<int16_t> pos)
                 }
             }
 
-            if (fronttype != tooltipparent) {
+            if (Tooltip::same_ui_type(tooltipparent, fronttype)) {
                 clear_tooltip(tooltipparent);
             }
 
@@ -271,7 +271,7 @@ void UIStateGame::remove(UIElement::Type type)
         focused = UIElement::NONE;
     }
 
-    if (type == tooltipparent) {
+    if (Tooltip::same_ui_type(tooltipparent, type)) {
         clear_tooltip(tooltipparent);
     }
 

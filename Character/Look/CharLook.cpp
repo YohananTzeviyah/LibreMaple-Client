@@ -227,6 +227,8 @@ void CharLook::draw(const DrawArgument& args,
             equips.draw(
                 Equipslot::CAP, interstance, Clothing::CAP, interframe, args);
             break;
+        default:
+            break;
         }
 
         equips.draw(Equipslot::WEAPON,

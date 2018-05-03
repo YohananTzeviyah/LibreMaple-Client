@@ -17,6 +17,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
 #include "../../Template/Point.h"
+#include "../UIElement.h"
 
 #include <cstdint>
 
@@ -29,6 +30,24 @@ class Tooltip
 public:
     /// Possible parent UIs for Tooltips.
     enum Parent { NONE, EQUIPINVENTORY, ITEMINVENTORY, SKILLBOOK, SHOP };
+
+    static constexpr bool same_ui_type(Parent p, UIElement::Type t) noexcept
+    {
+        switch (p) {
+        case NONE:
+            return t == UIElement::Type::NONE;
+        case EQUIPINVENTORY:
+            return t == UIElement::Type::EQUIPINVENTORY;
+        case ITEMINVENTORY:
+            return t == UIElement::Type::ITEMINVENTORY;
+        case SKILLBOOK:
+            return t == UIElement::Type::SKILLBOOK;
+        case SHOP:
+            return t == UIElement::Type::SHOP;
+        }
+
+        return false;
+    }
 
     virtual ~Tooltip() = default;
 

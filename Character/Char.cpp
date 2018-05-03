@@ -195,6 +195,8 @@ void Char::change_look(Maplestat::Id stat, int32_t id)
     case Maplestat::HAIR:
         look.set_hair(id);
         break;
+    default:
+        break;
     }
 }
 

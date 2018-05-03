@@ -22,10 +22,13 @@
 #include "nlnx/node.hpp"
 #include "nlnx/nx.hpp"
 
+#include <string>
 #include <unordered_set>
 
 namespace jrc
 {
+using namespace std::string_literals;
+
 Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
 {
     const EquipData& equipdata = EquipData::get(itemid);
@@ -135,7 +138,7 @@ Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
                     }
                 }
 
-                nl::node mapnode = partnode["map"];
+                // nl::node mapnode = partnode["map"];
                 Point<int16_t> shift;
                 switch (eqslot) {
                 case Equipslot::FACEACC:
@@ -234,24 +237,24 @@ const std::string& Clothing::get_vslot() const
 const std::unordered_map<std::string, Clothing::Layer>
     Clothing::sublayernames = {
         // WEAPON
-        {"weaponOverHand", Layer::WEAPON_OVER_HAND},
-        {"weaponOverGlove", Layer::WEAPON_OVER_GLOVE},
-        {"weaponOverBody", Layer::WEAPON_OVER_BODY},
-        {"weaponBelowArm", Layer::WEAPON_BELOW_ARM},
-        {"weaponBelowBody", Layer::WEAPON_BELOW_BODY},
-        {"backWeaponOverShield", Layer::BACKWEAPON},
+        {"weaponOverHand"s, Layer::WEAPON_OVER_HAND},
+        {"weaponOverGlove"s, Layer::WEAPON_OVER_GLOVE},
+        {"weaponOverBody"s, Layer::WEAPON_OVER_BODY},
+        {"weaponBelowArm"s, Layer::WEAPON_BELOW_ARM},
+        {"weaponBelowBody"s, Layer::WEAPON_BELOW_BODY},
+        {"backWeaponOverShield"s, Layer::BACKWEAPON},
         // SHIELD
-        {"shieldOverHair", Layer::SHIELD_OVER_HAIR},
-        {"shieldBelowBody", Layer::SHIELD_BELOW_BODY},
-        {"backShield", Layer::BACKSHIELD},
+        {"shieldOverHair"s, Layer::SHIELD_OVER_HAIR},
+        {"shieldBelowBody"s, Layer::SHIELD_BELOW_BODY},
+        {"backShield"s, Layer::BACKSHIELD},
         // GLOVE
-        {"gloveWrist", Layer::WRIST},
-        {"gloveOverHair", Layer::GLOVE_OVER_HAIR},
-        {"gloveOverBody", Layer::GLOVE_OVER_BODY},
-        {"gloveWristOverHair", Layer::WRIST_OVER_HAIR},
-        {"gloveWristOverBody", Layer::WRIST_OVER_BODY},
+        {"gloveWrist"s, Layer::WRIST},
+        {"gloveOverHair"s, Layer::GLOVE_OVER_HAIR},
+        {"gloveOverBody"s, Layer::GLOVE_OVER_BODY},
+        {"gloveWristOverHair"s, Layer::WRIST_OVER_HAIR},
+        {"gloveWristOverBody"s, Layer::WRIST_OVER_BODY},
         // CAP
-        {"capOverHair", Layer::CAP_OVER_HAIR},
-        {"capBelowBody", Layer::CAP_BELOW_BODY},
+        {"capOverHair"s, Layer::CAP_OVER_HAIR},
+        {"capBelowBody"s, Layer::CAP_BELOW_BODY},
 };
 } // namespace jrc

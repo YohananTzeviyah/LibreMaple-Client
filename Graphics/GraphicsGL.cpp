@@ -679,6 +679,8 @@ void GraphicsGL::drawtext(const DrawArgument& args,
                                0.0f);
         }
         break;
+    default:
+        break;
     }
 
     constexpr GLfloat colors[Text::NUM_COLORS][3] = {

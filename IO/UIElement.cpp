@@ -112,6 +112,8 @@ bool UIElement::remove_cursor(bool, Point<int16_t>)
         case Button::MOUSEOVER:
             button->set_state(Button::NORMAL);
             break;
+        default:
+            break;
         }
     }
     return false;

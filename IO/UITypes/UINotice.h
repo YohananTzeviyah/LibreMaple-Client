@@ -34,7 +34,7 @@ public:
 protected:
     UINotice(std::string question);
 
-    void draw(bool textfield) const;
+    void draw_notice(bool textfield) const;
 
     int16_t box2offset() const;
 

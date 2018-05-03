@@ -524,9 +524,9 @@ void UIShop::SellState::reset()
     tab = InventoryType::NONE;
 }
 
-void UIShop::SellState::change_tab(const Inventory& inventory,
+void UIShop::SellState::change_tab(const Inventory& inv,
                                    InventoryType::Id newtab,
-                                   Texture meso)
+                                   Texture meso_texture)
 {
     tab = newtab;
 
@@ -535,12 +535,12 @@ void UIShop::SellState::change_tab(const Inventory& inventory,
 
     items.clear();
 
-    int16_t slots = inventory.get_slotmax(tab);
+    int16_t slots = inv.get_slotmax(tab);
     for (int16_t i = 1; i <= slots; ++i) {
-        if (int32_t item_id = inventory.get_item_id(tab, i)) {
-            int16_t count = inventory.get_item_count(tab, i);
+        if (int32_t item_id = inv.get_item_id(tab, i)) {
+            int16_t count = inv.get_item_count(tab, i);
             items.emplace_back(
-                item_id, count, i, tab != InventoryType::EQUIP, meso);
+                item_id, count, i, tab != InventoryType::EQUIP, meso_texture);
         }
     }
 

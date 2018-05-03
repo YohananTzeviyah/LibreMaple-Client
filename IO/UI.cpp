@@ -104,6 +104,8 @@ void UI::send_cursor(bool pressed)
         case Cursor::IDLE:
             focusedtextfield = {};
             break;
+        default:
+            break;
         }
     }
 }
@@ -132,6 +134,8 @@ void UI::send_key(int32_t keycode, bool pressed)
                     break;
                 case KeyAction::PASTE:
                     focusedtextfield->add_string(Window::get().getclipboard());
+                    break;
+                default:
                     break;
                 }
             }

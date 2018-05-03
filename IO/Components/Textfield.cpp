@@ -148,13 +148,15 @@ void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed)
     case KeyType::LETTER:
     case KeyType::NUMBER:
         if (!pressed) {
-            auto c = static_cast<int8_t>(key);
+            auto c = static_cast<char>(key);
             if (belowlimit()) {
                 text.insert(markerpos, 1, c);
                 markerpos++;
                 modifytext(text);
             }
         }
+        break;
+    default:
         break;
     }
 }
