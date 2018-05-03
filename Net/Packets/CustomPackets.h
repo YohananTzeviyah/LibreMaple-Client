@@ -19,28 +19,25 @@
 #include "../OutPacket.h"
 
 #ifdef JOURNEY_USE_XXHASH
-#include "../../Util/HashUtility.h"
-#include "../../Util/NxFiles.h"
+#    include "../../Util/HashUtility.h"
+#    include "../../Util/NxFiles.h"
 #endif
 
 namespace jrc
 {
 #ifdef JOURNEY_USE_XXHASH
-    // Packet which sends the hash values of all game files to the server.
-    // Opcode: HASH_CHECK(30000)
-    class NxCheckPacket : public OutPacket
+// Packet which sends the hash values of all game files to the server.
+// Opcode: HASH_CHECK(30000)
+class NxCheckPacket : public OutPacket
+{
+public:
+    NxCheckPacket(uint64_t seed) : OutPacket(HASH_CHECK)
     {
-    public:
-        NxCheckPacket(uint64_t seed) : OutPacket(HASH_CHECK)
-        {
-            write_byte(NxFiles::NUM_FILES);
-            for (auto filename : NxFiles::filenames)
-            {
-                write_string(
-                    HashUtility::get_filehash(filename, seed)
-                );
-            }
+        write_byte(NxFiles::NUM_FILES);
+        for (auto filename : NxFiles::filenames) {
+            write_string(HashUtility::get_filehash(filename, seed));
         }
-    };
+    }
+};
 #endif
-}
+} // namespace jrc

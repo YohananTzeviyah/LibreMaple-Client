@@ -16,110 +16,108 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../OutPacket.h"
-
 #include "../../Character/Inventory/Inventory.h"
+#include "../OutPacket.h"
 
 namespace jrc
 {
-    // Packet which requests that the inventory is sorted.
-    // Opcode: GATHER_ITEMS(69)
-    class GatherItemsPacket : public OutPacket
+// Packet which requests that the inventory is sorted.
+// Opcode: GATHER_ITEMS(69)
+class GatherItemsPacket : public OutPacket
+{
+public:
+    GatherItemsPacket(InventoryType::Id type) : OutPacket(GATHER_ITEMS)
     {
-    public:
-        GatherItemsPacket(InventoryType::Id type) : OutPacket(GATHER_ITEMS)
-        {
-            write_time();
-            write_byte(type);
-        }
-    };
+        write_time();
+        write_byte(type);
+    }
+};
 
-
-    // Packet which requests that the inventory is sorted.
-    // Opcode: SORT_ITEMS(70)
-    class SortItemsPacket : public OutPacket
+// Packet which requests that the inventory is sorted.
+// Opcode: SORT_ITEMS(70)
+class SortItemsPacket : public OutPacket
+{
+public:
+    SortItemsPacket(InventoryType::Id type) : OutPacket(SORT_ITEMS)
     {
-    public:
-        SortItemsPacket(InventoryType::Id type) : OutPacket(SORT_ITEMS)
-        {
-            write_time();
-            write_byte(type);
-        }
-    };
+        write_time();
+        write_byte(type);
+    }
+};
 
-
-    // Packet which requests that an item is moved.
-    // Opcode: MOVE_ITEM(71)
-    class MoveItemPacket : public OutPacket
+// Packet which requests that an item is moved.
+// Opcode: MOVE_ITEM(71)
+class MoveItemPacket : public OutPacket
+{
+public:
+    MoveItemPacket(InventoryType::Id type,
+                   int16_t slot,
+                   int16_t action,
+                   int16_t qty)
+        : OutPacket(MOVE_ITEM)
     {
-    public:
-        MoveItemPacket(InventoryType::Id type, int16_t slot,
-            int16_t action, int16_t qty) : OutPacket(MOVE_ITEM) {
+        write_time();
+        write_byte(type);
+        write_short(slot);
+        write_short(action);
+        write_short(qty);
+    }
+};
 
-            write_time();
-            write_byte(type);
-            write_short(slot);
-            write_short(action);
-            write_short(qty);
-        }
-    };
-
-
-    // Packet which requests that an item is equipped.
-    // Opcode: MOVE_ITEM(71)
-    class EquipItemPacket : public MoveItemPacket
+// Packet which requests that an item is equipped.
+// Opcode: MOVE_ITEM(71)
+class EquipItemPacket : public MoveItemPacket
+{
+public:
+    EquipItemPacket(int16_t src, Equipslot::Id dest)
+        : MoveItemPacket(InventoryType::EQUIP, src, -dest, 1)
     {
-    public:
-        EquipItemPacket(int16_t src, Equipslot::Id dest)
-            : MoveItemPacket(InventoryType::EQUIP, src, -dest, 1) {}
-    };
+    }
+};
 
-
-    // Packet which requests that an item is unequipped.
-    // Opcode: MOVE_ITEM(71)
-    class UnequipItemPacket : public MoveItemPacket
+// Packet which requests that an item is unequipped.
+// Opcode: MOVE_ITEM(71)
+class UnequipItemPacket : public MoveItemPacket
+{
+public:
+    UnequipItemPacket(int16_t src, int16_t dest)
+        : MoveItemPacket(InventoryType::EQUIPPED, -src, dest, 1)
     {
-    public:
-        UnequipItemPacket(int16_t src, int16_t dest)
-            : MoveItemPacket(InventoryType::EQUIPPED, -src, dest, 1) {}
-    };
+    }
+};
 
-
-    // A packet which requests that an 'USE' item is used.
-    // Opcode: USE_ITEM(72)
-    class UseItemPacket : public OutPacket
+// A packet which requests that an 'USE' item is used.
+// Opcode: USE_ITEM(72)
+class UseItemPacket : public OutPacket
+{
+public:
+    UseItemPacket(int16_t slot, int32_t itemid) : OutPacket(USE_ITEM)
     {
-    public:
-        UseItemPacket(int16_t slot, int32_t itemid) : OutPacket(USE_ITEM)
-        {
-            write_time();
-            write_short(slot);
-            write_int(itemid);
-        }
-    };
+        write_time();
+        write_short(slot);
+        write_int(itemid);
+    }
+};
 
+// Requests using a scroll on an equip.
+// Opcode: SCROLL_EQUIP(86)
+class ScrollEquipPacket : public OutPacket
+{
+public:
+    enum Flag : uint8_t { NONE = 0x00, UNKNOWN = 0x01, WHITESCROLL = 0x02 };
 
-    // Requests using a scroll on an equip.
-    // Opcode: SCROLL_EQUIP(86)
-    class ScrollEquipPacket : public OutPacket
+    ScrollEquipPacket(int16_t source, Equipslot::Id target, uint8_t flags)
+        : OutPacket(SCROLL_EQUIP)
     {
-    public:
-        enum Flag : uint8_t
-        {
-            NONE = 0x00,
-            UNKNOWN = 0x01,
-            WHITESCROLL = 0x02
-        };
+        write_time();
+        write_short(source);
+        write_short(-target);
+        write_short(flags);
+    }
 
-        ScrollEquipPacket(int16_t source, Equipslot::Id target, uint8_t flags) : OutPacket(SCROLL_EQUIP)
-        {
-            write_time();
-            write_short(source);
-            write_short(-target);
-            write_short(flags);
-        }
-
-        ScrollEquipPacket(int16_t source, Equipslot::Id target)
-            : ScrollEquipPacket(source, target, 0) {}
-    };
-}
+    ScrollEquipPacket(int16_t source, Equipslot::Id target)
+        : ScrollEquipPacket(source, target, 0)
+    {
+    }
+};
+} // namespace jrc

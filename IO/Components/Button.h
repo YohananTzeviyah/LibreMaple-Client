@@ -16,45 +16,37 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../Cursor.h"
-
 #include "../../Template/Rectangle.h"
+#include "../Cursor.h"
 
 #include <cstdint>
 #include <functional>
 
 namespace jrc
 {
-    // Base class for different button types.
-    class Button
+// Base class for different button types.
+class Button
+{
+public:
+    enum State { NORMAL, DISABLED, MOUSEOVER, PRESSED, IDENTITY, NUM_STATES };
+
+    virtual ~Button()
     {
-    public:
-        enum State
-        {
-            NORMAL,
-            DISABLED,
-            MOUSEOVER,
-            PRESSED,
-            IDENTITY,
-            NUM_STATES
-        };
+    }
 
-        virtual ~Button() {}
+    virtual void draw(Point<int16_t> parentpos) const = 0;
+    virtual Rectangle<int16_t> bounds(Point<int16_t> parentpos) const = 0;
 
-        virtual void draw(Point<int16_t> parentpos) const = 0;
-        virtual Rectangle<int16_t> bounds(Point<int16_t> parentpos) const = 0;
+    void set_position(Point<int16_t> position);
+    void set_state(State state);
+    void set_active(bool active);
 
-        void set_position(Point<int16_t> position);
-        void set_state(State state);
-        void set_active(bool active);
+    bool is_active() const;
+    State get_state() const;
 
-        bool is_active() const;
-        State get_state() const;
-
-    protected:
-        State state;
-        Point<int16_t> position;
-        bool active;
-    };
-}
-
+protected:
+    State state;
+    Point<int16_t> position;
+    bool active;
+};
+} // namespace jrc

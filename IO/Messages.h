@@ -24,50 +24,48 @@
 
 namespace jrc
 {
-    namespace Messages
-    {
-        enum Type
-        {
-            NONE,
-            // Cannot use a skill
-            SKILL_WEAPONTYPE,
-            SKILL_HPCOST,
-            SKILL_MPCOST,
-            SKILL_NOARROWS,
-            SKILL_NOBULLETS,
-            SKILL_NOSTARS,
-            SKILL_COOLDOWN,
+namespace Messages
+{
+enum Type {
+    NONE,
+    // Cannot use a skill
+    SKILL_WEAPONTYPE,
+    SKILL_HPCOST,
+    SKILL_MPCOST,
+    SKILL_NOARROWS,
+    SKILL_NOBULLETS,
+    SKILL_NOSTARS,
+    SKILL_COOLDOWN,
 
-            // Scrolling result
-            SCROLL_SUCCESS,
-            SCROLL_FAILURE,
-            SCROLL_DESTROYED,
-            LENGTH
-        };
+    // Scrolling result
+    SCROLL_SUCCESS,
+    SCROLL_FAILURE,
+    SCROLL_DESTROYED,
+    LENGTH
+};
 
-        extern const EnumMap<Type, const char*> messages;
-    };
+extern const EnumMap<Type, const char*> messages;
+}; // namespace Messages
 
+class InChatMessage
+{
+public:
+    InChatMessage(Messages::Type type);
 
-    class InChatMessage
-    {
-    public:
-        InChatMessage(Messages::Type type);
+    void drop() const;
 
-        void drop() const;
+private:
+    Messages::Type type;
+};
 
-    private:
-        Messages::Type type;
-    };
+class ForbidSkillMessage : public InChatMessage
+{
+public:
+    ForbidSkillMessage(SpecialMove::ForbidReason reason, Weapon::Type weapon);
 
-
-    class ForbidSkillMessage : public InChatMessage
-    {
-    public:
-        ForbidSkillMessage(SpecialMove::ForbidReason reason, Weapon::Type weapon);
-
-    private:
-        Messages::Type message_by_reason(SpecialMove::ForbidReason reason, Weapon::Type weapon);
-        Messages::Type message_by_weapon(Weapon::Type weapon);
-    };
-}
+private:
+    Messages::Type message_by_reason(SpecialMove::ForbidReason reason,
+                                     Weapon::Type weapon);
+    Messages::Type message_by_weapon(Weapon::Type weapon);
+};
+} // namespace jrc

@@ -16,45 +16,42 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "Layer.h"
-#include "Tile.h"
-#include "Obj.h"
-
 #include "../../Template/EnumMap.h"
+#include "Layer.h"
+#include "Obj.h"
+#include "Tile.h"
 
-#include <vector>
 #include <map>
+#include <vector>
 
 namespace jrc
 {
-    // A tile and obj layer.
-    class TilesObjs
-    {
-    public:
-        TilesObjs(nl::node src);
-        TilesObjs();
+// A tile and obj layer.
+class TilesObjs
+{
+public:
+    TilesObjs(nl::node src);
+    TilesObjs();
 
-        void draw(Point<int16_t> viewpos, float alpha) const;
-        void update();
+    void draw(Point<int16_t> viewpos, float alpha) const;
+    void update();
 
-    private:
-        std::multimap<uint8_t, Tile> tiles;
-        std::multimap<uint8_t, Obj> objs;
-    };
+private:
+    std::multimap<uint8_t, Tile> tiles;
+    std::multimap<uint8_t, Obj> objs;
+};
 
+// The collection of tile and obj layers on a map.
+class MapTilesObjs
+{
+public:
+    MapTilesObjs(nl::node src);
+    MapTilesObjs();
 
-    // The collection of tile and obj layers on a map.
-    class MapTilesObjs
-    {
-    public:
-        MapTilesObjs(nl::node src);
-        MapTilesObjs();
+    void draw(Layer::Id layer, Point<int16_t> viewpos, float alpha) const;
+    void update();
 
-        void draw(Layer::Id layer, Point<int16_t> viewpos, float alpha) const;
-        void update();
-
-    private:
-        EnumMap<Layer::Id, TilesObjs> layers;
-    };
-}
-
+private:
+    EnumMap<Layer::Id, TilesObjs> layers;
+};
+} // namespace jrc

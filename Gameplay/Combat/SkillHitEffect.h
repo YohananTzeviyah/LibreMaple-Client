@@ -16,115 +16,111 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "Attack.h"
-
-#include "../MapleMap/Mob.h"
-
 #include "../../Template/BoolPair.h"
+#include "../MapleMap/Mob.h"
+#include "Attack.h"
 
 namespace jrc
 {
-    // Interface for hit effects, animations applied to a mob for each hit.
-    class SkillHitEffect
+// Interface for hit effects, animations applied to a mob for each hit.
+class SkillHitEffect
+{
+public:
+    virtual ~SkillHitEffect()
+    {
+    }
+
+    virtual void apply(const AttackUser& user, Mob& target) const = 0;
+
+protected:
+    class Effect
     {
     public:
-        virtual ~SkillHitEffect() {}
-
-        virtual void apply(const AttackUser& user, Mob& target) const = 0;
-
-    protected:
-        class Effect
+        Effect(nl::node src)
         {
-        public:
-            Effect(nl::node src)
-            {
-                animation = src;
-                pos = src["pos"];
-                z = src["z"];
-            }
+            animation = src;
+            pos = src["pos"];
+            z = src["z"];
+        }
 
-            void apply(Mob& target, bool flip) const
-            {
-                target.show_effect(animation, pos, z, flip);
-            }
-
-        private:
-            Animation animation;
-            int8_t pos;
-            int8_t z;
-        };
-    };
-
-
-    // No animation.
-    class NoHitEffect : public SkillHitEffect
-    {
-    public:
-        void apply(const AttackUser&, Mob&) const override {}
-    };
-
-
-    // A single animation.
-    class SingleHitEffect : public SkillHitEffect
-    {
-    public:
-        SingleHitEffect(nl::node src);
-
-        void apply(const AttackUser& user, Mob& target) const override;
+        void apply(Mob& target, bool flip) const
+        {
+            target.show_effect(animation, pos, z, flip);
+        }
 
     private:
-        Effect effect;
+        Animation animation;
+        int8_t pos;
+        int8_t z;
     };
+};
 
-
-    // The animation changes depending on the weapon used.
-    class TwoHHitEffect : public SkillHitEffect
+// No animation.
+class NoHitEffect : public SkillHitEffect
+{
+public:
+    void apply(const AttackUser&, Mob&) const override
     {
-    public:
-        TwoHHitEffect(nl::node src);
+    }
+};
 
-        void apply(const AttackUser& user, Mob& target) const override;
+// A single animation.
+class SingleHitEffect : public SkillHitEffect
+{
+public:
+    SingleHitEffect(nl::node src);
 
-    private:
-        BoolPair<Effect> effects;
-    };
+    void apply(const AttackUser& user, Mob& target) const override;
 
+private:
+    Effect effect;
+};
 
-    // The animation changes with the character level.
-    class ByLevelHitEffect : public SkillHitEffect
-    {
-    public:
-        ByLevelHitEffect(nl::node src);
+// The animation changes depending on the weapon used.
+class TwoHHitEffect : public SkillHitEffect
+{
+public:
+    TwoHHitEffect(nl::node src);
 
-        void apply(const AttackUser& user, Mob& target) const override;
+    void apply(const AttackUser& user, Mob& target) const override;
 
-    private:
-        std::map<uint16_t, Effect> effects;
-    };
+private:
+    BoolPair<Effect> effects;
+};
 
+// The animation changes with the character level.
+class ByLevelHitEffect : public SkillHitEffect
+{
+public:
+    ByLevelHitEffect(nl::node src);
 
-    // The animation changes with the character level and weapon used.
-    class ByLevelTwoHHitEffect : public SkillHitEffect
-    {
-    public:
-        ByLevelTwoHHitEffect(nl::node src);
+    void apply(const AttackUser& user, Mob& target) const override;
 
-        void apply(const AttackUser& user, Mob& target) const override;
+private:
+    std::map<uint16_t, Effect> effects;
+};
 
-    private:
-        std::map<uint16_t, BoolPair<Effect>> effects;
-    };
+// The animation changes with the character level and weapon used.
+class ByLevelTwoHHitEffect : public SkillHitEffect
+{
+public:
+    ByLevelTwoHHitEffect(nl::node src);
 
+    void apply(const AttackUser& user, Mob& target) const override;
 
-    // The animation changes with the skill level.
-    class BySkillLevelHitEffect : public SkillHitEffect
-    {
-    public:
-        BySkillLevelHitEffect(nl::node src);
+private:
+    std::map<uint16_t, BoolPair<Effect>> effects;
+};
 
-        void apply(const AttackUser& user, Mob& target) const override;
+// The animation changes with the skill level.
+class BySkillLevelHitEffect : public SkillHitEffect
+{
+public:
+    BySkillLevelHitEffect(nl::node src);
 
-    private:
-        std::map<int32_t, Effect> effects;
-    };
-}
+    void apply(const AttackUser& user, Mob& target) const override;
+
+private:
+    std::map<int32_t, Effect> effects;
+};
+} // namespace jrc

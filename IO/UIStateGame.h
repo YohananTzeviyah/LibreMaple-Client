@@ -16,59 +16,61 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "UIState.h"
-
+#include "../Template/EnumMap.h"
+#include "../Template/Optional.h"
 #include "Components/EquipTooltip.h"
 #include "Components/ItemTooltip.h"
 #include "Components/SkillTooltip.h"
-
-#include "../Template/EnumMap.h"
-#include "../Template/Optional.h"
+#include "UIState.h"
 
 #include <list>
 #include <memory>
 
 namespace jrc
 {
-    class UIStateGame : public UIState
-    {
-    public:
-        UIStateGame();
+class UIStateGame : public UIState
+{
+public:
+    UIStateGame();
 
-        void draw(float inter, Point<int16_t> cursor) const override;
-        void update() override;
+    void draw(float inter, Point<int16_t> cursor) const override;
+    void update() override;
 
-        void doubleclick(Point<int16_t> pos) override;
-        void send_key(KeyType::Id type, int32_t action, bool pressed) override;
-        Cursor::State send_cursor(Cursor::State mst, Point<int16_t> pos) override;
+    void doubleclick(Point<int16_t> pos) override;
+    void send_key(KeyType::Id type, int32_t action, bool pressed) override;
+    Cursor::State send_cursor(Cursor::State mst, Point<int16_t> pos) override;
 
-        void drag_icon(Icon* icon) override;
-        void clear_tooltip(Tooltip::Parent parent) override;
-        void show_equip(Tooltip::Parent parent, int16_t slot) override;
-        void show_item(Tooltip::Parent parent, int32_t itemid) override;
-        void show_skill(Tooltip::Parent parent, int32_t skill_id,
-            int32_t level, int32_t masterlevel, int64_t expiration) override;
+    void drag_icon(Icon* icon) override;
+    void clear_tooltip(Tooltip::Parent parent) override;
+    void show_equip(Tooltip::Parent parent, int16_t slot) override;
+    void show_item(Tooltip::Parent parent, int32_t itemid) override;
+    void show_skill(Tooltip::Parent parent,
+                    int32_t skill_id,
+                    int32_t level,
+                    int32_t masterlevel,
+                    int64_t expiration) override;
 
-        Iterator pre_add(UIElement::Type type, bool toggled, bool focused) override;
-        void remove(UIElement::Type type) override;
-        UIElement* get(UIElement::Type type) override;
-        UIElement* get_front(Point<int16_t> pos) override;
+    Iterator
+    pre_add(UIElement::Type type, bool toggled, bool focused) override;
+    void remove(UIElement::Type type) override;
+    UIElement* get(UIElement::Type type) override;
+    UIElement* get_front(Point<int16_t> pos) override;
 
-    private:
-        void drop_icon(const Icon& icon, Point<int16_t> pos);
-        template <class T, typename...Args>
-        void emplace(Args&&...args);
+private:
+    void drop_icon(const Icon& icon, Point<int16_t> pos);
+    template<class T, typename... Args>
+    void emplace(Args&&... args);
 
-        EnumMap<UIElement::Type, UIElement::UPtr, UIElement::NUM_TYPES> elements;
-        std::list<UIElement::Type> elementorder;
-        UIElement::Type focused;
+    EnumMap<UIElement::Type, UIElement::UPtr, UIElement::NUM_TYPES> elements;
+    std::list<UIElement::Type> elementorder;
+    UIElement::Type focused;
 
-        EquipTooltip eqtooltip;
-        ItemTooltip ittooltip;
-        SkillTooltip sktooltip;
-        Optional<Tooltip> tooltip;
-        Tooltip::Parent tooltipparent;
+    EquipTooltip eqtooltip;
+    ItemTooltip ittooltip;
+    SkillTooltip sktooltip;
+    Optional<Tooltip> tooltip;
+    Tooltip::Parent tooltipparent;
 
-        Optional<Icon> draggedicon;
-    };
-}
+    Optional<Icon> draggedicon;
+};
+} // namespace jrc

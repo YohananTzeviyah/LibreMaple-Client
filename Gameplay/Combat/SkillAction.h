@@ -16,68 +16,66 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "Attack.h"
-
 #include "../../Character/Char.h"
+#include "Attack.h"
 
 namespace jrc
 {
-    class SkillAction
+class SkillAction
+{
+public:
+    virtual ~SkillAction()
     {
-    public:
-        virtual ~SkillAction() {}
+    }
 
-        virtual void apply(Char& target, Attack::Type atype) const = 0;
-    };
+    virtual void apply(Char& target, Attack::Type atype) const = 0;
+};
 
-
-    class NoAction : public SkillAction
+class NoAction : public SkillAction
+{
+public:
+    void apply(Char&, Attack::Type) const override
     {
-    public:
-        void apply(Char&, Attack::Type) const override {}
-    };
+    }
+};
 
+class RegularAction : public SkillAction
+{
+public:
+    void apply(Char& target, Attack::Type atype) const override;
+};
 
-    class RegularAction : public SkillAction
-    {
-    public:
-        void apply(Char& target, Attack::Type atype) const override;
-    };
+class SingleAction : public SkillAction
+{
+public:
+    SingleAction(nl::node src);
 
+    void apply(Char& target, Attack::Type atype) const override;
 
-    class SingleAction : public SkillAction
-    {
-    public:
-        SingleAction(nl::node src);
+private:
+    std::string action;
+};
 
-        void apply(Char& target, Attack::Type atype) const override;
+class TwoHAction : public SkillAction
+{
+public:
+    TwoHAction(nl::node src);
 
-    private:
-        std::string action;
-    };
+    void apply(Char& target, Attack::Type atype) const override;
 
+private:
+    BoolPair<std::string> actions;
+};
 
-    class TwoHAction : public SkillAction
-    {
-    public:
-        TwoHAction(nl::node src);
+class ByLevelAction : public SkillAction
+{
+public:
+    ByLevelAction(nl::node src, int32_t skillid);
 
-        void apply(Char& target, Attack::Type atype) const override;
+    void apply(Char& target, Attack::Type atype) const override;
 
-    private:
-        BoolPair<std::string> actions;
-    };
-
-
-    class ByLevelAction : public SkillAction
-    {
-    public:
-        ByLevelAction(nl::node src, int32_t skillid);
-
-        void apply(Char& target, Attack::Type atype) const override;
-
-    private:
-        std::map<int32_t, std::string> actions;
-        int32_t skillid;
-    };
-}
+private:
+    std::map<int32_t, std::string> actions;
+    int32_t skillid;
+};
+} // namespace jrc

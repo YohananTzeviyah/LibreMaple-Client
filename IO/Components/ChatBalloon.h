@@ -16,32 +16,30 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "MapleFrame.h"
-
 #include "../../Graphics/Text.h"
+#include "MapleFrame.h"
 
 namespace jrc
 {
-    class ChatBalloon
-    {
-    public:
-        ChatBalloon(int8_t type);
-        ChatBalloon();
+class ChatBalloon
+{
+public:
+    ChatBalloon(int8_t type);
+    ChatBalloon();
 
-        void draw(Point<int16_t> position) const;
-        void update();
+    void draw(Point<int16_t> position) const;
+    void update();
 
-        void change_text(const std::string& text);
-        void expire();
+    void change_text(const std::string& text);
+    void expire();
 
-    private:
-        // How long a line stays on screen. 4 seconds.
-        static constexpr int16_t DURATION = 4000;
+private:
+    // How long a line stays on screen. 4 seconds.
+    static constexpr int16_t DURATION = 4000;
 
-        MapleFrame frame;
-        Text textlabel;
-        Texture arrow;
-        int16_t duration;
-    };
-}
-
+    MapleFrame frame;
+    Text textlabel;
+    Texture arrow;
+    int16_t duration;
+};
+} // namespace jrc

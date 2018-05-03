@@ -16,24 +16,17 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../EquipStat.h"
-
 #include "../../Template/EnumMap.h"
+#include "../EquipStat.h"
 
 namespace jrc
 {
-    namespace EquipQuality
-    {
-        enum Id
-        {
-            GREY,
-            WHITE,
-            ORANGE,
-            BLUE,
-            VIOLET,
-            GOLD
-        };
+namespace EquipQuality
+{
+enum Id { GREY, WHITE, ORANGE, BLUE, VIOLET, GOLD };
 
-        Id check_quality(int32_t item_id, bool scrolled, const EnumMap<Equipstat::Id, uint16_t>& stats);
-    }
-}
+Id check_quality(int32_t item_id,
+                 bool scrolled,
+                 const EnumMap<Equipstat::Id, uint16_t>& stats);
+} // namespace EquipQuality
+} // namespace jrc

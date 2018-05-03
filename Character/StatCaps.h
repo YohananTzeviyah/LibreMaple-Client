@@ -16,28 +16,27 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include <unordered_map>
 #include <cstdint>
+#include <unordered_map>
 
 namespace jrc
 {
-    // Externalising this for easier configurability.
-    const std::unordered_map<Equipstat::Id, int32_t> EQSTAT_CAPS =
-    {
-        { Equipstat::STR, 999 },
-        { Equipstat::DEX, 999 },
-        { Equipstat::INT, 999 },
-        { Equipstat::LUK, 999 },
-        { Equipstat::HP, 30000 },
-        { Equipstat::MP, 30000 },
-        { Equipstat::WATK, 999 },
-        { Equipstat::MAGIC, 2000 },
-        { Equipstat::WDEF, 999 },
-        { Equipstat::MDEF, 999 },
-        { Equipstat::ACC, 999 },
-        { Equipstat::AVOID, 999 },
-        { Equipstat::HANDS, 999 },
-        { Equipstat::SPEED, 140 },
-        { Equipstat::JUMP, 123 },
-    };
-}
+// Externalising this for easier configurability.
+const std::unordered_map<Equipstat::Id, int32_t> EQSTAT_CAPS = {
+    {Equipstat::STR, 999},
+    {Equipstat::DEX, 999},
+    {Equipstat::INT, 999},
+    {Equipstat::LUK, 999},
+    {Equipstat::HP, 30000},
+    {Equipstat::MP, 30000},
+    {Equipstat::WATK, 999},
+    {Equipstat::MAGIC, 2000},
+    {Equipstat::WDEF, 999},
+    {Equipstat::MDEF, 999},
+    {Equipstat::ACC, 999},
+    {Equipstat::AVOID, 999},
+    {Equipstat::HANDS, 999},
+    {Equipstat::SPEED, 140},
+    {Equipstat::JUMP, 123},
+};
+} // namespace jrc

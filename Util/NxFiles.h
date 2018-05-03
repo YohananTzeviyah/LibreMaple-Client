@@ -18,29 +18,36 @@
 #pragma once
 #include "../Error.h"
 
-#include <cstdint>
 #include <array>
+#include <cstdint>
 
 namespace jrc
 {
-    namespace NxFiles
-    {
-        /// Number of needed files.
-        constexpr uint8_t NUM_FILES = 14;
-        /// Names of the needed game files.
-        constexpr std::array<const char*, NUM_FILES> filenames =
-        {{
-            "Character.nx", "Effect.nx", "Etc.nx",   "Item.nx",
-            "Map.nx",       "Mob.nx",    "Npc.nx",   "Quest.nx",
-            "Reactor.nx",   "Skill.nx",  "Sound.nx", "String.nx",
-            "TamingMob.nx", "UI.nx"
-        }};
+namespace NxFiles
+{
+/// Number of needed files.
+constexpr uint8_t NUM_FILES = 14;
+/// Names of the needed game files.
+constexpr std::array<const char*, NUM_FILES> filenames = {{"Character.nx",
+                                                           "Effect.nx",
+                                                           "Etc.nx",
+                                                           "Item.nx",
+                                                           "Map.nx",
+                                                           "Mob.nx",
+                                                           "Npc.nx",
+                                                           "Quest.nx",
+                                                           "Reactor.nx",
+                                                           "Skill.nx",
+                                                           "Sound.nx",
+                                                           "String.nx",
+                                                           "TamingMob.nx",
+                                                           "UI.nx"}};
 
-        /// Initialize nlnx.
-        /// When successful, also tests if the UI file contains valid images.
-        ///
-        /// This also tests that the UI.nx file has a post-chaos image in it
-        /// as a proxy for requiring a v154+ Ui.nx.
-        Error init();
-    };
-}
+/// Initialize nlnx.
+/// When successful, also tests if the UI file contains valid images.
+///
+/// This also tests that the UI.nx file has a post-chaos image in it
+/// as a proxy for requiring a v154+ Ui.nx.
+Error init();
+}; // namespace NxFiles
+} // namespace jrc

@@ -18,76 +18,73 @@
 #pragma once
 #include "CharStats.h"
 
-#include <unordered_map>
 #include <memory>
+#include <unordered_map>
 
 namespace jrc
 {
-    // Interface for passive buffs.
-    class PassiveBuff
+// Interface for passive buffs.
+class PassiveBuff
+{
+public:
+    virtual ~PassiveBuff()
     {
-    public:
-        virtual ~PassiveBuff() {}
+    }
 
-        virtual bool is_applicable(CharStats& stats, nl::node level) const = 0;
-        virtual void apply_to(CharStats& stats, nl::node level) const = 0;
-    };
+    virtual bool is_applicable(CharStats& stats, nl::node level) const = 0;
+    virtual void apply_to(CharStats& stats, nl::node level) const = 0;
+};
 
+// Abstract base for passives without conditions.
+class ConditionlessBuff : public PassiveBuff
+{
+public:
+    bool is_applicable(CharStats& stats, nl::node level) const final override;
+};
 
-    // Abstract base for passives without conditions.
-    class ConditionlessBuff : public PassiveBuff
-    {
-    public:
-        bool is_applicable(CharStats& stats, nl::node level) const final override;
-    };
+// Buff for angel blessing/blessing of the spirit.
+class AngelBlessingBuff : public ConditionlessBuff
+{
+public:
+    void apply_to(CharStats& stats, nl::node level) const override;
+};
 
+template<Weapon::Type... W>
+// Buff for Mastery skills.
+class WeaponMasteryBuff : public PassiveBuff
+{
+public:
+    bool is_applicable(CharStats& stats, nl::node level) const override;
+    void apply_to(CharStats& stats, nl::node level) const override;
+};
 
-    // Buff for angel blessing/blessing of the spirit.
-    class AngelBlessingBuff : public ConditionlessBuff
-    {
-    public:
-        void apply_to(CharStats& stats, nl::node level) const override;
-    };
+// Buff for Achilles.
+class AchillesBuff : public ConditionlessBuff
+{
+public:
+    void apply_to(CharStats& stats, nl::node level) const override;
+};
 
+// Buff for Berserk.
+class BerserkBuff : public PassiveBuff
+{
+public:
+    bool is_applicable(CharStats& stats, nl::node level) const override;
+    void apply_to(CharStats& stats, nl::node level) const override;
+};
 
-    template <Weapon::Type...W>
-    // Buff for Mastery skills.
-    class WeaponMasteryBuff : public PassiveBuff
-    {
-    public:
-        bool is_applicable(CharStats& stats, nl::node level) const override;
-        void apply_to(CharStats& stats, nl::node level) const override;
-    };
+// Collection of passive buffs.
+class PassiveBuffs
+{
+public:
+    // Register all effects.
+    PassiveBuffs();
 
+    // Apply a passive skill effect to the character stats.
+    void
+    apply_buff(CharStats& stats, int32_t skill_id, int32_t skill_level) const;
 
-    // Buff for Achilles.
-    class AchillesBuff : public ConditionlessBuff
-    {
-    public:
-        void apply_to(CharStats& stats, nl::node level) const override;
-    };
-
-
-    // Buff for Berserk.
-    class BerserkBuff : public PassiveBuff
-    {
-    public:
-        bool is_applicable(CharStats& stats, nl::node level) const override;
-        void apply_to(CharStats& stats, nl::node level) const override;
-    };
-
-
-    // Collection of passive buffs.
-    class PassiveBuffs
-    {
-    public:
-        // Register all effects.
-        PassiveBuffs();
-
-        // Apply a passive skill effect to the character stats.
-        void apply_buff(CharStats& stats, int32_t skill_id, int32_t skill_level) const;
-
-    private:
-        std::unordered_map<int32_t, std::unique_ptr<PassiveBuff>> buffs;
-    };
-}
+private:
+    std::unordered_map<int32_t, std::unique_ptr<PassiveBuff>> buffs;
+};
+} // namespace jrc

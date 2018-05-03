@@ -16,37 +16,36 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "ItemData.h"
-
 #include "../Graphics/Animation.h"
+#include "ItemData.h"
 
 namespace jrc
 {
-    // Information about a bullet type item.
-    class BulletData : public Cache<BulletData>
-    {
-    public:
-        // Returns wether the bullet was loaded correctly.
-        bool is_valid() const;
-        // Returns wether the bullet was loaded correctly.
-        explicit operator bool() const;
+// Information about a bullet type item.
+class BulletData : public Cache<BulletData>
+{
+public:
+    // Returns wether the bullet was loaded correctly.
+    bool is_valid() const;
+    // Returns wether the bullet was loaded correctly.
+    explicit operator bool() const;
 
-        // Returns the watk increase when using this bullet.
-        int16_t get_watk() const;
-        // Returns the bullet animation.
-        const Animation& get_animation() const;
-        // Returns the general item data.
-        const ItemData& get_itemdata() const;
+    // Returns the watk increase when using this bullet.
+    int16_t get_watk() const;
+    // Returns the bullet animation.
+    const Animation& get_animation() const;
+    // Returns the general item data.
+    const ItemData& get_itemdata() const;
 
-    private:
-        // Allow the cache to use the constructor.
-        friend Cache<BulletData>;
-        // Load a bullet from the game files.
-        BulletData(int32_t id);
+private:
+    // Allow the cache to use the constructor.
+    friend Cache<BulletData>;
+    // Load a bullet from the game files.
+    BulletData(int32_t id);
 
-        const ItemData& itemdata;
+    const ItemData& itemdata;
 
-        Animation bullet;
-        int16_t watk;
-    };
-}
+    Animation bullet;
+    int16_t watk;
+};
+} // namespace jrc

@@ -16,55 +16,52 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "../Error.h"
+#include "../Journey.h"
+#include "../Template/Singleton.h"
 #include "Cryptography.h"
 #include "PacketSwitch.h"
-
-#include "../Error.h"
-
-#include "../Template/Singleton.h"
-
-#include "../Journey.h"
 #ifdef JOURNEY_USE_ASIO
-#include "SocketAsio.h"
+#    include "SocketAsio.h"
 #else
-#include "SocketWinsock.h"
+#    include "SocketWinsock.h"
 #endif
 
 namespace jrc
 {
-    class Session : public Singleton<Session>
-    {
-    public:
-        Session();
-        ~Session() override;
+class Session : public Singleton<Session>
+{
+public:
+    Session();
+    ~Session() override;
 
-        // Connect using host and port from the configuration file.
-        Error init();
-        // Send a packet to the server.
-        void write(int8_t* bytes, size_t length);
-        // Check for incoming packets and handle them.
-        void read();
-        // Closes the current connection and opens a new one.
-        void reconnect(const char* address, const char* port);
-        // Check if the connection is alive.
-        bool is_connected() const;
+    // Connect using host and port from the configuration file.
+    Error init();
+    // Send a packet to the server.
+    void write(int8_t* bytes, size_t length);
+    // Check for incoming packets and handle them.
+    void read();
+    // Closes the current connection and opens a new one.
+    void reconnect(const char* address, const char* port);
+    // Check if the connection is alive.
+    bool is_connected() const;
 
-    private:
-        bool init(const char* host, const char* port);
-        void process(const int8_t* bytes, size_t available);
+private:
+    bool init(const char* host, const char* port);
+    void process(const int8_t* bytes, size_t available);
 
-        Cryptography cryptography;
-        PacketSwitch packetswitch;
+    Cryptography cryptography;
+    PacketSwitch packetswitch;
 
-        int8_t buffer[MAX_PACKET_LENGTH];
-        size_t length;
-        size_t pos;
-        bool connected;
+    int8_t buffer[MAX_PACKET_LENGTH];
+    size_t length;
+    size_t pos;
+    bool connected;
 
 #ifdef JOURNEY_USE_ASIO
-        SocketAsio socket;
+    SocketAsio socket;
 #else
-        SocketWinsock socket;
+    SocketWinsock socket;
 #endif
-    };
-}
+};
+} // namespace jrc

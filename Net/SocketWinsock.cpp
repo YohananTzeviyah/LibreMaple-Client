@@ -17,116 +17,104 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "SocketWinsock.h"
 #ifndef JOURNEY_USE_ASIO
-#include <WinSock2.h>
-#include <ws2tcpip.h>
+#    include <WinSock2.h>
+#    include <ws2tcpip.h>
 
-#pragma comment (lib, "Ws2_32.lib")
-#pragma comment (lib, "Mswsock.lib")
-#pragma comment (lib, "AdvApi32.lib")
+#    pragma comment(lib, "Ws2_32.lib")
+#    pragma comment(lib, "Mswsock.lib")
+#    pragma comment(lib, "AdvApi32.lib")
 
 namespace jrc
 {
-    bool SocketWinsock::open(const char* iaddr, const char* port)
-    {
-        WSADATA wsa_info;
-        sock = INVALID_SOCKET;
+bool SocketWinsock::open(const char* iaddr, const char* port)
+{
+    WSADATA wsa_info;
+    sock = INVALID_SOCKET;
 
-        struct addrinfo *addr_info = NULL;
-        struct addrinfo *ptr = NULL;
-        struct addrinfo hints;
+    struct addrinfo* addr_info = NULL;
+    struct addrinfo* ptr = NULL;
+    struct addrinfo hints;
 
-        int result = WSAStartup(MAKEWORD(2, 2), &wsa_info);
-        if (result != 0)
-        {
-            return false;
-        }
-
-        ZeroMemory(&hints, sizeof(hints));
-        hints.ai_family = AF_UNSPEC;
-        hints.ai_socktype = SOCK_STREAM;
-        hints.ai_protocol = IPPROTO_TCP;
-
-        result = getaddrinfo(iaddr, port, &hints, &addr_info);
-        if (result != 0)
-        {
-            WSACleanup();
-            return false;
-        }
-
-        for (ptr = addr_info; ptr != NULL; ptr = ptr->ai_next)
-        {
-            sock = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
-            if (sock == INVALID_SOCKET)
-            {
-                WSACleanup();
-                return false;
-            }
-            result = connect(sock, ptr->ai_addr, (int)ptr->ai_addrlen);
-            if (result == SOCKET_ERROR)
-            {
-                closesocket(sock);
-                sock = INVALID_SOCKET;
-                continue;
-            }
-            break;
-        }
-
-        freeaddrinfo(addr_info);
-
-        if (sock == INVALID_SOCKET)
-        {
-            WSACleanup();
-            return false;
-        }
-
-        result = recv(sock, (char*)buffer, 32, 0);
-        if (result == HANDSHAKE_LEN)
-        {
-            return true;
-        }
-        else
-        {
-            WSACleanup();
-            return false;
-        }
+    int result = WSAStartup(MAKEWORD(2, 2), &wsa_info);
+    if (result != 0) {
+        return false;
     }
 
-    bool SocketWinsock::close()
-    {
-        int error = closesocket(sock);
+    ZeroMemory(&hints, sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+
+    result = getaddrinfo(iaddr, port, &hints, &addr_info);
+    if (result != 0) {
         WSACleanup();
-        return error != SOCKET_ERROR;
+        return false;
     }
 
-    bool SocketWinsock::dispatch(const int8_t* bytes, size_t length) const
-    {
-        return send(sock, (char*)bytes, static_cast<int>(length), 0) != SOCKET_ERROR;
+    for (ptr = addr_info; ptr != NULL; ptr = ptr->ai_next) {
+        sock = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
+        if (sock == INVALID_SOCKET) {
+            WSACleanup();
+            return false;
+        }
+        result = connect(sock, ptr->ai_addr, (int)ptr->ai_addrlen);
+        if (result == SOCKET_ERROR) {
+            closesocket(sock);
+            sock = INVALID_SOCKET;
+            continue;
+        }
+        break;
     }
 
-    size_t SocketWinsock::receive(bool* success)
-    {
-        timeval timeout = { 0, 0 };
-        fd_set sockset = { 0 };
-        FD_SET(sock, &sockset);
-        int result = select(0, &sockset, 0, 0, &timeout);
-        if (result > 0)
-        {
-            result = recv(sock, (char*)buffer, MAX_PACKET_LENGTH, 0);
-        }
-        if (result == SOCKET_ERROR)
-        {
-            *success = false;
-            return 0;
-        }
-        else
-        {
-            return result;
-        }
+    freeaddrinfo(addr_info);
+
+    if (sock == INVALID_SOCKET) {
+        WSACleanup();
+        return false;
     }
 
-    const int8_t* SocketWinsock::get_buffer() const
-    {
-        return buffer;
+    result = recv(sock, (char*)buffer, 32, 0);
+    if (result == HANDSHAKE_LEN) {
+        return true;
+    } else {
+        WSACleanup();
+        return false;
     }
 }
+
+bool SocketWinsock::close()
+{
+    int error = closesocket(sock);
+    WSACleanup();
+    return error != SOCKET_ERROR;
+}
+
+bool SocketWinsock::dispatch(const int8_t* bytes, size_t length) const
+{
+    return send(sock, (char*)bytes, static_cast<int>(length), 0) !=
+           SOCKET_ERROR;
+}
+
+size_t SocketWinsock::receive(bool* success)
+{
+    timeval timeout = {0, 0};
+    fd_set sockset = {0};
+    FD_SET(sock, &sockset);
+    int result = select(0, &sockset, 0, 0, &timeout);
+    if (result > 0) {
+        result = recv(sock, (char*)buffer, MAX_PACKET_LENGTH, 0);
+    }
+    if (result == SOCKET_ERROR) {
+        *success = false;
+        return 0;
+    } else {
+        return result;
+    }
+}
+
+const int8_t* SocketWinsock::get_buffer() const
+{
+    return buffer;
+}
+} // namespace jrc
 #endif

@@ -15,151 +15,135 @@
 // You should have received a copy of the GNU Affero General Public License //
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
+#include "Audio/Audio.h"
+#include "Character/Char.h"
 #include "Configuration.h"
 #include "Constants.h"
 #include "Error.h"
-#include "Timer.h"
-
-#include "Audio/Audio.h"
-#include "Character/Char.h"
 #include "Gameplay/Combat/DamageNumber.h"
 #include "Gameplay/Stage.h"
 #include "IO/UI.h"
 #include "IO/Window.h"
 #include "Net/Session.h"
+#include "Timer.h"
 #include "Util/NxFiles.h"
 
 #include <iostream>
 
-
 namespace jrc
 {
-    Error init()
-    {
-        if (Error error = Session::get().init())
-        {
-            return error;
-        }
-
-        if (Error error = NxFiles::init())
-        {
-            return error;
-        }
-
-        if (Error error = Window::get().init())
-        {
-            return error;
-        }
-
-        if (Error error = Sound::init())
-        {
-            return error;
-        }
-
-        if (Error error = Music::init())
-        {
-            return error;
-        }
-
-        Char::init();
-        DamageNumber::init();
-        MapPortals::init();
-        Stage::get().init();
-        UI::get().init();
-
-        return Error::NONE;
+Error init()
+{
+    if (Error error = Session::get().init()) {
+        return error;
     }
 
-    void update()
-    {
-        Window::get().check_events();
-        Window::get().update();
-        Stage::get().update();
-        UI::get().update();
-        Session::get().read();
+    if (Error error = NxFiles::init()) {
+        return error;
     }
 
-    void draw(float alpha)
-    {
-        Window::get().begin();
-        Stage::get().draw(alpha);
-        UI::get().draw(alpha);
-        Window::get().end();
+    if (Error error = Window::get().init()) {
+        return error;
     }
 
-    bool running()
-    {
-        return Session::get().is_connected()
-            && UI::get().not_quitted()
-            && Window::get().not_closed();
+    if (Error error = Sound::init()) {
+        return error;
     }
 
-    void loop()
-    {
-        Timer::get().start();
-        int64_t timestep    = Constants::TIMESTEP * 1000;
-        int64_t accumulator = timestep;
+    if (Error error = Music::init()) {
+        return error;
+    }
 
-        int64_t period  = 0;
-        int32_t samples = 0;
+    Char::init();
+    DamageNumber::init();
+    MapPortals::init();
+    Stage::get().init();
+    UI::get().init();
 
-        while (running())
-        {
-            int64_t elapsed = Timer::get().stop();
+    return Error::NONE;
+}
 
-            // Update game with constant timestep as many times as possible.
-            for (accumulator += elapsed; accumulator >= timestep; accumulator -= timestep)
-            {
-                update();
-            }
+void update()
+{
+    Window::get().check_events();
+    Window::get().update();
+    Stage::get().update();
+    UI::get().update();
+    Session::get().read();
+}
 
-            // Draw the game. Interpolate to account for remaining time.
-            float alpha = static_cast<float>(accumulator) / timestep;
-            draw(alpha);
+void draw(float alpha)
+{
+    Window::get().begin();
+    Stage::get().draw(alpha);
+    UI::get().draw(alpha);
+    Window::get().end();
+}
 
-            if (samples < 100)
-            {
-                period += elapsed;
-                samples++;
-            }
-            else if (period)
-            {
-                //int64_t fps = (samples * 1000000) / period;
-                //std::cout << "FPS: " << fps << std::endl;
+bool running()
+{
+    return Session::get().is_connected() && UI::get().not_quitted() &&
+           Window::get().not_closed();
+}
 
-                period  = 0;
-                samples = 0;
-            }
+void loop()
+{
+    Timer::get().start();
+    int64_t timestep = Constants::TIMESTEP * 1000;
+    int64_t accumulator = timestep;
+
+    int64_t period = 0;
+    int32_t samples = 0;
+
+    while (running()) {
+        int64_t elapsed = Timer::get().stop();
+
+        // Update game with constant timestep as many times as possible.
+        for (accumulator += elapsed; accumulator >= timestep;
+             accumulator -= timestep) {
+            update();
         }
 
-        Sound::close();
+        // Draw the game. Interpolate to account for remaining time.
+        float alpha = static_cast<float>(accumulator) / timestep;
+        draw(alpha);
+
+        if (samples < 100) {
+            period += elapsed;
+            ++samples;
+        } else if (period) {
+            // int64_t fps = (samples * 1000000) / period;
+            // std::cout << "FPS: " << fps << '\n';
+
+            period = 0;
+            samples = 0;
+        }
     }
 
-    void start()
-    {
-        // Initialize and check for errors.
-        if (Error error = init())
-        {
-            const char* message   = error.get_message();
-            const char* args      = error.get_args();
-            const bool  can_retry = error.can_retry();
+    Sound::close();
+}
 
-            std::cout << "Error: " << message << args << std::endl;
+void start()
+{
+    // Initialize and check for errors.
+    if (Error error = init()) {
+        const char* message = error.get_message();
+        const char* args = error.get_args();
+        const bool can_retry = error.can_retry();
 
-            std::string command;
-            std::cin >> command;
+        std::cout << "Error: " << message << args << '\n';
 
-            if (can_retry && command == "retry")
-            {
-                start();
-            }
+        std::string command;
+        std::cin >> command;
+
+        if (can_retry && command == "retry") {
+            start();
         }
-        else
-        {
-            loop();
-        }
+    } else {
+        loop();
     }
 }
+} // namespace jrc
 
 int main()
 {

@@ -21,99 +21,103 @@
 
 namespace jrc
 {
-    namespace Buffstat
+namespace Buffstat
+{
+enum Id {
+    NONE,
+
+    MORPH,
+    RECOVERY,
+    MAPLE_WARRIOR,
+    STANCE,
+    SHARP_EYES,
+    MANA_REFLECTION,
+    SHADOW_CLAW,
+    INFINITY_,
+    HOLY_SHIELD,
+    HAMSTRING,
+    BLIND,
+    CONCENTRATE,
+    ECHO_OF_HERO,
+    GHOST_MORPH,
+    AURA,
+    CONFUSE,
+    BERSERK_FURY,
+    DIVINE_BODY,
+    SPARK,
+    FINALATTACK,
+    BATTLESHIP,
+    WATK,
+    WDEF,
+    MATK,
+    MDEF,
+    ACC,
+    AVOID,
+    HANDS,
+    SHOWDASH,
+    SPEED,
+    JUMP,
+    MAGIC_GUARD,
+    DARKSIGHT,
+    BOOSTER,
+    POWERGUARD,
+    HYPERBODYHP,
+    HYPERBODYMP,
+    INVINCIBLE,
+    SOULARROW,
+    STUN,
+    POISON,
+    SEAL,
+    DARKNESS,
+    COMBO,
+    SUMMON,
+    WK_CHARGE,
+    DRAGONBLOOD,
+    HOLY_SYMBOL,
+    MESOUP,
+    SHADOWPARTNER,
+    PICKPOCKET,
+    PUPPET,
+    MESOGUARD,
+    WEAKEN,
+
+    DASH,
+    DASH2,
+    ELEMENTAL_RESET,
+    ARAN_COMBO,
+    COMBO_DRAIN,
+    COMBO_BARRIER,
+    BODY_PRESSURE,
+    SMART_KNOCKBACK,
+    PYRAMID_PQ,
+    ENERGY_CHARGE,
+    MONSTER_RIDING,
+    HOMING_BEACON,
+    SPEED_INFUSION,
+
+    LENGTH
+};
+
+extern const std::unordered_map<Id, uint64_t> first_codes;
+extern const std::unordered_map<Id, uint64_t> second_codes;
+} // namespace Buffstat
+
+struct Buff {
+    Buffstat::Id stat;
+    int16_t value;
+    int32_t skillid;
+    int32_t duration;
+
+    constexpr Buff(Buffstat::Id stat,
+                   int16_t value,
+                   int32_t skillid,
+                   int32_t duration)
+        : stat(stat), value(value), skillid(skillid), duration(duration)
     {
-        enum Id
-        {
-            NONE,
-
-            MORPH,
-            RECOVERY,
-            MAPLE_WARRIOR,
-            STANCE,
-            SHARP_EYES,
-            MANA_REFLECTION,
-            SHADOW_CLAW,
-            INFINITY_,
-            HOLY_SHIELD,
-            HAMSTRING,
-            BLIND,
-            CONCENTRATE,
-            ECHO_OF_HERO,
-            GHOST_MORPH,
-            AURA,
-            CONFUSE,
-            BERSERK_FURY,
-            DIVINE_BODY,
-            SPARK,
-            FINALATTACK,
-            BATTLESHIP,
-            WATK,
-            WDEF,
-            MATK,
-            MDEF,
-            ACC,
-            AVOID,
-            HANDS,
-            SHOWDASH,
-            SPEED,
-            JUMP,
-            MAGIC_GUARD,
-            DARKSIGHT,
-            BOOSTER,
-            POWERGUARD,
-            HYPERBODYHP,
-            HYPERBODYMP,
-            INVINCIBLE,
-            SOULARROW,
-            STUN,
-            POISON,
-            SEAL,
-            DARKNESS,
-            COMBO,
-            SUMMON,
-            WK_CHARGE,
-            DRAGONBLOOD,
-            HOLY_SYMBOL,
-            MESOUP,
-            SHADOWPARTNER,
-            PICKPOCKET,
-            PUPPET,
-            MESOGUARD,
-            WEAKEN,
-
-            DASH,
-            DASH2,
-            ELEMENTAL_RESET,
-            ARAN_COMBO,
-            COMBO_DRAIN,
-            COMBO_BARRIER,
-            BODY_PRESSURE,
-            SMART_KNOCKBACK,
-            PYRAMID_PQ,
-            ENERGY_CHARGE,
-            MONSTER_RIDING,
-            HOMING_BEACON,
-            SPEED_INFUSION,
-
-            LENGTH
-        };
-
-        extern const std::unordered_map<Id, uint64_t> first_codes;
-        extern const std::unordered_map<Id, uint64_t> second_codes;
     }
 
-    struct Buff
+    constexpr Buff() : Buff(Buffstat::NONE, 0, 0, 0)
     {
-        Buffstat::Id stat;
-        int16_t value;
-        int32_t skillid;
-        int32_t duration;
-
-        constexpr Buff(Buffstat::Id stat, int16_t value, int32_t skillid, int32_t duration)
-            : stat(stat), value(value), skillid(skillid), duration(duration) {}
-
-        constexpr Buff()
-            : Buff(Buffstat::NONE, 0, 0, 0) {}
-    };
-}
+    }
+};
+} // namespace jrc

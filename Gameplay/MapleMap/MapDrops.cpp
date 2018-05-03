@@ -17,121 +17,106 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "MapDrops.h"
 
+#include "../../Constants.h"
+#include "../../Data/ItemData.h"
 #include "Drop.h"
 #include "ItemDrop.h"
 #include "MesoDrop.h"
-
-#include "../../Constants.h"
-#include "../../Data/ItemData.h"
-
-#include "nlnx/nx.hpp"
 #include "nlnx/node.hpp"
+#include "nlnx/nx.hpp"
 
 namespace jrc
 {
-    MapDrops::MapDrops()
-    {
-        lootenabled = false;
-    }
+MapDrops::MapDrops()
+{
+    lootenabled = false;
+}
 
-    void MapDrops::init()
-    {
-        nl::node src = nl::nx::item["Special"]["0900.img"];
+void MapDrops::init()
+{
+    nl::node src = nl::nx::item["Special"]["0900.img"];
 
-        mesoicons[BRONZE] = src["09000000"]["iconRaw"];
-        mesoicons[GOLD] = src["09000001"]["iconRaw"];
-        mesoicons[BUNDLE] = src["09000002"]["iconRaw"];
-        mesoicons[BAG] = src["09000003"]["iconRaw"];
-    }
+    mesoicons[BRONZE] = src["09000000"]["iconRaw"];
+    mesoicons[GOLD] = src["09000001"]["iconRaw"];
+    mesoicons[BUNDLE] = src["09000002"]["iconRaw"];
+    mesoicons[BAG] = src["09000003"]["iconRaw"];
+}
 
-    void MapDrops::draw(Layer::Id layer, double viewx, double viewy, float alpha) const
-    {
-        drops.draw(layer, viewx, viewy, alpha);
-    }
+void MapDrops::draw(Layer::Id layer,
+                    double viewx,
+                    double viewy,
+                    float alpha) const
+{
+    drops.draw(layer, viewx, viewy, alpha);
+}
 
-    void MapDrops::update(const Physics& physics)
-    {
-        for (; !spawns.empty(); spawns.pop())
-        {
-            const DropSpawn& spawn = spawns.front();
+void MapDrops::update(const Physics& physics)
+{
+    for (; !spawns.empty(); spawns.pop()) {
+        const DropSpawn& spawn = spawns.front();
 
-            int32_t oid = spawn.get_oid();
-            if (Optional<MapObject> drop = drops.get(oid))
-            {
-                drop->makeactive();
-            }
-            else
-            {
-                int32_t itemid = spawn.get_itemid();
-                bool meso = spawn.is_meso();
-                if (meso)
-                {
-                    MesoIcon mesotype = (itemid > 999)
-                        ? BAG : (itemid > 99)
-                        ? BUNDLE : (itemid > 49)
-                        ? GOLD : BRONZE;
-                    const Animation& icon = mesoicons[mesotype];
-                    drops.add(
-                        spawn.instantiate(icon)
-                    );
-                }
-                else if (const ItemData& itemdata = ItemData::get(itemid))
-                {
-                    const Texture& icon = itemdata.get_icon(true);
-                    drops.add(
-                        spawn.instantiate(icon)
-                    );
-                }
+        int32_t oid = spawn.get_oid();
+        if (Optional<MapObject> drop = drops.get(oid)) {
+            drop->makeactive();
+        } else {
+            int32_t itemid = spawn.get_itemid();
+            bool meso = spawn.is_meso();
+            if (meso) {
+                MesoIcon mesotype = (itemid > 999)
+                                        ? BAG
+                                        : (itemid > 99)
+                                              ? BUNDLE
+                                              : (itemid > 49) ? GOLD : BRONZE;
+                const Animation& icon = mesoicons[mesotype];
+                drops.add(spawn.instantiate(icon));
+            } else if (const ItemData& itemdata = ItemData::get(itemid)) {
+                const Texture& icon = itemdata.get_icon(true);
+                drops.add(spawn.instantiate(icon));
             }
         }
-
-        for (auto& mesoicon : mesoicons)
-        {
-            mesoicon.update();
-        }
-
-        drops.update(physics);
-
-        lootenabled = true;
     }
 
-    void MapDrops::spawn(DropSpawn&& spawn)
-    {
-        spawns.emplace(
-            std::move(spawn)
-        );
+    for (auto& mesoicon : mesoicons) {
+        mesoicon.update();
     }
 
-    void MapDrops::remove(int32_t oid, int8_t mode, const PhysicsObject* looter)
-    {
-        if (Optional<Drop> drop = drops.get(oid))
-        {
-            drop->expire(mode, looter);
-        }
-    }
+    drops.update(physics);
 
-    void MapDrops::clear()
-    {
-        drops.clear();
-    }
+    lootenabled = true;
+}
 
-    MapDrops::Loot MapDrops::find_loot_at(Point<int16_t> playerpos)
-    {
-        if (!lootenabled)
-            return{ 0, {} };
+void MapDrops::spawn(DropSpawn&& spawn)
+{
+    spawns.emplace(std::move(spawn));
+}
 
-        for (auto& mmo : drops)
-        {
-            Optional<const Drop> drop = mmo.second.get();
-            if (drop && drop->bounds().contains(playerpos))
-            {
-                lootenabled = false;
-
-                int32_t oid = mmo.first;
-                Point<int16_t> position = drop->get_position();
-                return{ oid, position };
-            }
-        }
-        return{ 0, {} };
+void MapDrops::remove(int32_t oid, int8_t mode, const PhysicsObject* looter)
+{
+    if (Optional<Drop> drop = drops.get(oid)) {
+        drop->expire(mode, looter);
     }
 }
+
+void MapDrops::clear()
+{
+    drops.clear();
+}
+
+MapDrops::Loot MapDrops::find_loot_at(Point<int16_t> playerpos)
+{
+    if (!lootenabled)
+        return {0, {}};
+
+    for (auto& mmo : drops) {
+        Optional<const Drop> drop = mmo.second.get();
+        if (drop && drop->bounds().contains(playerpos)) {
+            lootenabled = false;
+
+            int32_t oid = mmo.first;
+            Point<int16_t> position = drop->get_position();
+            return {oid, position};
+        }
+    }
+    return {0, {}};
+}
+} // namespace jrc

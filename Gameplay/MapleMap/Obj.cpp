@@ -16,30 +16,32 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #include "Obj.h"
+
 #include "nlnx/nx.hpp"
 
 namespace jrc
 {
-    Obj::Obj(nl::node src)
-    {
-        animation = Animation(nl::nx::map["Obj"][src["oS"] + ".img"][src["l0"]][src["l1"]][src["l2"]]);
-        pos = Point<int16_t>(src["x"], src["y"]);
-        flip = src["f"].get_bool();
-        z = src["z"];
-    }
-
-    void Obj::update()
-    {
-        animation.update();
-    }
-
-    void Obj::draw(Point<int16_t> viewpos, float inter) const
-    {
-        animation.draw(DrawArgument(pos + viewpos, flip), inter);
-    }
-
-    uint8_t Obj::getz() const
-    {
-        return z;
-    }
+Obj::Obj(nl::node src)
+{
+    animation = Animation(nl::nx::map["Obj"][src["oS"] + ".img"][src["l0"]]
+                                     [src["l1"]][src["l2"]]);
+    pos = Point<int16_t>(src["x"], src["y"]);
+    flip = src["f"].get_bool();
+    z = src["z"];
 }
+
+void Obj::update()
+{
+    animation.update();
+}
+
+void Obj::draw(Point<int16_t> viewpos, float inter) const
+{
+    animation.draw(DrawArgument(pos + viewpos, flip), inter);
+}
+
+uint8_t Obj::getz() const
+{
+    return z;
+}
+} // namespace jrc

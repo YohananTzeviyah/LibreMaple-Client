@@ -16,27 +16,25 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "Button.h"
-
 #include "../../Graphics/Texture.h"
 #include "../../Template/BoolPair.h"
+#include "Button.h"
 
 #include <map>
 
 namespace jrc
 {
-    class TwoSpriteButton : public Button
-    {
-    public:
-        TwoSpriteButton(nl::node nsrc, nl::node ssrc, Point<int16_t> position);
-        TwoSpriteButton(nl::node nsrc, nl::node ssrc);
-        TwoSpriteButton();
+class TwoSpriteButton : public Button
+{
+public:
+    TwoSpriteButton(nl::node nsrc, nl::node ssrc, Point<int16_t> position);
+    TwoSpriteButton(nl::node nsrc, nl::node ssrc);
+    TwoSpriteButton();
 
-        void draw(Point<int16_t> position) const;
-        Rectangle<int16_t> bounds(Point<int16_t> position) const;
+    void draw(Point<int16_t> position) const;
+    Rectangle<int16_t> bounds(Point<int16_t> position) const;
 
-    private:
-        BoolPair<Texture> textures;
-    };
-}
-
+private:
+    BoolPair<Texture> textures;
+};
+} // namespace jrc

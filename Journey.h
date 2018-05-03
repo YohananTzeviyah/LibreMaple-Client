@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 
-//Define things here.
+// Define things here.
 
 // JOURNEY_USE_ASIO : Use asio for networking, if not defined use Winsock.
 #define JOURNEY_USE_ASIO

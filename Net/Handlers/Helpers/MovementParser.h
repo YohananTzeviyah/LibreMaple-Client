@@ -16,16 +16,15 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../../InPacket.h"
-
 #include "../../../Gameplay/Movement.h"
+#include "../../InPacket.h"
 
 #include <vector>
 
 namespace jrc
 {
-    namespace MovementParser
-    {
-        std::vector<Movement> parse_movements(InPacket& recv);
-    }
+namespace MovementParser
+{
+std::vector<Movement> parse_movements(InPacket& recv);
 }
+} // namespace jrc

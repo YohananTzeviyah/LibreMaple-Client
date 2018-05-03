@@ -18,61 +18,57 @@
 #pragma once
 #include "PacketHandler.h"
 
-#include <type_traits>
 #include <memory>
+#include <type_traits>
 
 namespace jrc
 {
-    /// Class which contains the array of handler classes to use.
-    class PacketSwitch
+/// Class which contains the array of handler classes to use.
+class PacketSwitch
+{
+public:
+    /// Register all handlers.
+    PacketSwitch();
+
+    /// Forward a packet to the correct handler.
+    void forward(const int8_t* bytes, size_t length) const;
+
+private:
+    /// Print a warning to the console about something strange or amiss in
+    /// the packet switcher.
+    void warn(const std::string& message, size_t opcode) const;
+
+    /// Opcodes for which handlers can be registered.
+    enum Opcode : uint16_t;
+
+    /// Message when an unhandled packet is received.
+    static constexpr const char* MSG_UNHANDLED = "Unhandled packet detected";
+    /// Message when a packet with a larger opcode than the array size is
+    /// received.
+    static constexpr const char* MSG_OUTOFBOUNDS = "Large opcode detected";
+    /// Message when a handler is registered more than once.
+    static constexpr const char* MSG_REREGISTER =
+        "Handler was registered twice";
+    /// Maximum number of handlers needed.
+    static constexpr const size_t NUM_HANDLERS = 500;
+
+    std::unique_ptr<PacketHandler> handlers[NUM_HANDLERS];
+
+    /// Register a handler for the specified opcode.
+    template<size_t O, typename T, typename... Args>
+    void emplace(Args&&... args)
     {
-    public:
-        /// Register all handlers.
-        PacketSwitch();
+        static_assert(O < NUM_HANDLERS,
+                      "PacketSwitch::emplace - Opcode out of array bounds.");
+        static_assert(
+            std::is_base_of<PacketHandler, T>::value,
+            "Error: Packet handlers must derive from PacketHandler.");
 
-        /// Forward a packet to the correct handler.
-        void forward(const int8_t* bytes, size_t length) const;
-
-    private:
-        /// Print a warning to the console about something strange or amiss in
-        /// the packet switcher.
-        void warn(const std::string& message, size_t opcode) const;
-
-        /// Opcodes for which handlers can be registered.
-        enum Opcode : uint16_t;
-
-        /// Message when an unhandled packet is received.
-        static constexpr const char* MSG_UNHANDLED = "Unhandled packet detected";
-        /// Message when a packet with a larger opcode than the array size is received.
-        static constexpr const char* MSG_OUTOFBOUNDS = "Large opcode detected";
-        /// Message when a handler is registered more than once.
-        static constexpr const char* MSG_REREGISTER = "Handler was registered twice";
-        /// Maximum number of handlers needed.
-        static constexpr const size_t NUM_HANDLERS = 500;
-
-        std::unique_ptr<PacketHandler> handlers[NUM_HANDLERS];
-
-        /// Register a handler for the specified opcode.
-        template <size_t O, typename T, typename... Args>
-        void emplace(Args&&... args)
-        {
-            static_assert(
-                O < NUM_HANDLERS,
-                "PacketSwitch::emplace - Opcode out of array bounds."
-            );
-            static_assert(
-                std::is_base_of<PacketHandler, T>::value,
-                "Error: Packet handlers must derive from PacketHandler."
-            );
-
-            if (handlers[O])
-            {
-                warn(MSG_REREGISTER, O);
-            }
-
-            handlers[O] = std::make_unique<T>(
-                std::forward<Args>(args)...
-            );
+        if (handlers[O]) {
+            warn(MSG_REREGISTER, O);
         }
-    };
-}
+
+        handlers[O] = std::make_unique<T>(std::forward<Args>(args)...);
+    }
+};
+} // namespace jrc

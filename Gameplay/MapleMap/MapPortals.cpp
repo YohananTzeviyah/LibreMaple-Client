@@ -19,134 +19,121 @@
 
 #include "../../Constants.h"
 #include "../../Util/Misc.h"
-
 #include "nlnx/nx.hpp"
 
 namespace jrc
 {
-    MapPortals::MapPortals(nl::node src, int32_t mapid)
-    {
-        for (const auto& sub : src)
-        {
-            auto portal_id = string_conversion::or_default<int8_t>(sub.name(), -1);
-            if (portal_id < 0)
-            {
-                continue;
-            }
-
-            Portal::Type type = Portal::typebyid(sub["pt"]);
-            std::string name = sub["pn"];
-            std::string target_name = sub["tn"];
-            int32_t target_id = sub["tm"];
-            Point<int16_t> position = { sub["x"], sub["y"] };
-
-            const Animation* animation = &animations[type];
-            bool intramap = target_id == mapid;
-
-            portals_by_id.emplace(
-                std::piecewise_construct,
-                std::forward_as_tuple(portal_id),
-                std::forward_as_tuple(animation, type, name, intramap, position, target_id, target_name)
-            );
-            portal_ids_by_name.emplace(name, portal_id);
+MapPortals::MapPortals(nl::node src, int32_t mapid)
+{
+    for (const auto& sub : src) {
+        auto portal_id = string_conversion::or_default<int8_t>(sub.name(), -1);
+        if (portal_id < 0) {
+            continue;
         }
 
-        cooldown = WARPCD;
+        Portal::Type type = Portal::typebyid(sub["pt"]);
+        std::string name = sub["pn"];
+        std::string target_name = sub["tn"];
+        int32_t target_id = sub["tm"];
+        Point<int16_t> position = {sub["x"], sub["y"]};
+
+        const Animation* animation = &animations[type];
+        bool intramap = target_id == mapid;
+
+        portals_by_id.emplace(std::piecewise_construct,
+                              std::forward_as_tuple(portal_id),
+                              std::forward_as_tuple(animation,
+                                                    type,
+                                                    name,
+                                                    intramap,
+                                                    position,
+                                                    target_id,
+                                                    target_name));
+        portal_ids_by_name.emplace(name, portal_id);
     }
 
-    MapPortals::MapPortals()
-    {
-        cooldown = WARPCD;
-    }
+    cooldown = WARPCD;
+}
 
-    void MapPortals::update(Point<int16_t> playerpos)
-    {
-        animations[Portal::REGULAR].update(Constants::TIMESTEP);
-        animations[Portal::HIDDEN].update(Constants::TIMESTEP);
+MapPortals::MapPortals()
+{
+    cooldown = WARPCD;
+}
 
-        for (auto& iter : portals_by_id)
-        {
-            Portal& portal = iter.second;
-            switch (portal.get_type())
-            {
-            case Portal::HIDDEN:
-            case Portal::TOUCH:
-                portal.update(playerpos);
-                break;
-            default:
-                break;
-            }
-        }
+void MapPortals::update(Point<int16_t> playerpos)
+{
+    animations[Portal::REGULAR].update(Constants::TIMESTEP);
+    animations[Portal::HIDDEN].update(Constants::TIMESTEP);
 
-        if (cooldown > 0)
-        {
-            cooldown--;
+    for (auto& iter : portals_by_id) {
+        Portal& portal = iter.second;
+        switch (portal.get_type()) {
+        case Portal::HIDDEN:
+        case Portal::TOUCH:
+            portal.update(playerpos);
+            break;
+        default:
+            break;
         }
     }
 
-    void MapPortals::draw(Point<int16_t> viewpos, float inter) const
-    {
-        for (auto& ptit : portals_by_id)
-        {
-            ptit.second
-                .draw(viewpos, inter);
-        }
+    if (cooldown > 0) {
+        cooldown--;
     }
+}
 
-    Point<int16_t> MapPortals::get_portal_by_id(uint8_t portal_id) const
-    {
-        auto iter = portals_by_id.find(portal_id);
-        if (iter != portals_by_id.end())
-        {
-            constexpr Point<int16_t> ABOVE(0, 30);
-            return iter->second.get_position() - ABOVE;
-        }
-        else
-        {
-            return {};
-        }
+void MapPortals::draw(Point<int16_t> viewpos, float inter) const
+{
+    for (auto& ptit : portals_by_id) {
+        ptit.second.draw(viewpos, inter);
     }
+}
 
-    Point<int16_t> MapPortals::get_portal_by_name(const std::string& portal_name) const
-    {
-        auto iter = portal_ids_by_name.find(portal_name);
-        if (iter != portal_ids_by_name.end())
-        {
-            return get_portal_by_id(iter->second);
-        }
-        else
-        {
-            return {};
-        }
-    }
-
-    Portal::WarpInfo MapPortals::find_warp_at(Point<int16_t> playerpos)
-    {
-        if (cooldown == 0)
-        {
-            cooldown = WARPCD;
-
-            for (const auto& iter : portals_by_id)
-            {
-                const Portal& portal = iter.second;
-                if (portal.bounds().contains(playerpos))
-                {
-                    return portal.getwarpinfo();
-                }
-            }
-        }
-
+Point<int16_t> MapPortals::get_portal_by_id(uint8_t portal_id) const
+{
+    auto iter = portals_by_id.find(portal_id);
+    if (iter != portals_by_id.end()) {
+        constexpr Point<int16_t> ABOVE(0, 30);
+        return iter->second.get_position() - ABOVE;
+    } else {
         return {};
     }
+}
 
+Point<int16_t>
+MapPortals::get_portal_by_name(const std::string& portal_name) const
+{
+    auto iter = portal_ids_by_name.find(portal_name);
+    if (iter != portal_ids_by_name.end()) {
+        return get_portal_by_id(iter->second);
+    } else {
+        return {};
+    }
+}
 
-    void MapPortals::init()
-    {
-        nl::node src = nl::nx::map["MapHelper.img"]["portal"]["game"];
+Portal::WarpInfo MapPortals::find_warp_at(Point<int16_t> playerpos)
+{
+    if (cooldown == 0) {
+        cooldown = WARPCD;
 
-        animations[Portal::HIDDEN]  = src["ph"]["default"]["portalContinue"];
-        animations[Portal::REGULAR] = src["pv"];
+        for (const auto& iter : portals_by_id) {
+            const Portal& portal = iter.second;
+            if (portal.bounds().contains(playerpos)) {
+                return portal.getwarpinfo();
+            }
+        }
     }
 
-    std::unordered_map<Portal::Type, Animation> MapPortals::animations;
+    return {};
 }
+
+void MapPortals::init()
+{
+    nl::node src = nl::nx::map["MapHelper.img"]["portal"]["game"];
+
+    animations[Portal::HIDDEN] = src["ph"]["default"]["portalContinue"];
+    animations[Portal::REGULAR] = src["pv"];
+}
+
+std::unordered_map<Portal::Type, Animation> MapPortals::animations;
+} // namespace jrc

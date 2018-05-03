@@ -18,71 +18,67 @@
 #include "ChatBalloon.h"
 
 #include "../../Constants.h"
-
-#include "nlnx/nx.hpp"
 #include "nlnx/node.hpp"
+#include "nlnx/nx.hpp"
 
 namespace jrc
 {
-    ChatBalloon::ChatBalloon(int8_t type)
-    {
-        std::string typestr;
-        if (type < 0)
-        {
-            switch (type)
-            {
-            case -1:
-                typestr = "dead";
-                break;
-            }
+ChatBalloon::ChatBalloon(int8_t type)
+{
+    std::string typestr;
+    if (type < 0) {
+        switch (type) {
+        case -1:
+            typestr = "dead";
+            break;
         }
-        else
-        {
-            typestr = std::to_string(type);
-        }
-
-        nl::node src = nl::nx::ui["ChatBalloon.img"][typestr];
-
-        arrow = src["arrow"];
-        frame = src;
-
-        textlabel = { Text::A11M, Text::CENTER, Text::BLACK, "", 80 };
-
-        duration = 0;
+    } else {
+        typestr = std::to_string(type);
     }
 
-    ChatBalloon::ChatBalloon()
-        : ChatBalloon(0) {}
+    nl::node src = nl::nx::ui["ChatBalloon.img"][typestr];
 
-    void ChatBalloon::change_text(const std::string& text)
-    {
-        textlabel.change_text(text);
+    arrow = src["arrow"];
+    frame = src;
 
-        duration = DURATION;
-    }
+    textlabel = {Text::A11M, Text::CENTER, Text::BLACK, "", 80};
 
-    void ChatBalloon::draw(Point<int16_t> position) const
-    {
-        if (duration == 0)
-            return;
-
-        int16_t width = textlabel.width();
-        int16_t height = textlabel.height();
-
-        frame.draw(position, width, height);
-        arrow.draw(position);
-        textlabel.draw(position - Point<int16_t>(0, height + 4));
-    }
-
-    void ChatBalloon::update()
-    {
-        duration -= Constants::TIMESTEP;
-        if (duration < 0)
-            duration = 0;
-    }
-
-    void ChatBalloon::expire()
-    {
-        duration = 0;
-    }
+    duration = 0;
 }
+
+ChatBalloon::ChatBalloon() : ChatBalloon(0)
+{
+}
+
+void ChatBalloon::change_text(const std::string& text)
+{
+    textlabel.change_text(text);
+
+    duration = DURATION;
+}
+
+void ChatBalloon::draw(Point<int16_t> position) const
+{
+    if (duration == 0)
+        return;
+
+    int16_t width = textlabel.width();
+    int16_t height = textlabel.height();
+
+    frame.draw(position, width, height);
+    arrow.draw(position);
+    textlabel.draw(position - Point<int16_t>(0, height + 4));
+}
+
+void ChatBalloon::update()
+{
+    duration -= Constants::TIMESTEP;
+    if (duration < 0)
+        duration = 0;
+}
+
+void ChatBalloon::expire()
+{
+    duration = 0;
+}
+} // namespace jrc

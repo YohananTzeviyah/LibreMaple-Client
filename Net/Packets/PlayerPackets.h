@@ -16,34 +16,32 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../OutPacket.h"
-
 #include "../../Character/MapleStat.h"
+#include "../OutPacket.h"
 
 namespace jrc
 {
-    // Requests a stat increase by spending ap.
-    // Opcode: SPEND_AP(87)
-    class SpendApPacket : public OutPacket
+// Requests a stat increase by spending ap.
+// Opcode: SPEND_AP(87)
+class SpendApPacket : public OutPacket
+{
+public:
+    SpendApPacket(Maplestat::Id stat) : OutPacket(SPEND_AP)
     {
-    public:
-        SpendApPacket(Maplestat::Id stat) : OutPacket(SPEND_AP)
-        {
-            write_time();
-            write_int(Maplestat::codes[stat]);
-        }
-    };
+        write_time();
+        write_int(Maplestat::codes[stat]);
+    }
+};
 
-
-    // Requests a skill level increase by spending sp.
-    // Opcode: SPEND_SP(90)
-    class SpendSpPacket : public OutPacket
+// Requests a skill level increase by spending sp.
+// Opcode: SPEND_SP(90)
+class SpendSpPacket : public OutPacket
+{
+public:
+    SpendSpPacket(int32_t skill_id) : OutPacket(SPEND_SP)
     {
-    public:
-        SpendSpPacket(int32_t skill_id) : OutPacket(SPEND_SP)
-        {
-            write_time();
-            write_int(skill_id);
-        }
-    };
-}
+        write_time();
+        write_int(skill_id);
+    }
+};
+} // namespace jrc

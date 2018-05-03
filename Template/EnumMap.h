@@ -16,190 +16,186 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include <array>
 #include <type_traits>
 #include <utility>
-#include <array>
 
 namespace jrc
 {
-    template <typename K, typename V, K LENGTH = K::LENGTH>
-    // Wraps an array so that it is adressable by enum values.
-    class EnumMap
+template<typename K, typename V, K LENGTH = K::LENGTH>
+// Wraps an array so that it is adressable by enum values.
+class EnumMap
+{
+public:
+    template<typename... Args>
+    // Initialize with an initializer list.
+    EnumMap(Args&&... args) : m_values{{std::forward<Args>(args)...}}
+    {
+        static_assert(std::is_enum<K>::value,
+                      "Template parameter 'K' for EnumMap must be an enum.");
+
+        for (size_t i = 0; i < LENGTH; ++i) {
+            m_keys[i] = static_cast<K>(i);
+        }
+    }
+
+    void clear()
+    {
+        for (size_t i = 0; i < LENGTH; ++i) {
+            m_values[i] = V();
+        }
+    }
+
+    void erase(K key)
+    {
+        if (key >= 0 && key < LENGTH) {
+            m_values[key] = V();
+        }
+    }
+
+    template<typename... Args>
+    void emplace(K key, Args&&... args)
+    {
+        m_values[key] = {std::forward<Args>(args)...};
+    }
+
+    V& operator[](K key)
+    {
+        return m_values[key];
+    }
+
+    const V& operator[](K key) const
+    {
+        return m_values[key];
+    }
+
+    template<typename T>
+    class base_iterator : public std::iterator<std::forward_iterator_tag, V>
     {
     public:
-        template <typename... Args>
-        // Initialize with an initializer list.
-        EnumMap(Args&&... args)
-            : m_values{ { std::forward<Args>(args)... } } {
+        using index_type = typename std::underlying_type<K>::type;
 
-            static_assert(std::is_enum<K>::value,
-                "Template parameter 'K' for EnumMap must be an enum.");
-
-            for (size_t i = 0; i < LENGTH; ++i)
-            {
-                m_keys[i] = static_cast<K>(i);
-            }
-        }
-
-        void clear()
+        base_iterator(T* p, index_type i) : value(p), index(i)
         {
-            for (size_t i = 0; i < LENGTH; ++i)
-            {
-                m_values[i] = V();
-            }
         }
 
-        void erase(K key)
-        {
-            if (key >= 0 && key < LENGTH)
+        struct node {
+            K first;
+            T& second;
+
+            node(K f, T& s) : first(f), second(s)
             {
-                m_values[key] = V();
-            }
-        }
-
-        template <typename... Args>
-        void emplace(K key, Args&&... args)
-        {
-            m_values[key] = { std::forward<Args>(args)... };
-        }
-
-        V& operator[](K key)
-        {
-            return m_values[key];
-        }
-
-        const V& operator[](K key) const
-        {
-            return m_values[key];
-        }
-
-        template <typename T>
-        class base_iterator
-            : public std::iterator<std::forward_iterator_tag, V> {
-
-        public:
-            using index_type = typename std::underlying_type<K>::type;
-
-            base_iterator(T* p, index_type i)
-                : value(p), index(i) {}
-
-            struct node
-            {
-                K first;
-                T& second;
-
-                node(K f, T& s)
-                    : first(f), second(s) {}
-
-                node& operator =(const node&) = delete;
-
-                void set(const T& t)
-                {
-                    second = t;
-                }
-            };
-
-            node operator*()
-            {
-                return node{ first(), second() };
             }
 
-            explicit operator bool() const
-            {
-                return index >= 0 && index < LENGTH;
-            }
+            node& operator=(const node&) = delete;
 
-            K first() const
+            void set(const T& t)
             {
-                return static_cast<K>(index);
+                second = t;
             }
-
-            T& second()
-            {
-                /*
-                if (!this) // Clang says this never happens
-                {
-                    throw std::out_of_range("iterator out of range");
-                }
-                else
-                {*/
-                return *(value + index);
-                /*}*/
-            }
-
-            base_iterator& operator++()
-            {
-                index++;
-                return *this;
-            }
-
-            bool operator!=(const base_iterator& other) const
-            {
-                return index != other.index;
-            }
-
-            bool operator==(const base_iterator& other) const
-            {
-                return index == other.index;
-            }
-
-        private:
-            T* value;
-            index_type index;
         };
 
-        using iterator       = base_iterator<V>;
-        using const_iterator = base_iterator<const V>;
-        using node           = typename iterator::node;
-        using cnode          = typename const_iterator::node;
-
-        iterator find(K key)
+        node operator*()
         {
-            return { m_values.data(), key };
+            return node{first(), second()};
         }
 
-        const_iterator find(K key) const
+        explicit operator bool() const
         {
-            return { m_values.data(), key };
+            return index >= 0 && index < LENGTH;
         }
 
-        iterator begin()
+        K first() const
         {
-            return { m_values.data(), 0 };
+            return static_cast<K>(index);
         }
 
-        iterator end()
+        T& second()
         {
-            return { m_values.data(), LENGTH };
+            /*
+            if (!this) // Clang says this never happens
+            {
+                throw std::out_of_range("iterator out of range");
+            }
+            else
+            {*/
+            return *(value + index);
+            /*}*/
         }
 
-        const_iterator begin() const
+        base_iterator& operator++()
         {
-            return { m_values.data(), 0 };
+            index++;
+            return *this;
         }
 
-        const_iterator end() const
+        bool operator!=(const base_iterator& other) const
         {
-            return { m_values.data(), LENGTH };
+            return index != other.index;
         }
 
-        const std::array<K, LENGTH>& keys() const
+        bool operator==(const base_iterator& other) const
         {
-            return m_keys;
-        }
-
-        std::array<V, LENGTH>& values()
-        {
-            return m_values;
-        }
-
-        const std::array<V, LENGTH>& values() const
-        {
-            return m_values;
+            return index == other.index;
         }
 
     private:
-        std::array<K, LENGTH> m_keys;
-        std::array<V, LENGTH> m_values;
+        T* value;
+        index_type index;
     };
-}
+
+    using iterator = base_iterator<V>;
+    using const_iterator = base_iterator<const V>;
+    using node = typename iterator::node;
+    using cnode = typename const_iterator::node;
+
+    iterator find(K key)
+    {
+        return {m_values.data(), key};
+    }
+
+    const_iterator find(K key) const
+    {
+        return {m_values.data(), key};
+    }
+
+    iterator begin()
+    {
+        return {m_values.data(), 0};
+    }
+
+    iterator end()
+    {
+        return {m_values.data(), LENGTH};
+    }
+
+    const_iterator begin() const
+    {
+        return {m_values.data(), 0};
+    }
+
+    const_iterator end() const
+    {
+        return {m_values.data(), LENGTH};
+    }
+
+    const std::array<K, LENGTH>& keys() const
+    {
+        return m_keys;
+    }
+
+    std::array<V, LENGTH>& values()
+    {
+        return m_values;
+    }
+
+    const std::array<V, LENGTH>& values() const
+    {
+        return m_values;
+    }
+
+private:
+    std::array<K, LENGTH> m_keys;
+    std::array<V, LENGTH> m_values;
+};
+} // namespace jrc

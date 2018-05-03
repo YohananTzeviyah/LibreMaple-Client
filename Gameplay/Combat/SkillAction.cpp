@@ -19,70 +19,64 @@
 
 namespace jrc
 {
-    void RegularAction::apply(Char& target, Attack::Type atype) const
-    {
-        Weapon::Type weapontype = target.get_weapontype();
-        bool degenerate;
-        switch (weapontype)
-        {
-        case Weapon::BOW:
-        case Weapon::CROSSBOW:
-        case Weapon::CLAW:
-        case Weapon::GUN:
-            degenerate = atype != Attack::RANGED;
-            break;
-        default:
-            degenerate = false;
-        }
-
-        target.attack(degenerate);
+void RegularAction::apply(Char& target, Attack::Type atype) const
+{
+    Weapon::Type weapontype = target.get_weapontype();
+    bool degenerate;
+    switch (weapontype) {
+    case Weapon::BOW:
+    case Weapon::CROSSBOW:
+    case Weapon::CLAW:
+    case Weapon::GUN:
+        degenerate = atype != Attack::RANGED;
+        break;
+    default:
+        degenerate = false;
     }
 
+    target.attack(degenerate);
+}
 
-    SingleAction::SingleAction(nl::node src)
-    {
-        action = src["action"]["0"].get_string();
+SingleAction::SingleAction(nl::node src)
+{
+    action = src["action"]["0"].get_string();
+}
+
+void SingleAction::apply(Char& target, Attack::Type) const
+{
+    target.attack(action);
+}
+
+TwoHAction::TwoHAction(nl::node src)
+{
+    actions[false] = src["action"]["0"].get_string();
+    actions[true] = src["action"]["1"].get_string();
+}
+
+void TwoHAction::apply(Char& target, Attack::Type) const
+{
+    bool twohanded = target.is_twohanded();
+    std::string action = actions[twohanded];
+
+    target.attack(action);
+}
+
+ByLevelAction::ByLevelAction(nl::node src, int32_t id)
+{
+    for (auto sub : src["level"]) {
+        int32_t level = string_conversion::or_zero<int32_t>(sub.name());
+        actions[level] = sub["action"].get_string();
     }
 
-    void SingleAction::apply(Char& target, Attack::Type) const
-    {
-        target.attack(action);
-    }
+    skillid = id;
+}
 
-
-    TwoHAction::TwoHAction(nl::node src)
-    {
-        actions[false] = src["action"]["0"].get_string();
-        actions[true] = src["action"]["1"].get_string();
-    }
-
-    void TwoHAction::apply(Char& target, Attack::Type) const
-    {
-        bool twohanded = target.is_twohanded();
-        std::string action = actions[twohanded];
-
-        target.attack(action);
-    }
-
-
-    ByLevelAction::ByLevelAction(nl::node src, int32_t id)
-    {
-        for (auto sub : src["level"])
-        {
-            int32_t level = string_conversion::or_zero<int32_t>(sub.name());
-            actions[level] = sub["action"].get_string();
-        }
-
-        skillid = id;
-    }
-
-    void ByLevelAction::apply(Char& target, Attack::Type) const
-    {
-        int32_t level = target.get_skilllevel(skillid);
-        auto iter = actions.find(level);
-        if (iter != actions.end())
-        {
-            target.attack(iter->second);
-        }
+void ByLevelAction::apply(Char& target, Attack::Type) const
+{
+    int32_t level = target.get_skilllevel(skillid);
+    auto iter = actions.find(level);
+    if (iter != actions.end()) {
+        target.attack(iter->second);
     }
 }
+} // namespace jrc

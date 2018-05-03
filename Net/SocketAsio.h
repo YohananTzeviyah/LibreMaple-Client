@@ -18,42 +18,42 @@
 #pragma once
 #include "../Journey.h"
 #ifdef JOURNEY_USE_ASIO
-#include "NetConstants.h"
+#    include "NetConstants.h"
 
-#define BOOST_DATE_TIME_NO_LIB
-#define BOOST_REGEX_NO_LIB
-#include "asio.hpp"
+#    define BOOST_DATE_TIME_NO_LIB
+#    define BOOST_REGEX_NO_LIB
+#    include "asio.hpp"
 
 namespace jrc
 {
-#ifndef JOURNEY_USE_CRYPTO
-    const size_t HANDSHAKE_LEN = 2;
-#else
-    const size_t HANDSHAKE_LEN = 16;
-#endif
+#    ifndef JOURNEY_USE_CRYPTO
+const size_t HANDSHAKE_LEN = 2;
+#    else
+const size_t HANDSHAKE_LEN = 16;
+#    endif
 
-    using asio::io_service;
-    using asio::ip::tcp;
-    using asio::error_code;
+using asio::error_code;
+using asio::io_service;
+using asio::ip::tcp;
 
-    // Class that wraps an asio socket.
-    class SocketAsio
-    {
-    public:
-        SocketAsio();
-        ~SocketAsio();
+// Class that wraps an asio socket.
+class SocketAsio
+{
+public:
+    SocketAsio();
+    ~SocketAsio();
 
-        bool open(const char* adress, const char* port);
-        bool close();
-        size_t receive(bool* connected);
-        const int8_t* get_buffer() const;
-        bool dispatch(const int8_t* bytes, size_t length);
+    bool open(const char* adress, const char* port);
+    bool close();
+    size_t receive(bool* connected);
+    const int8_t* get_buffer() const;
+    bool dispatch(const int8_t* bytes, size_t length);
 
-    private:
-        io_service ioservice;
-        tcp::resolver resolver;
-        tcp::socket socket;
-        int8_t buffer[MAX_PACKET_LENGTH];
-    };
-}
+private:
+    io_service ioservice;
+    tcp::resolver resolver;
+    tcp::socket socket;
+    int8_t buffer[MAX_PACKET_LENGTH];
+};
+} // namespace jrc
 #endif

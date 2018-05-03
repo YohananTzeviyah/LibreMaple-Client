@@ -16,43 +16,47 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "Attack.h"
-
-#include "../MapleMap/Mob.h"
-
 #include "../../Character/Char.h"
 #include "../../Character/Job.h"
+#include "../MapleMap/Mob.h"
+#include "Attack.h"
 
 namespace jrc
 {
-    // Base class for attacks and buffs.
-    class SpecialMove
-    {
-    public:
-        enum ForbidReason
-        {
-            FBR_NONE,
-            FBR_WEAPONTYPE,
-            FBR_HPCOST,
-            FBR_MPCOST,
-            FBR_BULLETCOST,
-            FBR_COOLDOWN,
-            FBR_OTHER
-        };
-
-        virtual ~SpecialMove() {}
-
-        virtual void apply_useeffects(Char& user) const = 0;
-        virtual void apply_actions(Char& user, Attack::Type type) const = 0;
-        virtual void apply_stats(const Char& user, Attack& attack) const = 0;
-        virtual void apply_hiteffects(const AttackUser& user, Mob& target) const = 0;
-        virtual Animation get_bullet(const Char& user, int32_t bulletid) const = 0;
-
-        virtual bool is_attack() const = 0;
-        virtual bool is_skill() const = 0;
-        virtual int32_t get_id() const = 0;
-
-        virtual ForbidReason can_use(int32_t level, Weapon::Type weapon,
-            const Job& job, uint16_t hp, uint16_t mp, uint16_t bullets) const = 0;
+// Base class for attacks and buffs.
+class SpecialMove
+{
+public:
+    enum ForbidReason {
+        FBR_NONE,
+        FBR_WEAPONTYPE,
+        FBR_HPCOST,
+        FBR_MPCOST,
+        FBR_BULLETCOST,
+        FBR_COOLDOWN,
+        FBR_OTHER
     };
-}
+
+    virtual ~SpecialMove()
+    {
+    }
+
+    virtual void apply_useeffects(Char& user) const = 0;
+    virtual void apply_actions(Char& user, Attack::Type type) const = 0;
+    virtual void apply_stats(const Char& user, Attack& attack) const = 0;
+    virtual void apply_hiteffects(const AttackUser& user,
+                                  Mob& target) const = 0;
+    virtual Animation get_bullet(const Char& user, int32_t bulletid) const = 0;
+
+    virtual bool is_attack() const = 0;
+    virtual bool is_skill() const = 0;
+    virtual int32_t get_id() const = 0;
+
+    virtual ForbidReason can_use(int32_t level,
+                                 Weapon::Type weapon,
+                                 const Job& job,
+                                 uint16_t hp,
+                                 uint16_t mp,
+                                 uint16_t bullets) const = 0;
+};
+} // namespace jrc

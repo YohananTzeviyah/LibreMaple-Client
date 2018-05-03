@@ -20,13 +20,15 @@
 
 namespace jrc
 {
-    class PingHandler : public PacketHandler
-    {
-        void handle(InPacket& recv) const override;
-    };
+class PingHandler : public PacketHandler
+{
+    void handle(InPacket& recv) const override;
+};
 
-    class NullHandler : public PacketHandler
+class NullHandler : public PacketHandler
+{
+    void handle(InPacket&) const override
     {
-        void handle(InPacket&) const override {}
-    };
-}
+    }
+};
+} // namespace jrc

@@ -19,35 +19,39 @@
 
 namespace jrc
 {
-    TwoSpriteButton::TwoSpriteButton(nl::node nsrc, nl::node ssrc, Point<int16_t> pos)
-        : textures(ssrc, nsrc) {
+TwoSpriteButton::TwoSpriteButton(nl::node nsrc,
+                                 nl::node ssrc,
+                                 Point<int16_t> pos)
+    : textures(ssrc, nsrc)
+{
+    position = pos;
+    state = NORMAL;
+    active = true;
+}
 
-        position = pos;
-        state = NORMAL;
-        active = true;
-    }
+TwoSpriteButton::TwoSpriteButton(nl::node nsrc, nl::node ssrc)
+    : TwoSpriteButton(nsrc, ssrc, {})
+{
+}
 
-    TwoSpriteButton::TwoSpriteButton(nl::node nsrc, nl::node ssrc)
-        : TwoSpriteButton(nsrc, ssrc, {}) {}
+TwoSpriteButton::TwoSpriteButton() : textures({}, {})
+{
+}
 
-    TwoSpriteButton::TwoSpriteButton()
-        : textures({}, {}) {}
-
-    void TwoSpriteButton::draw(Point<int16_t> parentpos) const
-    {
-        if (active)
-        {
-            bool selected = state == MOUSEOVER || state == PRESSED;
-            textures[selected]
-                .draw(position + parentpos);
-        }
-    }
-
-    Rectangle<int16_t> TwoSpriteButton::bounds(Point<int16_t> parentpos) const
-    {
+void TwoSpriteButton::draw(Point<int16_t> parentpos) const
+{
+    if (active) {
         bool selected = state == MOUSEOVER || state == PRESSED;
-        Point<int16_t> absp = parentpos + position - textures[selected].get_origin();
-        Point<int16_t> dim = textures[selected].get_dimensions();
-        return{ absp, absp + dim };
+        textures[selected].draw(position + parentpos);
     }
 }
+
+Rectangle<int16_t> TwoSpriteButton::bounds(Point<int16_t> parentpos) const
+{
+    bool selected = state == MOUSEOVER || state == PRESSED;
+    Point<int16_t> absp =
+        parentpos + position - textures[selected].get_origin();
+    Point<int16_t> dim = textures[selected].get_dimensions();
+    return {absp, absp + dim};
+}
+} // namespace jrc

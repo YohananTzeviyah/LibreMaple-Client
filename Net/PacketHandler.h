@@ -18,15 +18,14 @@
 #pragma once
 #include "InPacket.h"
 
-
 namespace jrc
 {
-    /// Interface for classes that handle `InPacket`s.
-    class PacketHandler
-    {
-    public:
-        virtual ~PacketHandler() = default;
+/// Interface for classes that handle `InPacket`s.
+class PacketHandler
+{
+public:
+    virtual ~PacketHandler() = default;
 
-        virtual void handle(InPacket& recv) const = 0;
-    };
-}
+    virtual void handle(InPacket& recv) const = 0;
+};
+} // namespace jrc

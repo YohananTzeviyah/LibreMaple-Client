@@ -19,23 +19,23 @@
 
 namespace jrc
 {
-    template <class T>
-    class Singleton
+template<class T>
+class Singleton
+{
+public:
+    virtual ~Singleton() = default;
+
+    static T& get()
     {
-    public:
-        virtual ~Singleton() = default;
+        return instance;
+    }
 
-        static T& get()
-        {
-            return instance;
-        }
+    T& operator=(const T&) = delete;
 
-        T& operator=(const T&) = delete;
+private:
+    static T instance;
+};
 
-    private:
-        static T instance;
-    };
-
-    template <class T>
-    T Singleton<T>::instance;
-}
+template<class T>
+T Singleton<T>::instance;
+} // namespace jrc

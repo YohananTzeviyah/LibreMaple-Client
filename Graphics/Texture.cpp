@@ -16,78 +16,80 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #include "Texture.h"
-#include "GraphicsGL.h"
 
 #include "../Configuration.h"
-
+#include "GraphicsGL.h"
 #include "nlnx/nx.hpp"
 
 namespace jrc
 {
-    Texture::Texture(nl::node src)
-    {
-        if (src.data_type() == nl::node::type::bitmap)
-        {
-            std::string link = src["source"];
-            if (!link.empty())
-            {
-                nl::node srcfile = src;
-                while (srcfile != srcfile.root())
-                {
-                    srcfile = srcfile.root();
-                }
-                src = srcfile.resolve(link.substr(link.find('/') + 1));
+Texture::Texture(nl::node src)
+{
+    if (src.data_type() == nl::node::type::bitmap) {
+        std::string link = src["source"];
+        if (!link.empty()) {
+            nl::node srcfile = src;
+            while (srcfile != srcfile.root()) {
+                srcfile = srcfile.root();
             }
-
-            bitmap = src;
-            origin = src["origin"];
-            dimensions = Point<int16_t>(bitmap.width(),  bitmap.height());
-
-            GraphicsGL::get().addbitmap(bitmap);
+            src = srcfile.resolve(link.substr(link.find('/') + 1));
         }
-    }
 
-    Texture::Texture() {}
+        bitmap = src;
+        origin = src["origin"];
+        dimensions = Point<int16_t>(bitmap.width(), bitmap.height());
 
-    Texture::~Texture() {}
-
-    void Texture::draw(const DrawArgument& args) const
-    {
-        size_t id = bitmap.id();
-        if (id == 0)
-            return;
-
-        GraphicsGL::get()
-            .draw(bitmap, args.get_rectangle(origin, dimensions), args.get_color(), args.get_angle());
-    }
-
-    void Texture::shift(Point<int16_t> amount)
-    {
-        origin -= amount;
-    }
-
-    bool Texture::is_valid() const
-    {
-        return bitmap.id() > 0;
-    }
-
-    int16_t Texture::width() const
-    {
-        return dimensions.x();
-    }
-
-    int16_t Texture::height() const
-    {
-        return dimensions.y();
-    }
-
-    Point<int16_t> Texture::get_origin() const
-    {
-        return origin;
-    }
-
-    Point<int16_t> Texture::get_dimensions() const
-    {
-        return dimensions;
+        GraphicsGL::get().addbitmap(bitmap);
     }
 }
+
+Texture::Texture()
+{
+}
+
+Texture::~Texture()
+{
+}
+
+void Texture::draw(const DrawArgument& args) const
+{
+    size_t id = bitmap.id();
+    if (id == 0)
+        return;
+
+    GraphicsGL::get().draw(bitmap,
+                           args.get_rectangle(origin, dimensions),
+                           args.get_color(),
+                           args.get_angle());
+}
+
+void Texture::shift(Point<int16_t> amount)
+{
+    origin -= amount;
+}
+
+bool Texture::is_valid() const
+{
+    return bitmap.id() > 0;
+}
+
+int16_t Texture::width() const
+{
+    return dimensions.x();
+}
+
+int16_t Texture::height() const
+{
+    return dimensions.y();
+}
+
+Point<int16_t> Texture::get_origin() const
+{
+    return origin;
+}
+
+Point<int16_t> Texture::get_dimensions() const
+{
+    return dimensions;
+}
+} // namespace jrc

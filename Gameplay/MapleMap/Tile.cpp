@@ -16,27 +16,28 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #include "Tile.h"
+
 #include "nlnx/nx.hpp"
 
 namespace jrc
 {
-    Tile::Tile(nl::node src, const std::string& ts)
-    {
-        nl::node dsrc = nl::nx::map["Tile"][ts][src["u"]][src["no"]];
-        texture = Texture(nl::nx::map["Tile"][ts][src["u"]][src["no"]]);
-        pos = Point<int16_t>(src["x"], src["y"]);
-        z = dsrc["z"];
-        if (z == 0)
-            z = dsrc["zM"];
-    }
-
-    void Tile::draw(Point<int16_t> viewpos) const
-    {
-        texture.draw(pos + viewpos);
-    }
-
-    uint8_t Tile::getz() const
-    {
-        return z;
-    }
+Tile::Tile(nl::node src, const std::string& ts)
+{
+    nl::node dsrc = nl::nx::map["Tile"][ts][src["u"]][src["no"]];
+    texture = Texture(nl::nx::map["Tile"][ts][src["u"]][src["no"]]);
+    pos = Point<int16_t>(src["x"], src["y"]);
+    z = dsrc["z"];
+    if (z == 0)
+        z = dsrc["zM"];
 }
+
+void Tile::draw(Point<int16_t> viewpos) const
+{
+    texture.draw(pos + viewpos);
+}
+
+uint8_t Tile::getz() const
+{
+    return z;
+}
+} // namespace jrc

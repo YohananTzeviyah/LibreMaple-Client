@@ -19,17 +19,16 @@
 #include "../Journey.h"
 
 #ifdef JOURNEY_USE_XXHASH
-#include <cstdint>
-#include <string>
+#    include <cstdint>
+#    include <string>
 
 namespace jrc
 {
-    // Uses hashing to calculate the hash value of a game file.
-    namespace HashUtility
-    {
-        // Calculate file hash using the fast xxhash algorithm.
-        std::string get_filehash(const char* filename, uint64_t seed);
-    }
-}
+// Uses hashing to calculate the hash value of a game file.
+namespace HashUtility
+{
+// Calculate file hash using the fast xxhash algorithm.
+std::string get_filehash(const char* filename, uint64_t seed);
+} // namespace HashUtility
+} // namespace jrc
 #endif
-

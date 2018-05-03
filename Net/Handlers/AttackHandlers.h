@@ -16,45 +16,44 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../PacketHandler.h"
-
 #include "../../Gameplay/Combat/Attack.h"
+#include "../PacketHandler.h"
 
 namespace jrc
 {
-    class AttackHandler : public PacketHandler
+class AttackHandler : public PacketHandler
+{
+public:
+    void handle(InPacket& recv) const override;
+
+protected:
+    AttackHandler(Attack::Type type);
+
+private:
+    Attack::Type type;
+};
+
+class CloseAttackHandler : public AttackHandler
+{
+public:
+    CloseAttackHandler() : AttackHandler(Attack::CLOSE)
     {
-    public:
-        void handle(InPacket& recv) const override;
+    }
+};
 
-    protected:
-        AttackHandler(Attack::Type type);
-
-    private:
-        Attack::Type type;
-    };
-
-
-    class CloseAttackHandler : public AttackHandler
+class RangedAttackHandler : public AttackHandler
+{
+public:
+    RangedAttackHandler() : AttackHandler(Attack::RANGED)
     {
-    public:
-        CloseAttackHandler()
-            : AttackHandler(Attack::CLOSE) {}
-    };
+    }
+};
 
-
-    class RangedAttackHandler : public AttackHandler
+class MagicAttackHandler : public AttackHandler
+{
+public:
+    MagicAttackHandler() : AttackHandler(Attack::MAGIC)
     {
-    public:
-        RangedAttackHandler()
-            : AttackHandler(Attack::RANGED) {}
-    };
-
-
-    class MagicAttackHandler : public AttackHandler
-    {
-    public:
-        MagicAttackHandler()
-            : AttackHandler(Attack::MAGIC) {}
-    };
-}
+    }
+};
+} // namespace jrc

@@ -16,39 +16,45 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "BodyDrawInfo.h"
-
 #include "../../Graphics/Texture.h"
+#include "BodyDrawInfo.h"
 
 namespace jrc
 {
-    class Body
-    {
-    public:
-        enum Layer
-        {
-            NONE,
-            BODY, ARM, ARM_BELOW_HEAD, ARM_BELOW_HEAD_OVER_MAIL,
-            ARM_OVER_HAIR, ARM_OVER_HAIR_BELOW_WEAPON,
-            HAND_BELOW_WEAPON, HAND_OVER_HAIR, HAND_OVER_WEAPON, HEAD,
-            NUM_LAYERS
-        };
-
-        Body(int32_t skin, const BodyDrawinfo& drawinfo);
-
-        void draw(Stance::Id stance, Layer layer, uint8_t frame, const DrawArgument& args) const;
-
-        const std::string& get_name() const;
-
-
-        static Layer layer_by_name(const std::string& name);
-
-    private:
-        std::unordered_map<uint8_t, Texture> stances[Stance::LENGTH][Layer::NUM_LAYERS];
-        std::string name;
-
-
-        static const std::unordered_map<std::string, Layer> layers_by_name;
+class Body
+{
+public:
+    enum Layer {
+        NONE,
+        BODY,
+        ARM,
+        ARM_BELOW_HEAD,
+        ARM_BELOW_HEAD_OVER_MAIL,
+        ARM_OVER_HAIR,
+        ARM_OVER_HAIR_BELOW_WEAPON,
+        HAND_BELOW_WEAPON,
+        HAND_OVER_HAIR,
+        HAND_OVER_WEAPON,
+        HEAD,
+        NUM_LAYERS
     };
-}
 
+    Body(int32_t skin, const BodyDrawinfo& drawinfo);
+
+    void draw(Stance::Id stance,
+              Layer layer,
+              uint8_t frame,
+              const DrawArgument& args) const;
+
+    const std::string& get_name() const;
+
+    static Layer layer_by_name(const std::string& name);
+
+private:
+    std::unordered_map<uint8_t, Texture> stances[Stance::LENGTH]
+                                                [Layer::NUM_LAYERS];
+    std::string name;
+
+    static const std::unordered_map<std::string, Layer> layers_by_name;
+};
+} // namespace jrc

@@ -20,213 +20,213 @@
 
 namespace jrc
 {
-    template <typename T>
-    class Nominal
+template<typename T>
+class Nominal
+{
+public:
+    constexpr Nominal() : now(T()), before(T()), threshold(0.0f)
     {
-    public:
-        constexpr Nominal()
-            : now(T()), before(T()), threshold(0.0f) {}
+    }
 
-        T get() const
-        {
-            return now;
-        }
-
-        T get(float alpha) const
-        {
-            return alpha >= threshold ? now : before;
-        }
-
-        T last() const
-        {
-            return before;
-        }
-
-        void set(T value)
-        {
-            now = value;
-            before = value;
-        }
-
-        void normalize()
-        {
-            before = now;
-        }
-
-        bool normalized() const
-        {
-            return before == now;
-        }
-
-        void next(T value, float thrs)
-        {
-            before = now;
-            now = value;
-            threshold = thrs;
-        }
-
-        bool operator == (T value) const
-        {
-            return now == value;
-        }
-
-        bool operator != (T value) const
-        {
-            return now != value;
-        }
-
-        T operator + (T value) const
-        {
-            return now + value;
-        }
-
-        T operator - (T value) const
-        {
-            return now - value;
-        }
-
-        T operator * (T value) const
-        {
-            return now * value;
-        }
-
-        T operator / (T value) const
-        {
-            return now / value;
-        }
-
-    private:
-        T now;
-        T before;
-        float threshold;
-    };
-
-
-    template <typename T>
-    class Linear
+    T get() const
     {
-    public:
-        T get() const
-        {
-            return now;
-        }
+        return now;
+    }
 
-        T get(float alpha) const
-        {
-            return lerp<T>(before, now, alpha);
-        }
+    T get(float alpha) const
+    {
+        return alpha >= threshold ? now : before;
+    }
 
-        T last() const
-        {
-            return before;
-        }
+    T last() const
+    {
+        return before;
+    }
 
-        void set(T value)
-        {
-            now = value;
-            before = value;
-        }
+    void set(T value)
+    {
+        now = value;
+        before = value;
+    }
 
-        void normalize()
-        {
-            before = now;
-        }
+    void normalize()
+    {
+        before = now;
+    }
 
-        bool normalized() const
-        {
-            return before == now;
-        }
+    bool normalized() const
+    {
+        return before == now;
+    }
 
-        void operator = (T value)
-        {
-            before = now;
-            now = value;
-        }
+    void next(T value, float thrs)
+    {
+        before = now;
+        now = value;
+        threshold = thrs;
+    }
 
-        void operator += (T value)
-        {
-            before = now;
-            now += value;
-        }
+    bool operator==(T value) const
+    {
+        return now == value;
+    }
 
-        void operator -= (T value)
-        {
-            before = now;
-            now -= value;
-        }
+    bool operator!=(T value) const
+    {
+        return now != value;
+    }
 
-        bool operator == (T value) const
-        {
-            return now == value;
-        }
+    T operator+(T value) const
+    {
+        return now + value;
+    }
 
-        bool operator != (T value) const
-        {
-            return now != value;
-        }
+    T operator-(T value) const
+    {
+        return now - value;
+    }
 
-        bool operator < (T value) const
-        {
-            return now < value;
-        }
+    T operator*(T value) const
+    {
+        return now * value;
+    }
 
-        bool operator <= (T value) const
-        {
-            return now <= value;
-        }
+    T operator/(T value) const
+    {
+        return now / value;
+    }
 
-        bool operator > (T value) const
-        {
-            return now > value;
-        }
+private:
+    T now;
+    T before;
+    float threshold;
+};
 
-        bool operator >= (T value) const
-        {
-            return now >= value;
-        }
+template<typename T>
+class Linear
+{
+public:
+    T get() const
+    {
+        return now;
+    }
 
-        T operator + (T value) const
-        {
-            return now + value;
-        }
+    T get(float alpha) const
+    {
+        return lerp<T>(before, now, alpha);
+    }
 
-        T operator - (T value) const
-        {
-            return now - value;
-        }
+    T last() const
+    {
+        return before;
+    }
 
-        T operator * (T value) const
-        {
-            return now * value;
-        }
+    void set(T value)
+    {
+        now = value;
+        before = value;
+    }
 
-        T operator / (T value) const
-        {
-            return now / value;
-        }
+    void normalize()
+    {
+        before = now;
+    }
 
-        T operator + (Linear<T> value) const
-        {
-            return now + value.get();
-        }
+    bool normalized() const
+    {
+        return before == now;
+    }
 
-        T operator - (Linear<T> value) const
-        {
-            return now - value.get();
-        }
+    void operator=(T value)
+    {
+        before = now;
+        now = value;
+    }
 
-        T operator * (Linear<T> value) const
-        {
-            return now * value.get();
-        }
+    void operator+=(T value)
+    {
+        before = now;
+        now += value;
+    }
 
-        T operator / (Linear<T> value) const
-        {
-            return now / value.get();
-        }
+    void operator-=(T value)
+    {
+        before = now;
+        now -= value;
+    }
 
-    private:
-        T now;
-        T before;
-    };
-}
+    bool operator==(T value) const
+    {
+        return now == value;
+    }
+
+    bool operator!=(T value) const
+    {
+        return now != value;
+    }
+
+    bool operator<(T value) const
+    {
+        return now < value;
+    }
+
+    bool operator<=(T value) const
+    {
+        return now <= value;
+    }
+
+    bool operator>(T value) const
+    {
+        return now > value;
+    }
+
+    bool operator>=(T value) const
+    {
+        return now >= value;
+    }
+
+    T operator+(T value) const
+    {
+        return now + value;
+    }
+
+    T operator-(T value) const
+    {
+        return now - value;
+    }
+
+    T operator*(T value) const
+    {
+        return now * value;
+    }
+
+    T operator/(T value) const
+    {
+        return now / value;
+    }
+
+    T operator+(Linear<T> value) const
+    {
+        return now + value.get();
+    }
+
+    T operator-(Linear<T> value) const
+    {
+        return now - value.get();
+    }
+
+    T operator*(Linear<T> value) const
+    {
+        return now * value.get();
+    }
+
+    T operator/(Linear<T> value) const
+    {
+        return now / value.get();
+    }
+
+private:
+    T now;
+    T before;
+};
+} // namespace jrc

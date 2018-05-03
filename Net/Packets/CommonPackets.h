@@ -20,11 +20,13 @@
 
 namespace jrc
 {
-    // Packet which notifies the server that the connection is still alive.
-    // Opcode: PONG(24)
-    class PongPacket : public OutPacket
+// Packet which notifies the server that the connection is still alive.
+// Opcode: PONG(24)
+class PongPacket : public OutPacket
+{
+public:
+    PongPacket() : OutPacket(PONG)
     {
-    public:
-        PongPacket() : OutPacket(PONG) {}
-    };
-}
+    }
+};
+} // namespace jrc

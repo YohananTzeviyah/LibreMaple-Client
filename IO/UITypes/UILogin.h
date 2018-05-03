@@ -16,52 +16,50 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../UIElement.h"
-
-#include "../Components/Textfield.h"
-
 #include "../../Template/BoolPair.h"
+#include "../Components/Textfield.h"
+#include "../UIElement.h"
 
 namespace jrc
 {
-    class UILogin : public UIElement
-    {
-    public:
-        static constexpr Type TYPE = LOGIN;
-        static constexpr bool FOCUSED = false;
-        static constexpr bool TOGGLED = false;
+class UILogin : public UIElement
+{
+public:
+    static constexpr Type TYPE = LOGIN;
+    static constexpr bool FOCUSED = false;
+    static constexpr bool TOGGLED = false;
 
-        UILogin();
+    UILogin();
 
-        void draw(float alpha) const override;
-        void update() override;
+    void draw(float alpha) const override;
+    void update() override;
 
-        Cursor::State send_cursor(bool clicked, Point<int16_t> cursor_pos) override;
+    Cursor::State send_cursor(bool clicked,
+                              Point<int16_t> cursor_pos) override;
 
-    protected:
-        Button::State button_pressed(uint16_t id) override;
+protected:
+    Button::State button_pressed(uint16_t id) override;
 
-    private:
-        void login();
+private:
+    void login();
 
-        enum Buttons
-        {
-            BT_LOGIN,
-            BT_REGISTER,
-            BT_HOMEPAGE,
-            BT_PASSLOST,
-            BT_IDLOST,
-            BT_SAVEID,
-            BT_QUIT,
-            NUM_BUTTONS
-        };
-
-        Textfield account;
-        Textfield password;
-        Texture accountbg;
-        Texture passwordbg;
-        BoolPair<Texture> checkbox;
-
-        bool saveid;
+    enum Buttons {
+        BT_LOGIN,
+        BT_REGISTER,
+        BT_HOMEPAGE,
+        BT_PASSLOST,
+        BT_IDLOST,
+        BT_SAVEID,
+        BT_QUIT,
+        NUM_BUTTONS
     };
-}
+
+    Textfield account;
+    Textfield password;
+    Texture accountbg;
+    Texture passwordbg;
+    BoolPair<Texture> checkbox;
+
+    bool saveid;
+};
+} // namespace jrc

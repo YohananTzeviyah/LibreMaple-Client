@@ -23,28 +23,29 @@
 
 namespace jrc
 {
-    const float* Color::data() const
-    {
-        return rgba.data();
-    }
-
-    Color::underlying_t::const_iterator Color::begin() const
-    {
-        return rgba.begin();
-    }
-
-    Color::underlying_t::const_iterator Color::end() const
-    {
-        return rgba.end();
-    }
-
-    Color Color::blend(const Color& other, float alpha) const
-    {
-        underlying_t blended;
-        std::transform(begin(), end(), other.begin(), blended.begin(),
-            [alpha](float f, float s) {
-            return lerp(f, s, alpha);
-        });
-        return blended;
-    }
+const float* Color::data() const
+{
+    return rgba.data();
 }
+
+Color::underlying_t::const_iterator Color::begin() const
+{
+    return rgba.begin();
+}
+
+Color::underlying_t::const_iterator Color::end() const
+{
+    return rgba.end();
+}
+
+Color Color::blend(const Color& other, float alpha) const
+{
+    underlying_t blended;
+    std::transform(begin(),
+                   end(),
+                   other.begin(),
+                   blended.begin(),
+                   [alpha](float f, float s) { return lerp(f, s, alpha); });
+    return blended;
+}
+} // namespace jrc

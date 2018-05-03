@@ -17,35 +17,38 @@
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
 #include <cstdint>
-#include <unordered_map>
 #include <map>
+#include <unordered_map>
 
 namespace jrc
 {
-    // Class that stores all information about the skills of an individual character.
-    class Skillbook
-    {
-    public:
-        void set_skill(int32_t id, int32_t level, int32_t masterlevel, int64_t expiration);
+// Class that stores all information about the skills of an individual
+// character.
+class Skillbook
+{
+public:
+    void set_skill(int32_t id,
+                   int32_t level,
+                   int32_t masterlevel,
+                   int64_t expiration);
 
-        bool has_skill(int32_t id) const;
-        int32_t get_level(int32_t id) const;
-        int32_t get_masterlevel(int32_t id) const;
-        int64_t get_expiration(int32_t id) const;
+    bool has_skill(int32_t id) const;
+    int32_t get_level(int32_t id) const;
+    int32_t get_masterlevel(int32_t id) const;
+    int64_t get_expiration(int32_t id) const;
 
-        // Return id and level of all passive skills.
-        // An ordered map is used so that lower passive skills don't override higher ones.
-        std::map<int32_t, int32_t> collect_passives() const;
+    // Return id and level of all passive skills.
+    // An ordered map is used so that lower passive skills don't override
+    // higher ones.
+    std::map<int32_t, int32_t> collect_passives() const;
 
-    private:
-        struct SkillEntry
-        {
-            int32_t level;
-            int32_t masterlevel;
-            int64_t expiration;
-        };
-
-        std::unordered_map<int32_t, SkillEntry> skillentries;
+private:
+    struct SkillEntry {
+        int32_t level;
+        int32_t masterlevel;
+        int64_t expiration;
     };
-}
 
+    std::unordered_map<int32_t, SkillEntry> skillentries;
+};
+} // namespace jrc
