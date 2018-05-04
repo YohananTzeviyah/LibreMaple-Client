@@ -5,6 +5,8 @@ import os
 EXCLUDE_DIRS = [".git", "build", "gsl", ".vscode"]
 
 
+print(".*(", end="")
+
 for dirpath, _, filenames in os.walk("."):
     excluded = False
     for exl_dir in EXCLUDE_DIRS:
@@ -19,5 +21,6 @@ for dirpath, _, filenames in os.walk("."):
         if not filename.endswith(".h") and not filename.endswith(".cpp"):
             continue
 
-        fullname = os.path.join(dirpath, filename)
-        os.system(f"clang-format -verbose -i {fullname}")
+        print(filename.replace(".", r"\.") + "|", end="")
+
+print(r"Journey\.cpp)", end="")
