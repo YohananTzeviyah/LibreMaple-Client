@@ -44,7 +44,7 @@ void PlayerNullState::update_state(Player& player) const
             state = Char::STAND;
         }
     } else {
-        Optional<const Ladder> ladder = player.get_ladder();
+        nullable_ptr<const Ladder> ladder = player.get_ladder();
         if (ladder) {
             state = ladder->is_ladder() ? Char::LADDER : Char::ROPE;
         } else {

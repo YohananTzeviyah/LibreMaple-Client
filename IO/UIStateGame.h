@@ -17,7 +17,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
 #include "../Template/EnumMap.h"
-#include "../Template/Optional.h"
+#include "../Template/nullable_ptr.h"
 #include "Components/EquipTooltip.h"
 #include "Components/ItemTooltip.h"
 #include "Components/SkillTooltip.h"
@@ -68,9 +68,9 @@ private:
     EquipTooltip eqtooltip;
     ItemTooltip ittooltip;
     SkillTooltip sktooltip;
-    Optional<Tooltip> tooltip;
+    nullable_ptr<Tooltip> tooltip;
     Tooltip::Parent tooltipparent;
 
-    Optional<Icon> draggedicon;
+    nullable_ptr<Icon> draggedicon;
 };
 } // namespace jrc

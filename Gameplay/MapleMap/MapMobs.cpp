@@ -38,7 +38,7 @@ void MapMobs::update(const Physics& physics)
     for (; !spawns.empty(); spawns.pop()) {
         const MobSpawn& spawn = spawns.front();
 
-        if (Optional<Mob> mob = mobs.get(spawn.get_oid())) {
+        if (nullable_ptr<Mob> mob = mobs.get(spawn.get_oid())) {
             int8_t mode = spawn.get_mode();
             if (mode > 0) {
                 mob->set_control(mode);
@@ -59,7 +59,7 @@ void MapMobs::spawn(MobSpawn&& spawn)
 
 void MapMobs::remove(int32_t oid, int8_t animation)
 {
-    if (Optional<Mob> mob = mobs.get(oid)) {
+    if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->kill(animation);
     }
 }
@@ -72,14 +72,14 @@ void MapMobs::clear()
 void MapMobs::set_control(int32_t oid, bool control)
 {
     int8_t mode = control ? 1 : 0;
-    if (Optional<Mob> mob = mobs.get(oid)) {
+    if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->set_control(mode);
     }
 }
 
 void MapMobs::send_mobhp(int32_t oid, int8_t percent, uint16_t playerlevel)
 {
-    if (Optional<Mob> mob = mobs.get(oid)) {
+    if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->show_hp(percent, playerlevel);
     }
 }
@@ -88,7 +88,7 @@ void MapMobs::send_movement(int32_t oid,
                             Point<int16_t> start,
                             std::vector<Movement>&& movements)
 {
-    if (Optional<Mob> mob = mobs.get(oid)) {
+    if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->send_movement(start, std::move(movements));
     }
 }
@@ -114,7 +114,7 @@ AttackResult MapMobs::send_attack(const Attack& attack)
     AttackResult result = attack;
     std::vector<int32_t> targets = find_closest(range, origin, mobcount);
     for (const auto& target : targets) {
-        if (Optional<Mob> mob = mobs.get(target)) {
+        if (nullable_ptr<Mob> mob = mobs.get(target)) {
             result.damagelines[target] = mob->calculate_damage(attack);
             result.mobcount++;
 
@@ -135,7 +135,7 @@ void MapMobs::apply_damage(int32_t oid,
                            const AttackUser& user,
                            const SpecialMove& move)
 {
-    if (Optional<Mob> mob = mobs.get(oid)) {
+    if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->apply_damage(damage, toleft);
 
         // maybe move this into the method above too?
@@ -184,7 +184,7 @@ int32_t MapMobs::find_colliding(const MovingObject& moveobj) const
 
     auto iter =
         std::find_if(mobs.begin(), mobs.end(), [&player_rect](auto& mmo) {
-            Optional<Mob> mob = mmo.second.get();
+            nullable_ptr<Mob> mob = mmo.second.get();
             return mob && mob->is_alive() && mob->is_in_range(player_rect);
         });
 
@@ -197,7 +197,7 @@ int32_t MapMobs::find_colliding(const MovingObject& moveobj) const
 
 MobAttack MapMobs::create_attack(int32_t oid) const
 {
-    if (Optional<const Mob> mob = mobs.get(oid)) {
+    if (nullable_ptr<const Mob> mob = mobs.get(oid)) {
         return mob->create_touch_attack();
     } else {
         return {};
@@ -215,7 +215,7 @@ Point<int16_t> MapMobs::get_mob_position(int32_t oid) const
 
 Point<int16_t> MapMobs::get_mob_head_position(int32_t oid) const
 {
-    if (Optional<const Mob> mob = mobs.get(oid)) {
+    if (nullable_ptr<const Mob> mob = mobs.get(oid)) {
         return mob->get_head_position();
     } else {
         return {};

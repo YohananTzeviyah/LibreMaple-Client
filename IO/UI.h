@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../Template/Optional.h"
+#include "../Template/nullable_ptr.h"
 #include "../Template/Singleton.h"
 #include "Components/Icon.h"
 #include "Components/ScrollingNotice.h"
@@ -70,9 +70,9 @@ public:
                     int64_t expiration);
 
     template<class T, typename... Args>
-    Optional<T> emplace(Args&&... args);
+    nullable_ptr<T> emplace(Args&&... args);
     template<class T>
-    Optional<T> get_element();
+    nullable_ptr<T> get_element();
     void remove(UIElement::Type type);
 
 private:
@@ -81,7 +81,7 @@ private:
     Cursor cursor;
     ScrollingNotice scrollingnotice;
 
-    Optional<Textfield> focusedtextfield;
+    nullable_ptr<Textfield> focusedtextfield;
     std::unordered_map<int32_t, bool> is_key_down;
 
     bool enabled;
@@ -89,7 +89,7 @@ private:
 };
 
 template<class T, typename... Args>
-Optional<T> UI::emplace(Args&&... args)
+nullable_ptr<T> UI::emplace(Args&&... args)
 {
     if (auto iter = state->pre_add(T::TYPE, T::TOGGLED, T::FOCUSED)) {
         (*iter).second = std::make_unique<T>(std::forward<Args>(args)...);
@@ -98,7 +98,7 @@ Optional<T> UI::emplace(Args&&... args)
 }
 
 template<class T>
-Optional<T> UI::get_element()
+nullable_ptr<T> UI::get_element()
 {
     UIElement::Type type = T::TYPE;
     UIElement* element = state->get(type);

@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../../Template/Optional.h"
+#include "../../Template/nullable_ptr.h"
 #include "Layer.h"
 #include "MapObject.h"
 
@@ -47,9 +47,9 @@ public:
     // Check if a map object with the specified id exists on the map.
     bool contains(int32_t oid) const;
     // Obtains a pointer to the mapobject with the given oid.
-    Optional<MapObject> get(int32_t oid);
+    nullable_ptr<MapObject> get(int32_t oid);
     // Obtains a const pointer to the mapobject with the given oid.
-    Optional<const MapObject> get(int32_t oid) const;
+    nullable_ptr<const MapObject> get(int32_t oid) const;
 
     using underlying_t =
         typename std::unordered_map<int32_t, std::unique_ptr<MapObject>>;

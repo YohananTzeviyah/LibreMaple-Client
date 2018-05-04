@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../../Template/Optional.h"
+#include "../../Template/nullable_ptr.h"
 #include "../../Template/Point.h"
 #include "../../Template/Range.h"
 #include "nlnx/node.hpp"
@@ -66,10 +66,10 @@ public:
     Range<int16_t> get_borders() const;
 
     // Find a setat the player's position.
-    Optional<const Seat> findseat(Point<int16_t> position) const;
+    nullable_ptr<const Seat> findseat(Point<int16_t> position) const;
     // Find a ladder at the player's position. upwards = false implies
     // downwards.
-    Optional<const Ladder> findladder(Point<int16_t> position,
+    nullable_ptr<const Ladder> findladder(Point<int16_t> position,
                                       bool upwards) const;
 
 private:

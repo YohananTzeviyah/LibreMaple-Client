@@ -56,7 +56,7 @@ void MapDrops::update(const Physics& physics)
         const DropSpawn& spawn = spawns.front();
 
         int32_t oid = spawn.get_oid();
-        if (Optional<MapObject> drop = drops.get(oid)) {
+        if (nullable_ptr<MapObject> drop = drops.get(oid)) {
             drop->makeactive();
         } else {
             int32_t itemid = spawn.get_itemid();
@@ -92,7 +92,7 @@ void MapDrops::spawn(DropSpawn&& spawn)
 
 void MapDrops::remove(int32_t oid, int8_t mode, const PhysicsObject* looter)
 {
-    if (Optional<Drop> drop = drops.get(oid)) {
+    if (nullable_ptr<Drop> drop = drops.get(oid)) {
         drop->expire(mode, looter);
     }
 }
@@ -108,7 +108,7 @@ MapDrops::Loot MapDrops::find_loot_at(Point<int16_t> playerpos)
         return {0, {}};
 
     for (auto& mmo : drops) {
-        Optional<const Drop> drop = mmo.second.get();
+        nullable_ptr<const Drop> drop = mmo.second.get();
         if (drop && drop->bounds().contains(playerpos)) {
             lootenabled = false;
 

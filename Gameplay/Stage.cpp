@@ -190,7 +190,7 @@ void Stage::check_seats()
         return;
     }
 
-    Optional<const Seat> seat = mapinfo.findseat(player.get_position());
+    nullable_ptr<const Seat> seat = mapinfo.findseat(player.get_position());
     player.set_seat(seat);
 }
 
@@ -200,7 +200,7 @@ void Stage::check_ladders(bool up)
         return;
     }
 
-    Optional<const Ladder> ladder =
+    nullable_ptr<const Ladder> ladder =
         mapinfo.findladder(player.get_position(), up);
     player.set_ladder(ladder);
 }
@@ -306,7 +306,7 @@ Combat& Stage::get_combat()
     return combat;
 }
 
-Optional<Char> Stage::get_character(int32_t cid)
+nullable_ptr<Char> Stage::get_character(int32_t cid)
 {
     if (is_player(cid)) {
         return player;

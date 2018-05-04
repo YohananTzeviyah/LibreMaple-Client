@@ -178,7 +178,7 @@ void Combat::push_attack(const AttackResult& attack)
 
 void Combat::apply_attack(const AttackResult& attack)
 {
-    if (Optional<OtherChar> ouser = chars.get_char(attack.attacker)) {
+    if (nullable_ptr<OtherChar> ouser = chars.get_char(attack.attacker)) {
         OtherChar& user = *ouser;
         user.update_skill(attack.skill, attack.level);
         user.update_speed(attack.speed);
@@ -291,7 +291,7 @@ Combat::place_numbers(int32_t oid,
 
 void Combat::show_buff(int32_t cid, int32_t skillid, int8_t level)
 {
-    if (Optional<OtherChar> ouser = chars.get_char(cid)) {
+    if (nullable_ptr<OtherChar> ouser = chars.get_char(cid)) {
         OtherChar& user = *ouser;
         user.update_skill(skillid, level);
 

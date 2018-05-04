@@ -22,32 +22,32 @@
 namespace jrc
 {
 template<typename T>
-class Optional
+class nullable_ptr
 {
 public:
     template<typename R,
              typename = std::enable_if_t<std::is_base_of<R, T>::value ||
                                          std::is_base_of<T, R>::value>>
-    constexpr Optional(R* r_val) : val(static_cast<T*>(r_val))
+    constexpr nullable_ptr(R* r_val) : val(static_cast<T*>(r_val))
     {
     }
 
     template<typename R,
              typename = std::enable_if_t<std::is_base_of<R, T>::value ||
                                          std::is_base_of<T, R>::value>>
-    constexpr Optional(Optional<R> r_opt) : Optional(r_opt.get())
+    constexpr nullable_ptr(nullable_ptr<R> r_opt) : nullable_ptr(r_opt.get())
     {
     }
 
-    constexpr Optional(T* p) : val(p)
+    constexpr nullable_ptr(T* p) : val(p)
     {
     }
 
-    constexpr Optional(T& p) : val(&p)
+    constexpr nullable_ptr(T& p) : val(&p)
     {
     }
 
-    constexpr Optional() : val(nullptr)
+    constexpr nullable_ptr() : val(nullptr)
     {
     }
 

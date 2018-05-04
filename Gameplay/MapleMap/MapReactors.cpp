@@ -52,7 +52,7 @@ void MapReactors::spawn(ReactorSpawn&& spawn)
 
 void MapReactors::remove(int32_t oid, int8_t state, Point<int16_t> position)
 {
-    if (Optional<Reactor> reactor = reactors.get(oid)) {
+    if (nullable_ptr<Reactor> reactor = reactors.get(oid)) {
         reactor->destroy(state, position);
     }
 }

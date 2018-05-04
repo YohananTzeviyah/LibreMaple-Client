@@ -130,13 +130,13 @@ public:
     /// Returns if a Keyaction is currently active.
     bool is_key_down(KeyAction::Id action) const;
     /// Return a pointer to the ladder the player is on.
-    Optional<const Ladder> get_ladder() const;
+    nullable_ptr<const Ladder> get_ladder() const;
 
     /// Change players position to the seat's position and stance to Char::SIT.
-    void set_seat(Optional<const Seat> seat);
+    void set_seat(nullable_ptr<const Seat> seat);
     /// Change players xpos to the ladder x and change stance to Char::LADDER
     /// or Char::ROPE.
-    void set_ladder(Optional<const Ladder> ladder);
+    void set_ladder(nullable_ptr<const Ladder> ladder);
 
     /// Obtain a reference to the player's stats.
     CharStats& get_stats();
@@ -175,7 +175,7 @@ private:
 
     Randomizer randomizer;
 
-    Optional<const Ladder> ladder;
+    nullable_ptr<const Ladder> ladder;
     bool underwater;
 };
 } // namespace jrc

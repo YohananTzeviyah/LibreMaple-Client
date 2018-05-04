@@ -420,7 +420,7 @@ void Player::change_job(uint16_t jobid)
     stats.change_job(jobid);
 }
 
-void Player::set_seat(Optional<const Seat> seat)
+void Player::set_seat(nullable_ptr<const Seat> seat)
 {
     if (seat) {
         set_position(seat->getpos());
@@ -428,7 +428,7 @@ void Player::set_seat(Optional<const Seat> seat)
     }
 }
 
-void Player::set_ladder(Optional<const Ladder> ldr)
+void Player::set_ladder(nullable_ptr<const Ladder> ldr)
 {
     ladder = ldr;
 
@@ -514,7 +514,7 @@ Monsterbook& Player::get_monsterbook()
     return monsterbook;
 }
 
-Optional<const Ladder> Player::get_ladder() const
+nullable_ptr<const Ladder> Player::get_ladder() const
 {
     return ladder;
 }

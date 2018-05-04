@@ -91,13 +91,13 @@ void MapObjects::remove(int32_t oid)
     }
 }
 
-Optional<MapObject> MapObjects::get(int32_t oid)
+nullable_ptr<MapObject> MapObjects::get(int32_t oid)
 {
     auto iter = objects.find(oid);
     return iter != objects.end() ? iter->second.get() : nullptr;
 }
 
-Optional<const MapObject> MapObjects::get(int32_t oid) const
+nullable_ptr<const MapObject> MapObjects::get(int32_t oid) const
 {
     auto iter = objects.find(oid);
     return iter != objects.end() ? iter->second.get() : nullptr;

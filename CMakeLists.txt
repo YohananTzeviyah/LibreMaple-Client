@@ -127,7 +127,7 @@ SET(SOURCE_FILES ${Root_CPP}
                  ${Packets_H}
                  ${Helpers_H}
                  ${nlnx_H}
-                 "gsl/gsl-lite.h")
+                 "gsl/gsl-lite.hpp")
 
 # Adding file globs created above as libraries
 add_library(Audio         ${Audio_CPP})

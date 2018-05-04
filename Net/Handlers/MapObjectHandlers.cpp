@@ -109,7 +109,7 @@ void RemoveCharHandler::handle(InPacket& recv) const
 void SpawnPetHandler::handle(InPacket& recv) const
 {
     int32_t cid = recv.read_int();
-    Optional<Char> character = Stage::get().get_character(cid);
+    nullable_ptr<Char> character = Stage::get().get_character(cid);
     if (!character)
         return;
 
@@ -366,7 +366,7 @@ void RemoveLootHandler::handle(InPacket& recv) const
     int8_t mode = recv.read_byte();
     int32_t oid = recv.read_int();
 
-    Optional<PhysicsObject> looter;
+    nullable_ptr<PhysicsObject> looter;
     if (mode > 1) {
         int32_t cid = recv.read_int();
         if (recv.length() > 0) {

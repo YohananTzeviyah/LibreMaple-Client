@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../../Template/Optional.h"
+#include "../../Template/nullable_ptr.h"
 #include "Portal.h"
 #include "nlnx/node.hpp"
 

@@ -83,7 +83,7 @@ public:
     Combat& get_combat();
 
     // Return a pointer to a character, possibly the player.
-    Optional<Char> get_character(int32_t cid);
+    nullable_ptr<Char> get_character(int32_t cid);
 
 private:
     void load_map(int32_t mapid);
@@ -99,7 +99,7 @@ private:
     Physics physics;
     Player player;
 
-    Optional<Playable> playable;
+    nullable_ptr<Playable> playable;
     State state;
 
     MapInfo mapinfo;

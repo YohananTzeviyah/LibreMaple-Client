@@ -78,7 +78,7 @@ Range<int16_t> MapInfo::get_borders() const
     return mapborders;
 }
 
-Optional<const Seat> MapInfo::findseat(Point<int16_t> position) const
+nullable_ptr<const Seat> MapInfo::findseat(Point<int16_t> position) const
 {
     for (auto& seat : seats) {
         if (seat.inrange(position))
@@ -87,7 +87,7 @@ Optional<const Seat> MapInfo::findseat(Point<int16_t> position) const
     return nullptr;
 }
 
-Optional<const Ladder> MapInfo::findladder(Point<int16_t> position,
+nullable_ptr<const Ladder> MapInfo::findladder(Point<int16_t> position,
                                            bool upwards) const
 {
     for (auto& ladder : ladders) {

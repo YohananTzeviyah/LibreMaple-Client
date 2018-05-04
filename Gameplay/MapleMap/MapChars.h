@@ -46,7 +46,7 @@ public:
     // Update a characters look.
     void update_look(int32_t cid, const LookEntry& look);
 
-    Optional<OtherChar> get_char(int32_t cid);
+    nullable_ptr<OtherChar> get_char(int32_t cid);
 
 private:
     MapObjects chars;
