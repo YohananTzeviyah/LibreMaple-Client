@@ -7,17 +7,22 @@ if(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Debug)
 endif()
 
+# Force the use of lld for linking
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld")
+SET(CMAKE_AR "llvm-ar")
+SET(CMAKE_RANLIB "llvm-ranlib")
+
 # Set compiler flags
 SET(REQUIRED_FLAGS "-std=c++17 -pipe -DASIO_STANDALONE -DGLEW_NO_GLU -lglut -lGL -ldl -lXinerama -lXext -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -pthread -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     SET(CMAKE_CXX_FLAGS "-O -g -ftrapv ${REQUIRED_FLAGS}")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
-    SET(CMAKE_CXX_FLAGS "-O3 -flto=full -DNDEBUG ${REQUIRED_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "-O4 -flto=full -DNDEBUG ${REQUIRED_FLAGS}")
 elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-    SET(CMAKE_CXX_FLAGS "-Os -DNDEBUG ${REQUIRED_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "-Oz -DNDEBUG ${REQUIRED_FLAGS}")
 elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-    SET(CMAKE_CXX_FLAGS "-O3 -flto=full -g ${REQUIRED_FLAGS}")
+    SET(CMAKE_CXX_FLAGS "-O2 -flto=full -g ${REQUIRED_FLAGS}")
 else()
     SET(CMAKE_CXX_FLAGS "-O -g -ftrapv ${REQUIRED_FLAGS}")
 endif()

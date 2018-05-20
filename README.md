@@ -37,6 +37,8 @@ The client is currently compatible with GMS version 83 servers. For the UI file
 #### Dependencies
 
 * [clang](http://clang.llvm.org/) (version 6+)
+* [lld](https://lld.llvm.org/) (version 6+)
+* [llvm](https://llvm.org/) (version 6+, including any "tools" or "runtime")
 * [cmake](https://cmake.org/) (version 3.10+)
 * [make](https://www.gnu.org/software/make/) (GNU Make version 4+)
 * [git](https://git-scm.com/)
@@ -133,6 +135,8 @@ $ cd build
 $ cmake -D CMAKE_BUILD_TYPE=Debug ..
 # Or `make -jN` with N being the number of CPU cores you wish to utilize.
 $ make
+# For `Release` and `MinSizeRel` builds only:
+$ strip JourneyClient
 ```
 
 If all this is successful, you should have the executable in your current
