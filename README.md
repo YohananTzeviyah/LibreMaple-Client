@@ -32,7 +32,7 @@ The client is currently compatible with GMS version 83 servers. For the UI file
 
 ## How to compile/install
 
-### [Unix-like systems](https://en.wikipedia.org/wiki/Unix-like) (GNU+Linux, FreeBSD, etc.) (may also work for Unix-like Windows subsystems like [Cygwin](https://en.wikipedia.org/wiki/Cygwin), [MinGW](https://en.wikipedia.org/wiki/MinGW), or [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux))
+### [Unix-like systems](https://en.wikipedia.org/wiki/Unix-like) excluding macOS (GNU+Linux, FreeBSD, etc.) (may also work for Unix-like Windows subsystems like [Cygwin](https://en.wikipedia.org/wiki/Cygwin), [MinGW](https://en.wikipedia.org/wiki/MinGW), or [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux))
 
 #### Dependencies
 
@@ -48,11 +48,15 @@ The client is currently compatible with GMS version 83 servers. For the UI file
 * [autoconf](https://www.gnu.org/software/autoconf/autoconf.html)
 * [libtool](https://www.gnu.org/software/libtool/)
 * [sh or bash](https://en.wikipedia.org/wiki/Bourne_shell)
-* [glut](http://freeglut.sourceforge.net/) / freeglut / freeglut3, freeglut3-dev (an implementation of GLUT, including development files, version 3)
+* [glut](http://freeglut.sourceforge.net/) / freeglut / freeglut3,
+  freeglut3-dev (an implementation of GLUT, including development files,
+  version 3)
 * libXmu / libxmu (including the "development" version, if that's separate)
 * libXi / libxi (including the "development" version)
-* libgl-dev / libgl1-mesa-dev / libgl / mesa / libGL-devel (implementation of OpenGL with development files)
-* libosmesa-dev / libosmesa / osmesa (skip this if your package manager doesn't have it)
+* libgl-dev / libgl1-mesa-dev / libgl / mesa / libGL-devel (implementation of
+  OpenGL with development files)
+* libosmesa-dev / libosmesa / osmesa (skip this if your package manager doesn't
+  have it)
 * xorg / xorg-dev / xorg-server-devel (Xorg development libraries)
 * build-essential (for users of Debian-based distibutions only)
 
@@ -141,6 +145,115 @@ $ strip JourneyClient
 
 If all this is successful, you should have the executable in your current
 directory (`LibreMaple-Client/build`).
+
+### macOS
+
+#### Dependencies
+
+* macOS Command Line Tools (can be installed using `xcode-select --install`,
+  includes clang, git, make, and some things needed for basic clang
+  functionality)
+* [Homebrew](https://brew.sh/)
+* [llvm](https://llvm.org/) (`brew install llvm`)
+* [cmake](https://cmake.org/) (`brew install cmake`)
+* [wget](https://www.gnu.org/software/wget/) (`brew install wget`)
+* [autoconf](https://www.gnu.org/software/autoconf/autoconf.html)
+  (`brew install autoconf`)
+* [libtool](https://www.gnu.org/software/libtool/) (`brew install libtool`; the
+  macOS CL tools come with a libtool, but this installs the GNU version with
+  'g' prefix e.g. `glibtoolize`)
+* [freeglut](http://freeglut.sourceforge.net/) (`brew install freeglut`; may
+  require you to separately install XQuartz, one way to do this is
+  `brew cask install xquartz`)
+* [freetype](https://www.freetype.org/) (`brew install freetype`)
+
+#### Instructions
+
+```bash
+$ git clone https://github.com/Libre-Maple/LibreMaple-Client.git
+$ git clone https://github.com/NoLifeDev/NoLifeNx.git nlnx
+
+# The next command is probably best replaced by navigating to
+# https://sourceforge.net/projects/asio/files/latest/download
+# and downloading from there to get the latest stable version of ASIO.
+$ wget https://downloads.sourceforge.net/project/asio/asio/1.12.1%20%28Stable%29/asio-1.12.1.tar.bz2
+$ mkdir asio
+$ tar xf asio-* --strip-components=1 -C asio/
+$ rm asio-*
+
+$ git clone https://github.com/glfw/glfw.git
+
+# Again, the following command can be replaced by just going to
+# https://sourceforge.net/projects/glew/files/glew
+# and downloading the latest version of GLEW.
+$ wget https://downloads.sourceforge.net/project/glew/glew/2.1.0/glew-2.1.0.tgz
+$ mkdir glew
+$ tar xf glew-* --strip-components=1 -C glew/
+$ rm glew-*
+
+# www.un4seen.com
+$ wget http://www.un4seen.com/files/bass24-osx.zip
+$ mkdir bass
+$ unzip bass2* -d bass/
+$ rm bass2*
+
+$ git clone https://github.com/lz4/lz4.git
+
+$ export CC='clang'
+$ export CXX='clang++'
+
+$ cd glew
+$ make
+$ cd ..
+
+$ cd glfw
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
+$ cd ../..
+
+$ cd lz4
+$ make
+$ cd ..
+
+$ cd LibreMaple-Client
+$ mkdir build
+$ cd build
+# Build type may also be `Release`, `RelWithDebInfo`, or `MinSizeRel`.
+# Additionally,pass in the argument `-D NATIVE_BUILD=true` if you desire a
+# native-only build (`-march=native`).
+$ cmake -D CMAKE_BUILD_TYPE=Debug ..
+# Or `make -jN` with N being the number of CPU cores you wish to utilize.
+$ make
+# For `Release` and `MinSizeRel` builds only:
+$ strip JourneyClient
+```
+
+If all this is successful, you should have the executable in your current
+directory (`LibreMaple-Client/build`). However, it probably will not run right
+away, since the paths that the executable looks for dylibs on will be wrong.
+
+In order to fix this, gather up the following files, copying them to wherever
+you find most appropriate if desired (you may want to put them all into the
+same directory as the executable for ease of use). All paths shown here are
+relative to the base directory where you cloned all of the repos and extracted
+the tarballs:
+
+* `libbass.dylib` (found as `bass/libbass.dylib`)
+* `libGLEW.dylib` (found as `glew/lib/libGLEW.dylib`, this should be a symlink
+  to `libGLEW.2.1.0.dylib` or something like that, so be aware)
+* `liblz4.dylib` (found as `lz4/lib/liblz4.dylib`, this should be a symlink to
+  `liblz4.1.8.2.dylib` or something like that, so be aware)
+
+Now that you have the locations of these dylibs, you can change the executable
+to point to them. Like this, for example:
+
+```bash
+$ install_name_tool -change @loader_path/libbass.dylib ./libbass.dylib JourneyClient
+$ install_name_tool -change /usr/local/lib/libGLEW.2.1.0.dylib ./libGLEW.2.1.0.dylib JourneyClient
+$ install_name_tool -change /usr/local/lib/liblz4.1.dylib ./liblz4.1.8.2.dylib JourneyClient
+```
 
 ### Windows NT (Windows 7, 8, 10+)
 
