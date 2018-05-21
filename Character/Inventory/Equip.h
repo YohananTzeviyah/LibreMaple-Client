@@ -18,6 +18,8 @@
 #pragma once
 #include "EquipQuality.h"
 
+#include <string>
+
 namespace jrc
 {
 class Equip

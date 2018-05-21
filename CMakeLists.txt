@@ -8,12 +8,13 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Force the use of lld for linking
-SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld")
-SET(CMAKE_AR "llvm-ar")
-SET(CMAKE_RANLIB "llvm-ranlib")
+#SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=lld")
+#SET(CMAKE_AR "llvm-ar")
+#SET(CMAKE_RANLIB "llvm-ranlib")
 
 # Set compiler flags
-SET(REQUIRED_FLAGS "-std=c++17 -pipe -DASIO_STANDALONE -DGLEW_NO_GLU -lglut -lGL -ldl -lXinerama -lXext -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -pthread -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
+#SET(REQUIRED_FLAGS "-std=c++17 -pipe -DASIO_STANDALONE -DGLEW_NO_GLU -lglut -lGL -ldl -lXinerama -lXext -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -pthread -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
+SET(REQUIRED_FLAGS "-std=c++17 -nostdinc++ -I/usr/local/Cellar/llvm/6.0.0/include/c++/v1 -L/usr/local/Cellar/llvm/6.0.0/lib -Wl,-rpath,/usr/local/Cellar/llvm/6.0.0/lib -pipe -DASIO_STANDALONE -DGLEW_NO_GLU -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -lglut -ldl -pthread -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     SET(CMAKE_CXX_FLAGS "-O -g -ftrapv ${REQUIRED_FLAGS}")
@@ -202,17 +203,22 @@ target_link_libraries(JourneyClient Configuration)
 target_link_libraries(JourneyClient nlnx)
 
 # Link in shared object files
-target_link_libraries(JourneyClient "${CMAKE_CURRENT_SOURCE_DIR}/../freetype/objs/.libs/libfreetype.so")
-target_link_libraries(JourneyClient "${CMAKE_CURRENT_SOURCE_DIR}/../bass/x64/libbass.so")
-target_link_libraries(JourneyClient "${CMAKE_CURRENT_SOURCE_DIR}/../glew/lib/libGLEW.so")
+#target_link_libraries(JourneyClient "${CMAKE_CURRENT_SOURCE_DIR}/../freetype/objs/.libs/libfreetype.so")
+target_link_libraries(JourneyClient "/usr/local/Cellar/freetype/2.9.1/lib/libfreetype.dylib")
+#target_link_libraries(JourneyClient "${CMAKE_CURRENT_SOURCE_DIR}/../bass/x64/libbass.so")
+target_link_libraries(JourneyClient "${CMAKE_CURRENT_SOURCE_DIR}/../bass/libbass.dylib")
+#target_link_libraries(JourneyClient "${CMAKE_CURRENT_SOURCE_DIR}/../glew/lib/libGLEW.so")
+target_link_libraries(JourneyClient "${CMAKE_CURRENT_SOURCE_DIR}/../glew/lib/libGLEW.dylib")
 target_link_libraries(JourneyClient "${CMAKE_CURRENT_SOURCE_DIR}/../glfw/build/src/libglfw3.a")
 
-target_link_libraries(nlnx          "${CMAKE_CURRENT_SOURCE_DIR}/../lz4/lib/liblz4.so")
+#target_link_libraries(nlnx          "${CMAKE_CURRENT_SOURCE_DIR}/../lz4/lib/liblz4.so")
+target_link_libraries(nlnx          "${CMAKE_CURRENT_SOURCE_DIR}/../lz4/lib/liblz4.dylib")
 
 # Include directories for project dependencies
 include_directories(".")
 include_directories("..")
-include_directories("../freetype/include")
+#include_directories("../freetype/include")
+include_directories("/usr/local/Cellar/freetype/2.9.1/include/freetype2")
 include_directories("../glew/include")
 include_directories("../glfw/include")
 include_directories("../asio/include")
