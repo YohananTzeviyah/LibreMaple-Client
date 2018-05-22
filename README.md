@@ -255,17 +255,106 @@ $ install_name_tool -change /usr/local/lib/libGLEW.2.1.0.dylib ./libGLEW.2.1.0.d
 $ install_name_tool -change /usr/local/lib/liblz4.1.dylib ./liblz4.1.8.2.dylib JourneyClient
 ```
 
-### Windows NT (Windows 7, 8, 10+)
-
-Coming soon...
+### Windows NT (Windows 7, 8, 10+) (64-bit only, i.e. amd64/x86_64)
 
 #### Dependencies
 
-Coming soon...
+* [Visual Studio 2017](https://www.visualstudio.com/downloads/) (the Community Edition works just fine, make sure to enable Visual C++ development when installing)
+* [.NET Framework 4](https://www.microsoft.com/en-us/download/details.aspx?id=17718) (hopefully already installed, but just in case)
+* [Visual C++ Redistributable for Visual Studio 2017](https://go.microsoft.com/fwlink/?LinkId=746572) (probably already installed, but again, just in case)
+* [clang for windows](https://releases.llvm.org/download.html) (version 6+; download and install **Pre-Built Binaries:** -> Clang for Windows (64-bit))
+* [cmake](https://cmake.org/download/) (latest version, 3.11.X as of this writing)
+* [git](https://git-scm.com/)
+* [7-Zip](https://www.7-zip.org/)
 
 #### Instructions
 
-Coming soon...
+```bat
+$ git clone https://github.com/Libre-Maple/LibreMaple-Client.git
+$ git clone https://github.com/NoLifeDev/NoLifeNx.git nlnx
+
+$ git clone https://github.com/ubawurinna/freetype-windows-binaries.git freetype
+```
+
+Navigate to
+[https://sourceforge.net/projects/asio/files/latest/download](https://sourceforge.net/projects/asio/files/latest/download)
+and download `asio-X.Y.Z.zip`, whatever the latest version is
+(`asio-1.12.1.zip` as of this writing).
+
+Use 7-Zip to extract the contents of the asio ZIP file to a directory called
+`asio`.
+
+Navigate to
+[http://www.glfw.org/download.html](http://www.glfw.org/download.html) and
+download the 64-bit Windows binaries (called `glfw-3.2.1.bin.WIN64.zip` as of
+this writing).
+
+Use 7-Zip to extract the contents of the glfw ZIP file into a directory called
+`glfw`.
+
+Navigate to [http://glew.sourceforge.net/](http://glew.sourceforge.net/) and
+download the "Binaries: Windows 32-bit and 64-bit" ZIP file (called
+`glew-2.1.0-win32.zip` as of this writing).
+
+Use 7-Zip to extract the contents of the glew ZIP file into a directory called
+`glew` (make sure that the contents are at the top level of `glew`, you want
+`glew\bin`, not `glew\glew-2.1.0\bin`).
+
+Navigate to [https://www.un4seen.com/](https://www.un4seen.com/) and download
+the latest version of BASS for Windows (called `bass24.zip` as of this
+writing).
+
+Use 7-Zip to extract the contents of the bass ZIP file into a directory called
+`bass`.
+
+Navigate to
+[https://github.com/lz4/lz4/releases](https://github.com/lz4/lz4/releases) and
+download the latest version of LZ4 for "win64" (called `lz4_v1_8_2_win64.zip`
+as of this writing).
+
+Use 7-Zip to extract the contents of the LZ4 ZIP file into a directory called
+`lz4`.
+
+Notice here that we assume the installation directory of LLVM is the default
+one. If you don't use the default installation directory, you will have to
+tweak `CMakeLists.txt` yourself:
+
+```bat
+$ SET CC="C:\Program Files\LLVM\bin\clang.exe"
+$ SET CXX="C:\Program Files\LLVM\bin\clang++.exe"
+
+$ cd LibreMaple-Client
+$ md build
+$ cd build
+```
+
+`CMAKE_BUILD_TYPE` here may also be `Release`, `RelWithDebInfo`, or
+`MinSizeRel`:
+
+```bat
+$ cmake -G "Visual Studio 15 2017 Win64" -T "LLVM-vs2017" -D CMAKE_C_COMPILER="C:/Program Files/LLVM/bin/clang.exe" -D CMAKE_CXX_COMPILER="C:/Program Files/LLVM/bin/clang++.exe" -D CMAKE_BUILD_TYPE=Debug ..
+```
+
+This may also be `cmake --build . -- /mN /v:d`, with `N` being the number of
+CPU cores you wish to utilize:
+
+```bat
+$ cmake --build . -- /v:d
+```
+
+If all this is successful, you should have the executable (`JourneyClient.exe`)
+in `LibreMaple-Client\build\Debug`. However, it probably will not run right
+away, since the paths that the executable looks for DLLs on will be wrong.
+
+In order to fix this, gather up the following files, copying them to be right
+next to the executable. All paths shown here are relative to the base directory
+where you cloned all of the repos and extracted the ZIP files:
+
+* `freetype.dll` (found as `freetype\win64\freetype.dll`)
+* `bass.dll` (found as `bass\x64\bass.dll`)
+* `glew32.dll` (found as `glew\bin\Release\x64\glew32.dll`)
+* `liblz4.dll` (found as `lz4\dll\liblz4.so.1.8.2.dll`, the version number may
+  be different and you will have to name your copied version to `liblz4.dll`)
 
 ## Compiler
 
