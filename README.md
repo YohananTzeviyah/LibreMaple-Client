@@ -354,7 +354,7 @@ where you cloned all of the repos and extracted the ZIP files:
 * `bass.dll` (found as `bass\x64\bass.dll`)
 * `glew32.dll` (found as `glew\bin\Release\x64\glew32.dll`)
 * `liblz4.dll` (found as `lz4\dll\liblz4.so.1.8.2.dll`, the version number may
-  be different and you will have to name your copied version to `liblz4.dll`)
+  be different and you will have to rename your copied version to `liblz4.dll`)
 
 ## Compiler
 
