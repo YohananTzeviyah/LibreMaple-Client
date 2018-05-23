@@ -328,8 +328,7 @@ $ md build
 $ cd build
 ```
 
-`CMAKE_BUILD_TYPE` here may also be `Release`, `RelWithDebInfo`, or
-`MinSizeRel`:
+`CMAKE_BUILD_TYPE` here should be `Debug`.:
 
 ```bat
 $ cmake -G "Visual Studio 15 2017 Win64" -T "LLVM-vs2017" -D CMAKE_C_COMPILER="C:/Program Files/LLVM/bin/clang.exe" -D CMAKE_CXX_COMPILER="C:/Program Files/LLVM/bin/clang++.exe" -D CMAKE_BUILD_TYPE=Debug ..
@@ -339,7 +338,15 @@ This may also be `cmake --build . -- /mN /v:d`, with `N` being the number of
 CPU cores you wish to utilize:
 
 ```bat
-$ cmake --build . -- /v:d
+$ cmake --build . -- /v:d /property:Configuration=Debug /property:Platform=x64
+```
+
+`CMAKE_BUILD_TYPE` here may also be `Release`, `RelWithDebInfo`, or
+`MinSizeRel`. If so, use these commands instead:
+
+```bat
+$ cmake -G "Visual Studio 15 2017 Win64" -T "LLVM-vs2017" -D CMAKE_C_COMPILER="C:/Program Files/LLVM/bin/clang.exe" -D CMAKE_CXX_COMPILER="C:/Program Files/LLVM/bin/clang++.exe" -D CMAKE_BUILD_TYPE=Release ..
+$ cmake --build . -- /v:d /property:Configuration=Release /property:Platform=x64
 ```
 
 If all this is successful, you should have the executable (`JourneyClient.exe`)
