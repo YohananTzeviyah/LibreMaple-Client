@@ -328,21 +328,19 @@ $ md build
 $ cd build
 ```
 
-`CMAKE_BUILD_TYPE` here should be `Debug`.:
+Use the following two commands if `CMAKE_BUILD_TYPE` is to be `Debug` (you may
+wish to add an additional `/mN` flag, with `N` being the number of CPU cores
+you wish to utilize for compilation):
 
 ```bat
 $ cmake -G "Visual Studio 15 2017 Win64" -T "LLVM-vs2017" -D CMAKE_C_COMPILER="C:/Program Files/LLVM/bin/clang.exe" -D CMAKE_CXX_COMPILER="C:/Program Files/LLVM/bin/clang++.exe" -D CMAKE_BUILD_TYPE=Debug ..
-```
-
-This may also be `cmake --build . -- /mN /v:d`, with `N` being the number of
-CPU cores you wish to utilize:
-
-```bat
 $ cmake --build . -- /v:d /property:Configuration=Debug /property:Platform=x64
 ```
 
 `CMAKE_BUILD_TYPE` here may also be `Release`, `RelWithDebInfo`, or
-`MinSizeRel`. If so, use these commands instead:
+`MinSizeRel`. If you want to use one of these build types, use these commands
+instead, setting `CMAKE_BUILD_TYPE` to the desired value (we use `Release`
+here as an example):
 
 ```bat
 $ cmake -G "Visual Studio 15 2017 Win64" -T "LLVM-vs2017" -D CMAKE_C_COMPILER="C:/Program Files/LLVM/bin/clang.exe" -D CMAKE_CXX_COMPILER="C:/Program Files/LLVM/bin/clang++.exe" -D CMAKE_BUILD_TYPE=Release ..
@@ -350,8 +348,10 @@ $ cmake --build . -- /v:d /property:Configuration=Release /property:Platform=x64
 ```
 
 If all this is successful, you should have the executable (`JourneyClient.exe`)
-in `LibreMaple-Client\build\Debug`. However, it probably will not run right
-away, since the paths that the executable looks for DLLs on will be wrong.
+in `LibreMaple-Client\build\Debug` for debug builds, or
+`LibreMaple-Client\build\Release` for release build types. However, it
+probably will not run right away, since the paths that the executable looks
+for DLLs on will be wrong.
 
 In order to fix this, gather up the following files, copying them to be right
 next to the executable. All paths shown here are relative to the base directory

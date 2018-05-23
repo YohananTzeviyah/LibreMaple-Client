@@ -39,6 +39,9 @@
 # IntelliJ
 .idea/
 
+# Qt Creator
+*.user
+
 ## CMake stuff ##
 build/
 build-*/
