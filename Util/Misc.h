@@ -32,7 +32,7 @@ inline T or_default(const std::string& str, T def)
         const int32_t intval = std::stoi(str);
         return static_cast<T>(intval);
     } catch (const std::exception& ex) {
-        Console::get().print(__func__, ex);
+        Console::get().print(__func__, ex.what());
         return def;
     }
 }

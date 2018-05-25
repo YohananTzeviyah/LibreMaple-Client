@@ -110,12 +110,20 @@ Rectangle<int16_t> Frame::get_bounds() const
 
 float Frame::opcstep(uint16_t timestep) const
 {
+    if (delay == 0) {
+        return 0.0f;
+    }
+
     return timestep * static_cast<float>(opacities.second - opacities.first) /
            delay;
 }
 
 float Frame::scalestep(uint16_t timestep) const
 {
+    if (delay == 0) {
+        return 0.0f;
+    }
+
     return timestep * static_cast<float>(scales.second - scales.first) / delay;
 }
 

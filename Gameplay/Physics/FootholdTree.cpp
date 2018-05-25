@@ -33,7 +33,7 @@ Footholdtree::Footholdtree(nl::node src)
         try {
             layer = static_cast<uint8_t>(std::stoi(basef.name()));
         } catch (const std::exception& ex) {
-            Console::get().print(__func__, ex);
+            Console::get().print(__func__, ex.what());
             continue;
         }
 
@@ -43,7 +43,7 @@ Footholdtree::Footholdtree(nl::node src)
                 try {
                     id = static_cast<uint16_t>(std::stoi(lastf.name()));
                 } catch (const std::exception& ex) {
-                    Console::get().print(__func__, ex);
+                    Console::get().print(__func__, ex.what());
                     continue;
                 }
 

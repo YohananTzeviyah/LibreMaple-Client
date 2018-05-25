@@ -55,8 +55,9 @@ bool BuffIcon::update()
 
         bool fadedout = opcstep < 0.0f && opacity.last() <= 0.0f;
         bool fadedin = opcstep > 0.0f && opacity.last() >= 1.0f;
-        if (fadedout || fadedin)
+        if (fadedout || fadedin) {
             opcstep = -opcstep;
+        }
     }
 
     cover.update();
