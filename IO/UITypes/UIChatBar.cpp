@@ -60,6 +60,8 @@ UIChatbar::UIChatbar(Point<int16_t> pos)
     chattargets[CHT_PARTY] = mainbar["chatTarget"]["party"];
     chattargets[CHT_SQUAD] = mainbar["chatTarget"]["expedition"];
 
+    chattarget = CHT_ALL; // Default chat target
+
     nl::node chat = nl::nx::ui["StatusBar2.img"]["chat"];
 
     tapbar = chat["tapBar"];
@@ -119,10 +121,11 @@ void UIChatbar::draw(float inter) const
 
         int16_t chatheight = CHATROWHEIGHT * chatrows;
         int16_t yshift = -chatheight;
-        for (int16_t i = 0; i < chatrows; i++) {
+        for (int16_t i = 0; i < chatrows; ++i) {
             int16_t rowid = rowpos - i;
-            if (!rowtexts.count(rowid))
+            if (!rowtexts.count(rowid)) {
                 break;
+            }
 
             int16_t textheight = rowtexts.at(rowid).height() / CHATROWHEIGHT;
             while (textheight > 0) {
@@ -179,8 +182,9 @@ bool UIChatbar::is_in_range(Point<int16_t> cursorpos) const
 
 bool UIChatbar::remove_cursor(bool clicked, Point<int16_t> cursorpos)
 {
-    if (slider.remove_cursor(clicked))
+    if (slider.remove_cursor(clicked)) {
         return true;
+    }
 
     return UIElement::remove_cursor(clicked, cursorpos);
 }
