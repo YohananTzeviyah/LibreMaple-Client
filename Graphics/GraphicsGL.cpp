@@ -327,6 +327,11 @@ const GraphicsGL::Offset& GraphicsGL::getoffset(const nl::bitmap& bmp)
         return nulloffset;
     }
 
+    const auto bmp_data = bmp.data();
+    if (!bmp_data) {
+        return nulloffset;
+    }
+
     auto value = Leftover(x, y, w, h);
     size_t lid = leftovers.findnode(
         value, [](const Leftover& val, const Leftover& leaf) {
@@ -412,7 +417,8 @@ const GraphicsGL::Offset& GraphicsGL::getoffset(const nl::bitmap& bmp)
     */
 
     glTexSubImage2D(
-        GL_TEXTURE_2D, 0, x, y, w, h, GL_BGRA, GL_UNSIGNED_BYTE, bmp.data());
+        GL_TEXTURE_2D, 0, x, y, w, h, GL_BGRA, GL_UNSIGNED_BYTE, bmp_data);
+
     return offsets
         .emplace(std::piecewise_construct,
                  std::forward_as_tuple(id),
@@ -460,8 +466,9 @@ Text::Layout GraphicsGL::createlayout(const std::string& text,
     size_t offset = 0;
     while (offset < length) {
         size_t last = text.find_first_of(" \\#", offset + 1);
-        if (last == std::string::npos)
+        if (last == std::string::npos) {
             last = length;
+        }
 
         first = builder.add(p_text, first, offset, last);
         offset = last;
@@ -575,8 +582,9 @@ size_t GraphicsGL::LayoutBuilder::add(const char* text,
 
         advances.push_back(ax);
 
-        if (pos < first + skip || (newline && c == ' '))
+        if (pos < first + skip || (newline && c == ' ')) {
             continue;
+        }
 
         ax += ch.ax;
 
