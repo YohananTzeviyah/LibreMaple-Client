@@ -17,8 +17,6 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "Keyboard.h"
 
-#include "../cpptoml/include/cpptoml.h"
-
 #include <GLFW/glfw3.h>
 #include <cstdint>
 
@@ -238,50 +236,6 @@ KeyAction::Id Keyboard::get_ctrl_action(std::int32_t keycode) const
         return KeyAction::PASTE;
     default:
         return KeyAction::NOACTION;
-    }
-}
-
-void Keyboard::load_from_toml()
-{
-    return;
-    static std::unordered_map<std::string, std::uint8_t> key_name_map(90);
-    if (key_name_map.empty()) {
-        std::uint8_t k = 0;
-        for (const auto key_name : KEY_NAMES) {
-            key_name_map.try_emplace(key_name, k);
-            ++k;
-        }
-    }
-
-    const auto key_config = cpptoml::parse_file("keyboard.toml");
-    if (!key_config) {
-        throw std::runtime_error("Could not parse keyboard.toml");
-    }
-    const auto keybinds = key_config->get_table("keybinds");
-    if (!keybinds) {
-        throw std::runtime_error(
-            R"(keyboard.toml has no table named "keybinds")");
-    }
-
-    for (const auto& [key_name, _] : *keybinds) {
-        const auto mapped_name = key_name_map.find(key_name);
-        if (mapped_name != key_name_map.end()) {
-            const auto k = mapped_name->second;
-            if (const auto o_arr =
-                    keybinds->get_array_of<std::int64_t>(key_name)) {
-                const auto arr = *o_arr;
-                const auto type = static_cast<std::uint8_t>(arr.at(0));
-                const auto action = static_cast<std::int32_t>(arr.at(1));
-
-                assign(k, type, action);
-            } else {
-                throw std::runtime_error("Expected an array of integers");
-            }
-        } else {
-            throw std::runtime_error(
-                R"(Unrecognized key name in keyboard.toml: ")" + key_name +
-                '"');
-        }
     }
 }
 

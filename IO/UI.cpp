@@ -34,7 +34,6 @@ void UI::init()
 {
     cursor.init();
     change_state(LOGIN);
-    keyboard.load_from_toml();
 }
 
 void UI::draw(float alpha) const

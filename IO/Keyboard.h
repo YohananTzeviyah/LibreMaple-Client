@@ -54,8 +54,6 @@ public:
 
     Keyboard();
 
-    //! Throws
-    void load_from_toml();
     void assign(std::uint8_t key, std::uint8_t type, std::int32_t action);
 
     std::int32_t shiftcode() const;
