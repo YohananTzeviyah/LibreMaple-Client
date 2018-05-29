@@ -90,7 +90,9 @@ void MapDrops::spawn(DropSpawn&& spawn)
     spawns.emplace(std::move(spawn));
 }
 
-void MapDrops::remove(std::int32_t oid, std::int8_t mode, const PhysicsObject* looter)
+void MapDrops::remove(std::int32_t oid,
+                      std::int8_t mode,
+                      const PhysicsObject* looter)
 {
     if (nullable_ptr<Drop> drop = drops.get(oid)) {
         drop->expire(mode, looter);

@@ -47,7 +47,7 @@ public:
 
 private:
     std::unordered_map<std::uint8_t, Texture> stances[Stance::LENGTH]
-                                                [Layer::NUM_LAYERS];
+                                                     [Layer::NUM_LAYERS];
     std::string name;
     std::string color;
 

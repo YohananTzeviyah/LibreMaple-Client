@@ -29,7 +29,7 @@ void NpcDialogueHandler::handle(InPacket& recv) const
 
     std::int32_t npcid = recv.read_int();
     std::int8_t msgtype = recv.read_byte(); // 0 - textonly, 1 - yes/no, 4 -
-                                       // selection, 12 - accept/decline
+                                            // selection, 12 - accept/decline
     std::int8_t speaker = recv.read_byte();
     std::string text = recv.read_string();
 

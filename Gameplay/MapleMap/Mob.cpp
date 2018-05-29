@@ -414,7 +414,10 @@ void Mob::show_hp(std::int8_t percent, std::uint16_t playerlevel)
     showhp.set_for(2000);
 }
 
-void Mob::show_effect(const Animation& animation, std::int8_t pos, std::int8_t z, bool f)
+void Mob::show_effect(const Animation& animation,
+                      std::int8_t pos,
+                      std::int8_t z,
+                      bool f)
 {
     if (!active) {
         return;
@@ -452,8 +455,9 @@ float Mob::calculate_hitchance(std::int16_t leveldelta,
     return hitchance;
 }
 
-double
-Mob::calculate_mindamage(std::int16_t leveldelta, double damage, bool magic) const
+double Mob::calculate_mindamage(std::int16_t leveldelta,
+                                double damage,
+                                bool magic) const
 {
     double mindamage = magic ? damage - (1 + 0.01 * leveldelta) * mdef * 0.6
                              : damage * (1 - 0.01 * leveldelta) - wdef * 0.6;
@@ -461,8 +465,9 @@ Mob::calculate_mindamage(std::int16_t leveldelta, double damage, bool magic) con
     return mindamage < 1.0 ? 1.0 : mindamage;
 }
 
-double
-Mob::calculate_maxdamage(std::int16_t leveldelta, double damage, bool magic) const
+double Mob::calculate_maxdamage(std::int16_t leveldelta,
+                                double damage,
+                                bool magic) const
 {
     double maxdamage = magic ? damage - (1 + 0.01 * leveldelta) * mdef * 0.5
                              : damage * (1 - 0.01 * leveldelta) - wdef * 0.5;
@@ -513,9 +518,9 @@ Mob::calculate_damage(const Attack& attack)
 }
 
 std::pair<std::int32_t, bool> Mob::next_damage(double mindamage,
-                                          double maxdamage,
-                                          float hitchance,
-                                          float critical) const
+                                               double maxdamage,
+                                               float hitchance,
+                                               float critical) const
 {
     bool hit = randomizer.below(hitchance);
     if (!hit) {

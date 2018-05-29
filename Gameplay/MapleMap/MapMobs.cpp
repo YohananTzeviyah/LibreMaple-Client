@@ -77,7 +77,9 @@ void MapMobs::set_control(std::int32_t oid, bool control)
     }
 }
 
-void MapMobs::send_mobhp(std::int32_t oid, std::int8_t percent, std::uint16_t playerlevel)
+void MapMobs::send_mobhp(std::int32_t oid,
+                         std::int8_t percent,
+                         std::uint16_t playerlevel)
 {
     if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->show_hp(percent, playerlevel);
@@ -144,15 +146,16 @@ void MapMobs::apply_damage(std::int32_t oid,
 }
 
 std::vector<std::int32_t> MapMobs::find_closest(Rectangle<std::int16_t> range,
-                                           Point<std::int16_t> origin,
-                                           std::uint8_t mobcount) const
+                                                Point<std::int16_t> origin,
+                                                std::uint8_t mobcount) const
 {
     std::multimap<std::uint16_t, std::int32_t> distances;
     for (const auto& mmo : mobs) {
         const Mob* mob = static_cast<const Mob*>(mmo.second.get());
         if (mob && mob->is_alive() && mob->is_in_range(range)) {
             std::int32_t oid = mob->get_oid();
-            auto distance = static_cast<std::uint16_t>(mob->get_position().distance(origin));
+            auto distance = static_cast<std::uint16_t>(
+                mob->get_position().distance(origin));
             distances.emplace(distance, oid);
         }
     }
@@ -178,9 +181,10 @@ std::int32_t MapMobs::find_colliding(const MovingObject& moveobj) const
     Range<std::int16_t> horizontal{moveobj.get_last_x(), moveobj.get_x()};
     Range<std::int16_t> vertical{moveobj.get_last_y(), moveobj.get_y()};
     Rectangle<std::int16_t> player_rect{horizontal.smaller(),
-                                   horizontal.greater(),
-                                   vertical.smaller() - static_cast<std::int16_t>(50),
-                                   vertical.greater()};
+                                        horizontal.greater(),
+                                        vertical.smaller() -
+                                            static_cast<std::int16_t>(50),
+                                        vertical.greater()};
 
     auto iter =
         std::find_if(mobs.begin(), mobs.end(), [&player_rect](auto& mmo) {

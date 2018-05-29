@@ -93,9 +93,10 @@ public:
     const std::string& get_vslot() const;
 
 private:
-    EnumMap<
-        Stance::Id,
-        EnumMap<Layer, std::unordered_multimap<std::uint8_t, Texture>, NUM_LAYERS>>
+    EnumMap<Stance::Id,
+            EnumMap<Layer,
+                    std::unordered_multimap<std::uint8_t, Texture>,
+                    NUM_LAYERS>>
         stances;
     std::int32_t itemid;
     Equipslot::Id eqslot;

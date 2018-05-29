@@ -78,7 +78,8 @@ public:
     void draw(float alpha) const override;
     void update() override;
 
-    Cursor::State send_cursor(bool pressed, Point<std::int16_t> cursorpos) override;
+    Cursor::State send_cursor(bool pressed,
+                              Point<std::int16_t> cursorpos) override;
 
 protected:
     Button::State button_pressed(std::uint16_t buttonid) override;

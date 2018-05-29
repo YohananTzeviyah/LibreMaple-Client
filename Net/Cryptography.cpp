@@ -87,7 +87,8 @@ std::size_t Cryptography::check_length(const std::int8_t* bytes) const
         headermask |= static_cast<std::uint8_t>(bytes[i]) << (8 * i);
     }
 
-    return static_cast<std::int16_t>((headermask >> 16) ^ (headermask & 0xFFFF));
+    return static_cast<std::int16_t>((headermask >> 16) ^
+                                     (headermask & 0xFFFF));
 #else
     std::size_t length = 0;
 
@@ -154,8 +155,8 @@ void Cryptography::mapledecrypt(std::int8_t* bytes, std::size_t length) const
 
 void Cryptography::updateiv(std::uint8_t* iv) const
 {
-    static const std::uint8_t maplebytes[256] = // This is called `funnyBytes` in
-                                           // OdinMS-based sources.
+    static const std::uint8_t maplebytes[256] = // This is called `funnyBytes`
+                                                // in OdinMS-based sources.
         {0xEC, 0x3F, 0x77, 0xA4, 0x45, 0xD0, 0x71, 0xBF, 0xB7, 0x98, 0x20,
          0xFC, 0x4B, 0xE9, 0xB3, 0xE1, 0x5C, 0x22, 0xF7, 0x0C, 0x44, 0x1B,
          0x81, 0xBD, 0x63, 0x8D, 0xD4, 0xC3, 0xF2, 0x10, 0x19, 0xE0, 0xFB,
@@ -181,8 +182,8 @@ void Cryptography::updateiv(std::uint8_t* iv) const
          0x61, 0x1E, 0xCF, 0xC5, 0xD1, 0x56, 0x3D, 0xCA, 0xF4, 0x05, 0xC6,
          0xE5, 0x08, 0x49};
 
-    std::uint8_t mbytes[4] = // Called `in` in OdinMS-based sources. Local to the
-                        // `getNewIv` method or similar.
+    std::uint8_t mbytes[4] = // Called `in` in OdinMS-based sources. Local to
+                             // the `getNewIv` method or similar.
         {0xF2, 0x53, 0x50, 0xC6};
 
     for (std::size_t i = 0; i < 4; ++i) {
@@ -224,7 +225,9 @@ std::int8_t Cryptography::rollright(std::int8_t data, std::size_t count) const
     return static_cast<std::int8_t>((mask & 0xFF) | (mask >> 8));
 }
 
-void Cryptography::aesofb(std::int8_t* bytes, std::size_t length, std::uint8_t* iv) const
+void Cryptography::aesofb(std::int8_t* bytes,
+                          std::size_t length,
+                          std::uint8_t* iv) const
 {
     std::size_t blocklength = 0x5B0;
     std::size_t offset = 0;

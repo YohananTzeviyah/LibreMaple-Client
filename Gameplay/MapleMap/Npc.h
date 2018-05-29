@@ -51,7 +51,8 @@ public:
     // Check wether this is a server-sided npc.
     bool isscripted() const;
     // Check if the npc is in range of the cursor.
-    bool inrange(Point<std::int16_t> cursorpos, Point<std::int16_t> viewpos) const;
+    bool inrange(Point<std::int16_t> cursorpos,
+                 Point<std::int16_t> viewpos) const;
 
 private:
     std::map<std::string, Animation> animations;

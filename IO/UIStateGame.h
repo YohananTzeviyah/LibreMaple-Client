@@ -37,8 +37,10 @@ public:
     void update() override;
 
     void doubleclick(Point<std::int16_t> pos) override;
-    void send_key(KeyType::Id type, std::int32_t action, bool pressed) override;
-    Cursor::State send_cursor(Cursor::State mst, Point<std::int16_t> pos) override;
+    void
+    send_key(KeyType::Id type, std::int32_t action, bool pressed) override;
+    Cursor::State send_cursor(Cursor::State mst,
+                              Point<std::int16_t> pos) override;
 
     void drag_icon(Icon* icon) override;
     void clear_tooltip(Tooltip::Parent parent) override;

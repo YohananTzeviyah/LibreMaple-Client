@@ -30,10 +30,9 @@ Rectangle<std::int16_t> GraphicsGL::screen;
 GraphicsGL::GraphicsGL()
 {
     screen = {0,
-            Constants::VIEWWIDTH,
-            -Constants::VIEWYOFFSET,
-            -Constants::VIEWYOFFSET +
-            Constants::VIEWHEIGHT};
+              Constants::VIEWWIDTH,
+              -Constants::VIEWYOFFSET,
+              -Constants::VIEWYOFFSET + Constants::VIEWHEIGHT};
     locked = false;
 }
 
@@ -267,8 +266,9 @@ void GraphicsGL::reinit()
     glUniform1i(uniform_yoffset, Constants::VIEWYOFFSET);
     glUniform1i(uniform_fontregion, fontymax);
     glUniform2f(uniform_atlassize, ATLASW, ATLASH);
-    glUniform2f(
-        uniform_screensize, Window::get().get_width(), Window::get().get_height());
+    glUniform2f(uniform_screensize,
+                Window::get().get_width(),
+                Window::get().get_height());
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(
@@ -501,9 +501,9 @@ GraphicsGL::LayoutBuilder::LayoutBuilder(const Font& f,
 }
 
 std::size_t GraphicsGL::LayoutBuilder::add(const char* text,
-                                      std::size_t prev,
-                                      std::size_t first,
-                                      std::size_t last)
+                                           std::size_t prev,
+                                           std::size_t first,
+                                           std::size_t last)
 {
     if (first == last) {
         return prev;
@@ -606,7 +606,8 @@ std::size_t GraphicsGL::LayoutBuilder::add(const char* text,
     }
 }
 
-Text::Layout GraphicsGL::LayoutBuilder::finish(std::size_t first, std::size_t last)
+Text::Layout GraphicsGL::LayoutBuilder::finish(std::size_t first,
+                                               std::size_t last)
 {
     add_word(first, last, fontid, color);
     add_line();
@@ -841,7 +842,10 @@ void GraphicsGL::set_screen(Rectangle<std::int16_t>&& new_screen) noexcept
     screen = new_screen;
 }
 
-void GraphicsGL::set_screen(std::int16_t l, std::int16_t r, std::int16_t t, std::int16_t b) noexcept
+void GraphicsGL::set_screen(std::int16_t l,
+                            std::int16_t r,
+                            std::int16_t t,
+                            std::int16_t b) noexcept
 {
     screen = {l, r, t, b};
 }

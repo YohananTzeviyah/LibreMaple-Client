@@ -55,7 +55,8 @@ public:
 
     void draw(float inter) const override;
     void update() override;
-    Cursor::State send_cursor(bool pressed, Point<std::int16_t> position) override;
+    Cursor::State send_cursor(bool pressed,
+                              Point<std::int16_t> position) override;
 
     void add_buff(std::int32_t buffid, std::int32_t duration);
 

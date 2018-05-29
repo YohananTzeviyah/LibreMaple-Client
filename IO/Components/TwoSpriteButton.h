@@ -27,7 +27,9 @@ namespace jrc
 class TwoSpriteButton : public Button
 {
 public:
-    TwoSpriteButton(nl::node nsrc, nl::node ssrc, Point<std::int16_t> position);
+    TwoSpriteButton(nl::node nsrc,
+                    nl::node ssrc,
+                    Point<std::int16_t> position);
     TwoSpriteButton(nl::node nsrc, nl::node ssrc);
     TwoSpriteButton();
 

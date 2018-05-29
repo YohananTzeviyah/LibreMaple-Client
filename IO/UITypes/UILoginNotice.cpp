@@ -31,8 +31,8 @@ UILoginNotice::UILoginNotice(std::int8_t id)
     background = notice["backgrnd"][back];
     text = {notice["text"][id], {17, 13}};
 
-    buttons[BT_OK] = std::make_unique<MapleButton>(notice["BtYes"],
-                                                   Point<std::int16_t>(100, 100));
+    buttons[BT_OK] = std::make_unique<MapleButton>(
+        notice["BtYes"], Point<std::int16_t>(100, 100));
 
     position = {292, 200};
     dimension = {362, 219};

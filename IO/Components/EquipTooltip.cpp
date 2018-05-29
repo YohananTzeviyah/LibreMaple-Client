@@ -277,7 +277,8 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
     for (Equipstat::Id es = Equipstat::STR; es <= Equipstat::JUMP;
          es = static_cast<Equipstat::Id>(es + 1)) {
         if (equip.get_stat(es) > 0) {
-            std::int16_t delta = equip.get_stat(es) - equipdata.get_defstat(es);
+            std::int16_t delta =
+                equip.get_stat(es) - equipdata.get_defstat(es);
             std::string statstr = std::to_string(equip.get_stat(es));
             if (delta != 0) {
                 statstr.append(" (");
@@ -301,7 +302,8 @@ void EquipTooltip::draw(Point<std::int16_t> pos) const
         return;
 
     top.draw({pos});
-    mid.draw({pos + Point<std::int16_t>(0, 13), Point<std::int16_t>(0, height)});
+    mid.draw(
+        {pos + Point<std::int16_t>(0, 13), Point<std::int16_t>(0, height)});
     bot.draw({pos + Point<std::int16_t>(0, height + 13)});
 
     name.draw(pos + Point<std::int16_t>(130, 3));
@@ -325,8 +327,9 @@ void EquipTooltip::draw(Point<std::int16_t> pos) const
         Point<std::int16_t> reqpos = reqstatpositions[ms];
         bool reqok = canequip[ms];
         reqstattextures[ms][reqok].draw({pos + reqpos});
-        reqset[reqok].draw(
-            reqstatstrings[ms], 6, {pos + reqpos + Point<std::int16_t>(54, 0)});
+        reqset[reqok].draw(reqstatstrings[ms],
+                           6,
+                           {pos + reqpos + Point<std::int16_t>(54, 0)});
     }
 
     pos.shift_y(88);

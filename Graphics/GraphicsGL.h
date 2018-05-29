@@ -93,7 +93,10 @@ public:
     //! Set the screen rectangle.
     static void set_screen(Rectangle<std::int16_t>&& new_screen) noexcept;
     //! Set the screen rectangle.
-    static void set_screen(std::int16_t l, std::int16_t r, std::int16_t t, std::int16_t b) noexcept;
+    static void set_screen(std::int16_t l,
+                           std::int16_t r,
+                           std::int16_t t,
+                           std::int16_t b) noexcept;
 
 private:
     void clearinternal();
@@ -243,7 +246,10 @@ private:
                       std::int16_t maxwidth,
                       bool formatted);
 
-        std::size_t add(const char* text, std::size_t prev, std::size_t first, std::size_t last);
+        std::size_t add(const char* text,
+                        std::size_t prev,
+                        std::size_t first,
+                        std::size_t last);
         Text::Layout finish(std::size_t first, std::size_t last);
 
     private:

@@ -136,8 +136,8 @@ Animation::Animation(nl::node src)
         std::set<std::int16_t> frameids;
         for (auto sub : src) {
             if (sub.data_type() == nl::node::type::bitmap) {
-                auto fid =
-                    string_conversion::or_default<std::int16_t>(sub.name(), -1);
+                auto fid = string_conversion::or_default<std::int16_t>(
+                    sub.name(), -1);
                 if (fid >= 0) {
                     frameids.insert(fid);
                 }

@@ -60,7 +60,8 @@ public:
 class ChangeKeymapPacket : public OutPacket
 {
 public:
-    ChangeKeymapPacket(const std::unordered_map<std::int32_t, Keyboard::Mapping>& maplekeys)
+    ChangeKeymapPacket(
+        const std::unordered_map<std::int32_t, Keyboard::Mapping>& maplekeys)
         : OutPacket(CHANGE_KEYMAP)
     {
         // mode
@@ -158,7 +159,8 @@ public:
 class ChangePartyLeaderPacket : public PartyOperationPacket
 {
 public:
-    ChangePartyLeaderPacket(std::int32_t cid) : PartyOperationPacket(PASS_LEADER)
+    ChangePartyLeaderPacket(std::int32_t cid)
+        : PartyOperationPacket(PASS_LEADER)
     {
         write_int(cid);
     }

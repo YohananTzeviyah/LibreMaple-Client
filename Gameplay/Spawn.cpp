@@ -26,7 +26,11 @@
 
 namespace jrc
 {
-NpcSpawn::NpcSpawn(std::int32_t o, std::int32_t i, Point<std::int16_t> p, bool fl, std::uint16_t f)
+NpcSpawn::NpcSpawn(std::int32_t o,
+                   std::int32_t i,
+                   Point<std::int16_t> p,
+                   bool fl,
+                   std::uint16_t f)
     : oid(o), id(i), position(p), flip(fl), fh(f)
 {
 }
@@ -77,7 +81,10 @@ std::unique_ptr<MapObject> MobSpawn::instantiate() const
         oid, id, mode, stance, fh, newspawn, team, position);
 }
 
-ReactorSpawn::ReactorSpawn(std::int32_t o, std::int32_t r, std::int8_t s, Point<std::int16_t> p)
+ReactorSpawn::ReactorSpawn(std::int32_t o,
+                           std::int32_t r,
+                           std::int8_t s,
+                           Point<std::int16_t> p)
     : oid(o), rid(r), state(s), position(p)
 {
 }

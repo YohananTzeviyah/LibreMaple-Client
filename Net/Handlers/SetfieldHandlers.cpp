@@ -27,14 +27,14 @@
 #include "../../IO/UITypes/UICharSelect.h"
 #include "../../IO/Window.h"
 #include "../../Timer.h"
+#include "../Packets/GameplayPackets.h"
 #include "Helpers/ItemParser.h"
 #include "Helpers/LoginParser.h"
 
-#include "../Packets/GameplayPackets.h"
-
 namespace jrc
 {
-void SetfieldHandler::transition(std::int32_t mapid, std::uint8_t portalid) const
+void SetfieldHandler::transition(std::int32_t mapid,
+                                 std::uint8_t portalid) const
 {
     float fadestep = 0.025f;
     Window::get().fadeout(fadestep, [mapid, portalid]() {

@@ -41,9 +41,13 @@ public:
     void send_icon(const Icon& icon, Point<std::int16_t> position) override;
     void toggle_active() override;
     bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
-    Cursor::State send_cursor(bool pressed, Point<std::int16_t> position) override;
+    Cursor::State send_cursor(bool pressed,
+                              Point<std::int16_t> position) override;
 
-    void modify(InventoryType::Id type, std::int16_t pos, std::int8_t mode, std::int16_t arg);
+    void modify(InventoryType::Id type,
+                std::int16_t pos,
+                std::int8_t mode,
+                std::int16_t arg);
     void enable_sort();
     void enable_gather();
 

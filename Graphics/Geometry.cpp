@@ -129,8 +129,8 @@ void ColorLine::draw(const DrawArgument& args) const
 
 void MobHpBar::draw(Point<std::int16_t> position, std::int16_t hppercent) const
 {
-    std::int16_t fillw = static_cast<std::int16_t>((WIDTH - 6) *
-                                         static_cast<float>(hppercent) / 100);
+    std::int16_t fillw = static_cast<std::int16_t>(
+        (WIDTH - 6) * static_cast<float>(hppercent) / 100);
     std::int16_t x = position.x() - WIDTH / 2;
     std::int16_t y = position.y() - HEIGHT * 3;
     Geometry::draw(x, y, WIDTH, HEIGHT, BLACK, 1.0f);

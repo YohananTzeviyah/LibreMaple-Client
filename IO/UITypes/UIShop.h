@@ -38,7 +38,8 @@ public:
     void update() override;
 
     bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
-    Cursor::State send_cursor(bool clicked, Point<std::int16_t> position) override;
+    Cursor::State send_cursor(bool clicked,
+                              Point<std::int16_t> position) override;
 
     void reset(std::int32_t npcid);
     void add_item(std::int32_t id,

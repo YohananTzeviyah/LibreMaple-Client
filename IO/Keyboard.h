@@ -42,7 +42,8 @@ public:
         }
 
         template<int I>
-        auto const& get() const {
+        auto const& get() const
+        {
             if constexpr (I == 0) {
                 return type;
             } else if constexpr (I == 1) {
@@ -73,13 +74,17 @@ private:
 
 namespace std
 {
-template<> struct tuple_size<jrc::Keyboard::Mapping> :
-    std::integral_constant<std::size_t, 2> {};
+template<>
+struct tuple_size<jrc::Keyboard::Mapping>
+    : std::integral_constant<std::size_t, 2> {
+};
 
-template<> struct tuple_element<0, jrc::Keyboard::Mapping> {
+template<>
+struct tuple_element<0, jrc::Keyboard::Mapping> {
     using type = jrc::KeyType::Id;
 };
-template<> struct tuple_element<1, jrc::Keyboard::Mapping> {
+template<>
+struct tuple_element<1, jrc::Keyboard::Mapping> {
     using type = std::int32_t;
 };
-}
+} // namespace std

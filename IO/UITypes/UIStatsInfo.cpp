@@ -162,19 +162,23 @@ void UIStatsinfo::update_all_stats()
         std::to_string(static_cast<std::int32_t>(stats.get_critical() * 100)) +
         "%");
     statlabels[MINCRIT].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_mincrit() * 100)) + "%");
+        std::to_string(static_cast<std::int32_t>(stats.get_mincrit() * 100)) +
+        "%");
     statlabels[MAXCRIT].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_maxcrit() * 100)) + "%");
+        std::to_string(static_cast<std::int32_t>(stats.get_maxcrit() * 100)) +
+        "%");
     statlabels[BDM].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_bossdmg() * 100)) + "%");
-    statlabels[IGNOREDEF].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_ignoredef() * 100)) +
+        std::to_string(static_cast<std::int32_t>(stats.get_bossdmg() * 100)) +
         "%");
-    statlabels[RESIST].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_resistance() * 100)) +
-        "%");
+    statlabels[IGNOREDEF].change_text(std::to_string(static_cast<std::int32_t>(
+                                          stats.get_ignoredef() * 100)) +
+                                      "%");
+    statlabels[RESIST].change_text(std::to_string(static_cast<std::int32_t>(
+                                       stats.get_resistance() * 100)) +
+                                   "%");
     statlabels[STANCE].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_stance() * 100)) + "%");
+        std::to_string(static_cast<std::int32_t>(stats.get_stance() * 100)) +
+        "%");
     statlabels[SPEED].change_text(
         std::to_string(stats.get_total(Equipstat::SPEED)) + "%");
     statlabels[JUMP].change_text(

@@ -61,8 +61,8 @@ void AttackHandler::handle(InPacket& recv) const
         recv.skip(1);
 
         std::uint8_t length = (attack.skill == SkillId::MESO_EXPLOSION)
-                             ? recv.read_byte()
-                             : attack.hitcount;
+                                  ? recv.read_byte()
+                                  : attack.hitcount;
         for (std::uint8_t j = 0; j < length; ++j) {
             std::int32_t damage = recv.read_int();
             bool critical = false; // todo

@@ -204,7 +204,8 @@ Button::State UIItemInventory::button_pressed(std::uint16_t buttonid)
         slotrange.first = 1;
         slotrange.second = 24;
 
-        slider.setrows(6, static_cast<std::int16_t>(1 + inventory.get_slotmax(tab) / 4));
+        slider.setrows(
+            6, static_cast<std::int16_t>(1 + inventory.get_slotmax(tab) / 4));
 
         buttons[button_by_tab(oldtab)]->set_state(Button::NORMAL);
 
@@ -237,7 +238,8 @@ void UIItemInventory::doubleclick(Point<std::int16_t> cursorpos)
     }
 }
 
-void UIItemInventory::send_icon(const Icon& icon, Point<std::int16_t> cursorpos)
+void UIItemInventory::send_icon(const Icon& icon,
+                                Point<std::int16_t> cursorpos)
 {
     std::int16_t slot = slot_by_position(cursorpos - position);
     if (slot > 0) {
@@ -363,7 +365,8 @@ void UIItemInventory::toggle_active()
     UIElement::toggle_active();
 }
 
-bool UIItemInventory::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
+bool UIItemInventory::remove_cursor(bool clicked,
+                                    Point<std::int16_t> cursorpos)
 {
     if (UIDragElement::remove_cursor(clicked, cursorpos)) {
         return true;
@@ -397,7 +400,8 @@ bool UIItemInventory::is_not_visible(std::int16_t slot) const
     return slot < slotrange.first || slot > slotrange.second;
 }
 
-std::int16_t UIItemInventory::slot_by_position(Point<std::int16_t> cursorpos) const
+std::int16_t
+UIItemInventory::slot_by_position(Point<std::int16_t> cursorpos) const
 {
     std::int16_t xoff = cursorpos.x() - 11;
     std::int16_t yoff = cursorpos.y() - 51;
@@ -412,7 +416,8 @@ std::int16_t UIItemInventory::slot_by_position(Point<std::int16_t> cursorpos) co
 Point<std::int16_t> UIItemInventory::get_slotpos(std::int16_t slot) const
 {
     std::int16_t absslot = slot - slotrange.first;
-    return Point<std::int16_t>(11 + (absslot % 4) * 36, 51 + (absslot / 4) * 35);
+    return Point<std::int16_t>(11 + (absslot % 4) * 36,
+                               51 + (absslot / 4) * 35);
 }
 
 Point<std::int16_t> UIItemInventory::get_tabpos(InventoryType::Id tb) const

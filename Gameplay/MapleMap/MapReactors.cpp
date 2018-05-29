@@ -50,7 +50,9 @@ void MapReactors::spawn(ReactorSpawn&& spawn)
     spawns.emplace(std::move(spawn));
 }
 
-void MapReactors::remove(std::int32_t oid, std::int8_t state, Point<std::int16_t> position)
+void MapReactors::remove(std::int32_t oid,
+                         std::int8_t state,
+                         Point<std::int16_t> position)
 {
     if (nullable_ptr<Reactor> reactor = reactors.get(oid)) {
         reactor->destroy(state, position);

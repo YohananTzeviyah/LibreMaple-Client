@@ -37,8 +37,8 @@ UINotice::UINotice(std::string q)
     question = {Text::A11M, Text::CENTER, Text::DARKGREY, q, 200};
 
     height = question.height();
-    dimension =
-        Point<std::int16_t>(top.width(), top.height() + height + bottom.height());
+    dimension = Point<std::int16_t>(top.width(),
+                                    top.height() + height + bottom.height());
     position =
         Point<std::int16_t>(400 - dimension.x() / 2, 240 - dimension.y() / 2);
 }

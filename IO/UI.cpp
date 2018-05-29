@@ -17,10 +17,10 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "UI.h"
 
+#include "../Graphics/GraphicsGL.h"
 #include "UIStateGame.h"
 #include "UIStateLogin.h"
 #include "Window.h"
-#include "../Graphics/GraphicsGL.h"
 
 namespace jrc
 {
@@ -185,7 +185,9 @@ void UI::drag_icon(Icon* icon)
     state->drag_icon(icon);
 }
 
-void UI::add_keymapping(std::uint8_t no, std::uint8_t type, std::int32_t action)
+void UI::add_keymapping(std::uint8_t no,
+                        std::uint8_t type,
+                        std::int32_t action)
 {
     keyboard.assign(no, type, action);
 }

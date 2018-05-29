@@ -30,7 +30,8 @@ public:
                std::int16_t level);
     Afterimage();
 
-    void draw(std::uint8_t stframe, const DrawArgument& args, float alpha) const;
+    void
+    draw(std::uint8_t stframe, const DrawArgument& args, float alpha) const;
     void update(std::uint8_t stframe, std::uint16_t timestep);
 
     std::uint8_t get_first_frame() const;

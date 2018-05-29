@@ -44,7 +44,8 @@ void RegularAttack::apply_hiteffects(const AttackUser&, Mob&) const
 {
 }
 
-Animation RegularAttack::get_bullet(const Char& user, std::int32_t bulletid) const
+Animation RegularAttack::get_bullet(const Char& user,
+                                    std::int32_t bulletid) const
 {
     return bullet.get(user, bulletid);
 }

@@ -27,7 +27,9 @@ public:
     MapleFrame(nl::node src);
     MapleFrame();
 
-    void draw(Point<std::int16_t> position, std::int16_t width, std::int16_t height) const;
+    void draw(Point<std::int16_t> position,
+              std::int16_t width,
+              std::int16_t height) const;
 
 private:
     Texture center;

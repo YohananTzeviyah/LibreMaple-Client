@@ -129,7 +129,8 @@ bool Npc::isscripted() const
     return scripted;
 }
 
-bool Npc::inrange(Point<std::int16_t> cursorpos, Point<std::int16_t> viewpos) const
+bool Npc::inrange(Point<std::int16_t> cursorpos,
+                  Point<std::int16_t> viewpos) const
 {
     if (!active) {
         return false;
@@ -137,13 +138,13 @@ bool Npc::inrange(Point<std::int16_t> cursorpos, Point<std::int16_t> viewpos) co
 
     Point<std::int16_t> absp = get_position() + viewpos;
     Point<std::int16_t> dim = animations.count(stance)
-                             ? animations.at(stance).get_dimensions()
-                             : Point<std::int16_t>();
+                                  ? animations.at(stance).get_dimensions()
+                                  : Point<std::int16_t>();
 
     return Rectangle<std::int16_t>(absp.x() - dim.x() / 2,
-                              absp.x() + dim.x() / 2,
-                              absp.y() - dim.y(),
-                              absp.y())
+                                   absp.x() + dim.x() / 2,
+                                   absp.y() - dim.y(),
+                                   absp.y())
         .contains(cursorpos);
 }
 } // namespace jrc

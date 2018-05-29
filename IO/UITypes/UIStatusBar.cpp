@@ -76,7 +76,8 @@ UIStatusbar::UIStatusbar(const CharStats& st)
     buttons[BT_INVENTORY] = std::make_unique<MapleButton>(mainbar["BtInven"]);
     buttons[BT_EQUIPS] = std::make_unique<MapleButton>(mainbar["BtEquip"]);
     buttons[BT_SKILL] = std::make_unique<MapleButton>(mainbar["BtSkill"]);
-    buttons[BT_KEYSETTING] = std::make_unique<MapleButton>(mainbar["BtKeysetting"]);
+    buttons[BT_KEYSETTING] =
+        std::make_unique<MapleButton>(mainbar["BtKeysetting"]);
 }
 
 void UIStatusbar::draw(float alpha) const
@@ -102,7 +103,8 @@ void UIStatusbar::draw(float alpha) const
                  position + Point<std::int16_t>(-124, -29));
     statset.draw("[" + std::to_string(mp) + "/" + std::to_string(maxmp) + "]",
                  position + Point<std::int16_t>(47, -29));
-    levelset.draw(std::to_string(level), position + Point<std::int16_t>(-480, -24));
+    levelset.draw(std::to_string(level),
+                  position + Point<std::int16_t>(-480, -24));
 
     joblabel.draw(position + Point<std::int16_t>(-435, -21));
     namelabel.draw(position + Point<std::int16_t>(-435, -36));
@@ -153,9 +155,9 @@ Button::State UIStatusbar::button_pressed(std::uint16_t id)
 
 bool UIStatusbar::is_in_range(Point<std::int16_t> cursorpos) const
 {
-    Rectangle<std::int16_t> bounds(
-        position - Point<std::int16_t>(512, 84),
-        position - Point<std::int16_t>(512, 84) + dimension);
+    Rectangle<std::int16_t> bounds(position - Point<std::int16_t>(512, 84),
+                                   position - Point<std::int16_t>(512, 84) +
+                                       dimension);
 
     return bounds.contains(cursorpos) || chatbar.is_in_range(cursorpos);
 }
@@ -169,7 +171,8 @@ bool UIStatusbar::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
     return UIElement::remove_cursor(clicked, cursorpos);
 }
 
-Cursor::State UIStatusbar::send_cursor(bool pressed, Point<std::int16_t> cursorpos)
+Cursor::State UIStatusbar::send_cursor(bool pressed,
+                                       Point<std::int16_t> cursorpos)
 {
     if (chatbar.is_in_range(cursorpos)) {
         UIElement::send_cursor(pressed, cursorpos);

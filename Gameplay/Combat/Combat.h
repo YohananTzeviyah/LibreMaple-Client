@@ -73,9 +73,9 @@ private:
     void extract_effects(const Char& user,
                          const SpecialMove& move,
                          const AttackResult& result);
-    std::vector<DamageNumber>
-    place_numbers(std::int32_t oid,
-                  const std::vector<std::pair<std::int32_t, bool>>& damagelines);
+    std::vector<DamageNumber> place_numbers(
+        std::int32_t oid,
+        const std::vector<std::pair<std::int32_t, bool>>& damagelines);
     const SpecialMove& get_move(std::int32_t move_id);
 
     Player& player;

@@ -35,7 +35,8 @@ MapleButton::MapleButton(nl::node src, std::int16_t x, std::int16_t y)
 {
 }
 
-MapleButton::MapleButton(nl::node src) : MapleButton(src, Point<std::int16_t>())
+MapleButton::MapleButton(nl::node src)
+    : MapleButton(src, Point<std::int16_t>())
 {
 }
 
@@ -46,7 +47,8 @@ void MapleButton::draw(Point<std::int16_t> parentpos) const
     }
 }
 
-Rectangle<std::int16_t> MapleButton::bounds(Point<std::int16_t> parentpos) const
+Rectangle<std::int16_t>
+MapleButton::bounds(Point<std::int16_t> parentpos) const
 {
     auto lt = parentpos + position - textures[state].get_origin();
     auto rb = lt + textures[state].get_dimensions();

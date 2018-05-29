@@ -19,7 +19,6 @@
 
 #include "../Gameplay/Stage.h"
 #include "UI.h"
-#include "Window.h"
 #include "UITypes/UIBuffList.h"
 #include "UITypes/UIEquipInventory.h"
 #include "UITypes/UIItemInventory.h"
@@ -29,6 +28,7 @@
 #include "UITypes/UIStatsInfo.h"
 #include "UITypes/UIStatusBar.h"
 #include "UITypes/UIStatusMessenger.h"
+#include "Window.h"
 
 namespace jrc
 {
@@ -129,7 +129,8 @@ void UIStateGame::send_key(KeyType::Id type, std::int32_t action, bool pressed)
     }
 }
 
-Cursor::State UIStateGame::send_cursor(Cursor::State mst, Point<std::int16_t> pos)
+Cursor::State UIStateGame::send_cursor(Cursor::State mst,
+                                       Point<std::int16_t> pos)
 {
     if (draggedicon) {
         switch (mst) {

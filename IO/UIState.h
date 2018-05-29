@@ -41,7 +41,8 @@ public:
     virtual void update() = 0;
 
     virtual void doubleclick(Point<std::int16_t> pos) = 0;
-    virtual void send_key(KeyType::Id type, std::int32_t action, bool pressed) = 0;
+    virtual void
+    send_key(KeyType::Id type, std::int32_t action, bool pressed) = 0;
     virtual Cursor::State send_cursor(Cursor::State mst,
                                       Point<std::int16_t> pos) = 0;
 
@@ -92,8 +93,11 @@ class UIStateNull : public UIState
     void show_item(Tooltip::Parent, std::int32_t) override
     {
     }
-    void show_skill(
-        Tooltip::Parent, std::int32_t, std::int32_t, std::int32_t, std::int64_t) override
+    void show_skill(Tooltip::Parent,
+                    std::int32_t,
+                    std::int32_t,
+                    std::int32_t,
+                    std::int64_t) override
     {
     }
     Iterator pre_add(UIElement::Type, bool, bool) override

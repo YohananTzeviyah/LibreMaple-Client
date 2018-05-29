@@ -18,17 +18,18 @@
 #include "UIWorldSelect.h"
 
 #include "../../Configuration.h"
+#include "../../Constants.h"
 #include "../../Graphics/Sprite.h"
 #include "../../IO/Components/MapleButton.h"
 #include "../../IO/Components/TwoSpriteButton.h"
 #include "../../IO/UI.h"
 #include "../../Net/Packets/LoginPackets.h"
 #include "nlnx/nx.hpp"
-#include "../../Constants.h"
 
 namespace jrc
 {
-UIWorldSelect::UIWorldSelect(std::vector<World> worlds, std::uint8_t worldcount)
+UIWorldSelect::UIWorldSelect(std::vector<World> worlds,
+                             std::uint8_t worldcount)
     : UIElement({0, 0}, {Constants::VIEWWIDTH, Constants::VIEWHEIGHT})
 {
     worldid = Setting<DefaultWorld>::get().load();
@@ -57,7 +58,8 @@ UIWorldSelect::UIWorldSelect(std::vector<World> worlds, std::uint8_t worldcount)
         worldsrc["button:15"], Point<std::int16_t>(650, 20));
     buttons[BT_WORLD0]->set_state(Button::PRESSED);
 
-    sprites.emplace_back(channelsrc["layer:bg"], Point<std::int16_t>(200, 170));
+    sprites.emplace_back(channelsrc["layer:bg"],
+                         Point<std::int16_t>(200, 170));
     sprites.emplace_back(channelsrc["release"]["layer:15"],
                          Point<std::int16_t>(200, 170));
 

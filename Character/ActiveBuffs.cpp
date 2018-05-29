@@ -26,7 +26,8 @@ void SimpleStatBuff<STAT>::apply_to(CharStats& stats, std::int16_t value) const
 }
 
 template<Equipstat::Id STAT>
-void PercentageStatBuff<STAT>::apply_to(CharStats& stats, std::int16_t value) const
+void PercentageStatBuff<STAT>::apply_to(CharStats& stats,
+                                        std::int16_t value) const
 {
     stats.add_percent(STAT, static_cast<float>(value) / 100);
 }

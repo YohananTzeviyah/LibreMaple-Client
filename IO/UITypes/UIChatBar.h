@@ -49,7 +49,8 @@ public:
 
     bool is_in_range(Point<std::int16_t> cursorpos) const override;
     bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
-    Cursor::State send_cursor(bool pressed, Point<std::int16_t> cursorpos) override;
+    Cursor::State send_cursor(bool pressed,
+                              Point<std::int16_t> cursorpos) override;
 
     void send_line(const std::string& line, LineType type);
 

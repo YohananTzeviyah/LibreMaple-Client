@@ -40,7 +40,8 @@ SkillData::SkillData(std::int32_t id)
     name = strsrc["name"].get_string();
     desc = strsrc["desc"].get_string();
 
-    for (std::int32_t level = 1; nl::node sub = strsrc["h" + std::to_string(level)];
+    for (std::int32_t level = 1;
+         nl::node sub = strsrc["h" + std::to_string(level)];
          level++) {
         levels.emplace(level, sub);
     }
@@ -52,9 +53,11 @@ SkillData::SkillData(std::int32_t id)
         std::int32_t matk = sub["mad"];
         std::int32_t fixdamage = sub["fixdamage"];
         std::int32_t mastery = sub["mastery"];
-        std::uint8_t attackcount = (std::uint8_t)sub["attackCount"].get_integer(1);
+        std::uint8_t attackcount =
+            (std::uint8_t)sub["attackCount"].get_integer(1);
         std::uint8_t mobcount = (std::uint8_t)sub["mobCount"].get_integer(1);
-        std::uint8_t bulletcount = (std::uint8_t)sub["bulletCount"].get_integer(1);
+        std::uint8_t bulletcount =
+            (std::uint8_t)sub["bulletCount"].get_integer(1);
         std::int16_t bulletcost =
             (std::int16_t)sub["bulletConsume"].get_integer(bulletcount);
         std::int32_t hpcost = sub["hpCon"];
@@ -64,7 +67,8 @@ SkillData::SkillData(std::int32_t id)
         float ignoredef = 0.0f;
         float hrange = (float)sub["range"].get_real(100.0) / 100;
         Rectangle<std::int16_t> range = sub;
-        std::int32_t level = string_conversion::or_default<std::int32_t>(sub.name(), -1);
+        std::int32_t level =
+            string_conversion::or_default<std::int32_t>(sub.name(), -1);
         stats.emplace(std::piecewise_construct,
                       std::forward_as_tuple(level),
                       std::forward_as_tuple(damage,

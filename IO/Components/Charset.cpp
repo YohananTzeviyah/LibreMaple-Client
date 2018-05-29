@@ -51,7 +51,8 @@ std::int16_t Charset::getw(std::int8_t c) const
     return iter != chars.end() ? iter->second.width() : 0;
 }
 
-std::int16_t Charset::draw(const std::string& text, const DrawArgument& args) const
+std::int16_t Charset::draw(const std::string& text,
+                           const DrawArgument& args) const
 {
     std::int16_t shift = 0;
     std::int16_t total = 0;
@@ -80,8 +81,8 @@ std::int16_t Charset::draw(const std::string& text, const DrawArgument& args) co
 }
 
 std::int16_t Charset::draw(const std::string& text,
-                      std::int16_t hspace,
-                      const DrawArgument& args) const
+                           std::int16_t hspace,
+                           const DrawArgument& args) const
 {
     std::size_t length = text.size();
     std::int16_t shift = 0;

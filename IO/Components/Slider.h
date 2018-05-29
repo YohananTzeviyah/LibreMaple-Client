@@ -38,7 +38,8 @@ public:
 
     bool isenabled() const;
     void setenabled(bool enabled);
-    void setrows(std::int16_t newrow, std::int16_t unitrows, std::int16_t rowmax);
+    void
+    setrows(std::int16_t newrow, std::int16_t unitrows, std::int16_t rowmax);
     void setrows(std::int16_t unitrows, std::int16_t rowmax);
     void setvertical(Range<std::int16_t> vertical);
 

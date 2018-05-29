@@ -54,7 +54,8 @@ private:
     std::int8_t rollright(std::int8_t byte, std::size_t count) const;
 
     /// Apply aesofb to a byte array.
-    void aesofb(std::int8_t* bytes, std::size_t length, std::uint8_t* iv) const;
+    void
+    aesofb(std::int8_t* bytes, std::size_t length, std::uint8_t* iv) const;
     /// Encrypt a byte array with AES.
     void aesencrypt(std::uint8_t* bytes) const;
     /// AES addroundkey step.

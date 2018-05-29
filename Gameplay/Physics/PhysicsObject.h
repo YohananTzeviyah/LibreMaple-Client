@@ -156,7 +156,8 @@ struct MovingObject {
         return math::saturating_cast<std::int16_t>(std::round(intery + viewy));
     }
 
-    Point<std::int16_t> get_absolute(double viewx, double viewy, float alpha) const
+    Point<std::int16_t>
+    get_absolute(double viewx, double viewy, float alpha) const
     {
         return {get_absolute_x(viewx, alpha), get_absolute_y(viewy, alpha)};
     }

@@ -33,8 +33,8 @@ UISoftkey::UISoftkey(Callback c) : callback(c)
 
     buttons[BT_NEXT] = std::make_unique<MapleButton>(src["BtNext"]);
     buttons[BT_BACK] = std::make_unique<MapleButton>(src["BtDel"]);
-    buttons[BT_OK] =
-        std::make_unique<MapleButton>(src["BtOK"], Point<std::int16_t>(72, 235));
+    buttons[BT_OK] = std::make_unique<MapleButton>(
+        src["BtOK"], Point<std::int16_t>(72, 235));
     buttons[BT_CANCEL] = std::make_unique<MapleButton>(
         src["BtCancel"], Point<std::int16_t>(13, 235));
 

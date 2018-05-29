@@ -68,7 +68,8 @@ void ItemTooltip::draw(Point<std::int16_t> pos) const
         return;
 
     top.draw(pos);
-    mid.draw({pos + Point<std::int16_t>(0, 13), Point<std::int16_t>(0, filllength)});
+    mid.draw({pos + Point<std::int16_t>(0, 13),
+              Point<std::int16_t>(0, filllength)});
     bot.draw(pos + Point<std::int16_t>(0, filllength + 13));
 
     name.draw(pos + Point<std::int16_t>(130, 3));

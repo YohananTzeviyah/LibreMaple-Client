@@ -34,7 +34,8 @@ JobData::JobData(std::int32_t id)
     name = strsrc["bookName"].get_string();
 
     for (nl::node sub : src["skill"]) {
-        std::int32_t skill_id = string_conversion::or_zero<std::int32_t>(sub.name());
+        std::int32_t skill_id =
+            string_conversion::or_zero<std::int32_t>(sub.name());
         if (skill_id == 0)
             continue;
 

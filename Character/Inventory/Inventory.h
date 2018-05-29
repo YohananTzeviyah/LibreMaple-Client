@@ -41,7 +41,13 @@ public:
         MOVE_EQUIP = 2
     };
 
-    enum Modification : std::int8_t { ADD, CHANGECOUNT, SWAP, REMOVE, ADDCOUNT };
+    enum Modification : std::int8_t {
+        ADD,
+        CHANGECOUNT,
+        SWAP,
+        REMOVE,
+        ADDCOUNT
+    };
 
     // Return the move type by value.
     static Movement movementbyvalue(std::int8_t value);
@@ -118,23 +124,26 @@ public:
     // Return the first slot which contains the specified item.
     std::int16_t find_item(InventoryType::Id type, std::int32_t itemid) const;
     // Return the count of an item. Returns 0 if the slot is empty.
-    std::int16_t get_item_count(InventoryType::Id type, std::int16_t slot) const;
+    std::int16_t get_item_count(InventoryType::Id type,
+                                std::int16_t slot) const;
     // Return the id of an item. Returns 0 if the slot is empty.
     std::int32_t get_item_id(InventoryType::Id type, std::int16_t slot) const;
 
     // Return a pointer to an equip.
     nullable_ptr<const Equip> get_equip(InventoryType::Id type,
-                                    std::int16_t slot) const;
+                                        std::int16_t slot) const;
 
 private:
     // Add an inventory slot and return the unique_id.
     std::int32_t add_slot(InventoryType::Id type,
-                     std::int16_t slot,
-                     std::int32_t item_id,
-                     std::int16_t count,
-                     bool cash);
+                          std::int16_t slot,
+                          std::int32_t item_id,
+                          std::int16_t count,
+                          bool cash);
     // Change the quantity of an item.
-    void change_count(InventoryType::Id type, std::int16_t slot, std::int16_t count);
+    void change_count(InventoryType::Id type,
+                      std::int16_t slot,
+                      std::int16_t count);
     // Swap two items.
     void swap(InventoryType::Id firsttype,
               std::int16_t firstslot,

@@ -271,9 +271,9 @@ void Combat::extract_effects(const Char& user,
     }
 }
 
-std::vector<DamageNumber>
-Combat::place_numbers(std::int32_t oid,
-                      const std::vector<std::pair<std::int32_t, bool>>& damagelines)
+std::vector<DamageNumber> Combat::place_numbers(
+    std::int32_t oid,
+    const std::vector<std::pair<std::int32_t, bool>>& damagelines)
 {
     std::vector<DamageNumber> numbers;
     std::int16_t head = mobs.get_mob_head_position(oid).y();
@@ -289,7 +289,9 @@ Combat::place_numbers(std::int32_t oid,
     return numbers;
 }
 
-void Combat::show_buff(std::int32_t cid, std::int32_t skillid, std::int8_t level)
+void Combat::show_buff(std::int32_t cid,
+                       std::int32_t skillid,
+                       std::int8_t level)
 {
     if (nullable_ptr<OtherChar> ouser = chars.get_char(cid)) {
         OtherChar& user = *ouser;

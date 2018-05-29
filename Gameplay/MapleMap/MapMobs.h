@@ -44,7 +44,9 @@ public:
     // Update who a mob is controlled by.
     void set_control(std::int32_t oid, bool control);
     // Update a mob's hp display.
-    void send_mobhp(std::int32_t oid, std::int8_t percent, std::uint16_t playerlevel);
+    void send_mobhp(std::int32_t oid,
+                    std::int8_t percent,
+                    std::uint16_t playerlevel);
     // Update a mob's movements.
     void send_movement(std::int32_t oid,
                        Point<std::int16_t> start,
@@ -72,8 +74,8 @@ public:
 
 private:
     std::vector<std::int32_t> find_closest(Rectangle<std::int16_t> range,
-                                      Point<std::int16_t> origin,
-                                      std::uint8_t mobcount) const;
+                                           Point<std::int16_t> origin,
+                                           std::uint8_t mobcount) const;
 
     MapObjects mobs;
 

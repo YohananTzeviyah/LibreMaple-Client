@@ -126,7 +126,8 @@ public:
 class UseSkillPacket : public OutPacket
 {
 public:
-    UseSkillPacket(std::int32_t skillid, std::int32_t level) : OutPacket(USE_SKILL)
+    UseSkillPacket(std::int32_t skillid, std::int32_t level)
+        : OutPacket(USE_SKILL)
     {
         write_time();
         write_int(skillid);

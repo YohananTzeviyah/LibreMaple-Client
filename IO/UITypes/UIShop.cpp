@@ -277,8 +277,11 @@ void UIShop::modify(InventoryType::Id type)
     }
 }
 
-void UIShop::add_item(
-    std::int32_t id, std::int32_t price, std::int32_t pitch, std::int32_t time, std::int16_t buyable)
+void UIShop::add_item(std::int32_t id,
+                      std::int32_t price,
+                      std::int32_t pitch,
+                      std::int32_t time,
+                      std::int16_t buyable)
 {
     add_rechargable(id, price, pitch, time, 0, buyable);
 }
@@ -379,8 +382,11 @@ std::int16_t UIShop::BuyItem::get_buyable() const
     return buyable;
 }
 
-UIShop::SellItem::SellItem(
-    std::int32_t item_id, std::int16_t count, std::int16_t s, bool sc, Texture cur)
+UIShop::SellItem::SellItem(std::int32_t item_id,
+                           std::int16_t count,
+                           std::int16_t s,
+                           bool sc,
+                           Texture cur)
 {
     const ItemData& idata = ItemData::get(item_id);
 
@@ -409,7 +415,8 @@ void UIShop::SellItem::draw(Point<std::int16_t> pos) const
     if (showcount) {
         static const Charset countset = {nl::nx::ui["Basic.img"]["ItemNo"],
                                          Charset::LEFT};
-        countset.draw(std::to_string(sellable), pos + Point<std::int16_t>(0, 20));
+        countset.draw(std::to_string(sellable),
+                      pos + Point<std::int16_t>(0, 20));
     }
     namelabel.draw(pos + Point<std::int16_t>(40, -1));
     currency.draw(pos + Point<std::int16_t>(38, 20));

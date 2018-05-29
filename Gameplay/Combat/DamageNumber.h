@@ -30,7 +30,10 @@ public:
     static const std::size_t NUM_TYPES = 3;
     enum Type { NORMAL, CRITICAL, TOPLAYER };
 
-    DamageNumber(Type type, std::int32_t damage, std::int16_t starty, std::int16_t x = 0);
+    DamageNumber(Type type,
+                 std::int32_t damage,
+                 std::int16_t starty,
+                 std::int16_t x = 0);
     DamageNumber();
 
     void draw(double viewx, double viewy, float alpha) const;

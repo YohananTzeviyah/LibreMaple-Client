@@ -23,7 +23,10 @@
 
 namespace jrc
 {
-DamageNumber::DamageNumber(Type t, std::int32_t damage, std::int16_t starty, std::int16_t x)
+DamageNumber::DamageNumber(Type t,
+                           std::int32_t damage,
+                           std::int16_t starty,
+                           std::int16_t x)
 {
     type = t;
 

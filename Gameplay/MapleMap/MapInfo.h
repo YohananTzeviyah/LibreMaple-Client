@@ -16,9 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../../Template/nullable_ptr.h"
 #include "../../Template/Point.h"
 #include "../../Template/Range.h"
+#include "../../Template/nullable_ptr.h"
 #include "nlnx/node.hpp"
 
 #include <vector>
@@ -57,7 +57,9 @@ private:
 class MapInfo
 {
 public:
-    MapInfo(nl::node src, Range<std::int16_t> walls, Range<std::int16_t> borders);
+    MapInfo(nl::node src,
+            Range<std::int16_t> walls,
+            Range<std::int16_t> borders);
     MapInfo();
 
     bool is_underwater() const;
@@ -70,7 +72,7 @@ public:
     // Find a ladder at the player's position. upwards = false implies
     // downwards.
     nullable_ptr<const Ladder> findladder(Point<std::int16_t> position,
-                                      bool upwards) const;
+                                          bool upwards) const;
 
 private:
     std::int32_t fieldlimit;

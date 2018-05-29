@@ -21,8 +21,8 @@
 #include "Components/Icon.h"
 #include "Cursor.h"
 
-#include <unordered_map>
 #include <memory>
+#include <unordered_map>
 #include <vector>
 
 namespace jrc
@@ -71,10 +71,13 @@ public:
     virtual void doubleclick(Point<std::int16_t> cursorpos);
     virtual bool is_in_range(Point<std::int16_t> cursorpos) const;
     virtual bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos);
-    virtual Cursor::State send_cursor(bool clicked, Point<std::int16_t> cursorpos);
+    virtual Cursor::State send_cursor(bool clicked,
+                                      Point<std::int16_t> cursorpos);
 
 protected:
-    UIElement(Point<std::int16_t> position, Point<std::int16_t> dimension, bool active);
+    UIElement(Point<std::int16_t> position,
+              Point<std::int16_t> dimension,
+              bool active);
     UIElement(Point<std::int16_t> position, Point<std::int16_t> dimension);
     UIElement();
 

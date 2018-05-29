@@ -72,7 +72,8 @@ const std::int8_t* SocketAsio::get_buffer() const
 bool SocketAsio::dispatch(const std::int8_t* bytes, std::size_t length)
 {
     error_code error;
-    std::size_t result = asio::write(socket, asio::buffer(bytes, length), error);
+    std::size_t result =
+        asio::write(socket, asio::buffer(bytes, length), error);
     return !error && (result == length);
 }
 } // namespace jrc

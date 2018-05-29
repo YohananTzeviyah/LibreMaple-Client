@@ -23,7 +23,8 @@
 
 namespace jrc
 {
-WeaponData::WeaponData(std::int32_t equipid) : equipdata(EquipData::get(equipid))
+WeaponData::WeaponData(std::int32_t equipid)
+    : equipdata(EquipData::get(equipid))
 {
     std::int32_t prefix = equipid / 10000;
     type = Weapon::by_value(prefix);

@@ -82,7 +82,8 @@ void UIEquipInventory::draw(float alpha) const
     }
 
     if (showpetequips) {
-        Point<std::int16_t> position_pet(position + Point<std::int16_t>(184, 0));
+        Point<std::int16_t> position_pet(position +
+                                         Point<std::int16_t>(184, 0));
         for (auto& texture : textures_pet) {
             texture.draw(position_pet);
         }
@@ -161,7 +162,8 @@ void UIEquipInventory::doubleclick(Point<std::int16_t> cursorpos)
     }
 }
 
-void UIEquipInventory::send_icon(const Icon& icon, Point<std::int16_t> cursorpos)
+void UIEquipInventory::send_icon(const Icon& icon,
+                                 Point<std::int16_t> cursorpos)
 {
     if (Equipslot::Id slot = slot_by_position(cursorpos)) {
         icon.drop_on_equips(slot);
@@ -174,7 +176,9 @@ void UIEquipInventory::toggle_active()
     UIElement::toggle_active();
 }
 
-void UIEquipInventory::modify(std::int16_t pos, std::int8_t mode, std::int16_t arg)
+void UIEquipInventory::modify(std::int16_t pos,
+                              std::int8_t mode,
+                              std::int16_t arg)
 {
     Equipslot::Id eqpos = Equipslot::by_id(pos);
     Equipslot::Id eqarg = Equipslot::by_id(arg);

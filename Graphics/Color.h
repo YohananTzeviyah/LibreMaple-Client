@@ -56,7 +56,10 @@ public:
     {
     }
     /// Create a color by natural numbers [0, 255]
-    constexpr Color(std::uint8_t red, std::uint8_t green, std::uint8_t blue, std::uint8_t alpha)
+    constexpr Color(std::uint8_t red,
+                    std::uint8_t green,
+                    std::uint8_t blue,
+                    std::uint8_t alpha)
         : Color(static_cast<float>(red) / 255,
                 static_cast<float>(green) / 255,
                 static_cast<float>(blue) / 255,

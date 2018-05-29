@@ -35,7 +35,8 @@ Portal::Portal(const Animation* a,
     touched = false;
 }
 
-Portal::Portal() : Portal(nullptr, SPAWN, "", false, Point<std::int16_t>(), 0, "")
+Portal::Portal()
+    : Portal(nullptr, SPAWN, "", false, Point<std::int16_t>(), 0, "")
 {
 }
 

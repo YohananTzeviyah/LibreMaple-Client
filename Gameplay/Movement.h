@@ -44,8 +44,12 @@ struct Movement {
     {
     }
 
-    Movement(
-        std::int16_t x, std::int16_t y, std::int16_t lx, std::int16_t ly, std::uint8_t s, std::int16_t d)
+    Movement(std::int16_t x,
+             std::int16_t y,
+             std::int16_t lx,
+             std::int16_t ly,
+             std::uint8_t s,
+             std::int16_t d)
         : Movement(_ABSOLUTE, 0, x, y, lx, ly, 0, s, d)
     {
     }

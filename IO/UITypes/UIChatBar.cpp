@@ -128,7 +128,8 @@ void UIChatbar::draw(float inter) const
                 break;
             }
 
-            std::int16_t textheight = rowtexts.at(rowid).height() / CHATROWHEIGHT;
+            std::int16_t textheight =
+                rowtexts.at(rowid).height() / CHATROWHEIGHT;
             while (textheight > 0) {
                 yshift += CHATROWHEIGHT;
                 textheight--;
@@ -190,7 +191,8 @@ bool UIChatbar::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
     return UIElement::remove_cursor(clicked, cursorpos);
 }
 
-Cursor::State UIChatbar::send_cursor(bool clicking, Point<std::int16_t> cursorpos)
+Cursor::State UIChatbar::send_cursor(bool clicking,
+                                     Point<std::int16_t> cursorpos)
 {
     if (slider.isenabled()) {
         auto cursoroffset =
@@ -208,7 +210,8 @@ Cursor::State UIChatbar::send_cursor(bool clicking, Point<std::int16_t> cursorpo
         }
     }
 
-    auto chattop = Rectangle<std::int16_t>(0, 502, getchattop(), getchattop() + 6);
+    auto chattop =
+        Rectangle<std::int16_t>(0, 502, getchattop(), getchattop() + 6);
     bool contains = chattop.contains(cursorpos);
     if (dragchattop) {
         if (clicking) {

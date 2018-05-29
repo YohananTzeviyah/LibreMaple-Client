@@ -52,7 +52,7 @@ public:
 
 private:
     std::unordered_map<std::uint8_t, Texture> stances[Stance::LENGTH]
-                                                [Layer::NUM_LAYERS];
+                                                     [Layer::NUM_LAYERS];
     std::string name;
 
     static const std::unordered_map<std::string, Layer> layers_by_name;

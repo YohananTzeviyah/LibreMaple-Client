@@ -64,7 +64,10 @@ struct MobAttack {
     bool valid = false;
 
     // Create a mob attack for touch damage.
-    MobAttack(std::int32_t watk, Point<std::int16_t> origin, std::int32_t mobid, std::int32_t oid)
+    MobAttack(std::int32_t watk,
+              Point<std::int16_t> origin,
+              std::int32_t mobid,
+              std::int32_t oid)
         : type(Attack::CLOSE),
           watk(watk),
           mobid(mobid),
@@ -90,7 +93,9 @@ struct MobAttackResult {
     std::int32_t oid;
     std::uint8_t direction;
 
-    MobAttackResult(const MobAttack& attack, std::int32_t damage, std::uint8_t direction)
+    MobAttackResult(const MobAttack& attack,
+                    std::int32_t damage,
+                    std::uint8_t direction)
         : damage(damage),
           mobid(attack.mobid),
           oid(attack.oid),
@@ -125,7 +130,8 @@ struct AttackResult {
     std::uint8_t stance = 0;
     std::uint8_t speed = 0;
     bool toleft = false;
-    std::unordered_map<std::int32_t, std::vector<std::pair<std::int32_t, bool>>>
+    std::unordered_map<std::int32_t,
+                       std::vector<std::pair<std::int32_t, bool>>>
         damagelines;
     std::int32_t first_oid;
     std::int32_t last_oid;

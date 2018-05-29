@@ -54,7 +54,8 @@ void UIStateLogin::send_key(KeyType::Id, std::int32_t, bool)
 {
 }
 
-Cursor::State UIStateLogin::send_cursor(Cursor::State mst, Point<std::int16_t> pos)
+Cursor::State UIStateLogin::send_cursor(Cursor::State mst,
+                                        Point<std::int16_t> pos)
 {
     if (UIElement* focusedelement = get(focused)) {
         if (focusedelement->is_active()) {

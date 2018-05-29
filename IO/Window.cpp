@@ -223,11 +223,8 @@ void Window::resize(bool in_game) noexcept
 
     glfwSetWindowSize(glwnd, width, height);
     glViewport(0, 0, width, height);
-    GraphicsGL::set_screen(0,
-                           width,
-                           -Constants::VIEWYOFFSET,
-                           -Constants::VIEWYOFFSET +
-                               height);
+    GraphicsGL::set_screen(
+        0, width, -Constants::VIEWYOFFSET, -Constants::VIEWYOFFSET + height);
 }
 
 std::int16_t Window::get_width() const noexcept

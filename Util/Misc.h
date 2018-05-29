@@ -64,41 +64,52 @@ bool compare(std::int32_t mask, std::int32_t value);
 
 namespace math
 {
-    template<typename T, typename U>
-    T saturating_cast(U u)
-    {
-        static_assert(std::numeric_limits<T>::is_specialized);
-        static_assert(std::numeric_limits<U>::is_specialized);
+template<typename T, typename U>
+T saturating_cast(U u)
+{
+    static_assert(std::numeric_limits<T>::is_specialized);
+    static_assert(std::numeric_limits<U>::is_specialized);
 
-        if constexpr (std::numeric_limits<T>::is_integer) {
-            if constexpr (std::numeric_limits<U>::is_integer) {
-                if constexpr (sizeof(T) > sizeof(U)) {
+    if constexpr (std::numeric_limits<T>::is_integer) {
+        if constexpr (std::numeric_limits<U>::is_integer) {
+            if constexpr (sizeof(T) > sizeof(U)) {
+                return static_cast<T>(u);
+            } else if constexpr (sizeof(T) == sizeof(U)) {
+                if constexpr (std::numeric_limits<T>::is_signed ==
+                              std::numeric_limits<U>::is_signed) {
                     return static_cast<T>(u);
-                } else if constexpr (sizeof(T) == sizeof(U)) {
-                    if constexpr (std::numeric_limits<T>::is_signed == std::numeric_limits<U>::is_signed) {
-                        return static_cast<T>(u);
-                    } else if constexpr (std::numeric_limits<T>::is_signed) {
-                        return static_cast<T>(std::min(u, static_cast<U>(std::numeric_limits<T>::max())));
-                    } else {
-                        return static_cast<T>(std::max(u, static_cast<U>(std::numeric_limits<T>::lowest())));
-                    }
+                } else if constexpr (std::numeric_limits<T>::is_signed) {
+                    return static_cast<T>(std::min(
+                        u, static_cast<U>(std::numeric_limits<T>::max())));
                 } else {
-                    return static_cast<T>(std::min(std::max(u, static_cast<U>(std::numeric_limits<T>::lowest())), static_cast<U>(std::numeric_limits<T>::max())));
+                    return static_cast<T>(std::max(
+                        u, static_cast<U>(std::numeric_limits<T>::lowest())));
                 }
             } else {
-                return static_cast<T>(std::min(std::max(u, static_cast<U>(std::numeric_limits<T>::lowest())), static_cast<U>(std::numeric_limits<T>::max())));
+                return static_cast<T>(std::min(
+                    std::max(u,
+                             static_cast<U>(std::numeric_limits<T>::lowest())),
+                    static_cast<U>(std::numeric_limits<T>::max())));
             }
         } else {
-            if constexpr (std::numeric_limits<U>::is_integer) {
+            return static_cast<T>(std::min(
+                std::max(u, static_cast<U>(std::numeric_limits<T>::lowest())),
+                static_cast<U>(std::numeric_limits<T>::max())));
+        }
+    } else {
+        if constexpr (std::numeric_limits<U>::is_integer) {
+            return static_cast<T>(u);
+        } else {
+            if constexpr (sizeof(T) >= sizeof(U)) {
                 return static_cast<T>(u);
             } else {
-                if constexpr (sizeof(T) >= sizeof(U)) {
-                    return static_cast<T>(u);
-                } else {
-                    return static_cast<T>(std::min(std::max(u, static_cast<U>(std::numeric_limits<T>::lowest())), static_cast<U>(std::numeric_limits<T>::max())));
-                }
+                return static_cast<T>(std::min(
+                    std::max(u,
+                             static_cast<U>(std::numeric_limits<T>::lowest())),
+                    static_cast<U>(std::numeric_limits<T>::max())));
             }
         }
     }
+}
 } // namespace math
 } // namespace jrc

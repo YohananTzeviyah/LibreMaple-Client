@@ -186,7 +186,8 @@ void Textfield::modifytext(const std::string& t)
     text = t;
 }
 
-Cursor::State Textfield::send_cursor(Point<std::int16_t> cursorpos, bool clicked)
+Cursor::State Textfield::send_cursor(Point<std::int16_t> cursorpos,
+                                     bool clicked)
 {
     if (state == DISABLED) {
         return Cursor::IDLE;
@@ -259,6 +260,6 @@ Textfield::State Textfield::get_state() const
 Rectangle<std::int16_t> Textfield::get_bounds() const
 {
     return Rectangle<std::int16_t>(bounds.getlt() + parentpos,
-                              bounds.getrb() + parentpos);
+                                   bounds.getrb() + parentpos);
 }
 } // namespace jrc

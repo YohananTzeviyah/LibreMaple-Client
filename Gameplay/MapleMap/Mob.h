@@ -37,7 +37,13 @@ class Mob : public MapObject
 {
 public:
     static const std::size_t NUM_STANCES = 6;
-    enum Stance : std::uint8_t { MOVE = 2, STAND = 4, JUMP = 6, HIT = 8, DIE = 10 };
+    enum Stance : std::uint8_t {
+        MOVE = 2,
+        STAND = 4,
+        JUMP = 6,
+        HIT = 8,
+        DIE = 10
+    };
 
     static std::string nameof(Stance stance)
     {
@@ -81,8 +87,10 @@ public:
     /// Use the playerlevel to determine color of nametag.
     void show_hp(std::int8_t percentage, std::uint16_t playerlevel);
     /// Show an effect at the mob's position.
-    void
-    show_effect(const Animation& animation, std::int8_t pos, std::int8_t z, bool flip);
+    void show_effect(const Animation& animation,
+                     std::int8_t pos,
+                     std::int8_t z,
+                     bool flip);
 
     /// Calculate the damage to this mob with the spcecified attack.
     std::vector<std::pair<std::int32_t, bool>>
@@ -115,7 +123,8 @@ private:
     void update_movement();
 
     /// Calculate the hit chance.
-    float calculate_hitchance(std::int16_t leveldelta, std::int32_t accuracy) const;
+    float calculate_hitchance(std::int16_t leveldelta,
+                              std::int32_t accuracy) const;
     /// Calculate the minimum damage.
     double calculate_mindamage(std::int16_t leveldelta,
                                double mindamage,
@@ -126,9 +135,9 @@ private:
                                bool magic) const;
     /// Calculate a random damage line based on the specified values.
     std::pair<std::int32_t, bool> next_damage(double mindamage,
-                                         double maxdamage,
-                                         float hitchance,
-                                         float critical) const;
+                                              double maxdamage,
+                                              float hitchance,
+                                              float critical) const;
 
     /// Return the current 'head' position.
     Point<std::int16_t> get_head_position(Point<std::int16_t> position) const;

@@ -41,13 +41,15 @@ void Camera::update(Point<std::int16_t> position)
         next_y += vdelta * (12.0 / Constants::GAMEVIEWHEIGHT);
     }
 
-    if (next_x > hbounds.first() || hbounds.length() < Constants::GAMEVIEWWIDTH) {
+    if (next_x > hbounds.first() ||
+        hbounds.length() < Constants::GAMEVIEWWIDTH) {
         next_x = hbounds.first();
     } else if (next_x < hbounds.second() + Constants::GAMEVIEWWIDTH) {
         next_x = hbounds.second() + Constants::GAMEVIEWWIDTH;
     }
 
-    if (next_y > vbounds.first() || vbounds.length() < Constants::GAMEVIEWHEIGHT) {
+    if (next_y > vbounds.first() ||
+        vbounds.length() < Constants::GAMEVIEWHEIGHT) {
         next_y = vbounds.first();
     } else if (next_y < vbounds.second() + Constants::GAMEVIEWHEIGHT) {
         next_y = vbounds.second() + Constants::GAMEVIEWHEIGHT;
@@ -63,7 +65,8 @@ void Camera::set_position(Point<std::int16_t> position)
     y.set(Constants::GAMEVIEWHEIGHT / 2 - position.y());
 }
 
-void Camera::set_view(Range<std::int16_t> mapwalls, Range<std::int16_t> mapborders)
+void Camera::set_view(Range<std::int16_t> mapwalls,
+                      Range<std::int16_t> mapborders)
 {
     hbounds = -mapwalls;
     vbounds = -mapborders;

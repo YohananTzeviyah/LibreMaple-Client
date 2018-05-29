@@ -55,8 +55,8 @@ UICharSelect::UICharSelect(std::vector<CharEntry> cs,
     charinfopos = Point<std::int16_t>(662, 355);
     buttons[BT_ARBEIT] = std::make_unique<MapleButton>(charsel["arbeit"],
     Point<std::int16_t>(580, 115))); buttons[BT_CARDS] =
-    std::make_unique<MapleButton>(charsel["characterCard"], Point<std::int16_t>(665,
-    115)));
+    std::make_unique<MapleButton>(charsel["characterCard"],
+    Point<std::int16_t>(665, 115)));
     */
 
     // Pre BB
@@ -128,9 +128,10 @@ void UICharSelect::draw(float alpha) const
         const StatsEntry& stats = characters[selected_relative].stats;
 
         std::string levelstr = std::to_string(stats.stats[Maplestat::LEVEL]);
-        std::int16_t lvx =
-            levelset.draw(levelstr, charinfopos + Point<std::int16_t>(23, -93));
-        levelset.draw('l', charinfopos + Point<std::int16_t>(-7 - lvx / 2, -93));
+        std::int16_t lvx = levelset.draw(
+            levelstr, charinfopos + Point<std::int16_t>(23, -93));
+        levelset.draw('l',
+                      charinfopos + Point<std::int16_t>(-7 - lvx / 2, -93));
 
         namelabel.draw(charinfopos + Point<std::int16_t>(0, -85));
 
@@ -142,7 +143,7 @@ void UICharSelect::draw(float alpha) const
 
     for (std::uint8_t i = charcount_relative; i < slots_relative; ++i) {
         Point<std::int16_t> position_slot(130 + (120 * (i % 4)),
-                                     250 + (200 * (i > 3)));
+                                          250 + (200 * (i > 3)));
         emptyslot.draw(position_slot, alpha);
     }
 }

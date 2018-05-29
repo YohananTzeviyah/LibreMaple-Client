@@ -57,7 +57,8 @@ public:
     void set_alerted(std::int64_t millis);
 
     bool is_twohanded(Stance::Id stance) const;
-    std::uint16_t get_attackdelay(std::size_t no, std::uint8_t first_frame) const;
+    std::uint16_t get_attackdelay(std::size_t no,
+                                  std::uint8_t first_frame) const;
     std::uint8_t get_frame() const;
     Stance::Id get_stance() const;
 

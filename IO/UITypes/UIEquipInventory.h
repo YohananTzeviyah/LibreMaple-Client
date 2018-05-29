@@ -39,7 +39,8 @@ public:
     void toggle_active() override;
     void doubleclick(Point<std::int16_t> position) override;
     void send_icon(const Icon& icon, Point<std::int16_t> position) override;
-    Cursor::State send_cursor(bool pressed, Point<std::int16_t> position) override;
+    Cursor::State send_cursor(bool pressed,
+                              Point<std::int16_t> position) override;
 
     void modify(std::int16_t pos, std::int8_t mode, std::int16_t arg);
 

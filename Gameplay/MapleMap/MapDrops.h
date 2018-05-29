@@ -41,7 +41,8 @@ public:
     // Spawn a new drop.
     void spawn(DropSpawn&& spawn);
     // Remove a drop.
-    void remove(std::int32_t oid, std::int8_t mode, const PhysicsObject* looter);
+    void
+    remove(std::int32_t oid, std::int8_t mode, const PhysicsObject* looter);
     // Remove all drops.
     void clear();
 

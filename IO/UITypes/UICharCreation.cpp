@@ -41,11 +41,13 @@ UICharcreation::UICharcreation()
     sprites.emplace_back(bgsrc["16"], Point<std::int16_t>(200, 400));
     sprites.emplace_back(bgsrc["17"], Point<std::int16_t>(160, 263));
     sprites.emplace_back(bgsrc["18"], Point<std::int16_t>(349, 1220));
-    sprites.emplace_back(src["Common"]["frame"], Point<std::int16_t>(400, 290));
+    sprites.emplace_back(src["Common"]["frame"],
+                         Point<std::int16_t>(400, 290));
 
     nameboard = crsrc["charName"];
 
-    sprites_lookboard.emplace_back(crsrc["charSet"], Point<std::int16_t>(450, 115));
+    sprites_lookboard.emplace_back(crsrc["charSet"],
+                                   Point<std::int16_t>(450, 115));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["0"]["normal"],
                                    Point<std::int16_t>(461, 217));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["1"]["normal"],
@@ -67,8 +69,8 @@ UICharcreation::UICharcreation()
 
     buttons[BT_CHARC_OK] = std::make_unique<MapleButton>(
         crsrc["BtYes"], Point<std::int16_t>(482, 292));
-    buttons[BT_CHARC_CANCEL] =
-        std::make_unique<MapleButton>(crsrc["BtNo"], Point<std::int16_t>(555, 292));
+    buttons[BT_CHARC_CANCEL] = std::make_unique<MapleButton>(
+        crsrc["BtNo"], Point<std::int16_t>(555, 292));
     buttons[BT_CHARC_FACEL] = std::make_unique<MapleButton>(
         crsrc["BtLeft"], Point<std::int16_t>(521, 216));
     buttons[BT_CHARC_FACER] = std::make_unique<MapleButton>(
@@ -420,7 +422,8 @@ void UICharcreation::send_naming_result(bool nameused)
         } else {
             named = true;
             buttons[BT_CHARC_OK]->set_position(Point<std::int16_t>(486, 445));
-            buttons[BT_CHARC_CANCEL]->set_position(Point<std::int16_t>(560, 445));
+            buttons[BT_CHARC_CANCEL]->set_position(
+                Point<std::int16_t>(560, 445));
             buttons[BT_CHARC_FACEL]->set_active(true);
             buttons[BT_CHARC_FACER]->set_active(true);
             buttons[BT_CHARC_HAIRL]->set_active(true);
@@ -449,11 +452,13 @@ void UICharcreation::draw(float alpha) const
 {
     for (std::int16_t i = 0; i < 2; ++i) {
         for (std::int16_t k = 0; k < Constants::VIEWWIDTH; k += sky.width()) {
-            sky.draw(Point<std::int16_t>(k, static_cast<std::int16_t>((400 * i) - 100)));
+            sky.draw(Point<std::int16_t>(
+                k, static_cast<std::int16_t>((400 * i) - 100)));
         }
     }
 
-    std::int16_t cloudx = static_cast<std::int16_t>(cloudfx) % Constants::VIEWWIDTH;
+    std::int16_t cloudx =
+        static_cast<std::int16_t>(cloudfx) % Constants::VIEWWIDTH;
     cloud.draw(Point<std::int16_t>(cloudx - cloud.width(), 300));
     cloud.draw(Point<std::int16_t>(cloudx, 300));
     cloud.draw(Point<std::int16_t>(cloudx + cloud.width(), 300));

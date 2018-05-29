@@ -27,7 +27,8 @@ class Questlog
 {
 public:
     void add_started(std::int16_t, const std::string& quest_data);
-    void add_in_progress(std::int16_t, std::int16_t, const std::string& quest_data);
+    void
+    add_in_progress(std::int16_t, std::int16_t, const std::string& quest_data);
     void add_completed(std::int16_t, std::int64_t);
     bool is_started(std::int16_t);
     std::int16_t get_last_started();

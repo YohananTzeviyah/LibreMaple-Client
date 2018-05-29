@@ -16,8 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../Template/nullable_ptr.h"
 #include "../Template/Singleton.h"
+#include "../Template/nullable_ptr.h"
 #include "Components/Icon.h"
 #include "Components/ScrollingNotice.h"
 #include "Components/Textfield.h"
@@ -58,7 +58,8 @@ public:
     void focus_textfield(Textfield* textfield);
     void drag_icon(Icon* icon);
 
-    void add_keymapping(std::uint8_t no, std::uint8_t type, std::int32_t action);
+    void
+    add_keymapping(std::uint8_t no, std::uint8_t type, std::int32_t action);
 
     void clear_tooltip(Tooltip::Parent parent);
     void show_equip(Tooltip::Parent parent, std::int16_t slot);

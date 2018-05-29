@@ -27,7 +27,8 @@
         {
             try
             {
-                //std::int32_t selection = std::stoi(str.substr(pos + 2, next - pos
+                //std::int32_t selection = std::stoi(str.substr(pos + 2, next -
+   pos
    + 2)); str.replace(str.begin() + pos, str.begin() + next + 1, ""); return
    pos + 1;
             }
@@ -83,9 +84,8 @@
         {
             try
             {
-                std::int32_t type = std::stoi(str.substr(pos + 2, next - pos + 2));
-                std::string insert;
-                switch (type)
+                std::int32_t type = std::stoi(str.substr(pos + 2, next - pos +
+   2)); std::string insert; switch (type)
                 {
                 case 0:
                     insert = Stage::get().get_player().get_stats().get_name();

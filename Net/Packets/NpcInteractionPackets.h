@@ -60,7 +60,10 @@ class NpcShopActionPacket : public OutPacket
 {
 public:
     // Requests that an item should be bought from or sold to a npc shop.
-    NpcShopActionPacket(std::int16_t slot, std::int32_t itemid, std::int16_t qty, bool buy)
+    NpcShopActionPacket(std::int16_t slot,
+                        std::int32_t itemid,
+                        std::int16_t qty,
+                        bool buy)
         : NpcShopActionPacket(buy ? BUY : SELL)
     {
         write_short(slot);

@@ -38,8 +38,12 @@ Text::Text(Font f,
     change_text(t);
 }
 
-Text::Text(
-    Font f, Alignment a, Color c, const std::string& t, std::uint16_t mw, bool fm)
+Text::Text(Font f,
+           Alignment a,
+           Color c,
+           const std::string& t,
+           std::uint16_t mw,
+           bool fm)
     : Text(f, a, c, NONE, t, mw, fm)
 {
 }
@@ -156,7 +160,8 @@ std::int16_t Text::Layout::height() const
 
 std::int16_t Text::Layout::advance(std::size_t index) const
 {
-    return static_cast<std::int16_t>(index < advances.size() ? advances[index] : 0);
+    return static_cast<std::int16_t>(index < advances.size() ? advances[index]
+                                                             : 0);
 }
 
 Point<std::int16_t> Text::Layout::get_dimensions() const

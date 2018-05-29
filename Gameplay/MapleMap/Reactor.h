@@ -26,7 +26,10 @@ namespace jrc
 class Reactor : public MapObject
 {
 public:
-    Reactor(std::int32_t oid, std::int32_t rid, std::int8_t state, Point<std::int16_t> position);
+    Reactor(std::int32_t oid,
+            std::int32_t rid,
+            std::int8_t state,
+            Point<std::int16_t> position);
 
     void draw(double viewx, double viewy, float alpha) const override;
 

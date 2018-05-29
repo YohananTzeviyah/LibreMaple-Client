@@ -19,13 +19,13 @@
 
 #include "../../Audio/Audio.h"
 #include "../../Configuration.h"
+#include "../../Constants.h"
 #include "../../Graphics/Sprite.h"
 #include "../../Net/Packets/LoginPackets.h"
 #include "../Components/MapleButton.h"
 #include "../UI.h"
 #include "UILoginWait.h"
 #include "nlnx/nx.hpp"
-#include "../../Constants.h"
 
 namespace jrc
 {
@@ -59,8 +59,8 @@ UILogin::UILogin()
         title["BtHomePage"], Point<std::int16_t>(382, 320));
     buttons[BT_PASSLOST] = std::make_unique<MapleButton>(
         title["BtPasswdLost"], Point<std::int16_t>(470, 300));
-    buttons[BT_QUIT] = std::make_unique<MapleButton>(title["BtQuit"],
-                                                     Point<std::int16_t>(455, 320));
+    buttons[BT_QUIT] = std::make_unique<MapleButton>(
+        title["BtQuit"], Point<std::int16_t>(455, 320));
     buttons[BT_IDLOST] = std::make_unique<MapleButton>(
         title["BtLoginIDLost"], Point<std::int16_t>(395, 300));
     buttons[BT_SAVEID] = std::make_unique<MapleButton>(

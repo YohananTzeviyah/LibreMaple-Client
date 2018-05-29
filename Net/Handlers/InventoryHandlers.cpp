@@ -71,7 +71,8 @@ void ModifyInventoryHandler::handle(InPacket& recv) const
         case Inventory::CHANGECOUNT: {
             mod.arg = recv.read_short();
 
-            std::int16_t count_before = inventory.get_item_count(mod.type, mod.pos);
+            std::int16_t count_before =
+                inventory.get_item_count(mod.type, mod.pos);
             std::int16_t count_now = mod.arg;
 
             inventory.modify(

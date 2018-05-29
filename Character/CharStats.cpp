@@ -87,8 +87,8 @@ void CharStats::close_totalstats()
     std::int32_t attack = get_total(Equipstat::WATK);
     float multiplier = damagepercent + static_cast<float>(attack) / 100;
     maxdamage = static_cast<std::int32_t>((primary + secondary) * multiplier);
-    mindamage = static_cast<std::int32_t>(((primary * 0.9f * mastery) + secondary) *
-                                     multiplier);
+    mindamage = static_cast<std::int32_t>(
+        ((primary * 0.9f * mastery) + secondary) * multiplier);
 }
 
 std::int32_t CharStats::calculateaccuracy() const

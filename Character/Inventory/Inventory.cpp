@@ -191,10 +191,10 @@ void Inventory::swap(InventoryType::Id firsttype,
 }
 
 std::int32_t Inventory::add_slot(InventoryType::Id type,
-                            std::int16_t slot,
-                            std::int32_t item_id,
-                            std::int16_t count,
-                            bool cash)
+                                 std::int16_t slot,
+                                 std::int32_t item_id,
+                                 std::int16_t count,
+                                 bool cash)
 {
     running_uid++;
     inventories[type][slot] = {running_uid, item_id, count, cash};
@@ -331,7 +331,8 @@ std::int16_t Inventory::find_free_slot(InventoryType::Id type) const
     return counter < slotmaxima[type] ? counter : 0;
 }
 
-std::int16_t Inventory::find_item(InventoryType::Id type, std::int32_t itemid) const
+std::int16_t Inventory::find_item(InventoryType::Id type,
+                                  std::int32_t itemid) const
 {
     for (auto& iter : inventories[type]) {
         if (iter.second.item_id == itemid) {
@@ -341,7 +342,8 @@ std::int16_t Inventory::find_item(InventoryType::Id type, std::int32_t itemid) c
     return 0;
 }
 
-std::int16_t Inventory::get_item_count(InventoryType::Id type, std::int16_t slot) const
+std::int16_t Inventory::get_item_count(InventoryType::Id type,
+                                       std::int16_t slot) const
 {
     auto iter = inventories[type].find(slot);
     if (iter != inventories[type].end()) {
@@ -351,7 +353,8 @@ std::int16_t Inventory::get_item_count(InventoryType::Id type, std::int16_t slot
     }
 }
 
-std::int32_t Inventory::get_item_id(InventoryType::Id type, std::int16_t slot) const
+std::int32_t Inventory::get_item_id(InventoryType::Id type,
+                                    std::int16_t slot) const
 {
     auto iter = inventories[type].find(slot);
     if (iter != inventories[type].end()) {

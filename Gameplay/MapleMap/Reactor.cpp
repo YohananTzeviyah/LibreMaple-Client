@@ -22,7 +22,10 @@
 
 namespace jrc
 {
-Reactor::Reactor(std::int32_t o, std::int32_t r, std::int8_t s, Point<std::int16_t> p)
+Reactor::Reactor(std::int32_t o,
+                 std::int32_t r,
+                 std::int8_t s,
+                 Point<std::int16_t> p)
     : MapObject(o, p), rid(r), state(s)
 {
     std::string strid = string_format::extend_id(rid, 7);

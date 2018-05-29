@@ -26,7 +26,8 @@ namespace jrc
 MapPortals::MapPortals(nl::node src, std::int32_t mapid)
 {
     for (const auto& sub : src) {
-        auto portal_id = string_conversion::or_default<std::int8_t>(sub.name(), -1);
+        auto portal_id =
+            string_conversion::or_default<std::int8_t>(sub.name(), -1);
         if (portal_id < 0) {
             continue;
         }

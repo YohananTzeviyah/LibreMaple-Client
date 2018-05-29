@@ -73,7 +73,8 @@ public:
     ActiveBuffs();
 
     // Return the buff effect associated with the buff stat.
-    void apply_buff(CharStats& stats, Buffstat::Id stat, std::int16_t value) const;
+    void
+    apply_buff(CharStats& stats, Buffstat::Id stat, std::int16_t value) const;
 
 private:
     EnumMap<Buffstat::Id, std::unique_ptr<ActiveBuff>> buffs;

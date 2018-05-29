@@ -42,7 +42,8 @@ public:
     void clear();
 
     // Update a characters movement.
-    void send_movement(std::int32_t cid, const std::vector<Movement>& movements);
+    void send_movement(std::int32_t cid,
+                       const std::vector<Movement>& movements);
     // Update a characters look.
     void update_look(std::int32_t cid, const LookEntry& look);
 

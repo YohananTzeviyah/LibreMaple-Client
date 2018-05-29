@@ -21,7 +21,9 @@
 
 namespace jrc
 {
-MapInfo::MapInfo(nl::node src, Range<std::int16_t> walls, Range<std::int16_t> borders)
+MapInfo::MapInfo(nl::node src,
+                 Range<std::int16_t> walls,
+                 Range<std::int16_t> borders)
 {
     nl::node info = src["info"];
     if (info["VRLeft"].data_type() == nl::node::type::integer) {
@@ -88,7 +90,7 @@ nullable_ptr<const Seat> MapInfo::findseat(Point<std::int16_t> position) const
 }
 
 nullable_ptr<const Ladder> MapInfo::findladder(Point<std::int16_t> position,
-                                           bool upwards) const
+                                               bool upwards) const
 {
     for (auto& ladder : ladders) {
         if (ladder.inrange(position, upwards))

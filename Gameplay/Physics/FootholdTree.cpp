@@ -185,7 +185,8 @@ void Footholdtree::update_fh(PhysicsObject& phobj) const
     phobj.onground = phobj.y == ground;
 
     if (phobj.enablejd || phobj.is_flag_set(PhysicsObject::CHECKBELOW)) {
-        std::uint16_t belowid = get_fhid_below(x, nextfh.ground_below(x) + 1.0);
+        std::uint16_t belowid =
+            get_fhid_below(x, nextfh.ground_below(x) + 1.0);
         if (belowid > 0) {
             double nextground = get_fh(belowid).ground_below(x);
             phobj.enablejd = (nextground - ground) < 600.0;

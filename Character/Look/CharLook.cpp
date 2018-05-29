@@ -69,7 +69,8 @@ void CharLook::draw(const DrawArgument& args,
                     std::uint8_t interframe,
                     std::uint8_t interexpframe) const
 {
-    Point<std::int16_t> faceshift = drawinfo.getfacepos(interstance, interframe);
+    Point<std::int16_t> faceshift =
+        drawinfo.getfacepos(interstance, interframe);
     DrawArgument faceargs =
         args + DrawArgument{faceshift, false, Point<std::int16_t>{}};
 
@@ -542,7 +543,8 @@ void CharLook::set_stance(Stance::Id newstance)
     }
 }
 
-Stance::Id CharLook::getattackstance(std::uint8_t attack, bool degenerate) const
+Stance::Id CharLook::getattackstance(std::uint8_t attack,
+                                     bool degenerate) const
 {
     if (stance == Stance::PRONE) {
         return Stance::PRONESTAB;
@@ -673,7 +675,8 @@ bool CharLook::is_twohanded(Stance::Id st) const
     }
 }
 
-std::uint16_t CharLook::get_attackdelay(std::size_t no, std::uint8_t first_frame) const
+std::uint16_t CharLook::get_attackdelay(std::size_t no,
+                                        std::uint8_t first_frame) const
 {
     if (action) {
         return drawinfo.get_attackdelay(actionstr, no);

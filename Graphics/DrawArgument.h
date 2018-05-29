@@ -67,13 +67,18 @@ public:
     {
     }
 
-    constexpr DrawArgument(Point<std::int16_t> p, bool flip, Point<std::int16_t> c)
+    constexpr DrawArgument(Point<std::int16_t> p,
+                           bool flip,
+                           Point<std::int16_t> c)
         : DrawArgument(p, c, flip ? -1.0f : 1.0f, 1.0f, 1.0f)
     {
     }
 
-    constexpr DrawArgument(
-        Point<std::int16_t> p, Point<std::int16_t> c, float xs, float ys, float opc)
+    constexpr DrawArgument(Point<std::int16_t> p,
+                           Point<std::int16_t> c,
+                           float xs,
+                           float ys,
+                           float opc)
         : DrawArgument(p, c, {}, xs, ys, opc, 0.0f)
     {
     }
@@ -88,7 +93,10 @@ public:
     {
     }
 
-    constexpr DrawArgument(Point<std::int16_t> p, float xs, float ys, float opc)
+    constexpr DrawArgument(Point<std::int16_t> p,
+                           float xs,
+                           float ys,
+                           float opc)
         : DrawArgument(p, p, xs, ys, opc)
     {
     }
@@ -98,7 +106,10 @@ public:
     {
     }
 
-    constexpr DrawArgument(float ang, Point<std::int16_t> p, bool flip, float opc)
+    constexpr DrawArgument(float ang,
+                           Point<std::int16_t> p,
+                           bool flip,
+                           float opc)
         : DrawArgument(p, p, {}, flip ? -1.0f : 1.0f, 1.0f, opc, ang)
     {
     }
@@ -207,7 +218,7 @@ public:
     }
 
     Rectangle<std::int16_t> get_rectangle(Point<std::int16_t> origin,
-                                     Point<std::int16_t> dimensions) const
+                                          Point<std::int16_t> dimensions) const
     {
         std::int16_t w = stretch.x();
         if (w == 0)

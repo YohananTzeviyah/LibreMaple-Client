@@ -65,7 +65,8 @@ public:
 
     void doubleclick(Point<std::int16_t> cursorpos) override;
     bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
-    Cursor::State send_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
+    Cursor::State send_cursor(bool clicked,
+                              Point<std::int16_t> cursorpos) override;
 
     void update_stat(Maplestat::Id stat, std::int16_t value);
     void update_skills(std::int32_t skill_id);

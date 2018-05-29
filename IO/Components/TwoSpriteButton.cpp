@@ -46,7 +46,8 @@ void TwoSpriteButton::draw(Point<std::int16_t> parentpos) const
     }
 }
 
-Rectangle<std::int16_t> TwoSpriteButton::bounds(Point<std::int16_t> parentpos) const
+Rectangle<std::int16_t>
+TwoSpriteButton::bounds(Point<std::int16_t> parentpos) const
 {
     bool selected = state == MOUSEOVER || state == PRESSED;
     Point<std::int16_t> absp =

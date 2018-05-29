@@ -40,7 +40,8 @@ public:
         return false;
     }
 
-    Cursor::State send_cursor(bool clicked, Point<std::int16_t> cursorpos) override
+    Cursor::State send_cursor(bool clicked,
+                              Point<std::int16_t> cursorpos) override
     {
         if (clicked) {
             if (dragged) {

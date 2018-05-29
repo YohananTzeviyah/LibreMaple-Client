@@ -40,8 +40,9 @@ public:
     void clear();
 
     // Send mouse input to clickable npcs.
-    Cursor::State
-    send_cursor(bool pressed, Point<std::int16_t> position, Point<std::int16_t> viewpos);
+    Cursor::State send_cursor(bool pressed,
+                              Point<std::int16_t> position,
+                              Point<std::int16_t> viewpos);
 
 private:
     MapObjects npcs;

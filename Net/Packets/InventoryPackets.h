@@ -104,9 +104,15 @@ public:
 class ScrollEquipPacket : public OutPacket
 {
 public:
-    enum Flag : std::uint8_t { NONE = 0x00, UNKNOWN = 0x01, WHITESCROLL = 0x02 };
+    enum Flag : std::uint8_t {
+        NONE = 0x00,
+        UNKNOWN = 0x01,
+        WHITESCROLL = 0x02
+    };
 
-    ScrollEquipPacket(std::int16_t source, Equipslot::Id target, std::uint8_t flags)
+    ScrollEquipPacket(std::int16_t source,
+                      Equipslot::Id target,
+                      std::uint8_t flags)
         : OutPacket(SCROLL_EQUIP)
     {
         write_time();

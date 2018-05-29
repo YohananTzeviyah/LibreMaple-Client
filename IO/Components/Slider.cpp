@@ -136,8 +136,8 @@ bool Slider::remove_cursor(bool clicked)
 Point<std::int16_t> Slider::getthumbpos() const
 {
     std::int16_t y = row < rowmax
-                    ? vertical.first() + row * rowheight + buttonheight
-                    : vertical.second() - buttonheight * 2 - 2;
+                         ? vertical.first() + row * rowheight + buttonheight
+                         : vertical.second() - buttonheight * 2 - 2;
     return {x, y};
 }
 
@@ -217,7 +217,8 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
 
     if (pressed) {
         auto yoffset = static_cast<double>(relative.y() - buttonheight * 2);
-        auto cursorrow = static_cast<std::int16_t>(std::round(yoffset / rowheight));
+        auto cursorrow =
+            static_cast<std::int16_t>(std::round(yoffset / rowheight));
         if (cursorrow < 0)
             cursorrow = 0;
         else if (cursorrow > rowmax)

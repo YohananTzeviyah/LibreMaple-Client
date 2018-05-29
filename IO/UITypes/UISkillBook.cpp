@@ -77,7 +77,8 @@ void SkillIcon::draw(const DrawArgument& args) const
     level.draw(args + Point<std::int16_t>(38, -16));
 }
 
-Cursor::State SkillIcon::send_cursor(Point<std::int16_t> cursorpos, bool clicked)
+Cursor::State SkillIcon::send_cursor(Point<std::int16_t> cursorpos,
+                                     bool clicked)
 {
     constexpr Rectangle<std::int16_t> bounds(0, 32, 0, 32);
     bool inrange = bounds.contains(cursorpos);
@@ -244,7 +245,8 @@ bool UISkillbook::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
     return slider.remove_cursor(clicked);
 }
 
-Cursor::State UISkillbook::send_cursor(bool clicked, Point<std::int16_t> cursorpos)
+Cursor::State UISkillbook::send_cursor(bool clicked,
+                                       Point<std::int16_t> cursorpos)
 {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
     if (dragged) {

@@ -40,8 +40,10 @@ void ScrollingNotice::setnotice(std::string n)
 void ScrollingNotice::draw(float alpha) const
 {
     if (active) {
-        std::int16_t interx = static_cast<std::int16_t>(std::round(xpos.get(alpha)));
-        auto position = Point<std::int16_t>(interx, -Constants::VIEWYOFFSET - 2);
+        std::int16_t interx =
+            static_cast<std::int16_t>(std::round(xpos.get(alpha)));
+        auto position =
+            Point<std::int16_t>(interx, -Constants::VIEWYOFFSET - 2);
         background.draw(backposition);
         notice.draw(position);
     }
