@@ -32,13 +32,13 @@ public:
     Tile(nl::node src, const std::string& tileset);
 
     // Draw the tile.
-    void draw(Point<int16_t> viewpos) const;
+    void draw(Point<std::int16_t> viewpos) const;
     // Returns depth of the tile.
-    uint8_t getz() const;
+    std::uint8_t getz() const;
 
 private:
     Texture texture;
-    Point<int16_t> pos;
-    uint8_t z;
+    Point<std::int16_t> pos;
+    std::uint8_t z;
 };
 } // namespace jrc

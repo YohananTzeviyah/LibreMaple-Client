@@ -33,14 +33,14 @@ public:
 
     void draw(float inter) const override;
 
-    void change_text(int32_t npcid,
-                     int8_t msgtype,
-                     int16_t style,
-                     int8_t speaker,
+    void change_text(std::int32_t npcid,
+                     std::int8_t msgtype,
+                     std::int16_t style,
+                     std::int8_t speaker,
                      const std::string& text);
 
 protected:
-    Button::State button_pressed(uint16_t buttonid) override;
+    Button::State button_pressed(std::uint16_t buttonid) override;
 
 private:
     enum Buttons { OK, NEXT, PREV, END, YES, NO };
@@ -53,10 +53,10 @@ private:
     Text text;
     Texture speaker;
     Text name;
-    int16_t height;
-    int16_t vtile;
+    std::int16_t height;
+    std::int16_t vtile;
     bool slider;
 
-    int8_t type;
+    std::int8_t type;
 };
 } // namespace jrc

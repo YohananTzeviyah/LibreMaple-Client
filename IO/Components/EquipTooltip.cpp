@@ -95,7 +95,7 @@ EquipTooltip::EquipTooltip()
     invpos = 0;
 }
 
-void EquipTooltip::set_equip(Parent parent, int16_t ivp)
+void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
 {
     if (ivp == invpos)
         return;
@@ -123,7 +123,7 @@ void EquipTooltip::set_equip(Parent parent, int16_t ivp)
 
     const Equip& equip = *oequip;
 
-    int32_t item_id = equip.get_item_id();
+    std::int32_t item_id = equip.get_item_id();
 
     const EquipData& equipdata = EquipData::get(item_id);
     const ItemData& itemdata = equipdata.get_itemdata();
@@ -277,7 +277,7 @@ void EquipTooltip::set_equip(Parent parent, int16_t ivp)
     for (Equipstat::Id es = Equipstat::STR; es <= Equipstat::JUMP;
          es = static_cast<Equipstat::Id>(es + 1)) {
         if (equip.get_stat(es) > 0) {
-            int16_t delta = equip.get_stat(es) - equipdata.get_defstat(es);
+            std::int16_t delta = equip.get_stat(es) - equipdata.get_defstat(es);
             std::string statstr = std::to_string(equip.get_stat(es));
             if (delta != 0) {
                 statstr.append(" (");
@@ -295,58 +295,58 @@ void EquipTooltip::set_equip(Parent parent, int16_t ivp)
     }
 }
 
-void EquipTooltip::draw(Point<int16_t> pos) const
+void EquipTooltip::draw(Point<std::int16_t> pos) const
 {
     if (invpos == 0)
         return;
 
     top.draw({pos});
-    mid.draw({pos + Point<int16_t>(0, 13), Point<int16_t>(0, height)});
-    bot.draw({pos + Point<int16_t>(0, height + 13)});
+    mid.draw({pos + Point<std::int16_t>(0, 13), Point<std::int16_t>(0, height)});
+    bot.draw({pos + Point<std::int16_t>(0, height + 13)});
 
-    name.draw(pos + Point<int16_t>(130, 3));
+    name.draw(pos + Point<std::int16_t>(130, 3));
     if (prank != Equip::POT_NONE) {
-        potflag.draw(pos + Point<int16_t>(130, 20));
+        potflag.draw(pos + Point<std::int16_t>(130, 20));
         pos.shift_y(16);
     }
     pos.shift_y(26);
 
     line.draw({pos});
 
-    base.draw(pos + Point<int16_t>(10, 10));
-    shade.draw(pos + Point<int16_t>(10, 10));
-    itemicon.draw({pos + Point<int16_t>(20, 82), 2.0f, 2.0f});
-    potential[prank].draw(pos + Point<int16_t>(10, 10));
-    cover.draw(pos + Point<int16_t>(10, 10));
+    base.draw(pos + Point<std::int16_t>(10, 10));
+    shade.draw(pos + Point<std::int16_t>(10, 10));
+    itemicon.draw({pos + Point<std::int16_t>(20, 82), 2.0f, 2.0f});
+    potential[prank].draw(pos + Point<std::int16_t>(10, 10));
+    cover.draw(pos + Point<std::int16_t>(10, 10));
 
     pos.shift_y(12);
 
     for (Maplestat::Id ms : requirements) {
-        Point<int16_t> reqpos = reqstatpositions[ms];
+        Point<std::int16_t> reqpos = reqstatpositions[ms];
         bool reqok = canequip[ms];
         reqstattextures[ms][reqok].draw({pos + reqpos});
         reqset[reqok].draw(
-            reqstatstrings[ms], 6, {pos + reqpos + Point<int16_t>(54, 0)});
+            reqstatstrings[ms], 6, {pos + reqpos + Point<std::int16_t>(54, 0)});
     }
 
     pos.shift_y(88);
 
-    Point<int16_t> job_position(pos + Point<int16_t>(8, 0));
+    Point<std::int16_t> job_position(pos + Point<std::int16_t>(8, 0));
     jobsback.draw(job_position);
     for (auto& jbit : okjobs) {
         jobs[canequip[Maplestat::JOB]].at(jbit).draw(job_position);
     }
 
-    line.draw({pos + Point<int16_t>(0, 30)});
+    line.draw({pos + Point<std::int16_t>(0, 30)});
 
     pos.shift_y(32);
 
-    category.draw(pos + Point<int16_t>(10, 0));
+    category.draw(pos + Point<std::int16_t>(10, 0));
 
     pos.shift_y(18);
 
     if (is_weapon) {
-        wepspeed.draw(pos + Point<int16_t>(10, 0));
+        wepspeed.draw(pos + Point<std::int16_t>(10, 0));
         pos.shift_y(18);
     }
 
@@ -354,20 +354,20 @@ void EquipTooltip::draw(Point<int16_t> pos) const
         if (label.empty())
             continue;
 
-        label.draw(pos + Point<int16_t>(10, 0));
+        label.draw(pos + Point<std::int16_t>(10, 0));
         pos.shift_y(18);
     }
 
     if (hasslots) {
-        slots.draw(pos + Point<int16_t>(10, 0));
+        slots.draw(pos + Point<std::int16_t>(10, 0));
         pos.shift_y(18);
-        hammers.draw(pos + Point<int16_t>(10, 0));
+        hammers.draw(pos + Point<std::int16_t>(10, 0));
         pos.shift_y(18);
     }
 
     if (hasdesc) {
-        line.draw({pos + Point<int16_t>(0, 5)});
-        desc.draw({pos + Point<int16_t>(10, 6)});
+        line.draw({pos + Point<std::int16_t>(0, 5)});
+        desc.draw({pos + Point<std::int16_t>(10, 6)});
     }
 }
 } // namespace jrc

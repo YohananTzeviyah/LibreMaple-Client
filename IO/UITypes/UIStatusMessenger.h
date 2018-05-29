@@ -29,7 +29,7 @@ class StatusInfo
 public:
     StatusInfo(const std::string& str, Text::Color color);
 
-    void draw(Point<int16_t> position, float alpha) const;
+    void draw(Point<std::int16_t> position, float alpha) const;
     bool update();
 
 private:
@@ -38,7 +38,7 @@ private:
     Linear<float> opacity;
 
     // 8 seconds.
-    static constexpr int64_t FADE_DURATION = 8'000;
+    static constexpr std::int64_t FADE_DURATION = 8'000;
 };
 
 class UIStatusMessenger : public UIElement
@@ -56,7 +56,7 @@ public:
     void show_status(Text::Color color, const std::string& message);
 
 private:
-    static constexpr size_t MAX_MESSAGES = 5;
+    static constexpr std::size_t MAX_MESSAGES = 5;
 
     std::deque<StatusInfo> statusinfos;
 };

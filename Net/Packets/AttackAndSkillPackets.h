@@ -90,14 +90,14 @@ private:
 class TakeDamagePacket : public OutPacket
 {
 public:
-    enum From : int8_t { TOUCH = -1 };
+    enum From : std::int8_t { TOUCH = -1 };
 
-    TakeDamagePacket(int8_t from,
-                     uint8_t element,
-                     int32_t damage,
-                     int32_t mobid,
-                     int32_t oid,
-                     uint8_t direction)
+    TakeDamagePacket(std::int8_t from,
+                     std::uint8_t element,
+                     std::int32_t damage,
+                     std::int32_t mobid,
+                     std::int32_t oid,
+                     std::uint8_t direction)
         : OutPacket(TAKE_DAMAGE)
     {
         write_time();
@@ -126,11 +126,11 @@ public:
 class UseSkillPacket : public OutPacket
 {
 public:
-    UseSkillPacket(int32_t skillid, int32_t level) : OutPacket(USE_SKILL)
+    UseSkillPacket(std::int32_t skillid, std::int32_t level) : OutPacket(USE_SKILL)
     {
         write_time();
         write_int(skillid);
-        write_byte(static_cast<uint8_t>(level));
+        write_byte(static_cast<std::uint8_t>(level));
 
         // if monster magnet : some more bytes
 

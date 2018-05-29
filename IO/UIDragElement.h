@@ -26,7 +26,7 @@ template<typename T>
 class UIDragElement : public UIElement
 {
 public:
-    bool remove_cursor(bool clicked, Point<int16_t> cursorpos) override
+    bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override
     {
         if (dragged) {
             if (clicked) {
@@ -40,7 +40,7 @@ public:
         return false;
     }
 
-    Cursor::State send_cursor(bool clicked, Point<int16_t> cursorpos) override
+    Cursor::State send_cursor(bool clicked, Point<std::int16_t> cursorpos) override
     {
         if (clicked) {
             if (dragged) {
@@ -61,19 +61,19 @@ public:
     }
 
 protected:
-    UIDragElement(Point<int16_t> d) : dragarea(d)
+    UIDragElement(Point<std::int16_t> d) : dragged(false), dragarea(d)
     {
         position = Setting<T>::get().load();
     }
 
     bool dragged;
-    Point<int16_t> dragarea;
-    Point<int16_t> cursoroffset;
+    Point<std::int16_t> dragarea;
+    Point<std::int16_t> cursoroffset;
 
 private:
-    bool indragrange(Point<int16_t> cursorpos) const
+    bool indragrange(Point<std::int16_t> cursorpos) const
     {
-        auto bounds = Rectangle<int16_t>(position, position + dragarea);
+        auto bounds = Rectangle<std::int16_t>(position, position + dragarea);
         return bounds.contains(cursorpos);
     }
 };

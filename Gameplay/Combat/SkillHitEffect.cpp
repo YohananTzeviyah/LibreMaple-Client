@@ -43,7 +43,7 @@ void TwoHHitEffect::apply(const AttackUser& user, Mob& target) const
 ByLevelHitEffect::ByLevelHitEffect(nl::node src)
 {
     for (auto sub : src["CharLevel"]) {
-        uint16_t level = string_conversion::or_zero<uint16_t>(sub.name());
+        std::uint16_t level = string_conversion::or_zero<std::uint16_t>(sub.name());
         effects.emplace(level, sub["hit"]["0"]);
     }
 }
@@ -65,7 +65,7 @@ void ByLevelHitEffect::apply(const AttackUser& user, Mob& target) const
 ByLevelTwoHHitEffect::ByLevelTwoHHitEffect(nl::node src)
 {
     for (auto sub : src["CharLevel"]) {
-        auto level = string_conversion::or_zero<uint16_t>(sub.name());
+        auto level = string_conversion::or_zero<std::uint16_t>(sub.name());
         effects.emplace(
             std::piecewise_construct,
             std::forward_as_tuple(level),
@@ -90,7 +90,7 @@ void ByLevelTwoHHitEffect::apply(const AttackUser& user, Mob& target) const
 BySkillLevelHitEffect::BySkillLevelHitEffect(nl::node src)
 {
     for (auto sub : src["level"]) {
-        auto level = string_conversion::or_zero<int32_t>(sub.name());
+        auto level = string_conversion::or_zero<std::int32_t>(sub.name());
         effects.emplace(level, sub["hit"]["0"]);
     }
 }

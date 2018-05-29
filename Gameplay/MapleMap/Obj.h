@@ -30,14 +30,14 @@ public:
     // Update animation.
     void update();
     // Draw the obj at the specified position.
-    void draw(Point<int16_t> viewpos, float inter) const;
+    void draw(Point<std::int16_t> viewpos, float inter) const;
     // Return depth of the obj.
-    uint8_t getz() const;
+    std::uint8_t getz() const;
 
 private:
     Animation animation;
-    Point<int16_t> pos;
-    uint8_t z;
+    Point<std::int16_t> pos;
+    std::uint8_t z;
     bool flip;
 };
 } // namespace jrc

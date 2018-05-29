@@ -20,14 +20,14 @@
 // Keeping it so I can copypaste some code later.
 
 /*
-    size_t Npctext::parseL(std::string& str, size_t pos)
+    std::size_t Npctext::parseL(std::string& str, std::size_t pos)
     {
-        size_t next = str.find_first_of('#', pos + 2);
+        std::size_t next = str.find_first_of('#', pos + 2);
         if (next != std::string::npos)
         {
             try
             {
-                //int32_t selection = std::stoi(str.substr(pos + 2, next - pos
+                //std::int32_t selection = std::stoi(str.substr(pos + 2, next - pos
    + 2)); str.replace(str.begin() + pos, str.begin() + next + 1, ""); return
    pos + 1;
             }
@@ -44,9 +44,9 @@
         }
     }
 
-    size_t Npctext::parsez(std::string& str, size_t pos)
+    std::size_t Npctext::parsez(std::string& str, std::size_t pos)
     {
-        size_t next = str.find_first_of('#', pos + 2);
+        std::size_t next = str.find_first_of('#', pos + 2);
         if (next != std::string::npos)
         {
             try
@@ -76,14 +76,14 @@
         }
     }
 
-    size_t Npctext::parseh(std::string& str, size_t pos)
+    std::size_t Npctext::parseh(std::string& str, std::size_t pos)
     {
-        size_t next = str.find_first_of('#', pos + 2);
+        std::size_t next = str.find_first_of('#', pos + 2);
         if (next != std::string::npos)
         {
             try
             {
-                int32_t type = std::stoi(str.substr(pos + 2, next - pos + 2));
+                std::int32_t type = std::stoi(str.substr(pos + 2, next - pos + 2));
                 std::string insert;
                 switch (type)
                 {
@@ -109,9 +109,9 @@
         }
     }
 
-    size_t Npctext::parsev(std::string& str, size_t pos)
+    std::size_t Npctext::parsev(std::string& str, std::size_t pos)
     {
-        size_t next = str.find_first_of('#', pos + 2);
+        std::size_t next = str.find_first_of('#', pos + 2);
         if (next != std::string::npos)
         {
             try
@@ -120,7 +120,7 @@
    ItemData::get(std::stoi(str.substr(pos + 2, next))))
                 {
                     Image image = { idata.get_icon(false), offset };
-                    image.texture.shift(Point<int16_t>(0, 32));
+                    image.texture.shift(Point<std::int16_t>(0, 32));
                     images.push_back(image);
                     offset.shift_x(32);
                     str.replace(str.begin() + pos, str.begin() + next + 1, "");
@@ -145,7 +145,7 @@
         }
     }
 
-    void Npctext::draw(Point<int16_t> position) const
+    void Npctext::draw(Point<std::int16_t> position) const
     {
         for (auto& line : lines)
         {
@@ -160,7 +160,7 @@
         }
     }
 
-    int16_t Npctext::getheight() const
+    std::int16_t Npctext::getheight() const
     {
         return offset.y();
     }

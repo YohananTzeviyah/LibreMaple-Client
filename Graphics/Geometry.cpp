@@ -21,10 +21,10 @@
 
 namespace jrc
 {
-void Geometry::draw(int16_t x,
-                    int16_t y,
-                    int16_t w,
-                    int16_t h,
+void Geometry::draw(std::int16_t x,
+                    std::int16_t y,
+                    std::int16_t w,
+                    std::int16_t h,
                     Geometry::Color cid,
                     float opacity) const
 {
@@ -44,7 +44,7 @@ void Geometry::draw(int16_t x,
         x, y, w, h, color[0], color[1], color[2], opacity);
 }
 
-ColorBox::ColorBox(int16_t w, int16_t h, Geometry::Color c, float o)
+ColorBox::ColorBox(std::int16_t w, std::int16_t h, Geometry::Color c, float o)
     : width(w), height(h), color(c), opacity(o)
 {
 }
@@ -53,12 +53,12 @@ ColorBox::ColorBox() : ColorBox(0, 0, Geometry::BLACK, 0.0f)
 {
 }
 
-void ColorBox::setwidth(int16_t w)
+void ColorBox::setwidth(std::int16_t w)
 {
     width = w;
 }
 
-void ColorBox::setheight(int16_t h)
+void ColorBox::setheight(std::int16_t h)
 {
     height = h;
 }
@@ -75,20 +75,20 @@ void ColorBox::setopacity(float o)
 
 void ColorBox::draw(const DrawArgument& args) const
 {
-    Point<int16_t> absp = args.getpos();
-    int16_t absw = args.getstretch().x();
+    Point<std::int16_t> absp = args.getpos();
+    std::int16_t absw = args.getstretch().x();
     if (absw == 0)
         absw = width;
-    int16_t absh = args.getstretch().y();
+    std::int16_t absh = args.getstretch().y();
     if (absh == 0)
         absh = height;
-    absw = static_cast<int16_t>(absw * args.get_xscale());
-    absh = static_cast<int16_t>(absh * args.get_yscale());
+    absw = static_cast<std::int16_t>(absw * args.get_xscale());
+    absh = static_cast<std::int16_t>(absh * args.get_yscale());
     float absopc = opacity * args.get_color().a();
     Geometry::draw(absp.x(), absp.y(), absw, absh, color, absopc);
 }
 
-ColorLine::ColorLine(int16_t w, Geometry::Color c, float o)
+ColorLine::ColorLine(std::int16_t w, Geometry::Color c, float o)
     : width(w), color(c), opacity(o)
 {
 }
@@ -97,7 +97,7 @@ ColorLine::ColorLine() : ColorLine(0, Geometry::BLACK, 0.0f)
 {
 }
 
-void ColorLine::setwidth(int16_t w)
+void ColorLine::setwidth(std::int16_t w)
 {
     width = w;
 }
@@ -114,25 +114,25 @@ void ColorLine::setopacity(float o)
 
 void ColorLine::draw(const DrawArgument& args) const
 {
-    Point<int16_t> absp = args.getpos();
-    int16_t absw = args.getstretch().x();
+    Point<std::int16_t> absp = args.getpos();
+    std::int16_t absw = args.getstretch().x();
     if (absw == 0)
         absw = width;
-    int16_t absh = args.getstretch().y();
+    std::int16_t absh = args.getstretch().y();
     if (absh == 0)
         absh = 1;
-    absw = static_cast<int16_t>(absw * args.get_xscale());
-    absh = static_cast<int16_t>(absh * args.get_yscale());
+    absw = static_cast<std::int16_t>(absw * args.get_xscale());
+    absh = static_cast<std::int16_t>(absh * args.get_yscale());
     float absopc = opacity * args.get_color().a();
     Geometry::draw(absp.x(), absp.y(), absw, absh, color, absopc);
 }
 
-void MobHpBar::draw(Point<int16_t> position, int16_t hppercent) const
+void MobHpBar::draw(Point<std::int16_t> position, std::int16_t hppercent) const
 {
-    int16_t fillw = static_cast<int16_t>((WIDTH - 6) *
+    std::int16_t fillw = static_cast<std::int16_t>((WIDTH - 6) *
                                          static_cast<float>(hppercent) / 100);
-    int16_t x = position.x() - WIDTH / 2;
-    int16_t y = position.y() - HEIGHT * 3;
+    std::int16_t x = position.x() - WIDTH / 2;
+    std::int16_t y = position.y() - HEIGHT * 3;
     Geometry::draw(x, y, WIDTH, HEIGHT, BLACK, 1.0f);
     Geometry::draw(x + 1, y + 1, WIDTH - 2, 1, WHITE, 1.0f);
     Geometry::draw(x + 1, y + HEIGHT - 2, WIDTH - 2, 1, WHITE, 1.0f);

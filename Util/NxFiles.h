@@ -26,7 +26,7 @@ namespace jrc
 namespace NxFiles
 {
 /// Number of needed files.
-constexpr uint8_t NUM_FILES = 14;
+constexpr std::uint8_t NUM_FILES = 14;
 /// Names of the needed game files.
 constexpr std::array<const char*, NUM_FILES> filenames = {{"Character.nx",
                                                            "Effect.nx",

@@ -43,7 +43,7 @@ public:
     }
 
     // Return time elapsed since the last measurement.
-    int64_t stop()
+    std::int64_t stop()
     {
         clock::time_point last = point;
         point = clock::now();

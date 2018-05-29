@@ -23,7 +23,7 @@
 
 namespace jrc
 {
-ChatBalloon::ChatBalloon(int8_t type)
+ChatBalloon::ChatBalloon(std::int8_t type)
 {
     std::string typestr;
     if (type < 0) {
@@ -57,17 +57,17 @@ void ChatBalloon::change_text(const std::string& text)
     duration = DURATION;
 }
 
-void ChatBalloon::draw(Point<int16_t> position) const
+void ChatBalloon::draw(Point<std::int16_t> position) const
 {
     if (duration == 0)
         return;
 
-    int16_t width = textlabel.width();
-    int16_t height = textlabel.height();
+    std::int16_t width = textlabel.width();
+    std::int16_t height = textlabel.height();
 
     frame.draw(position, width, height);
     arrow.draw(position);
-    textlabel.draw(position - Point<int16_t>(0, height + 4));
+    textlabel.draw(position - Point<std::int16_t>(0, height + 4));
 }
 
 void ChatBalloon::update()

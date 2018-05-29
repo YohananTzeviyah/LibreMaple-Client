@@ -28,14 +28,14 @@
 
 namespace jrc
 {
-Mob::Mob(int32_t oid,
-         int32_t mid,
-         int8_t mode,
-         uint8_t stance,
-         uint16_t fh,
+Mob::Mob(std::int32_t oid,
+         std::int32_t mid,
+         std::int8_t mode,
+         std::uint8_t stance,
+         std::uint16_t fh,
          bool newspawn,
-         int8_t tm,
-         Point<int16_t> position)
+         std::int8_t tm,
+         Point<std::int16_t> position)
     : MapObject(oid)
 {
     std::string strid = string_format::extend_id(mid, 7);
@@ -120,7 +120,7 @@ Mob::Mob(int32_t oid,
     }
 }
 
-void Mob::set_stance(uint8_t stancebyte)
+void Mob::set_stance(std::uint8_t stancebyte)
 {
     flip = (stancebyte % 2) == 0;
     if (!flip) {
@@ -143,7 +143,7 @@ void Mob::set_stance(Stance newstance)
     }
 }
 
-int8_t Mob::update(const Physics& physics)
+std::int8_t Mob::update(const Physics& physics)
 {
     if (!active) {
         return phobj.fhlayer;
@@ -312,8 +312,8 @@ void Mob::update_movement()
 
 void Mob::draw(double viewx, double viewy, float alpha) const
 {
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
-    Point<int16_t> headpos = get_head_position(absp);
+    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> headpos = get_head_position(absp);
 
     effects.drawbelow(absp, alpha);
 
@@ -335,13 +335,13 @@ void Mob::draw(double viewx, double viewy, float alpha) const
     effects.drawabove(absp, alpha);
 }
 
-void Mob::set_control(int8_t mode)
+void Mob::set_control(std::int8_t mode)
 {
     control = mode > 0;
     aggro = mode == 2;
 }
 
-void Mob::send_movement(Point<int16_t> start,
+void Mob::send_movement(Point<std::int16_t> start,
                         std::vector<Movement>&& in_movements)
 {
     if (control) {
@@ -358,22 +358,22 @@ void Mob::send_movement(Point<int16_t> start,
 
     const Movement& lastmove = movements.front();
 
-    uint8_t laststance = lastmove.newstate;
+    std::uint8_t laststance = lastmove.newstate;
     set_stance(laststance);
 
     phobj.fhid = lastmove.fh;
 }
 
-Point<int16_t> Mob::get_head_position(Point<int16_t> position) const
+Point<std::int16_t> Mob::get_head_position(Point<std::int16_t> position) const
 {
-    Point<int16_t> head = animations.at(stance).get_head();
+    Point<std::int16_t> head = animations.at(stance).get_head();
     position.shift_x((flip && !noflip) ? -head.x() : head.x());
     position.shift_y(head.y());
 
     return position;
 }
 
-void Mob::kill(int8_t animation)
+void Mob::kill(std::int8_t animation)
 {
     switch (animation) {
     case 0:
@@ -394,10 +394,10 @@ void Mob::kill(int8_t animation)
     }
 }
 
-void Mob::show_hp(int8_t percent, uint16_t playerlevel)
+void Mob::show_hp(std::int8_t percent, std::uint16_t playerlevel)
 {
     if (hppercent == 0) {
-        int16_t delta = playerlevel - level;
+        std::int16_t delta = playerlevel - level;
         if (delta > 9) {
             namelabel.change_color(Text::YELLOW);
         } else if (delta < -9) {
@@ -414,13 +414,13 @@ void Mob::show_hp(int8_t percent, uint16_t playerlevel)
     showhp.set_for(2000);
 }
 
-void Mob::show_effect(const Animation& animation, int8_t pos, int8_t z, bool f)
+void Mob::show_effect(const Animation& animation, std::int8_t pos, std::int8_t z, bool f)
 {
     if (!active) {
         return;
     }
 
-    Point<int16_t> shift;
+    Point<std::int16_t> shift;
     switch (pos) {
     case 0:
         shift = get_head_position({});
@@ -439,8 +439,8 @@ void Mob::show_effect(const Animation& animation, int8_t pos, int8_t z, bool f)
     effects.add(animation, {shift, f}, z);
 }
 
-float Mob::calculate_hitchance(int16_t leveldelta,
-                               int32_t player_accuracy) const
+float Mob::calculate_hitchance(std::int16_t leveldelta,
+                               std::int32_t player_accuracy) const
 {
     auto faccuracy = static_cast<float>(player_accuracy);
     float hitchance =
@@ -453,7 +453,7 @@ float Mob::calculate_hitchance(int16_t leveldelta,
 }
 
 double
-Mob::calculate_mindamage(int16_t leveldelta, double damage, bool magic) const
+Mob::calculate_mindamage(std::int16_t leveldelta, double damage, bool magic) const
 {
     double mindamage = magic ? damage - (1 + 0.01 * leveldelta) * mdef * 0.6
                              : damage * (1 - 0.01 * leveldelta) - wdef * 0.6;
@@ -462,7 +462,7 @@ Mob::calculate_mindamage(int16_t leveldelta, double damage, bool magic) const
 }
 
 double
-Mob::calculate_maxdamage(int16_t leveldelta, double damage, bool magic) const
+Mob::calculate_maxdamage(std::int16_t leveldelta, double damage, bool magic) const
 {
     double maxdamage = magic ? damage - (1 + 0.01 * leveldelta) * mdef * 0.5
                              : damage * (1 - 0.01 * leveldelta) - wdef * 0.5;
@@ -470,14 +470,14 @@ Mob::calculate_maxdamage(int16_t leveldelta, double damage, bool magic) const
     return maxdamage < 1.0 ? 1.0 : maxdamage;
 }
 
-std::vector<std::pair<int32_t, bool>>
+std::vector<std::pair<std::int32_t, bool>>
 Mob::calculate_damage(const Attack& attack)
 {
     double mindamage;
     double maxdamage;
     float hitchance;
     float critical;
-    int16_t leveldelta = level - attack.playerlevel;
+    std::int16_t leveldelta = level - attack.playerlevel;
     if (leveldelta < 0) {
         leveldelta = 0;
     }
@@ -501,7 +501,7 @@ Mob::calculate_damage(const Attack& attack)
         break;
     }
 
-    std::vector<std::pair<int32_t, bool>> result(attack.hitcount);
+    std::vector<std::pair<std::int32_t, bool>> result(attack.hitcount);
     std::generate(result.begin(), result.end(), [&]() {
         return next_damage(mindamage, maxdamage, hitchance, critical);
     });
@@ -512,7 +512,7 @@ Mob::calculate_damage(const Attack& attack)
     return result;
 }
 
-std::pair<int32_t, bool> Mob::next_damage(double mindamage,
+std::pair<std::int32_t, bool> Mob::next_damage(double mindamage,
                                           double maxdamage,
                                           float hitchance,
                                           float critical) const
@@ -536,11 +536,11 @@ std::pair<int32_t, bool> Mob::next_damage(double mindamage,
         damage = DAMAGECAP;
     }
 
-    auto intdamage = static_cast<int32_t>(damage);
+    auto intdamage = static_cast<std::int32_t>(damage);
     return {intdamage, iscritical};
 }
 
-void Mob::apply_damage(int32_t damage, bool toleft)
+void Mob::apply_damage(std::int32_t damage, bool toleft)
 {
     hitsound.play();
 
@@ -562,9 +562,9 @@ MobAttack Mob::create_touch_attack() const
         return {};
     }
 
-    auto minattack = static_cast<int32_t>(watk * 0.8f);
-    int32_t maxattack = watk;
-    int32_t attack = randomizer.next_int(minattack, maxattack);
+    auto minattack = static_cast<std::int32_t>(watk * 0.8f);
+    std::int32_t maxattack = watk;
+    std::int32_t attack = randomizer.next_int(minattack, maxattack);
     return {attack, get_position(), id, oid};
 }
 
@@ -580,20 +580,20 @@ bool Mob::is_alive() const
     return active && !dying;
 }
 
-bool Mob::is_in_range(const Rectangle<int16_t>& range) const
+bool Mob::is_in_range(const Rectangle<std::int16_t>& range) const
 {
     if (!active) {
         return false;
     }
 
-    Rectangle<int16_t> bounds = animations.at(stance).get_bounds();
+    Rectangle<std::int16_t> bounds = animations.at(stance).get_bounds();
     bounds.shift(get_position());
     return range.overlaps(bounds);
 }
 
-Point<int16_t> Mob::get_head_position() const
+Point<std::int16_t> Mob::get_head_position() const
 {
-    Point<int16_t> position = get_position();
+    Point<std::int16_t> position = get_position();
     return get_head_position(position);
 }
 } // namespace jrc

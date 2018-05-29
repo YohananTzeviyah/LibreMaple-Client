@@ -19,6 +19,7 @@
 #include "../../Constants.h"
 #include "../../Template/Interpolated.h"
 #include "../../Template/Point.h"
+#include "../../Util/Misc.h"
 
 namespace jrc
 {
@@ -63,7 +64,7 @@ struct MovingObject {
         vspeed = 0.0;
     }
 
-    void movexuntil(double d, uint16_t delay)
+    void movexuntil(double d, std::uint16_t delay)
     {
         if (delay) {
             double hdelta = d - x.get();
@@ -71,7 +72,7 @@ struct MovingObject {
         }
     }
 
-    void moveyuntil(double d, uint16_t delay)
+    void moveyuntil(double d, std::uint16_t delay)
     {
         if (delay) {
             double vdelta = d - y.get();
@@ -114,48 +115,48 @@ struct MovingObject {
         return y + vspeed;
     }
 
-    int16_t get_x() const
+    std::int16_t get_x() const
     {
         double rounded = std::round(x.get());
-        return static_cast<int16_t>(rounded);
+        return static_cast<std::int16_t>(rounded);
     }
 
-    int16_t get_y() const
+    std::int16_t get_y() const
     {
         double rounded = std::round(y.get());
-        return static_cast<int16_t>(rounded);
+        return static_cast<std::int16_t>(rounded);
     }
 
-    int16_t get_last_x() const
+    std::int16_t get_last_x() const
     {
         double rounded = std::round(x.last());
-        return static_cast<int16_t>(rounded);
+        return static_cast<std::int16_t>(rounded);
     }
 
-    int16_t get_last_y() const
+    std::int16_t get_last_y() const
     {
         double rounded = std::round(y.last());
-        return static_cast<int16_t>(rounded);
+        return static_cast<std::int16_t>(rounded);
     }
 
-    Point<int16_t> get_position() const
+    Point<std::int16_t> get_position() const
     {
         return {get_x(), get_y()};
     }
 
-    int16_t get_absolute_x(double viewx, float alpha) const
+    std::int16_t get_absolute_x(double viewx, float alpha) const
     {
         double interx = x.normalized() ? std::round(x.get()) : x.get(alpha);
-        return static_cast<int16_t>(std::round(interx + viewx));
+        return math::saturating_cast<std::int16_t>(std::round(interx + viewx));
     }
 
-    int16_t get_absolute_y(double viewy, float alpha) const
+    std::int16_t get_absolute_y(double viewy, float alpha) const
     {
         double intery = y.normalized() ? std::round(y.get()) : y.get(alpha);
-        return static_cast<int16_t>(std::round(intery + viewy));
+        return math::saturating_cast<std::int16_t>(std::round(intery + viewy));
     }
 
-    Point<int16_t> get_absolute(double viewx, double viewy, float alpha) const
+    Point<std::int16_t> get_absolute(double viewx, double viewy, float alpha) const
     {
         return {get_absolute_x(viewx, alpha), get_absolute_y(viewy, alpha)};
     }
@@ -173,10 +174,10 @@ struct PhysicsObject : public MovingObject {
     };
 
     Type type = NORMAL;
-    int32_t flags = 0;
-    uint16_t fhid = 0;
+    std::int32_t flags = 0;
+    std::uint16_t fhid = 0;
     double fhslope = 0.0;
-    int8_t fhlayer = 0;
+    std::int8_t fhlayer = 0;
     double groundbelow = 0.0;
     bool onground = true;
     bool enablejd = false;

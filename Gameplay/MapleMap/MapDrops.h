@@ -41,13 +41,13 @@ public:
     // Spawn a new drop.
     void spawn(DropSpawn&& spawn);
     // Remove a drop.
-    void remove(int32_t oid, int8_t mode, const PhysicsObject* looter);
+    void remove(std::int32_t oid, std::int8_t mode, const PhysicsObject* looter);
     // Remove all drops.
     void clear();
 
     // Find a drop which can be picked up at the specified position.
-    using Loot = std::pair<int32_t, Point<int16_t>>;
-    Loot find_loot_at(Point<int16_t> playerpos);
+    using Loot = std::pair<std::int32_t, Point<std::int16_t>>;
+    Loot find_loot_at(Point<std::int16_t> playerpos);
 
 private:
     MapObjects drops;

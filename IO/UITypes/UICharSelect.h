@@ -34,28 +34,28 @@ public:
     static constexpr bool TOGGLED = false;
 
     UICharSelect(std::vector<CharEntry> characters,
-                 uint8_t count,
-                 uint8_t slots,
-                 uint8_t channel_id,
-                 int8_t pic);
+                 std::uint8_t count,
+                 std::uint8_t slots,
+                 std::uint8_t channel_id,
+                 std::int8_t pic);
 
     void draw(float alpha) const override;
     void update() override;
-    Button::State button_pressed(uint16_t id) override;
+    Button::State button_pressed(std::uint16_t id) override;
 
     void add_character(CharEntry&& character);
-    void remove_char(int32_t cid);
+    void remove_char(std::int32_t cid);
 
-    const CharEntry& get_character(int32_t cid);
+    const CharEntry& get_character(std::int32_t cid);
 
 private:
     void send_selection();
     void send_deletion();
     void update_selection();
     void update_counts();
-    std::string get_label_string(size_t label) const;
-    Point<int16_t> get_label_pos(size_t label) const;
-    Point<int16_t> get_char_pos(size_t id) const;
+    std::string get_label_string(std::size_t label) const;
+    Point<std::int16_t> get_label_pos(std::size_t label) const;
+    Point<std::int16_t> get_char_pos(std::size_t id) const;
 
     enum Buttons {
         BT_CREATECHAR,
@@ -68,27 +68,27 @@ private:
         BT_CHAR0
     };
 
-    static constexpr uint8_t PAGESIZE = 8;
+    static constexpr std::uint8_t PAGESIZE = 8;
 
     Sprite emptyslot;
     Charset levelset;
     nl::node nametag;
 
-    Point<int16_t> selworldpos;
-    Point<int16_t> charinfopos;
+    Point<std::int16_t> selworldpos;
+    Point<std::int16_t> charinfopos;
 
     std::vector<CharEntry> characters;
     std::vector<CharLook> charlooks;
     std::vector<Nametag> nametags;
-    int8_t require_pic;
+    std::int8_t require_pic;
 
-    uint8_t charcount_absolute;
-    uint8_t charcount_relative;
-    uint8_t slots_absolute;
-    uint8_t slots_relative;
-    uint8_t selected_absolute;
-    uint8_t selected_relative;
-    uint8_t page;
+    std::uint8_t charcount_absolute;
+    std::uint8_t charcount_relative;
+    std::uint8_t slots_absolute;
+    std::uint8_t slots_relative;
+    std::uint8_t selected_absolute;
+    std::uint8_t selected_relative;
+    std::uint8_t page;
 
     struct OutlinedText {
         Text inner;
@@ -108,12 +108,12 @@ private:
 
         OutlinedText() = default;
 
-        void draw(Point<int16_t> parentpos) const
+        void draw(Point<std::int16_t> parentpos) const
         {
-            l.draw(parentpos + Point<int16_t>(-1, 0));
-            r.draw(parentpos + Point<int16_t>(1, 0));
-            t.draw(parentpos + Point<int16_t>(0, -1));
-            b.draw(parentpos + Point<int16_t>(0, 1));
+            l.draw(parentpos + Point<std::int16_t>(-1, 0));
+            r.draw(parentpos + Point<std::int16_t>(1, 0));
+            t.draw(parentpos + Point<std::int16_t>(0, -1));
+            b.draw(parentpos + Point<std::int16_t>(0, 1));
             inner.draw(parentpos);
         }
 
@@ -128,7 +128,7 @@ private:
     };
     OutlinedText namelabel;
 
-    static const size_t NUM_LABELS = 7;
+    static const std::size_t NUM_LABELS = 7;
     enum InfoLabel { JOB, WORLDRANK, JOBRANK, STR, DEX, INT, LUK };
     OutlinedText infolabels[NUM_LABELS];
 };

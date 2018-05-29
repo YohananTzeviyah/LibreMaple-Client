@@ -24,13 +24,13 @@ namespace jrc
 class ItemDrop : public Drop
 {
 public:
-    ItemDrop(int32_t oid,
-             int32_t owner,
-             Point<int16_t> start,
-             Point<int16_t> dest,
-             int8_t type,
-             int8_t mode,
-             int32_t iid,
+    ItemDrop(std::int32_t oid,
+             std::int32_t owner,
+             Point<std::int16_t> start,
+             Point<std::int16_t> dest,
+             std::int8_t type,
+             std::int8_t mode,
+             std::int32_t iid,
              bool playerdrop,
              const Texture& icon);
 
@@ -38,6 +38,6 @@ public:
 
 private:
     const Texture& icon;
-    int32_t itemid;
+    std::int32_t itemid;
 };
 } // namespace jrc

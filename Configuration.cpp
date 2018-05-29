@@ -58,7 +58,7 @@ void Configuration::load()
         std::string line;
         while (getline(file, line)) {
             // If the setting is not empty, load the value.
-            size_t split = line.find('=');
+            std::size_t split = line.find('=');
             if (split != std::string::npos && split + 2 < line.size()) {
                 rawsettings.emplace(line.substr(0, split - 1),
                                     line.substr(split + 2));
@@ -107,19 +107,19 @@ std::string Configuration::StringEntry::load() const
     return value;
 }
 
-void Configuration::PointEntry::save(Point<int16_t> vec)
+void Configuration::PointEntry::save(Point<std::int16_t> vec)
 {
     value = vec.to_string();
 }
 
-Point<int16_t> Configuration::PointEntry::load() const
+Point<std::int16_t> Configuration::PointEntry::load() const
 {
     std::string xstr = value.substr(1, value.find(",") - 1);
     std::string ystr = value.substr(value.find(",") + 1,
                                     value.find(")") - value.find(",") - 1);
 
-    auto x = string_conversion::or_zero<int16_t>(xstr);
-    auto y = string_conversion::or_zero<int16_t>(ystr);
+    auto x = string_conversion::or_zero<std::int16_t>(xstr);
+    auto y = string_conversion::or_zero<std::int16_t>(ystr);
     return {x, y};
 }
 } // namespace jrc

@@ -37,13 +37,13 @@ Sprite::Sprite()
 {
 }
 
-void Sprite::draw(Point<int16_t> parentpos, float alpha) const
+void Sprite::draw(Point<std::int16_t> parentpos, float alpha) const
 {
     auto absargs = stateargs + parentpos;
     animation.draw(absargs, alpha);
 }
 
-bool Sprite::update(uint16_t timestep)
+bool Sprite::update(std::uint16_t timestep)
 {
     return animation.update(timestep);
 }

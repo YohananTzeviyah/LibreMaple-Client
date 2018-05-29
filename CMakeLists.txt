@@ -2,6 +2,9 @@
 cmake_minimum_required(VERSION 3.10)
 project(JourneyClient)
 
+# Emit compile commands/JSON "database", can be used for e.g. clangd.
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Set default build type as "Debug" if not specified
 if(NOT CMAKE_BUILD_TYPE)
     message(WARNING "No build type specified, using Debug build by default.")
@@ -166,7 +169,8 @@ SET(SOURCE_FILES ${Root_CPP}
                  ${Packets_H}
                  ${Helpers_H}
                  ${nlnx_H}
-                 "gsl/gsl-lite.hpp")
+                 "gsl/gsl-lite.hpp"
+                 "../cpptoml/include/cpptoml.h")
 
 # Adding file globs created above as libraries
 add_library(Audio         ${Audio_CPP})

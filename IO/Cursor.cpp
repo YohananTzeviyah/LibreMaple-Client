@@ -38,7 +38,7 @@ void Cursor::init()
 
 void Cursor::draw(float alpha) const
 {
-    constexpr int64_t HIDE_AFTER = HIDE_TIME / Constants::TIMESTEP;
+    constexpr std::int64_t HIDE_AFTER = HIDE_TIME / Constants::TIMESTEP;
 
     if (hide_counter < HIDE_AFTER) {
         animations[state].draw(position, alpha);
@@ -73,7 +73,7 @@ void Cursor::set_state(State s)
     }
 }
 
-void Cursor::set_position(Point<int16_t> pos)
+void Cursor::set_position(Point<std::int16_t> pos)
 {
     position = pos;
     hide_counter = 0;
@@ -84,7 +84,7 @@ Cursor::State Cursor::get_state() const
     return state;
 }
 
-Point<int16_t> Cursor::get_position() const
+Point<std::int16_t> Cursor::get_position() const
 {
     return position;
 }

@@ -30,7 +30,7 @@ public:
     {
     }
 
-    virtual Animation get(const Char& user, int32_t bulletid) const = 0;
+    virtual Animation get(const Char& user, std::int32_t bulletid) const = 0;
 
 protected:
     struct Ball {
@@ -50,7 +50,7 @@ protected:
 class RegularBullet : public SkillBullet
 {
 public:
-    Animation get(const Char& user, int32_t bulletid) const override;
+    Animation get(const Char& user, std::int32_t bulletid) const override;
 };
 
 class SingleBullet : public SkillBullet
@@ -58,7 +58,7 @@ class SingleBullet : public SkillBullet
 public:
     SingleBullet(nl::node src);
 
-    Animation get(const Char& user, int32_t bulletid) const override;
+    Animation get(const Char& user, std::int32_t bulletid) const override;
 
 private:
     Ball ball;
@@ -67,12 +67,12 @@ private:
 class BySkillLevelBullet : public SkillBullet
 {
 public:
-    BySkillLevelBullet(nl::node src, int32_t skillid);
+    BySkillLevelBullet(nl::node src, std::int32_t skillid);
 
-    Animation get(const Char& user, int32_t bulletid) const override;
+    Animation get(const Char& user, std::int32_t bulletid) const override;
 
 private:
-    std::unordered_map<int32_t, Ball> bullets;
-    int32_t skillid;
+    std::unordered_map<std::int32_t, Ball> bullets;
+    std::int32_t skillid;
 };
 } // namespace jrc

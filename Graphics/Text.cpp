@@ -26,7 +26,7 @@ Text::Text(Font f,
            Color c,
            Background b,
            const std::string& t,
-           uint16_t mw,
+           std::uint16_t mw,
            bool fm)
     : font(f),
       alignment(a),
@@ -39,7 +39,7 @@ Text::Text(Font f,
 }
 
 Text::Text(
-    Font f, Alignment a, Color c, const std::string& t, uint16_t mw, bool fm)
+    Font f, Alignment a, Color c, const std::string& t, std::uint16_t mw, bool fm)
     : Text(f, a, c, NONE, t, mw, fm)
 {
 }
@@ -50,8 +50,9 @@ Text::Text() : Text(A11M, LEFT, BLACK)
 
 void Text::reset_layout()
 {
-    if (text.empty())
+    if (text.empty()) {
         return;
+    }
 
     layout = GraphicsGL::get().createlayout(
         text, font, alignment, maxwidth, formatted);
@@ -59,8 +60,9 @@ void Text::reset_layout()
 
 void Text::change_text(const std::string& t)
 {
-    if (text == t)
+    if (text == t) {
         return;
+    }
 
     text = t;
 
@@ -69,8 +71,9 @@ void Text::change_text(const std::string& t)
 
 void Text::change_color(Color c)
 {
-    if (color == c)
+    if (color == c) {
         return;
+    }
 
     color = c;
 
@@ -87,9 +90,9 @@ void Text::draw(const DrawArgument& args) const
     GraphicsGL::get().drawtext(args, text, layout, font, color, background);
 }
 
-uint16_t Text::advance(size_t pos) const
+std::uint16_t Text::advance(std::size_t pos) const
 {
-    return layout.advance(pos);
+    return static_cast<std::uint16_t>(layout.advance(pos));
 }
 
 bool Text::empty() const
@@ -97,27 +100,27 @@ bool Text::empty() const
     return text.empty();
 }
 
-size_t Text::length() const
+std::size_t Text::length() const
 {
     return text.size();
 }
 
-int16_t Text::width() const
+std::int16_t Text::width() const
 {
     return layout.width();
 }
 
-int16_t Text::height() const
+std::int16_t Text::height() const
 {
     return layout.height();
 }
 
-Point<int16_t> Text::dimensions() const
+Point<std::int16_t> Text::dimensions() const
 {
     return layout.get_dimensions();
 }
 
-Point<int16_t> Text::endoffset() const
+Point<std::int16_t> Text::endoffset() const
 {
     return layout.get_endoffset();
 }
@@ -128,11 +131,11 @@ const std::string& Text::get_text() const
 }
 
 Text::Layout::Layout(const std::vector<Line>& l,
-                     const std::vector<int16_t>& a,
-                     int16_t w,
-                     int16_t h,
-                     int16_t ex,
-                     int16_t ey)
+                     const std::vector<std::int16_t>& a,
+                     std::int16_t w,
+                     std::int16_t h,
+                     std::int16_t ex,
+                     std::int16_t ey)
     : lines(l), advances(a), dimensions(w, h), endoffset(ex, ey)
 {
 }
@@ -141,27 +144,27 @@ Text::Layout::Layout() : Layout({}, {}, 0, 0, 0, 0)
 {
 }
 
-int16_t Text::Layout::width() const
+std::int16_t Text::Layout::width() const
 {
     return dimensions.x();
 }
 
-int16_t Text::Layout::height() const
+std::int16_t Text::Layout::height() const
 {
     return dimensions.y();
 }
 
-int16_t Text::Layout::advance(size_t index) const
+std::int16_t Text::Layout::advance(std::size_t index) const
 {
-    return index < advances.size() ? advances[index] : 0;
+    return static_cast<std::int16_t>(index < advances.size() ? advances[index] : 0);
 }
 
-Point<int16_t> Text::Layout::get_dimensions() const
+Point<std::int16_t> Text::Layout::get_dimensions() const
 {
     return dimensions;
 }
 
-Point<int16_t> Text::Layout::get_endoffset() const
+Point<std::int16_t> Text::Layout::get_endoffset() const
 {
     return endoffset;
 }

@@ -30,11 +30,11 @@ class Seat
 public:
     Seat(nl::node source);
 
-    bool inrange(Point<int16_t> position) const;
-    Point<int16_t> getpos() const;
+    bool inrange(Point<std::int16_t> position) const;
+    Point<std::int16_t> getpos() const;
 
 private:
-    Point<int16_t> pos;
+    Point<std::int16_t> pos;
 };
 
 class Ladder
@@ -43,37 +43,37 @@ public:
     Ladder(nl::node source);
 
     bool is_ladder() const;
-    bool inrange(Point<int16_t> position, bool upwards) const;
-    bool felloff(int16_t y, bool downwards) const;
-    int16_t get_x() const;
+    bool inrange(Point<std::int16_t> position, bool upwards) const;
+    bool felloff(std::int16_t y, bool downwards) const;
+    std::int16_t get_x() const;
 
 private:
-    int16_t x;
-    int16_t y1;
-    int16_t y2;
+    std::int16_t x;
+    std::int16_t y1;
+    std::int16_t y2;
     bool ladder;
 };
 
 class MapInfo
 {
 public:
-    MapInfo(nl::node src, Range<int16_t> walls, Range<int16_t> borders);
+    MapInfo(nl::node src, Range<std::int16_t> walls, Range<std::int16_t> borders);
     MapInfo();
 
     bool is_underwater() const;
     std::string get_bgm() const;
-    Range<int16_t> get_walls() const;
-    Range<int16_t> get_borders() const;
+    Range<std::int16_t> get_walls() const;
+    Range<std::int16_t> get_borders() const;
 
     // Find a setat the player's position.
-    nullable_ptr<const Seat> findseat(Point<int16_t> position) const;
+    nullable_ptr<const Seat> findseat(Point<std::int16_t> position) const;
     // Find a ladder at the player's position. upwards = false implies
     // downwards.
-    nullable_ptr<const Ladder> findladder(Point<int16_t> position,
+    nullable_ptr<const Ladder> findladder(Point<std::int16_t> position,
                                       bool upwards) const;
 
 private:
-    int32_t fieldlimit;
+    std::int32_t fieldlimit;
     bool cloud;
     std::string bgm;
     std::string mapdesc;
@@ -83,8 +83,8 @@ private:
     bool swim;
     bool town;
     bool hideminimap;
-    Range<int16_t> mapwalls;
-    Range<int16_t> mapborders;
+    Range<std::int16_t> mapwalls;
+    Range<std::int16_t> mapborders;
     std::vector<Seat> seats;
     std::vector<Ladder> ladders;
 };

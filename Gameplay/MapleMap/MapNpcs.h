@@ -35,13 +35,13 @@ public:
     // Add an npc to the spawn queue.
     void spawn(NpcSpawn&& spawn);
     // Remove the npc with the specified oid;
-    void remove(int32_t oid);
+    void remove(std::int32_t oid);
     // Remove all npcs.
     void clear();
 
     // Send mouse input to clickable npcs.
     Cursor::State
-    send_cursor(bool pressed, Point<int16_t> position, Point<int16_t> viewpos);
+    send_cursor(bool pressed, Point<std::int16_t> position, Point<std::int16_t> viewpos);
 
 private:
     MapObjects npcs;

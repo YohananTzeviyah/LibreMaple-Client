@@ -48,8 +48,8 @@ enum Id {
     LENGTH
 };
 
-Id by_id(size_t id);
+Id by_id(std::size_t id);
 
-extern const EnumMap<Id, int32_t> codes;
+extern const EnumMap<Id, std::int32_t> codes;
 }; // namespace Maplestat
 } // namespace jrc

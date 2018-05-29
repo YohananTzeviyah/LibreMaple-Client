@@ -31,7 +31,7 @@ public:
     explicit operator bool() const;
 
     // Returns the watk increase when using this bullet.
-    int16_t get_watk() const;
+    std::int16_t get_watk() const;
     // Returns the bullet animation.
     const Animation& get_animation() const;
     // Returns the general item data.
@@ -41,11 +41,11 @@ private:
     // Allow the cache to use the constructor.
     friend Cache<BulletData>;
     // Load a bullet from the game files.
-    BulletData(int32_t id);
+    BulletData(std::int32_t id);
 
     const ItemData& itemdata;
 
     Animation bullet;
-    int16_t watk;
+    std::int16_t watk;
 };
 } // namespace jrc

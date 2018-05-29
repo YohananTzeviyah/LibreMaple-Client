@@ -27,9 +27,9 @@
 namespace jrc
 {
 #    ifndef JOURNEY_USE_CRYPTO
-const size_t HANDSHAKE_LEN = 2;
+const std::size_t HANDSHAKE_LEN = 2;
 #    else
-const size_t HANDSHAKE_LEN = 16;
+const std::size_t HANDSHAKE_LEN = 16;
 #    endif
 
 using asio::error_code;
@@ -45,15 +45,15 @@ public:
 
     bool open(const char* adress, const char* port);
     bool close();
-    size_t receive(bool* connected);
-    const int8_t* get_buffer() const;
-    bool dispatch(const int8_t* bytes, size_t length);
+    std::size_t receive(bool* connected);
+    const std::int8_t* get_buffer() const;
+    bool dispatch(const std::int8_t* bytes, std::size_t length);
 
 private:
     io_service ioservice;
     tcp::resolver resolver;
     tcp::socket socket;
-    int8_t buffer[MAX_PACKET_LENGTH];
+    std::int8_t buffer[MAX_PACKET_LENGTH];
 };
 } // namespace jrc
 #endif

@@ -27,59 +27,59 @@ Camera::Camera()
     y.set(0.0);
 }
 
-void Camera::update(Point<int16_t> position)
+void Camera::update(Point<std::int16_t> position)
 {
     double next_x = x.get();
-    double hdelta = Constants::VIEWWIDTH / 2 - position.x() - next_x;
+    double hdelta = Constants::GAMEVIEWWIDTH / 2 - position.x() - next_x;
     if (std::abs(hdelta) >= 5.0) {
-        next_x += hdelta * (12.0 / Constants::VIEWWIDTH);
+        next_x += hdelta * (12.0 / Constants::GAMEVIEWWIDTH);
     }
 
     double next_y = y.get();
-    double vdelta = Constants::VIEWHEIGHT / 2 - position.y() - next_y;
+    double vdelta = Constants::GAMEVIEWHEIGHT / 2 - position.y() - next_y;
     if (std::abs(vdelta) >= 5.0) {
-        next_y += vdelta * (12.0 / Constants::VIEWHEIGHT);
+        next_y += vdelta * (12.0 / Constants::GAMEVIEWHEIGHT);
     }
 
-    if (next_x > hbounds.first() || hbounds.length() < Constants::VIEWWIDTH) {
+    if (next_x > hbounds.first() || hbounds.length() < Constants::GAMEVIEWWIDTH) {
         next_x = hbounds.first();
-    } else if (next_x < hbounds.second() + Constants::VIEWWIDTH) {
-        next_x = hbounds.second() + Constants::VIEWWIDTH;
+    } else if (next_x < hbounds.second() + Constants::GAMEVIEWWIDTH) {
+        next_x = hbounds.second() + Constants::GAMEVIEWWIDTH;
     }
 
-    if (next_y > vbounds.first() || vbounds.length() < Constants::VIEWHEIGHT) {
+    if (next_y > vbounds.first() || vbounds.length() < Constants::GAMEVIEWHEIGHT) {
         next_y = vbounds.first();
-    } else if (next_y < vbounds.second() + Constants::VIEWHEIGHT) {
-        next_y = vbounds.second() + Constants::VIEWHEIGHT;
+    } else if (next_y < vbounds.second() + Constants::GAMEVIEWHEIGHT) {
+        next_y = vbounds.second() + Constants::GAMEVIEWHEIGHT;
     }
 
     x = next_x;
     y = next_y;
 }
 
-void Camera::set_position(Point<int16_t> position)
+void Camera::set_position(Point<std::int16_t> position)
 {
-    x.set(Constants::VIEWWIDTH / 2 - position.x());
-    y.set(Constants::VIEWHEIGHT / 2 - position.y());
+    x.set(Constants::GAMEVIEWWIDTH / 2 - position.x());
+    y.set(Constants::GAMEVIEWHEIGHT / 2 - position.y());
 }
 
-void Camera::set_view(Range<int16_t> mapwalls, Range<int16_t> mapborders)
+void Camera::set_view(Range<std::int16_t> mapwalls, Range<std::int16_t> mapborders)
 {
     hbounds = -mapwalls;
     vbounds = -mapborders;
 }
 
-Point<int16_t> Camera::position() const
+Point<std::int16_t> Camera::position() const
 {
-    auto shortx = static_cast<int16_t>(std::round(x.get()));
-    auto shorty = static_cast<int16_t>(std::round(y.get()));
+    auto shortx = static_cast<std::int16_t>(std::round(x.get()));
+    auto shorty = static_cast<std::int16_t>(std::round(y.get()));
     return {shortx, shorty};
 }
 
-Point<int16_t> Camera::position(float alpha) const
+Point<std::int16_t> Camera::position(float alpha) const
 {
-    auto interx = static_cast<int16_t>(std::round(x.get(alpha)));
-    auto intery = static_cast<int16_t>(std::round(y.get(alpha)));
+    auto interx = static_cast<std::int16_t>(std::round(x.get(alpha)));
+    auto intery = static_cast<std::int16_t>(std::round(y.get(alpha)));
     return {interx, intery};
 }
 

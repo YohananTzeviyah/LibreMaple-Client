@@ -52,7 +52,7 @@ protected:
 
     private:
         Animation animation;
-        int8_t z;
+        std::int8_t z;
     };
 };
 
@@ -111,7 +111,7 @@ public:
     void apply(Char& target) const override;
 
 private:
-    std::map<uint16_t, Effect> effects;
+    std::map<std::uint16_t, Effect> effects;
 };
 
 // Use effect for Iron Body.

@@ -23,15 +23,15 @@ namespace jrc
 {
 Footholdtree::Footholdtree(nl::node src)
 {
-    int16_t leftw = 30000;
-    int16_t rightw = -30000;
-    int16_t botb = -30000;
-    int16_t topb = 30000;
+    std::int16_t leftw = 30000;
+    std::int16_t rightw = -30000;
+    std::int16_t botb = -30000;
+    std::int16_t topb = 30000;
 
     for (const auto& basef : src) {
-        uint8_t layer;
+        std::uint8_t layer;
         try {
-            layer = static_cast<uint8_t>(std::stoi(basef.name()));
+            layer = static_cast<std::uint8_t>(std::stoi(basef.name()));
         } catch (const std::exception& ex) {
             Console::get().print(__func__, ex.what());
             continue;
@@ -39,9 +39,9 @@ Footholdtree::Footholdtree(nl::node src)
 
         for (const auto& midf : basef) {
             for (const auto& lastf : midf) {
-                uint16_t id;
+                std::uint16_t id;
                 try {
-                    id = static_cast<uint16_t>(std::stoi(lastf.name()));
+                    id = static_cast<std::uint16_t>(std::stoi(lastf.name()));
                 } catch (const std::exception& ex) {
                     Console::get().print(__func__, ex.what());
                     continue;
@@ -74,9 +74,9 @@ Footholdtree::Footholdtree(nl::node src)
                     continue;
                 }
 
-                int16_t start = foothold.l();
-                int16_t end = foothold.r();
-                for (int16_t i = start; i <= end; ++i) {
+                std::int16_t start = foothold.l();
+                std::int16_t end = foothold.r();
+                for (std::int16_t i = start; i <= end; ++i) {
                     footholdsbyx.emplace(i, id);
                 }
             }
@@ -185,7 +185,7 @@ void Footholdtree::update_fh(PhysicsObject& phobj) const
     phobj.onground = phobj.y == ground;
 
     if (phobj.enablejd || phobj.is_flag_set(PhysicsObject::CHECKBELOW)) {
-        uint16_t belowid = get_fhid_below(x, nextfh.ground_below(x) + 1.0);
+        std::uint16_t belowid = get_fhid_below(x, nextfh.ground_below(x) + 1.0);
         if (belowid > 0) {
             double nextground = get_fh(belowid).ground_below(x);
             phobj.enablejd = (nextground - ground) < 600.0;
@@ -207,7 +207,7 @@ void Footholdtree::update_fh(PhysicsObject& phobj) const
     }
 }
 
-const Foothold& Footholdtree::get_fh(uint16_t fhid) const
+const Foothold& Footholdtree::get_fh(std::uint16_t fhid) const
 {
     auto iter = footholds.find(fhid);
     if (iter == footholds.end()) {
@@ -217,10 +217,10 @@ const Foothold& Footholdtree::get_fh(uint16_t fhid) const
     return iter->second;
 }
 
-double Footholdtree::get_wall(uint16_t curid, bool left, double fy) const
+double Footholdtree::get_wall(std::uint16_t curid, bool left, double fy) const
 {
-    auto shorty = static_cast<int16_t>(fy);
-    Range<int16_t> vertical(shorty - 50, shorty - 1);
+    auto shorty = static_cast<std::int16_t>(fy);
+    Range<std::int16_t> vertical(shorty - 50, shorty - 1);
     const Foothold& cur = get_fh(curid);
     if (left) {
         const Foothold& prev = get_fh(cur.prev());
@@ -247,30 +247,30 @@ double Footholdtree::get_wall(uint16_t curid, bool left, double fy) const
     }
 }
 
-double Footholdtree::get_edge(uint16_t curid, bool left) const
+double Footholdtree::get_edge(std::uint16_t curid, bool left) const
 {
     const Foothold& fh = get_fh(curid);
     if (left) {
-        uint16_t previd = fh.prev();
+        std::uint16_t previd = fh.prev();
         if (!previd) {
             return fh.l();
         }
 
         const Foothold& prev = get_fh(previd);
-        uint16_t prev_previd = prev.prev();
+        std::uint16_t prev_previd = prev.prev();
         if (!prev_previd) {
             return prev.l();
         }
 
         return walls.first();
     } else {
-        uint16_t nextid = fh.next();
+        std::uint16_t nextid = fh.next();
         if (!nextid) {
             return fh.r();
         }
 
         const Foothold& next = get_fh(nextid);
-        uint16_t next_nextid = next.next();
+        std::uint16_t next_nextid = next.next();
         if (!next_nextid) {
             return next.r();
         }
@@ -279,12 +279,12 @@ double Footholdtree::get_edge(uint16_t curid, bool left) const
     }
 }
 
-uint16_t Footholdtree::get_fhid_below(double fx, double fy) const
+std::uint16_t Footholdtree::get_fhid_below(double fx, double fy) const
 {
-    uint16_t ret = 0;
+    std::uint16_t ret = 0;
     double comp = borders.second();
 
-    auto x = static_cast<int16_t>(fx);
+    auto x = static_cast<std::int16_t>(fx);
     auto range = footholdsbyx.equal_range(x);
     for (auto iter = range.first; iter != range.second; ++iter) {
         const Foothold& fh = footholds.at(iter->second);
@@ -298,22 +298,22 @@ uint16_t Footholdtree::get_fhid_below(double fx, double fy) const
     return ret;
 }
 
-int16_t Footholdtree::get_y_below(Point<int16_t> position) const
+std::int16_t Footholdtree::get_y_below(Point<std::int16_t> position) const
 {
-    if (uint16_t fhid = get_fhid_below(position.x(), position.y())) {
+    if (std::uint16_t fhid = get_fhid_below(position.x(), position.y())) {
         const Foothold& fh = get_fh(fhid);
-        return static_cast<int16_t>(fh.ground_below(position.x()));
+        return static_cast<std::int16_t>(fh.ground_below(position.x()));
     } else {
         return borders.second();
     }
 }
 
-Range<int16_t> Footholdtree::get_walls() const
+Range<std::int16_t> Footholdtree::get_walls() const
 {
     return walls;
 }
 
-Range<int16_t> Footholdtree::get_borders() const
+Range<std::int16_t> Footholdtree::get_borders() const
 {
     return borders;
 }

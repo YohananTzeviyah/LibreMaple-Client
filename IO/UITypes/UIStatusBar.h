@@ -42,22 +42,22 @@ public:
     void draw(float alpha) const override;
     void update() override;
 
-    bool is_in_range(Point<int16_t> cursorpos) const override;
-    bool remove_cursor(bool clicked, Point<int16_t> cursorpos) override;
-    Cursor::State send_cursor(bool pressed, Point<int16_t> cursorpos) override;
+    bool is_in_range(Point<std::int16_t> cursorpos) const override;
+    bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
+    Cursor::State send_cursor(bool pressed, Point<std::int16_t> cursorpos) override;
 
     void send_chatline(const std::string& line, UIChatbar::LineType type);
     void display_message(Messages::Type line, UIChatbar::LineType type);
 
 protected:
-    Button::State button_pressed(uint16_t buttonid) override;
+    Button::State button_pressed(std::uint16_t buttonid) override;
 
 private:
     float getexppercent() const;
     float gethppercent() const;
     float getmppercent() const;
 
-    enum Buttons : uint16_t {
+    enum Buttons : std::uint16_t {
         BT_WHISPER,
         BT_CALLGM,
         BT_CASHSHOP,
@@ -69,11 +69,12 @@ private:
         BT_QUEST,
         BT_INVENTORY,
         BT_EQUIPS,
-        BT_SKILL
+        BT_SKILL,
+        BT_KEYSETTING
     };
 
-    static constexpr Point<int16_t> POSITION = {512, 590};
-    static constexpr Point<int16_t> DIMENSION = {1366, 80};
+    static constexpr Point<std::int16_t> POSITION = {512, 758}; // {512, 590}
+    static constexpr Point<std::int16_t> DIMENSION = {1366, 80};
     static constexpr time_t MESSAGE_COOLDOWN = 1'000;
 
     const CharStats& stats;

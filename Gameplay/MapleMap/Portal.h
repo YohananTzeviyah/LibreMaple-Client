@@ -45,19 +45,19 @@ public:
         TYPE14
     };
 
-    static Type typebyid(int32_t id)
+    static Type typebyid(std::int32_t id)
     {
         return static_cast<Type>(id);
     }
 
     struct WarpInfo {
-        int32_t mapid;
+        std::int32_t mapid;
         std::string toname;
         std::string name;
         bool intramap;
         bool valid;
 
-        WarpInfo(int32_t m, bool i, std::string tn, std::string n)
+        WarpInfo(std::int32_t m, bool i, std::string tn, std::string n)
             : mapid(m), toname(tn), name(n), intramap(i)
         {
             valid = mapid < 999999999;
@@ -72,18 +72,18 @@ public:
            Type type,
            std::string name,
            bool intramap,
-           Point<int16_t> position,
-           int32_t tomap,
+           Point<std::int16_t> position,
+           std::int32_t tomap,
            std::string toname);
     Portal();
 
-    void update(Point<int16_t> playerpos);
-    void draw(Point<int16_t> viewpos, float alpha) const;
+    void update(Point<std::int16_t> playerpos);
+    void draw(Point<std::int16_t> viewpos, float alpha) const;
 
     std::string get_name() const;
     Type get_type() const;
-    Point<int16_t> get_position() const;
-    Rectangle<int16_t> bounds() const;
+    Point<std::int16_t> get_position() const;
+    Rectangle<std::int16_t> bounds() const;
 
     WarpInfo getwarpinfo() const;
 
@@ -91,7 +91,7 @@ private:
     const Animation* animation;
     Type type;
     std::string name;
-    Point<int16_t> position;
+    Point<std::int16_t> position;
     WarpInfo warpinfo;
     bool touched;
 };

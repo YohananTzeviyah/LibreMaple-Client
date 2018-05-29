@@ -44,7 +44,7 @@ void RegularAttack::apply_hiteffects(const AttackUser&, Mob&) const
 {
 }
 
-Animation RegularAttack::get_bullet(const Char& user, int32_t bulletid) const
+Animation RegularAttack::get_bullet(const Char& user, std::int32_t bulletid) const
 {
     return bullet.get(user, bulletid);
 }
@@ -59,17 +59,17 @@ bool RegularAttack::is_skill() const
     return false;
 }
 
-int32_t RegularAttack::get_id() const
+std::int32_t RegularAttack::get_id() const
 {
     return 0;
 }
 
-SpecialMove::ForbidReason RegularAttack::can_use(int32_t,
+SpecialMove::ForbidReason RegularAttack::can_use(std::int32_t,
                                                  Weapon::Type weapon,
                                                  const Job&,
-                                                 uint16_t,
-                                                 uint16_t,
-                                                 uint16_t bullets) const
+                                                 std::uint16_t,
+                                                 std::uint16_t,
+                                                 std::uint16_t bullets) const
 {
     switch (weapon) {
     case Weapon::BOW:

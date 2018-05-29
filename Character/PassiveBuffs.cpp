@@ -74,9 +74,9 @@ void AchillesBuff::apply_to(CharStats& stats, nl::node level) const
 bool BerserkBuff::is_applicable(CharStats& stats, nl::node level) const
 {
     float hp_percent = static_cast<float>(level["x"]) / 100;
-    int32_t hp_threshold =
-        static_cast<int32_t>(stats.get_total(Equipstat::HP) * hp_percent);
-    int32_t hp_current = stats.get_stat(Maplestat::HP);
+    std::int32_t hp_threshold =
+        static_cast<std::int32_t>(stats.get_total(Equipstat::HP) * hp_percent);
+    std::int32_t hp_current = stats.get_stat(Maplestat::HP);
     return hp_current <= hp_threshold;
 }
 
@@ -127,8 +127,8 @@ PassiveBuffs::PassiveBuffs()
 }
 
 void PassiveBuffs::apply_buff(CharStats& stats,
-                              int32_t skill_id,
-                              int32_t skill_level) const
+                              std::int32_t skill_id,
+                              std::int32_t skill_level) const
 {
     auto iter = buffs.find(skill_id);
     if (iter == buffs.end())

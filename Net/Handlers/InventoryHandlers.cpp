@@ -49,15 +49,15 @@ void ModifyInventoryHandler::handle(InPacket& recv) const
     Inventory& inventory = Stage::get().get_player().get_inventory();
 
     struct Mod {
-        int8_t mode;
+        std::int8_t mode;
         InventoryType::Id type;
-        int16_t pos;
-        int16_t arg;
+        std::int16_t pos;
+        std::int16_t arg;
     };
     std::vector<Mod> mods;
 
-    int8_t size = recv.read_byte();
-    for (int8_t i = 0; i < size; ++i) {
+    std::int8_t size = recv.read_byte();
+    for (std::int8_t i = 0; i < size; ++i) {
         Mod mod;
         mod.mode = recv.read_byte();
         mod.type = InventoryType::by_value(recv.read_byte());
@@ -71,8 +71,8 @@ void ModifyInventoryHandler::handle(InPacket& recv) const
         case Inventory::CHANGECOUNT: {
             mod.arg = recv.read_short();
 
-            int16_t count_before = inventory.get_item_count(mod.type, mod.pos);
-            int16_t count_now = mod.arg;
+            std::int16_t count_before = inventory.get_item_count(mod.type, mod.pos);
+            std::int16_t count_now = mod.arg;
 
             inventory.modify(
                 mod.type, mod.pos, mod.mode, mod.arg, Inventory::MOVE_NONE);

@@ -34,10 +34,10 @@ SkillTooltip::SkillTooltip() : line(318, Geometry::WHITE, 1.0f)
     skill_id = 0;
 }
 
-void SkillTooltip::set_skill(int32_t id,
-                             int32_t level,
-                             int32_t mlevel,
-                             int64_t expiration)
+void SkillTooltip::set_skill(std::int32_t id,
+                             std::int32_t level,
+                             std::int32_t mlevel,
+                             std::int64_t expiration)
 {
     if (skill_id == id)
         return;
@@ -49,7 +49,7 @@ void SkillTooltip::set_skill(int32_t id,
 
     const SkillData& data = SkillData::get(id);
 
-    int32_t masterlevel;
+    std::int32_t masterlevel;
     if (mlevel > 0) {
         masterlevel = mlevel;
     } else {
@@ -60,11 +60,11 @@ void SkillTooltip::set_skill(int32_t id,
     if (masterlevel > 0) {
         const std::string mltag = "Master Level";
         const std::string mlstr = std::to_string(masterlevel);
-        size_t mlstart = descstr.find(mltag);
-        size_t mlpos = descstr.find(':', mlstart) + 2;
-        size_t mlend = descstr.find("]", mlstart);
+        std::size_t mlstart = descstr.find(mltag);
+        std::size_t mlpos = descstr.find(':', mlstart) + 2;
+        std::size_t mlend = descstr.find("]", mlstart);
         if (mlpos < mlend && mlend != std::string::npos) {
-            size_t mlsize = mlend - mlpos;
+            std::size_t mlsize = mlend - mlpos;
             descstr.erase(mlpos, mlsize);
             descstr.insert(mlpos, mlstr);
 
@@ -73,7 +73,7 @@ void SkillTooltip::set_skill(int32_t id,
                 descstr.insert(0, "[");
                 mlend++;
             }
-            size_t linebreak = descstr.find("]\\n", mlstart);
+            std::size_t linebreak = descstr.find("]\\n", mlstart);
             if (linebreak != mlend) {
                 descstr.insert(mlend + 1, "\\n");
             }
@@ -86,10 +86,10 @@ void SkillTooltip::set_skill(int32_t id,
     if (expiration > 0) {
         // TODO
     } else {
-        size_t expstart = descstr.find(exptag);
-        size_t expend = descstr.find('#', expstart + 1);
+        std::size_t expstart = descstr.find(exptag);
+        std::size_t expend = descstr.find('#', expstart + 1);
         if (expstart < expend && expend != std::string::npos) {
-            size_t expsize = expend - expstart + 1;
+            std::size_t expsize = expend - expstart + 1;
             descstr.erase(expstart, expsize);
         }
     }
@@ -119,29 +119,29 @@ void SkillTooltip::set_skill(int32_t id,
     leveldesc = {Text::A12M, Text::LEFT, Text::WHITE, levelstr, 330};
 
     icon_offset = 4 + name.height();
-    level_offset = std::max<int16_t>(desc.height(), 92) + 16;
+    level_offset = std::max<std::int16_t>(desc.height(), 92) + 16;
     height = icon_offset + level_offset + leveldesc.height();
 }
 
-void SkillTooltip::draw(Point<int16_t> pos) const
+void SkillTooltip::draw(Point<std::int16_t> pos) const
 {
     if (skill_id == 0)
         return;
 
-    frame.draw(pos + Point<int16_t>(176, height + 16), 320, height);
-    name.draw(pos + Point<int16_t>(16, 8));
+    frame.draw(pos + Point<std::int16_t>(176, height + 16), 320, height);
+    name.draw(pos + Point<std::int16_t>(16, 8));
 
     pos.shift_y(icon_offset);
 
-    base.draw({pos + Point<int16_t>(12, 16)});
-    icon.draw({pos + Point<int16_t>(22, 90), 2.0f, 2.0f});
-    cover.draw({pos + Point<int16_t>(12, 16)});
+    base.draw({pos + Point<std::int16_t>(12, 16)});
+    icon.draw({pos + Point<std::int16_t>(22, 90), 2.0f, 2.0f});
+    cover.draw({pos + Point<std::int16_t>(12, 16)});
 
-    desc.draw(pos + Point<int16_t>(102, 12));
+    desc.draw(pos + Point<std::int16_t>(102, 12));
 
     pos.shift_y(level_offset);
 
-    line.draw(pos + Point<int16_t>(14, 4));
-    leveldesc.draw(pos + Point<int16_t>(12, 12));
+    line.draw(pos + Point<std::int16_t>(14, 4));
+    leveldesc.draw(pos + Point<std::int16_t>(12, 12));
 }
 } // namespace jrc

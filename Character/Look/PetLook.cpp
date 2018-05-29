@@ -23,12 +23,12 @@
 
 namespace jrc
 {
-PetLook::PetLook(int32_t iid,
+PetLook::PetLook(std::int32_t iid,
                  std::string nm,
-                 int32_t uqid,
-                 Point<int16_t> pos,
-                 uint8_t st,
-                 int32_t)
+                 std::int32_t uqid,
+                 Point<std::int16_t> pos,
+                 std::uint8_t st,
+                 std::int32_t)
 {
     itemid = iid;
     name = nm;
@@ -65,18 +65,18 @@ PetLook::PetLook()
 
 void PetLook::draw(double viewx, double viewy, float alpha) const
 {
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
 
     animations[stance].draw(DrawArgument(absp, flip), alpha);
     namelabel.draw(absp);
 }
 
-void PetLook::update(const Physics& physics, Point<int16_t> charpos)
+void PetLook::update(const Physics& physics, Point<std::int16_t> charpos)
 {
     static const double PETWALKFORCE = 0.35;
     static const double PETFLYFORCE = 0.2;
 
-    Point<int16_t> curpos = phobj.get_position();
+    Point<std::int16_t> curpos = phobj.get_position();
     switch (stance) {
     case STAND:
     case MOVE:
@@ -138,7 +138,7 @@ void PetLook::update(const Physics& physics, Point<int16_t> charpos)
     animations[stance].update();
 }
 
-void PetLook::set_position(int16_t x, int16_t y)
+void PetLook::set_position(std::int16_t x, std::int16_t y)
 {
     phobj.set_x(x);
     phobj.set_y(y);
@@ -152,13 +152,13 @@ void PetLook::set_stance(Stance st)
     }
 }
 
-void PetLook::set_stance(uint8_t stancebyte)
+void PetLook::set_stance(std::uint8_t stancebyte)
 {
     flip = stancebyte % 2 == 1;
     stance = stancebyvalue(stancebyte);
 }
 
-int32_t PetLook::get_itemid() const
+std::int32_t PetLook::get_itemid() const
 {
     return itemid;
 }

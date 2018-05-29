@@ -57,17 +57,17 @@ void Background::settype(Type type)
     switch (type) {
     case HTILED:
     case HMOVEA:
-        htile = Constants::VIEWWIDTH / cx + 3;
+        htile = Constants::GAMEVIEWWIDTH / cx + 3;
         break;
     case VTILED:
     case VMOVEA:
-        vtile = Constants::VIEWHEIGHT / cy + 3;
+        vtile = Constants::GAMEVIEWHEIGHT / cy + 3;
         break;
     case TILED:
     case HMOVEB:
     case VMOVEB:
-        htile = Constants::VIEWWIDTH / cx + 3;
-        vtile = Constants::VIEWHEIGHT / cy + 3;
+        htile = Constants::GAMEVIEWWIDTH / cx + 3;
+        vtile = Constants::GAMEVIEWHEIGHT / cy + 3;
         break;
     default:
         break;
@@ -122,14 +122,14 @@ void Background::draw(double viewx, double viewy, float alpha) const
             y += cy;
         }
     }
-    auto ix = static_cast<int16_t>(std::round(x));
-    auto iy = static_cast<int16_t>(std::round(y));
+    auto ix = static_cast<std::int16_t>(std::round(x));
+    auto iy = static_cast<std::int16_t>(std::round(y));
 
-    int16_t tw = cx * htile;
-    int16_t th = cy * vtile;
-    for (int16_t tx = 0; tx < tw; tx += cx) {
-        for (int16_t ty = 0; ty < th; ty += cy) {
-            animation.draw(DrawArgument(Point<int16_t>(ix + tx, iy + ty),
+    std::int16_t tw = cx * htile;
+    std::int16_t th = cy * vtile;
+    for (std::int16_t tx = 0; tx < tw; tx += cx) {
+        for (std::int16_t ty = 0; ty < th; ty += cy) {
+            animation.draw(DrawArgument(Point<std::int16_t>(ix + tx, iy + ty),
                                         flipped,
                                         opacity / 255),
                            alpha);
@@ -145,7 +145,7 @@ void Background::update()
 
 MapBackgrounds::MapBackgrounds(nl::node src)
 {
-    int16_t no = 0;
+    std::int16_t no = 0;
     nl::node back = src[std::to_string(no)];
     while (back.size() > 0) {
         bool front = back["front"].get_bool();

@@ -19,15 +19,21 @@
 
 #include "../Configuration.h"
 #include "../Console.h"
+#include "../IO/Window.h"
 
 #include <algorithm>
 
 namespace jrc
 {
-constexpr Rectangle<int16_t> GraphicsGL::SCREEN;
+Rectangle<std::int16_t> GraphicsGL::screen;
 
 GraphicsGL::GraphicsGL()
 {
+    screen = {0,
+            Constants::VIEWWIDTH,
+            -Constants::VIEWYOFFSET,
+            -Constants::VIEWYOFFSET +
+            Constants::VIEWHEIGHT};
     locked = false;
 }
 
@@ -156,18 +162,18 @@ Error GraphicsGL::init()
 
     fontymax += fontborder.y();
 
-    leftovers = QuadTree<size_t, Leftover>(
+    leftovers = QuadTree<std::size_t, Leftover>(
         [](const Leftover& first, const Leftover& second) {
             bool wcomp = first.width() >= second.width();
             bool hcomp = first.height() >= second.height();
             if (wcomp && hcomp) {
-                return QuadTree<size_t, Leftover>::RIGHT;
+                return QuadTree<std::size_t, Leftover>::RIGHT;
             } else if (wcomp) {
-                return QuadTree<size_t, Leftover>::DOWN;
+                return QuadTree<std::size_t, Leftover>::DOWN;
             } else if (hcomp) {
-                return QuadTree<size_t, Leftover>::UP;
+                return QuadTree<std::size_t, Leftover>::UP;
             } else {
-                return QuadTree<size_t, Leftover>::LEFT;
+                return QuadTree<std::size_t, Leftover>::LEFT;
             }
         });
 
@@ -192,7 +198,7 @@ bool GraphicsGL::addfont(const char* name,
 
     GLshort width = 0;
     GLshort height = 0;
-    for (uint8_t c = 32; c < 128; ++c) {
+    for (std::uint8_t c = 32; c < 128; ++c) {
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))
             continue;
 
@@ -223,7 +229,7 @@ bool GraphicsGL::addfont(const char* name,
 
     GLshort ox = x;
     GLshort oy = y;
-    for (uint8_t c = 32; c < 128; ++c) {
+    for (std::uint8_t c = 32; c < 128; ++c) {
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
             continue;
         }
@@ -262,7 +268,7 @@ void GraphicsGL::reinit()
     glUniform1i(uniform_fontregion, fontymax);
     glUniform2f(uniform_atlassize, ATLASW, ATLASH);
     glUniform2f(
-        uniform_screensize, Constants::VIEWWIDTH, Constants::VIEWHEIGHT);
+        uniform_screensize, Window::get().get_width(), Window::get().get_height());
 
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(
@@ -298,7 +304,7 @@ void GraphicsGL::clearinternal()
 
 void GraphicsGL::clear()
 {
-    size_t used = ATLASW * border.y() + border.x() * yrange.second();
+    std::size_t used = ATLASW * border.y() + border.x() * yrange.second();
     double usedpercent = static_cast<double>(used) / (ATLASW * ATLASH);
     if (usedpercent > 80.0) {
         clearinternal();
@@ -312,7 +318,7 @@ void GraphicsGL::addbitmap(const nl::bitmap& bmp)
 
 const GraphicsGL::Offset& GraphicsGL::getoffset(const nl::bitmap& bmp)
 {
-    size_t id = bmp.id();
+    std::size_t id = bmp.id();
     auto offiter = offsets.find(id);
     if (offiter != offsets.end()) {
         return offiter->second;
@@ -333,7 +339,7 @@ const GraphicsGL::Offset& GraphicsGL::getoffset(const nl::bitmap& bmp)
     }
 
     auto value = Leftover(x, y, w, h);
-    size_t lid = leftovers.findnode(
+    std::size_t lid = leftovers.findnode(
         value, [](const Leftover& val, const Leftover& leaf) {
             return val.width() <= leaf.width() &&
                    val.height() <= leaf.height();
@@ -409,7 +415,7 @@ const GraphicsGL::Offset& GraphicsGL::getoffset(const nl::bitmap& bmp)
     }
 
     /*
-    size_t used = ATLASW * border.y() + border.x() * yrange.second();
+    std::size_t used = ATLASW * border.y() + border.x() * yrange.second();
     double usedpercent = static_cast<double>(used) / (ATLASW * ATLASH);
     double wastedpercent = static_cast<double>(wasted) / used;
     Console::get().print("Used: " + std::to_string(usedpercent) + ", wasted: "
@@ -427,7 +433,7 @@ const GraphicsGL::Offset& GraphicsGL::getoffset(const nl::bitmap& bmp)
 }
 
 void GraphicsGL::draw(const nl::bitmap& bmp,
-                      const Rectangle<int16_t>& rect,
+                      const Rectangle<std::int16_t>& rect,
                       const Color& color,
                       float angle)
 {
@@ -439,7 +445,7 @@ void GraphicsGL::draw(const nl::bitmap& bmp,
         return;
     }
 
-    if (!rect.overlaps(SCREEN)) {
+    if (!rect.overlaps(screen)) {
         return;
     }
 
@@ -450,10 +456,10 @@ void GraphicsGL::draw(const nl::bitmap& bmp,
 Text::Layout GraphicsGL::createlayout(const std::string& text,
                                       Text::Font id,
                                       Text::Alignment alignment,
-                                      int16_t maxwidth,
+                                      std::int16_t maxwidth,
                                       bool formatted)
 {
-    size_t length = text.length();
+    std::size_t length = text.length();
     if (length == 0) {
         return {};
     }
@@ -462,10 +468,10 @@ Text::Layout GraphicsGL::createlayout(const std::string& text,
 
     const char* p_text = text.c_str();
 
-    size_t first = 0;
-    size_t offset = 0;
+    std::size_t first = 0;
+    std::size_t offset = 0;
     while (offset < length) {
-        size_t last = text.find_first_of(" \\#", offset + 1);
+        std::size_t last = text.find_first_of(" \\#", offset + 1);
         if (last == std::string::npos) {
             last = length;
         }
@@ -479,7 +485,7 @@ Text::Layout GraphicsGL::createlayout(const std::string& text,
 
 GraphicsGL::LayoutBuilder::LayoutBuilder(const Font& f,
                                          Text::Alignment a,
-                                         int16_t mw,
+                                         std::int16_t mw,
                                          bool fm)
     : font(f), alignment(a), maxwidth(mw), formatted(fm)
 {
@@ -490,14 +496,14 @@ GraphicsGL::LayoutBuilder::LayoutBuilder(const Font& f,
     width = 0;
     endy = 0;
     if (maxwidth == 0) {
-        maxwidth = 800;
+        maxwidth = Window::get().get_width();
     }
 }
 
-size_t GraphicsGL::LayoutBuilder::add(const char* text,
-                                      size_t prev,
-                                      size_t first,
-                                      size_t last)
+std::size_t GraphicsGL::LayoutBuilder::add(const char* text,
+                                      std::size_t prev,
+                                      std::size_t first,
+                                      std::size_t last)
 {
     if (first == last) {
         return prev;
@@ -505,7 +511,7 @@ size_t GraphicsGL::LayoutBuilder::add(const char* text,
 
     Text::Font last_font = fontid;
     Text::Color last_color = color;
-    size_t skip = 0;
+    std::size_t skip = 0;
     bool linebreak = false;
     if (formatted) {
         switch (text[first]) {
@@ -546,9 +552,9 @@ size_t GraphicsGL::LayoutBuilder::add(const char* text,
         }
     }
 
-    int16_t wordwidth = 0;
+    std::int16_t wordwidth = 0;
     if (!linebreak) {
-        for (size_t i = first; i < last; ++i) {
+        for (std::size_t i = first; i < last; ++i) {
             char c = text[i];
             wordwidth += font.chars[c].ax;
 
@@ -576,7 +582,7 @@ size_t GraphicsGL::LayoutBuilder::add(const char* text,
         ay += font.linespace();
     }
 
-    for (size_t pos = first; pos < last; ++pos) {
+    for (std::size_t pos = first; pos < last; ++pos) {
         char c = text[pos];
         const Font::Char& ch = font.chars[c];
 
@@ -600,7 +606,7 @@ size_t GraphicsGL::LayoutBuilder::add(const char* text,
     }
 }
 
-Text::Layout GraphicsGL::LayoutBuilder::finish(size_t first, size_t last)
+Text::Layout GraphicsGL::LayoutBuilder::finish(std::size_t first, std::size_t last)
 {
     add_word(first, last, fontid, color);
     add_line();
@@ -609,8 +615,8 @@ Text::Layout GraphicsGL::LayoutBuilder::finish(size_t first, size_t last)
     return {lines, advances, width, ay, ax, endy};
 }
 
-void GraphicsGL::LayoutBuilder::add_word(size_t word_first,
-                                         size_t word_last,
+void GraphicsGL::LayoutBuilder::add_word(std::size_t word_first,
+                                         std::size_t word_last,
                                          Text::Font word_font,
                                          Text::Color word_color)
 {
@@ -619,8 +625,8 @@ void GraphicsGL::LayoutBuilder::add_word(size_t word_first,
 
 void GraphicsGL::LayoutBuilder::add_line()
 {
-    int16_t line_x = 0;
-    int16_t line_y = ay;
+    std::int16_t line_x = 0;
+    std::int16_t line_y = ay;
     switch (alignment) {
     case Text::CENTER:
         line_x -= ax / 2;
@@ -707,7 +713,7 @@ void GraphicsGL::drawtext(const DrawArgument& args,
     };
 
     for (const Text::Layout::Line& line : layout) {
-        Point<int16_t> position = line.position;
+        Point<std::int16_t> position = line.position;
 
         for (const Text::Layout::Word& word : line.words) {
             GLshort ax = position.x() + layout.advance(word.first);
@@ -722,7 +728,7 @@ void GraphicsGL::drawtext(const DrawArgument& args,
             Color abscolor =
                 color * Color{wordcolor[0], wordcolor[1], wordcolor[2], 1.0f};
 
-            for (size_t pos = word.first; pos < word.last; ++pos) {
+            for (std::size_t pos = word.first; pos < word.last; ++pos) {
                 const char c = text[pos];
                 const Font::Char& ch = font.chars[c];
 
@@ -748,10 +754,10 @@ void GraphicsGL::drawtext(const DrawArgument& args,
     }
 }
 
-void GraphicsGL::drawrectangle(int16_t x,
-                               int16_t y,
-                               int16_t w,
-                               int16_t h,
+void GraphicsGL::drawrectangle(std::int16_t x,
+                               std::int16_t y,
+                               std::int16_t w,
+                               std::int16_t h,
                                float r,
                                float g,
                                float b,
@@ -769,8 +775,8 @@ void GraphicsGL::drawscreenfill(float r, float g, float b, float a)
 {
     drawrectangle(0,
                   -Constants::VIEWYOFFSET,
-                  Constants::VIEWWIDTH,
-                  Constants::VIEWHEIGHT,
+                  Window::get().get_width(),
+                  Window::get().get_height(),
                   r,
                   g,
                   b,
@@ -794,10 +800,10 @@ void GraphicsGL::flush(float opacity)
         float complement = 1.0f - opacity;
         Color color{0.0f, 0.0f, 0.0f, complement};
 
-        quads.emplace_back(SCREEN.l(),
-                           SCREEN.r(),
-                           SCREEN.t(),
-                           SCREEN.b(),
+        quads.emplace_back(screen.l(),
+                           screen.r(),
+                           screen.t(),
+                           screen.b(),
                            nulloffset,
                            color,
                            0.0f);
@@ -828,5 +834,15 @@ void GraphicsGL::clearscene()
     if (!locked) {
         quads.clear();
     }
+}
+
+void GraphicsGL::set_screen(Rectangle<std::int16_t>&& new_screen) noexcept
+{
+    screen = new_screen;
+}
+
+void GraphicsGL::set_screen(std::int16_t l, std::int16_t r, std::int16_t t, std::int16_t b) noexcept
+{
+    screen = {l, r, t, b};
 }
 } // namespace jrc

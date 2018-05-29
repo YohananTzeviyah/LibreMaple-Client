@@ -32,8 +32,8 @@ AttackHandler::AttackHandler(Attack::Type t)
 
 void AttackHandler::handle(InPacket& recv) const
 {
-    int32_t cid = recv.read_int();
-    uint8_t count = recv.read_byte();
+    std::int32_t cid = recv.read_int();
+    std::uint8_t count = recv.read_byte();
 
     recv.skip(1);
 
@@ -55,16 +55,16 @@ void AttackHandler::handle(InPacket& recv) const
 
     attack.mobcount = (count >> 4) & 0x0F;
     attack.hitcount = count & 0x0F;
-    for (uint8_t i = 0; i < attack.mobcount; ++i) {
-        int32_t oid = recv.read_int();
+    for (std::uint8_t i = 0; i < attack.mobcount; ++i) {
+        std::int32_t oid = recv.read_int();
 
         recv.skip(1);
 
-        uint8_t length = (attack.skill == SkillId::MESO_EXPLOSION)
+        std::uint8_t length = (attack.skill == SkillId::MESO_EXPLOSION)
                              ? recv.read_byte()
                              : attack.hitcount;
-        for (uint8_t j = 0; j < length; ++j) {
-            int32_t damage = recv.read_int();
+        for (std::uint8_t j = 0; j < length; ++j) {
+            std::int32_t damage = recv.read_int();
             bool critical = false; // todo
             auto singledamage = std::make_pair(damage, critical);
             attack.damagelines[oid].push_back(singledamage);

@@ -37,7 +37,7 @@ public:
         virtual void drop_on_equips(Equipslot::Id eqslot) const = 0;
         virtual void drop_on_items(InventoryType::Id tab,
                                    Equipslot::Id eqslot,
-                                   int16_t slot,
+                                   std::int16_t slot,
                                    bool equip) const = 0;
     };
 
@@ -51,35 +51,35 @@ public:
         }
         void drop_on_items(InventoryType::Id,
                            Equipslot::Id,
-                           int16_t,
+                           std::int16_t,
                            bool) const override
         {
         }
     };
 
-    Icon(std::unique_ptr<Type> type, Texture texture, int16_t count);
+    Icon(std::unique_ptr<Type> type, Texture texture, std::int16_t count);
     Icon();
 
-    void draw(Point<int16_t> position) const;
-    void dragdraw(Point<int16_t> cursorpos) const;
+    void draw(Point<std::int16_t> position) const;
+    void dragdraw(Point<std::int16_t> cursorpos) const;
     void drop_on_stage() const;
     void drop_on_equips(Equipslot::Id eqslot) const;
     void drop_on_items(InventoryType::Id tab,
                        Equipslot::Id eqslot,
-                       int16_t slot,
+                       std::int16_t slot,
                        bool equip) const;
-    void start_drag(Point<int16_t> offset);
+    void start_drag(Point<std::int16_t> offset);
     void reset();
-    void set_count(int16_t count);
-    int16_t get_count() const;
+    void set_count(std::int16_t count);
+    std::int16_t get_count() const;
 
 private:
     std::unique_ptr<Type> type;
     Texture texture;
     bool showcount;
-    int16_t count;
+    std::int16_t count;
 
     bool dragged;
-    Point<int16_t> cursoroffset;
+    Point<std::int16_t> cursoroffset;
 };
 } // namespace jrc

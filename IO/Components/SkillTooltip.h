@@ -28,18 +28,18 @@ class SkillTooltip : public Tooltip
 public:
     SkillTooltip();
 
-    void draw(Point<int16_t> position) const override;
+    void draw(Point<std::int16_t> position) const override;
 
-    void set_skill(int32_t id,
-                   int32_t level,
-                   int32_t masterlevel,
-                   int64_t expiration);
+    void set_skill(std::int32_t id,
+                   std::int32_t level,
+                   std::int32_t masterlevel,
+                   std::int64_t expiration);
 
 private:
-    int32_t skill_id;
-    int16_t height;
-    int16_t icon_offset;
-    int16_t level_offset;
+    std::int32_t skill_id;
+    std::int16_t height;
+    std::int16_t icon_offset;
+    std::int16_t level_offset;
     Texture icon;
     Texture required_icon;
 

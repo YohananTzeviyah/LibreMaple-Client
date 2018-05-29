@@ -23,8 +23,8 @@ Portal::Portal(const Animation* a,
                Type t,
                std::string nm,
                bool intramap,
-               Point<int16_t> p,
-               int32_t tid,
+               Point<std::int16_t> p,
+               std::int32_t tid,
                std::string tnm)
     : animation(a),
       type(t),
@@ -35,16 +35,16 @@ Portal::Portal(const Animation* a,
     touched = false;
 }
 
-Portal::Portal() : Portal(nullptr, SPAWN, "", false, Point<int16_t>(), 0, "")
+Portal::Portal() : Portal(nullptr, SPAWN, "", false, Point<std::int16_t>(), 0, "")
 {
 }
 
-void Portal::update(Point<int16_t> playerpos)
+void Portal::update(Point<std::int16_t> playerpos)
 {
     touched = bounds().contains(playerpos);
 }
 
-void Portal::draw(Point<int16_t> viewpos, float inter) const
+void Portal::draw(Point<std::int16_t> viewpos, float inter) const
 {
     if (!animation || (type == HIDDEN && !touched)) {
         return;
@@ -63,16 +63,16 @@ Portal::Type Portal::get_type() const
     return type;
 }
 
-Point<int16_t> Portal::get_position() const
+Point<std::int16_t> Portal::get_position() const
 {
     return position;
 }
 
-Rectangle<int16_t> Portal::bounds() const
+Rectangle<std::int16_t> Portal::bounds() const
 {
-    auto lt = position + Point<int16_t>(-25, -100);
-    auto rb = position + Point<int16_t>(25, 25);
-    return Rectangle<int16_t>(lt, rb);
+    auto lt = position + Point<std::int16_t>(-25, -100);
+    auto rb = position + Point<std::int16_t>(25, 25);
+    return Rectangle<std::int16_t>(lt, rb);
 }
 
 Portal::WarpInfo Portal::getwarpinfo() const

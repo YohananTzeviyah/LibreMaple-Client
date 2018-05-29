@@ -35,18 +35,18 @@ public:
         NUM_LAYERS
     };
 
-    Hair(int32_t hairid, const BodyDrawinfo& drawinfo);
+    Hair(std::int32_t hairid, const BodyDrawinfo& drawinfo);
 
     void draw(Stance::Id stance,
               Layer layer,
-              uint8_t frame,
+              std::uint8_t frame,
               const DrawArgument& args) const;
 
     const std::string& get_name() const;
     const std::string& getcolor() const;
 
 private:
-    std::unordered_map<uint8_t, Texture> stances[Stance::LENGTH]
+    std::unordered_map<std::uint8_t, Texture> stances[Stance::LENGTH]
                                                 [Layer::NUM_LAYERS];
     std::string name;
     std::string color;

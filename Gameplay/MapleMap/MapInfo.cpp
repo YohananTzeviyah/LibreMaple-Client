@@ -21,7 +21,7 @@
 
 namespace jrc
 {
-MapInfo::MapInfo(nl::node src, Range<int16_t> walls, Range<int16_t> borders)
+MapInfo::MapInfo(nl::node src, Range<std::int16_t> walls, Range<std::int16_t> borders)
 {
     nl::node info = src["info"];
     if (info["VRLeft"].data_type() == nl::node::type::integer) {
@@ -35,7 +35,7 @@ MapInfo::MapInfo(nl::node src, Range<int16_t> walls, Range<int16_t> borders)
     }
 
     std::string bgmpath = info["bgm"];
-    size_t split = bgmpath.find('/');
+    std::size_t split = bgmpath.find('/');
     bgm = bgmpath.substr(0, split) + ".img/" + bgmpath.substr(split + 1);
 
     cloud = info["cloud"].get_bool();
@@ -68,17 +68,17 @@ std::string MapInfo::get_bgm() const
     return bgm;
 }
 
-Range<int16_t> MapInfo::get_walls() const
+Range<std::int16_t> MapInfo::get_walls() const
 {
     return mapwalls;
 }
 
-Range<int16_t> MapInfo::get_borders() const
+Range<std::int16_t> MapInfo::get_borders() const
 {
     return mapborders;
 }
 
-nullable_ptr<const Seat> MapInfo::findseat(Point<int16_t> position) const
+nullable_ptr<const Seat> MapInfo::findseat(Point<std::int16_t> position) const
 {
     for (auto& seat : seats) {
         if (seat.inrange(position))
@@ -87,7 +87,7 @@ nullable_ptr<const Seat> MapInfo::findseat(Point<int16_t> position) const
     return nullptr;
 }
 
-nullable_ptr<const Ladder> MapInfo::findladder(Point<int16_t> position,
+nullable_ptr<const Ladder> MapInfo::findladder(Point<std::int16_t> position,
                                            bool upwards) const
 {
     for (auto& ladder : ladders) {
@@ -102,14 +102,14 @@ Seat::Seat(nl::node src)
     pos = src;
 }
 
-bool Seat::inrange(Point<int16_t> position) const
+bool Seat::inrange(Point<std::int16_t> position) const
 {
-    auto hor = Range<int16_t>::symmetric(position.x(), 10);
-    auto ver = Range<int16_t>::symmetric(position.y(), 10);
+    auto hor = Range<std::int16_t>::symmetric(position.x(), 10);
+    auto ver = Range<std::int16_t>::symmetric(position.y(), 10);
     return hor.contains(pos.x()) && ver.contains(pos.y());
 }
 
-Point<int16_t> Seat::getpos() const
+Point<std::int16_t> Seat::getpos() const
 {
     return pos;
 }
@@ -127,21 +127,21 @@ bool Ladder::is_ladder() const
     return ladder;
 }
 
-bool Ladder::inrange(Point<int16_t> position, bool upwards) const
+bool Ladder::inrange(Point<std::int16_t> position, bool upwards) const
 {
-    auto hor = Range<int16_t>::symmetric(position.x(), 10);
-    auto ver = Range<int16_t>(y1, y2);
-    int16_t y = upwards ? position.y() - 5 : position.y() + 5;
+    auto hor = Range<std::int16_t>::symmetric(position.x(), 10);
+    auto ver = Range<std::int16_t>(y1, y2);
+    std::int16_t y = upwards ? position.y() - 5 : position.y() + 5;
     return hor.contains(x) && ver.contains(y);
 }
 
-bool Ladder::felloff(int16_t y, bool downwards) const
+bool Ladder::felloff(std::int16_t y, bool downwards) const
 {
-    int16_t dy = downwards ? y + 5 : y - 5;
+    std::int16_t dy = downwards ? y + 5 : y - 5;
     return dy > y2 || y + 5 < y1;
 }
 
-int16_t Ladder::get_x() const
+std::int16_t Ladder::get_x() const
 {
     return x;
 }

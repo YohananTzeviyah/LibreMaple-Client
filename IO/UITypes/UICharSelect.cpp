@@ -32,10 +32,10 @@
 namespace jrc
 {
 UICharSelect::UICharSelect(std::vector<CharEntry> cs,
-                           uint8_t c,
-                           uint8_t s,
-                           uint8_t channel_id,
-                           int8_t p)
+                           std::uint8_t c,
+                           std::uint8_t s,
+                           std::uint8_t channel_id,
+                           std::int8_t p)
     : characters(cs), require_pic(p), charcount_absolute(c), slots_absolute(s)
 {
     selected_absolute = Setting<DefaultCharacter>::get().load();
@@ -47,21 +47,21 @@ UICharSelect::UICharSelect(std::vector<CharEntry> cs,
     nl::node charselect = nl::nx::ui["Login.img"]["CharSelect"];
 
     sprites.emplace_back(title["worldsel"]);
-    sprites.emplace_back(common["frame"], Point<int16_t>(400, 290));
+    sprites.emplace_back(common["frame"], Point<std::int16_t>(400, 290));
 
     // Post BB
     /*
-    selworldpos = Point<int16_t>(578, 42);
-    charinfopos = Point<int16_t>(662, 355);
+    selworldpos = Point<std::int16_t>(578, 42);
+    charinfopos = Point<std::int16_t>(662, 355);
     buttons[BT_ARBEIT] = std::make_unique<MapleButton>(charsel["arbeit"],
-    Point<int16_t>(580, 115))); buttons[BT_CARDS] =
-    std::make_unique<MapleButton>(charsel["characterCard"], Point<int16_t>(665,
+    Point<std::int16_t>(580, 115))); buttons[BT_CARDS] =
+    std::make_unique<MapleButton>(charsel["characterCard"], Point<std::int16_t>(665,
     115)));
     */
 
     // Pre BB
-    charinfopos = Point<int16_t>(662, 305);
-    selworldpos = Point<int16_t>(578, 112);
+    charinfopos = Point<std::int16_t>(662, 305);
+    selworldpos = Point<std::int16_t>(578, 112);
 
     sprites.emplace_back(charselect["charInfo"], charinfopos);
     sprites.emplace_back(common["selectWorld"], selworldpos);
@@ -76,26 +76,26 @@ UICharSelect::UICharSelect(std::vector<CharEntry> cs,
     nametag = charselect["nameTag"];
 
     buttons[BT_SELECTCHAR] = std::make_unique<MapleButton>(
-        charselect["BtSelect"], charinfopos + Point<int16_t>(-76, 72));
+        charselect["BtSelect"], charinfopos + Point<std::int16_t>(-76, 72));
     buttons[BT_CREATECHAR] = std::make_unique<MapleButton>(
-        charselect["BtNew"], Point<int16_t>(200, 495));
+        charselect["BtNew"], Point<std::int16_t>(200, 495));
     buttons[BT_DELETECHAR] = std::make_unique<MapleButton>(
-        charselect["BtDelete"], Point<int16_t>(320, 495));
+        charselect["BtDelete"], Point<std::int16_t>(320, 495));
     buttons[BT_PAGELEFT] = std::make_unique<MapleButton>(
-        charselect["pageL"], Point<int16_t>(100, 490));
+        charselect["pageL"], Point<std::int16_t>(100, 490));
     buttons[BT_PAGERIGHT] = std::make_unique<MapleButton>(
-        charselect["pageR"], Point<int16_t>(490, 490));
+        charselect["pageR"], Point<std::int16_t>(490, 490));
 
-    for (uint8_t i = 0; i < PAGESIZE; ++i) {
+    for (std::uint8_t i = 0; i < PAGESIZE; ++i) {
         buttons[BT_CHAR0 + i] = std::make_unique<AreaButton>(
-            Point<int16_t>(105 + (120 * (i % 4)), 170 + (200 * (i > 3))),
-            Point<int16_t>(50, 80));
+            Point<std::int16_t>(105 + (120 * (i % 4)), 170 + (200 * (i > 3))),
+            Point<std::int16_t>(50, 80));
     }
 
     levelset = {charselect["lv"], Charset::CENTER};
 
     namelabel = {Text::A18M, Text::CENTER};
-    for (size_t i = 0; i < NUM_LABELS; ++i) {
+    for (std::size_t i = 0; i < NUM_LABELS; ++i) {
         infolabels[i] = {Text::A11M, Text::RIGHT};
     }
 
@@ -109,7 +109,7 @@ UICharSelect::UICharSelect(std::vector<CharEntry> cs,
     update_selection();
 
     position = {0, 0};
-    dimension = {800, 600};
+    dimension = {Constants::VIEWWIDTH, Constants::VIEWHEIGHT};
     active = true;
 }
 
@@ -117,9 +117,9 @@ void UICharSelect::draw(float alpha) const
 {
     UIElement::draw(alpha);
 
-    for (uint8_t i = 0; i < charcount_relative; ++i) {
-        Point<int16_t> charpos = get_char_pos(i);
-        uint8_t index = i + page * PAGESIZE;
+    for (std::uint8_t i = 0; i < charcount_relative; ++i) {
+        Point<std::int16_t> charpos = get_char_pos(i);
+        std::uint8_t index = i + page * PAGESIZE;
         charlooks[index].draw(charpos, alpha);
         nametags[index].draw(charpos);
     }
@@ -128,20 +128,20 @@ void UICharSelect::draw(float alpha) const
         const StatsEntry& stats = characters[selected_relative].stats;
 
         std::string levelstr = std::to_string(stats.stats[Maplestat::LEVEL]);
-        int16_t lvx =
-            levelset.draw(levelstr, charinfopos + Point<int16_t>(23, -93));
-        levelset.draw('l', charinfopos + Point<int16_t>(-7 - lvx / 2, -93));
+        std::int16_t lvx =
+            levelset.draw(levelstr, charinfopos + Point<std::int16_t>(23, -93));
+        levelset.draw('l', charinfopos + Point<std::int16_t>(-7 - lvx / 2, -93));
 
-        namelabel.draw(charinfopos + Point<int16_t>(0, -85));
+        namelabel.draw(charinfopos + Point<std::int16_t>(0, -85));
 
-        for (size_t i = 0; i < NUM_LABELS; ++i) {
-            Point<int16_t> labelpos = charinfopos + get_label_pos(i);
+        for (std::size_t i = 0; i < NUM_LABELS; ++i) {
+            Point<std::int16_t> labelpos = charinfopos + get_label_pos(i);
             infolabels[i].draw(labelpos);
         }
     }
 
-    for (uint8_t i = charcount_relative; i < slots_relative; ++i) {
-        Point<int16_t> position_slot(130 + (120 * (i % 4)),
+    for (std::uint8_t i = charcount_relative; i < slots_relative; ++i) {
+        Point<std::int16_t> position_slot(130 + (120 * (i % 4)),
                                      250 + (200 * (i > 3)));
         emptyslot.draw(position_slot, alpha);
     }
@@ -158,14 +158,14 @@ void UICharSelect::update()
     }
 }
 
-Button::State UICharSelect::button_pressed(uint16_t bid)
+Button::State UICharSelect::button_pressed(std::uint16_t bid)
 {
     if (bid >= BT_CHAR0) {
         nametags[selected_absolute].set_selected(false);
         charlooks[selected_absolute].set_stance(Stance::STAND1);
         buttons[BT_CHAR0 + selected_relative]->set_state(Button::NORMAL);
 
-        selected_relative = static_cast<uint8_t>(bid - BT_CHAR0);
+        selected_relative = static_cast<std::uint8_t>(bid - BT_CHAR0);
         selected_absolute = selected_relative + page * PAGESIZE;
         update_selection();
 
@@ -210,7 +210,7 @@ void UICharSelect::update_selection()
     buttons[BT_CHAR0 + selected_relative]->set_state(Button::PRESSED);
     namelabel.change_text(characters[selected_relative].stats.name);
 
-    for (size_t i = 0; i < NUM_LABELS; ++i) {
+    for (std::size_t i = 0; i < NUM_LABELS; ++i) {
         infolabels[i].change_text(get_label_string(i));
     }
 }
@@ -264,7 +264,7 @@ void UICharSelect::update_counts()
         buttons[BT_DELETECHAR]->set_state(Button::DISABLED);
     }
 
-    for (uint8_t i = 0; i < PAGESIZE; ++i) {
+    for (std::uint8_t i = 0; i < PAGESIZE; ++i) {
         if (i < charcount_relative) {
             buttons[BT_CHAR0 + i]->set_state(Button::NORMAL);
         } else {
@@ -281,7 +281,7 @@ void UICharSelect::send_selection()
     }
 
     Setting<DefaultCharacter>::get().save(selected_absolute);
-    int32_t cid = characters[selected_absolute].cid;
+    std::int32_t cid = characters[selected_absolute].cid;
     switch (require_pic) {
     case 0:
         UI::get().emplace<UISoftkey>([cid](const std::string& pic) {
@@ -313,7 +313,7 @@ void UICharSelect::send_deletion()
         return;
     }
 
-    int32_t cid = characters[selected_absolute].cid;
+    std::int32_t cid = characters[selected_absolute].cid;
     UI::get().emplace<UISoftkey>([cid](const std::string& pic) {
         UI::get().disable();
         DeleteCharPacket(pic, cid).dispatch();
@@ -333,9 +333,9 @@ void UICharSelect::add_character(CharEntry&& character)
     update_selection();
 }
 
-void UICharSelect::remove_char(int32_t cid)
+void UICharSelect::remove_char(std::int32_t cid)
 {
-    size_t index = 0;
+    std::size_t index = 0;
     for (const auto& character : characters) {
         if (character.cid == cid) {
             break;
@@ -358,7 +358,7 @@ void UICharSelect::remove_char(int32_t cid)
     update_selection();
 }
 
-const CharEntry& UICharSelect::get_character(int32_t cid)
+const CharEntry& UICharSelect::get_character(std::int32_t cid)
 {
     for (const auto& character : characters) {
         if (character.cid == cid) {
@@ -373,7 +373,7 @@ const CharEntry& UICharSelect::get_character(int32_t cid)
     return null_entry;
 }
 
-std::string UICharSelect::get_label_string(size_t label) const
+std::string UICharSelect::get_label_string(std::size_t label) const
 {
     const StatsEntry& stats = characters[selected_relative].stats;
     switch (label) {
@@ -396,7 +396,7 @@ std::string UICharSelect::get_label_string(size_t label) const
     }
 }
 
-Point<int16_t> UICharSelect::get_label_pos(size_t label) const
+Point<std::int16_t> UICharSelect::get_label_pos(std::size_t label) const
 {
     switch (label) {
     case JOB:
@@ -418,10 +418,10 @@ Point<int16_t> UICharSelect::get_label_pos(size_t label) const
     }
 }
 
-Point<int16_t> UICharSelect::get_char_pos(size_t i) const
+Point<std::int16_t> UICharSelect::get_char_pos(std::size_t i) const
 {
-    int16_t x = 130 + (120 * (i % 4));
-    int16_t y = 250 + (200 * (i > 3));
+    std::int16_t x = 130 + (120 * (i % 4));
+    std::int16_t y = 250 + (200 * (i > 3));
     return {x, y};
 }
 } // namespace jrc

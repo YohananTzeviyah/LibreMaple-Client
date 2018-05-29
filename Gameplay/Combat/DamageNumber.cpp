@@ -23,7 +23,7 @@
 
 namespace jrc
 {
-DamageNumber::DamageNumber(Type t, int32_t damage, int16_t starty, int16_t x)
+DamageNumber::DamageNumber(Type t, std::int32_t damage, std::int16_t starty, std::int16_t x)
 {
     type = t;
 
@@ -40,10 +40,10 @@ DamageNumber::DamageNumber(Type t, int32_t damage, int16_t starty, int16_t x)
             multiple = false;
         }
 
-        int16_t total = getadvance(firstnum, true);
-        for (size_t i = 0; i < restnum.length(); i++) {
+        std::int16_t total = getadvance(firstnum, true);
+        for (std::size_t i = 0; i < restnum.length(); i++) {
             char c = restnum[i];
-            int16_t advance;
+            std::int16_t advance;
             if (i < restnum.length() - 1) {
                 char n = restnum[i + 1];
                 advance = (getadvance(c, false) + getadvance(n, false)) / 2;
@@ -70,8 +70,8 @@ DamageNumber::DamageNumber()
 
 void DamageNumber::draw(double viewx, double viewy, float alpha) const
 {
-    Point<int16_t> absolute = moveobj.get_absolute(viewx, viewy, alpha);
-    Point<int16_t> position = absolute - Point<int16_t>(0, shift);
+    Point<std::int16_t> absolute = moveobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> position = absolute - Point<std::int16_t>(0, shift);
     float interopc = opacity.get(alpha);
 
     if (miss) {
@@ -80,19 +80,19 @@ void DamageNumber::draw(double viewx, double viewy, float alpha) const
         charsets[type][false].draw(firstnum, {position, interopc});
 
         if (multiple) {
-            int16_t first_advance = getadvance(firstnum, true);
+            std::int16_t first_advance = getadvance(firstnum, true);
             position.shift_x(first_advance);
 
-            for (size_t i = 0; i < restnum.length(); i++) {
+            for (std::size_t i = 0; i < restnum.length(); i++) {
                 char c = restnum[i];
-                Point<int16_t> yshift = {0, (i % 2) ? -2 : 2};
+                Point<std::int16_t> yshift = {0, (i % 2) ? -2 : 2};
                 charsets[type][true].draw(c, {position + yshift, interopc});
 
-                int16_t advance;
+                std::int16_t advance;
                 if (i < restnum.length() - 1) {
                     char n = restnum[i + 1];
-                    int16_t c_advance = getadvance(c, false);
-                    int16_t n_advance = getadvance(n, false);
+                    std::int16_t c_advance = getadvance(c, false);
+                    std::int16_t n_advance = getadvance(n, false);
                     advance = (c_advance + n_advance) / 2;
                 } else {
                     advance = getadvance(c, false);
@@ -104,15 +104,15 @@ void DamageNumber::draw(double viewx, double viewy, float alpha) const
     }
 }
 
-int16_t DamageNumber::getadvance(char c, bool first) const
+std::int16_t DamageNumber::getadvance(char c, bool first) const
 {
-    constexpr size_t LENGTH = 10;
-    constexpr int16_t advances[LENGTH] = {
+    constexpr std::size_t LENGTH = 10;
+    constexpr std::int16_t advances[LENGTH] = {
         24, 20, 22, 22, 24, 23, 24, 22, 24, 24};
 
-    size_t index = c - 48;
+    std::size_t index = c - 48;
     if (index < LENGTH) {
-        int16_t advance = advances[index];
+        std::int16_t advance = advances[index];
         switch (type) {
         case CRITICAL:
             if (first) {
@@ -132,7 +132,7 @@ int16_t DamageNumber::getadvance(char c, bool first) const
     }
 }
 
-void DamageNumber::set_x(int16_t headx)
+void DamageNumber::set_x(std::int16_t headx)
 {
     moveobj.set_x(headx);
 }
@@ -146,7 +146,7 @@ bool DamageNumber::update()
     return opacity.last() <= 0.0f;
 }
 
-int16_t DamageNumber::rowheight(bool critical)
+std::int16_t DamageNumber::rowheight(bool critical)
 {
     return critical ? 36 : 30;
 }

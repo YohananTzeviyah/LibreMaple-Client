@@ -24,15 +24,15 @@ namespace jrc
 class Item
 {
 public:
-    Item(int32_t itemid,
-         int64_t expiration,
+    Item(std::int32_t itemid,
+         std::int64_t expiration,
          const std::string& owner,
-         int16_t flags);
+         std::int16_t flags);
 
 private:
-    int32_t item_id;
-    int64_t expiration;
+    std::int32_t item_id;
+    std::int64_t expiration;
     std::string owner;
-    int16_t flags;
+    std::int16_t flags;
 };
 } // namespace jrc

@@ -37,7 +37,7 @@ Texture::Texture(nl::node src)
 
         bitmap = src;
         origin = src["origin"];
-        dimensions = Point<int16_t>(bitmap.width(), bitmap.height());
+        dimensions = Point<std::int16_t>(bitmap.width(), bitmap.height());
 
         GraphicsGL::get().addbitmap(bitmap);
     }
@@ -53,7 +53,7 @@ Texture::~Texture()
 
 void Texture::draw(const DrawArgument& args) const
 {
-    size_t id = bitmap.id();
+    std::size_t id = bitmap.id();
     if (id == 0)
         return;
 
@@ -63,7 +63,7 @@ void Texture::draw(const DrawArgument& args) const
                            args.get_angle());
 }
 
-void Texture::shift(Point<int16_t> amount)
+void Texture::shift(Point<std::int16_t> amount)
 {
     origin -= amount;
 }
@@ -73,22 +73,22 @@ bool Texture::is_valid() const
     return bitmap.id() > 0;
 }
 
-int16_t Texture::width() const
+std::int16_t Texture::width() const
 {
     return dimensions.x();
 }
 
-int16_t Texture::height() const
+std::int16_t Texture::height() const
 {
     return dimensions.y();
 }
 
-Point<int16_t> Texture::get_origin() const
+Point<std::int16_t> Texture::get_origin() const
 {
     return origin;
 }
 
-Point<int16_t> Texture::get_dimensions() const
+Point<std::int16_t> Texture::get_dimensions() const
 {
     return dimensions;
 }

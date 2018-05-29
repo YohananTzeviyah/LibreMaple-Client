@@ -38,7 +38,7 @@ void LoginResultHandler::handle(InPacket& recv) const
 
     // The packet should contain a 'reason' integer which can signify various
     // things.
-    if (int32_t reason = recv.read_int()) {
+    if (std::int32_t reason = recv.read_int()) {
         // Login unsuccessful. The LoginNotice displayed will contain the
         // specific information.
         switch (reason) {
@@ -56,7 +56,7 @@ void LoginResultHandler::handle(InPacket& recv) const
         default:
             // Other reasons.
             if (reason > 0) {
-                auto reasonbyte = static_cast<int8_t>(reason - 1);
+                auto reasonbyte = static_cast<std::int8_t>(reason - 1);
                 UI::get().emplace<UILoginNotice>(reasonbyte);
             }
         }
@@ -82,7 +82,7 @@ void ServerlistHandler::handle(InPacket& recv) const
 {
     // Parse all worlds.
     std::vector<World> worlds;
-    uint8_t worldcount = 0;
+    std::uint8_t worldcount = 0;
     while (recv.available()) {
         World world = LoginParser::parse_world(recv);
         if (world.wid != -1) {
@@ -105,16 +105,16 @@ void ServerlistHandler::handle(InPacket& recv) const
 
 void CharlistHandler::handle(InPacket& recv) const
 {
-    uint8_t channel_id = recv.read_byte();
+    auto channel_id = static_cast<std::uint8_t>(recv.read_byte());
 
     // Parse all characters.
     std::vector<CharEntry> characters;
-    uint8_t charcount = recv.read_byte();
-    for (uint8_t i = 0; i < charcount; ++i) {
+    auto charcount = static_cast<std::uint8_t>(recv.read_byte());
+    for (std::uint8_t i = 0; i < charcount; ++i) {
         characters.emplace_back(LoginParser::parse_charentry(recv));
     }
-    int8_t pic = recv.read_byte();
-    uint8_t slots = (uint8_t)recv.read_int();
+    std::int8_t pic = recv.read_byte();
+    auto slots = static_cast<std::uint8_t>(recv.read_int());
 
     // Remove previous UIs.
     UI::get().remove(UIElement::WORLDSELECT);
@@ -137,8 +137,9 @@ void CharnameResponseHandler::handle(InPacket& recv) const
     }
 
     // Notify the character creation screen.
-    if (auto charcreation = UI::get().get_element<UICharcreation>())
+    if (auto charcreation = UI::get().get_element<UICharcreation>()) {
         charcreation->send_naming_result(used);
+    }
 
     UI::get().enable();
 }
@@ -165,8 +166,8 @@ void AddNewCharEntryHandler::handle(InPacket& recv) const
 void DeleteCharResponseHandler::handle(InPacket& recv) const
 {
     // Read the character id and if deletion was successfull (pic was correct).
-    int32_t cid = recv.read_int();
-    uint8_t state = recv.read_byte();
+    std::int32_t cid = recv.read_int();
+    auto state = static_cast<std::uint8_t>(recv.read_byte());
 
     // Extract information from the state byte.
     if (state) {
@@ -184,8 +185,9 @@ void DeleteCharResponseHandler::handle(InPacket& recv) const
 
         UI::get().emplace<UILoginNotice>(message);
     } else {
-        if (auto charselect = UI::get().get_element<UICharSelect>())
+        if (auto charselect = UI::get().get_element<UICharSelect>()) {
             charselect->remove_char(cid);
+        }
     }
 
     UI::get().enable();
@@ -197,8 +199,9 @@ void ServerIPHandler::handle(InPacket& recv) const
 
     // Read the ipv4 adress in a string.
     std::string addrstr;
+    addrstr.reserve(15);
     for (int i = 0; i < 4; ++i) {
-        auto num = static_cast<uint8_t>(recv.read_byte());
+        auto num = static_cast<std::uint8_t>(recv.read_byte());
         addrstr.append(std::to_string(num));
         if (i < 3) {
             addrstr.push_back('.');
@@ -206,11 +209,11 @@ void ServerIPHandler::handle(InPacket& recv) const
     }
 
     // Read the port adress in a string.
-    std::string portstr = std::to_string(recv.read_short());
+    const std::string portstr = std::to_string(recv.read_short());
 
-    int32_t cid = recv.read_int();
+    const std::int32_t cid = recv.read_int();
 
-    // Attempt to reconnect to the server and if successfull, login to the
+    // Attempt to reconnect to the server, and if successful, login to the
     // game.
     Session::get().reconnect(addrstr.c_str(), portstr.c_str());
     PlayerLoginPacket(cid).dispatch();

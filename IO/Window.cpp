@@ -31,6 +31,8 @@ Window::Window()
     glwnd = nullptr;
     opacity = 1.0f;
     opcstep = 0.0f;
+    width = Constants::VIEWWIDTH;
+    height = Constants::VIEWHEIGHT;
 }
 
 Window::~Window()
@@ -80,9 +82,9 @@ void mousekey_callback(GLFWwindow*, int button, int action, int)
 
 void cursor_callback(GLFWwindow*, double xpos, double ypos)
 {
-    auto x = static_cast<int16_t>(xpos);
-    auto y = static_cast<int16_t>(ypos);
-    Point<int16_t> pos = Point<int16_t>(x, y);
+    auto x = static_cast<std::int16_t>(xpos);
+    auto y = static_cast<std::int16_t>(ypos);
+    Point<std::int16_t> pos = Point<std::int16_t>(x, y);
     UI::get().send_cursor(pos);
 }
 
@@ -116,7 +118,7 @@ Error Window::initwindow()
 
     glwnd = glfwCreateWindow(Constants::VIEWWIDTH,
                              Constants::VIEWHEIGHT,
-                             "Journey",
+                             "LibreMaple",
                              fullscreen ? glfwGetPrimaryMonitor() : nullptr,
                              context);
 
@@ -126,7 +128,7 @@ Error Window::initwindow()
 
     glfwMakeContextCurrent(glwnd);
 
-    bool vsync = Setting<VSync>::get().load();
+    const bool vsync = Setting<VSync>::get().load();
     glfwSwapInterval(vsync ? 1 : 0);
 
     glViewport(0, 0, Constants::VIEWWIDTH, Constants::VIEWHEIGHT);
@@ -173,7 +175,7 @@ void Window::updateopc()
 
 void Window::check_events()
 {
-    int32_t tabstate = glfwGetKey(glwnd, GLFW_KEY_F11);
+    std::int32_t tabstate = glfwGetKey(glwnd, GLFW_KEY_F11);
     if (tabstate == GLFW_PRESS) {
         fullscreen = !fullscreen;
         initwindow();
@@ -207,5 +209,34 @@ std::string Window::getclipboard() const
 {
     const char* text = glfwGetClipboardString(glwnd);
     return text ? text : "";
+}
+
+void Window::resize(bool in_game) noexcept
+{
+    if (in_game) {
+        width = Constants::GAMEVIEWWIDTH;
+        height = Constants::GAMEVIEWHEIGHT;
+    } else {
+        width = Constants::VIEWWIDTH;
+        height = Constants::VIEWHEIGHT;
+    }
+
+    glfwSetWindowSize(glwnd, width, height);
+    glViewport(0, 0, width, height);
+    GraphicsGL::set_screen(0,
+                           width,
+                           -Constants::VIEWYOFFSET,
+                           -Constants::VIEWYOFFSET +
+                               height);
+}
+
+std::int16_t Window::get_width() const noexcept
+{
+    return width;
+}
+
+std::int16_t Window::get_height() const noexcept
+{
+    return height;
 }
 } // namespace jrc

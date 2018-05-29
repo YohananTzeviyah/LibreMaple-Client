@@ -44,7 +44,7 @@ public:
     void init();
 
     // Loads the map to display.
-    void load(int32_t mapid, int8_t portalid);
+    void load(std::int32_t mapid, std::int8_t portalid);
     // Remove all map objects and graphics.
     void clear();
 
@@ -57,15 +57,15 @@ public:
     void update();
 
     // Show a character effect.
-    void show_character_effect(int32_t cid, CharEffect::Id effect);
+    void show_character_effect(std::int32_t cid, CharEffect::Id effect);
 
     // Send key input to the stage.
-    void send_key(KeyType::Id keytype, int32_t keycode, bool pressed);
+    void send_key(KeyType::Id keytype, std::int32_t keycode, bool pressed);
     // Send mouse input to the stage.
-    Cursor::State send_cursor(bool pressed, Point<int16_t> position);
+    Cursor::State send_cursor(bool pressed, Point<std::int16_t> position);
 
     // Check if the specified id is the player's id.
-    bool is_player(int32_t cid) const;
+    bool is_player(std::int32_t cid) const;
 
     // Returns a reference to the npcs on the current map.
     MapNpcs& get_npcs();
@@ -83,11 +83,11 @@ public:
     Combat& get_combat();
 
     // Return a pointer to a character, possibly the player.
-    nullable_ptr<Char> get_character(int32_t cid);
+    nullable_ptr<Char> get_character(std::int32_t cid);
 
 private:
-    void load_map(int32_t mapid);
-    void respawn(int8_t portalid);
+    void load_map(std::int32_t mapid);
+    void respawn(std::int8_t portalid);
     void check_portals();
     void check_seats();
     void check_ladders(bool up);

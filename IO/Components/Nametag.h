@@ -16,7 +16,7 @@ public:
             Text::Color color,
             std::string name);
 
-    void draw(Point<int16_t> position) const;
+    void draw(Point<std::int16_t> position) const;
     void set_selected(bool selected);
 
 private:

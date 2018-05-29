@@ -34,36 +34,36 @@ public:
     // The stats of one level.
     struct Stats {
         float damage;
-        int32_t matk;
-        int32_t fixdamage;
-        int32_t mastery;
-        uint8_t attackcount;
-        uint8_t mobcount;
-        uint8_t bulletcount;
-        int16_t bulletcost;
-        int32_t hpcost;
-        int32_t mpcost;
+        std::int32_t matk;
+        std::int32_t fixdamage;
+        std::int32_t mastery;
+        std::uint8_t attackcount;
+        std::uint8_t mobcount;
+        std::uint8_t bulletcount;
+        std::int16_t bulletcost;
+        std::int32_t hpcost;
+        std::int32_t mpcost;
         float chance;
         float critical;
         float ignoredef;
         float hrange;
-        Rectangle<int16_t> range;
+        Rectangle<std::int16_t> range;
 
         constexpr Stats(float damage,
-                        int32_t matk,
-                        int32_t fixdamage,
-                        int32_t mastery,
-                        uint8_t attackcount,
-                        uint8_t mobcount,
-                        uint8_t bulletcount,
-                        int16_t bulletcost,
-                        int32_t hpcost,
-                        int32_t mpcost,
+                        std::int32_t matk,
+                        std::int32_t fixdamage,
+                        std::int32_t mastery,
+                        std::uint8_t attackcount,
+                        std::uint8_t mobcount,
+                        std::uint8_t bulletcount,
+                        std::int16_t bulletcost,
+                        std::int32_t hpcost,
+                        std::int32_t mpcost,
                         float chance,
                         float critical,
                         float ignoredef,
                         float hrange,
-                        Rectangle<int16_t> range)
+                        Rectangle<std::int16_t> range)
             : damage(damage),
               matk(matk),
               fixdamage(fixdamage),
@@ -96,12 +96,12 @@ public:
     // Return wether this skill is invisible in the skill book ui.
     bool is_invisible() const;
     // Return the default masterlevel.
-    int32_t get_masterlevel() const;
+    std::int32_t get_masterlevel() const;
     // Return the required weapon.
     Weapon::Type get_required_weapon() const;
     // Return the stats of one level.
     // If there are no stats for that level, a default object is returned.
-    const Stats& get_stats(int32_t level) const;
+    const Stats& get_stats(std::int32_t level) const;
 
     // Return the name of the skill.
     const std::string& get_name() const;
@@ -110,7 +110,7 @@ public:
     // Return the description of a level.
     // If there is no description for this level, a warning message is
     // returned.
-    const std::string& get_level_desc(int32_t level) const;
+    const std::string& get_level_desc(std::int32_t level) const;
 
     // Return one of the skill icons.
     // Cannot fail if type is a valid enum.
@@ -120,22 +120,22 @@ private:
     // Allow the cache to use the constructor.
     friend Cache<SkillData>;
     // Load a skill from the game files.
-    SkillData(int32_t id);
+    SkillData(std::int32_t id);
 
     // Get some hardcoded information.
-    int32_t flags_of(int32_t id) const;
+    std::int32_t flags_of(std::int32_t id) const;
 
-    std::unordered_map<int32_t, Stats> stats;
+    std::unordered_map<std::int32_t, Stats> stats;
     std::string element;
     Weapon::Type reqweapon;
-    int32_t masterlevel;
-    int32_t flags;
+    std::int32_t masterlevel;
+    std::int32_t flags;
     bool passive;
     bool invisible;
 
     std::string name;
     std::string desc;
-    std::unordered_map<int32_t, std::string> levels;
+    std::unordered_map<std::int32_t, std::string> levels;
 
     std::array<Texture, NUM_ICONS> icons;
 };

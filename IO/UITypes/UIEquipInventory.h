@@ -37,26 +37,26 @@ public:
     void draw(float inter) const override;
 
     void toggle_active() override;
-    void doubleclick(Point<int16_t> position) override;
-    void send_icon(const Icon& icon, Point<int16_t> position) override;
-    Cursor::State send_cursor(bool pressed, Point<int16_t> position) override;
+    void doubleclick(Point<std::int16_t> position) override;
+    void send_icon(const Icon& icon, Point<std::int16_t> position) override;
+    Cursor::State send_cursor(bool pressed, Point<std::int16_t> position) override;
 
-    void modify(int16_t pos, int8_t mode, int16_t arg);
+    void modify(std::int16_t pos, std::int8_t mode, std::int16_t arg);
 
 protected:
-    Button::State button_pressed(uint16_t buttonid) override;
+    Button::State button_pressed(std::uint16_t buttonid) override;
 
 private:
     void show_equip(Equipslot::Id slot);
     void clear_tooltip();
     void load_icons();
     void update_slot(Equipslot::Id slot);
-    Equipslot::Id slot_by_position(Point<int16_t> position) const;
+    Equipslot::Id slot_by_position(Point<std::int16_t> position) const;
 
     class EquipIcon : public Icon::Type
     {
     public:
-        EquipIcon(int16_t source);
+        EquipIcon(std::int16_t source);
 
         void drop_on_stage() const override;
         void drop_on_equips(Equipslot::Id) const override
@@ -64,11 +64,11 @@ private:
         }
         void drop_on_items(InventoryType::Id tab,
                            Equipslot::Id eqslot,
-                           int16_t slot,
+                           std::int16_t slot,
                            bool equip) const override;
 
     private:
-        int16_t source;
+        std::int16_t source;
     };
 
     enum Buttons { BT_TOGGLEPETS };
@@ -76,7 +76,7 @@ private:
     const Inventory& inventory;
 
     std::vector<Texture> textures_pet;
-    EnumMap<Equipslot::Id, Point<int16_t>> iconpositions;
+    EnumMap<Equipslot::Id, Point<std::int16_t>> iconpositions;
     EnumMap<Equipslot::Id, std::unique_ptr<Icon>> icons;
 
     bool showpetequips;

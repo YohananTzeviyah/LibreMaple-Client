@@ -23,10 +23,10 @@
 
 namespace jrc
 {
-MapPortals::MapPortals(nl::node src, int32_t mapid)
+MapPortals::MapPortals(nl::node src, std::int32_t mapid)
 {
     for (const auto& sub : src) {
-        auto portal_id = string_conversion::or_default<int8_t>(sub.name(), -1);
+        auto portal_id = string_conversion::or_default<std::int8_t>(sub.name(), -1);
         if (portal_id < 0) {
             continue;
         }
@@ -34,8 +34,8 @@ MapPortals::MapPortals(nl::node src, int32_t mapid)
         Portal::Type type = Portal::typebyid(sub["pt"]);
         std::string name = sub["pn"];
         std::string target_name = sub["tn"];
-        int32_t target_id = sub["tm"];
-        Point<int16_t> position = {sub["x"], sub["y"]};
+        std::int32_t target_id = sub["tm"];
+        Point<std::int16_t> position = {sub["x"], sub["y"]};
 
         const Animation* animation = &animations[type];
         bool intramap = target_id == mapid;
@@ -60,7 +60,7 @@ MapPortals::MapPortals()
     cooldown = WARPCD;
 }
 
-void MapPortals::update(Point<int16_t> playerpos)
+void MapPortals::update(Point<std::int16_t> playerpos)
 {
     animations[Portal::REGULAR].update(Constants::TIMESTEP);
     animations[Portal::HIDDEN].update(Constants::TIMESTEP);
@@ -82,25 +82,25 @@ void MapPortals::update(Point<int16_t> playerpos)
     }
 }
 
-void MapPortals::draw(Point<int16_t> viewpos, float inter) const
+void MapPortals::draw(Point<std::int16_t> viewpos, float inter) const
 {
     for (auto& ptit : portals_by_id) {
         ptit.second.draw(viewpos, inter);
     }
 }
 
-Point<int16_t> MapPortals::get_portal_by_id(uint8_t portal_id) const
+Point<std::int16_t> MapPortals::get_portal_by_id(std::uint8_t portal_id) const
 {
     auto iter = portals_by_id.find(portal_id);
     if (iter != portals_by_id.end()) {
-        constexpr Point<int16_t> ABOVE(0, 30);
+        constexpr Point<std::int16_t> ABOVE(0, 30);
         return iter->second.get_position() - ABOVE;
     } else {
         return {};
     }
 }
 
-Point<int16_t>
+Point<std::int16_t>
 MapPortals::get_portal_by_name(const std::string& portal_name) const
 {
     auto iter = portal_ids_by_name.find(portal_name);
@@ -111,7 +111,7 @@ MapPortals::get_portal_by_name(const std::string& portal_name) const
     }
 }
 
-Portal::WarpInfo MapPortals::find_warp_at(Point<int16_t> playerpos)
+Portal::WarpInfo MapPortals::find_warp_at(Point<std::int16_t> playerpos)
 {
     if (cooldown == 0) {
         cooldown = WARPCD;

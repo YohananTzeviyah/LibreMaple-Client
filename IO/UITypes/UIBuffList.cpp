@@ -24,7 +24,7 @@
 
 namespace jrc
 {
-BuffIcon::BuffIcon(int32_t buff, int32_t dur)
+BuffIcon::BuffIcon(std::int32_t buff, std::int32_t dur)
     : cover(IconCover::BUFF, dur - FLASH_TIME)
 {
     buffid = buff;
@@ -42,10 +42,10 @@ BuffIcon::BuffIcon(int32_t buff, int32_t dur)
     }
 }
 
-void BuffIcon::draw(Point<int16_t> position, float alpha) const
+void BuffIcon::draw(Point<std::int16_t> position, float alpha) const
 {
     icon.draw({position, opacity.get(alpha)});
-    cover.draw(position + Point<int16_t>(1, -31), alpha);
+    cover.draw(position + Point<std::int16_t>(1, -31), alpha);
 }
 
 bool BuffIcon::update()
@@ -74,7 +74,7 @@ UIBuffList::UIBuffList()
 
 void UIBuffList::draw(float alpha) const
 {
-    Point<int16_t> icpos = position;
+    Point<std::int16_t> icpos = position;
     for (auto& icon : icons) {
         icon.second.draw(icpos, alpha);
         icpos.shift_x(-32);
@@ -94,12 +94,12 @@ void UIBuffList::update()
 }
 
 Cursor::State UIBuffList::send_cursor(bool pressed,
-                                      Point<int16_t> cursorposition)
+                                      Point<std::int16_t> cursorposition)
 {
     return UIElement::send_cursor(pressed, cursorposition);
 }
 
-void UIBuffList::add_buff(int32_t buffid, int32_t duration)
+void UIBuffList::add_buff(std::int32_t buffid, std::int32_t duration)
 {
     icons.emplace(std::piecewise_construct,
                   std::forward_as_tuple(buffid),

@@ -38,7 +38,7 @@ ItemTooltip::ItemTooltip()
     itemid = 0;
 }
 
-bool ItemTooltip::set_item(int32_t iid)
+bool ItemTooltip::set_item(std::int32_t iid)
 {
     if (itemid == iid)
         return false;
@@ -55,31 +55,31 @@ bool ItemTooltip::set_item(int32_t iid)
     desc = {Text::A12M, Text::LEFT, Text::WHITE, idata.get_desc(), 150};
 
     filllength = 81 + name.height();
-    int16_t descdelta = desc.height() - 80;
+    std::int16_t descdelta = desc.height() - 80;
     if (descdelta > 0)
         filllength += descdelta;
 
     return true;
 }
 
-void ItemTooltip::draw(Point<int16_t> pos) const
+void ItemTooltip::draw(Point<std::int16_t> pos) const
 {
     if (itemid == 0)
         return;
 
     top.draw(pos);
-    mid.draw({pos + Point<int16_t>(0, 13), Point<int16_t>(0, filllength)});
-    bot.draw(pos + Point<int16_t>(0, filllength + 13));
+    mid.draw({pos + Point<std::int16_t>(0, 13), Point<std::int16_t>(0, filllength)});
+    bot.draw(pos + Point<std::int16_t>(0, filllength + 13));
 
-    name.draw(pos + Point<int16_t>(130, 3));
+    name.draw(pos + Point<std::int16_t>(130, 3));
 
     pos.shift_y(4 + name.height());
 
-    base.draw(pos + Point<int16_t>(10, 10));
-    shade.draw(pos + Point<int16_t>(10, 10));
-    itemicon.draw({pos + Point<int16_t>(20, 82), 2.0f, 2.0f});
-    cover.draw(pos + Point<int16_t>(10, 10));
+    base.draw(pos + Point<std::int16_t>(10, 10));
+    shade.draw(pos + Point<std::int16_t>(10, 10));
+    itemicon.draw({pos + Point<std::int16_t>(20, 82), 2.0f, 2.0f});
+    cover.draw(pos + Point<std::int16_t>(10, 10));
 
-    desc.draw(pos + Point<int16_t>(100, 6));
+    desc.draw(pos + Point<std::int16_t>(100, 6));
 }
 } // namespace jrc

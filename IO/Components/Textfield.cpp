@@ -25,8 +25,8 @@ namespace jrc
 Textfield::Textfield(Text::Font font,
                      Text::Alignment alignment,
                      Text::Color color,
-                     Rectangle<int16_t> bnd,
-                     size_t lim)
+                     Rectangle<std::int16_t> bnd,
+                     std::size_t lim)
     : textlabel(font, alignment, color, "", 0, false),
       text(),
       marker(font, alignment, color, "|"),
@@ -43,25 +43,25 @@ Textfield::Textfield() = default;
 
 Textfield::~Textfield() = default;
 
-void Textfield::draw(Point<int16_t> parent) const
+void Textfield::draw(Point<std::int16_t> parent) const
 {
     if (state == DISABLED) {
         return;
     }
 
-    Point<int16_t> absp = bounds.getlt() + parent;
+    Point<std::int16_t> absp = bounds.getlt() + parent;
     if (text.size() > 0) {
         textlabel.draw(absp);
     }
 
     if (state == FOCUSED && showmarker) {
-        Point<int16_t> mpos =
-            absp + Point<int16_t>(textlabel.advance(markerpos), -1);
+        Point<std::int16_t> mpos =
+            absp + Point<std::int16_t>(textlabel.advance(markerpos), -1);
         marker.draw(mpos);
     }
 }
 
-void Textfield::update(Point<int16_t> parent)
+void Textfield::update(Point<std::int16_t> parent)
 {
     if (state == DISABLED) {
         return;
@@ -100,7 +100,7 @@ void Textfield::set_key_callback(KeyAction::Id key,
     callbacks[key] = action;
 }
 
-void Textfield::send_key(KeyType::Id type, int32_t key, bool pressed)
+void Textfield::send_key(KeyType::Id type, std::int32_t key, bool pressed)
 {
     switch (type) {
     case KeyType::ACTION:
@@ -186,7 +186,7 @@ void Textfield::modifytext(const std::string& t)
     text = t;
 }
 
-Cursor::State Textfield::send_cursor(Point<int16_t> cursorpos, bool clicked)
+Cursor::State Textfield::send_cursor(Point<std::int16_t> cursorpos, bool clicked)
 {
     if (state == DISABLED) {
         return Cursor::IDLE;
@@ -226,7 +226,7 @@ void Textfield::change_text(const std::string& t)
     markerpos = text.size();
 }
 
-void Textfield::set_cryptchar(int8_t c)
+void Textfield::set_cryptchar(std::int8_t c)
 {
     crypt = c;
 }
@@ -236,7 +236,7 @@ bool Textfield::belowlimit() const
     if (limit > 0) {
         return text.size() < limit;
     } else {
-        uint16_t advance = textlabel.advance(text.size());
+        std::uint16_t advance = textlabel.advance(text.size());
         return (advance + 50) < bounds.get_horizontal().length();
     }
 }
@@ -256,9 +256,9 @@ Textfield::State Textfield::get_state() const
     return state;
 }
 
-Rectangle<int16_t> Textfield::get_bounds() const
+Rectangle<std::int16_t> Textfield::get_bounds() const
 {
-    return Rectangle<int16_t>(bounds.getlt() + parentpos,
+    return Rectangle<std::int16_t>(bounds.getlt() + parentpos,
                               bounds.getrb() + parentpos);
 }
 } // namespace jrc

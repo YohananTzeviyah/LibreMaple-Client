@@ -47,27 +47,27 @@ public:
     void quit();
     bool not_quitted() const;
 
-    void send_cursor(Point<int16_t> pos);
+    void send_cursor(Point<std::int16_t> pos);
     void send_cursor(bool pressed);
-    void send_cursor(Point<int16_t> cursorpos, Cursor::State cursorstate);
+    void send_cursor(Point<std::int16_t> cursorpos, Cursor::State cursorstate);
     void doubleclick();
-    void send_key(int32_t keycode, bool pressed);
+    void send_key(std::int32_t keycode, bool pressed);
     void send_menu(KeyAction::Id action);
 
     void set_scrollnotice(const std::string& notice);
     void focus_textfield(Textfield* textfield);
     void drag_icon(Icon* icon);
 
-    void add_keymapping(uint8_t no, uint8_t type, int32_t action);
+    void add_keymapping(std::uint8_t no, std::uint8_t type, std::int32_t action);
 
     void clear_tooltip(Tooltip::Parent parent);
-    void show_equip(Tooltip::Parent parent, int16_t slot);
-    void show_item(Tooltip::Parent parent, int32_t item_id);
+    void show_equip(Tooltip::Parent parent, std::int16_t slot);
+    void show_item(Tooltip::Parent parent, std::int32_t item_id);
     void show_skill(Tooltip::Parent parent,
-                    int32_t skill_id,
-                    int32_t level,
-                    int32_t masterlevel,
-                    int64_t expiration);
+                    std::int32_t skill_id,
+                    std::int32_t level,
+                    std::int32_t masterlevel,
+                    std::int64_t expiration);
 
     template<class T, typename... Args>
     nullable_ptr<T> emplace(Args&&... args);
@@ -82,7 +82,7 @@ private:
     ScrollingNotice scrollingnotice;
 
     nullable_ptr<Textfield> focusedtextfield;
-    std::unordered_map<int32_t, bool> is_key_down;
+    std::unordered_map<std::int32_t, bool> is_key_down;
 
     bool enabled;
     bool quitted;

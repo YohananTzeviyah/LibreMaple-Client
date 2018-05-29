@@ -45,6 +45,10 @@ public:
     void setclipboard(const std::string& text) const;
     std::string getclipboard() const;
 
+    void resize(bool in_game) noexcept;
+    std::int16_t get_width() const noexcept;
+    std::int16_t get_height() const noexcept;
+
 private:
     void updateopc();
 
@@ -54,5 +58,8 @@ private:
     float opacity;
     float opcstep;
     std::function<void()> fadeprocedure;
+
+    std::int16_t width;
+    std::int16_t height;
 };
 } // namespace jrc

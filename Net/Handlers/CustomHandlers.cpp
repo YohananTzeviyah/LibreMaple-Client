@@ -24,7 +24,7 @@ namespace jrc
 #ifdef JOURNEY_USE_XXHASH
 void NxCheckRequestHandler::handle(InPacket& recv) const
 {
-    uint64_t seed = recv.read_long();
+    std::uint64_t seed = recv.read_long();
     NxCheckPacket(seed).dispatch();
 }
 #endif

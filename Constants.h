@@ -22,13 +22,22 @@ namespace jrc
 {
 namespace Constants
 {
-// Timestep, e.g. the granularity in which the game advances.
-constexpr uint16_t TIMESTEP = 8;
-// Window and screen width.
-constexpr int16_t VIEWWIDTH = 800;
-// Window and screen height.
-constexpr int16_t VIEWHEIGHT = 600;
-// View y offset.
-constexpr int16_t VIEWYOFFSET = 10;
+//! Timestep, e.g. the granularity in which the game advances.
+constexpr std::uint16_t TIMESTEP = 8;
+
+//! Initial window and screen width.
+constexpr std::int16_t VIEWWIDTH = 800;
+
+//! Initial window and screen height.
+constexpr std::int16_t VIEWHEIGHT = 600;
+
+//! In-game window and screen width.
+constexpr std::int16_t GAMEVIEWWIDTH = 1024;
+
+//! In-game window and screen height.
+constexpr std::int16_t GAMEVIEWHEIGHT = 768;
+
+//! View y offset.
+constexpr std::int16_t VIEWYOFFSET = 10;
 } // namespace Constants
 } // namespace jrc

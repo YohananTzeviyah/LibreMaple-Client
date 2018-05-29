@@ -33,12 +33,12 @@ public:
     TilesObjs(nl::node src);
     TilesObjs();
 
-    void draw(Point<int16_t> viewpos, float alpha) const;
+    void draw(Point<std::int16_t> viewpos, float alpha) const;
     void update();
 
 private:
-    std::multimap<uint8_t, Tile> tiles;
-    std::multimap<uint8_t, Obj> objs;
+    std::multimap<std::uint8_t, Tile> tiles;
+    std::multimap<std::uint8_t, Obj> objs;
 };
 
 // The collection of tile and obj layers on a map.
@@ -48,7 +48,7 @@ public:
     MapTilesObjs(nl::node src);
     MapTilesObjs();
 
-    void draw(Layer::Id layer, Point<int16_t> viewpos, float alpha) const;
+    void draw(Layer::Id layer, Point<std::int16_t> viewpos, float alpha) const;
     void update();
 
 private:

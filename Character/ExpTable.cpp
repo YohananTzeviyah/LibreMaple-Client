@@ -19,7 +19,7 @@
 
 namespace jrc
 {
-const std::array<int64_t, ExpTable::LEVELCAP> ExpTable::values = {
+const std::array<std::int64_t, ExpTable::LEVELCAP> ExpTable::values = {
     1,          15,         34,         57,         92,         135,
     372,        560,        840,        1242,       1144,       1573,
     2144,       2800,       3640,       4700,       5893,       7360,

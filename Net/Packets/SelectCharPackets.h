@@ -28,7 +28,7 @@ constexpr auto HWID = "685D43F8_B86C7A79";
 class SelectCharPacket : public OutPacket
 {
 public:
-    SelectCharPacket(int32_t cid) : OutPacket(SELECT_CHAR)
+    SelectCharPacket(std::int32_t cid) : OutPacket(SELECT_CHAR)
     {
         write_int(cid);
         write_string(MACS);
@@ -41,7 +41,7 @@ public:
 class RegisterPicPacket : public OutPacket
 {
 public:
-    RegisterPicPacket(int32_t cid, const std::string& pic)
+    RegisterPicPacket(std::int32_t cid, const std::string& pic)
         : OutPacket(REGISTER_PIC)
     {
         skip(1);
@@ -58,7 +58,7 @@ public:
 class SelectCharPicPacket : public OutPacket
 {
 public:
-    SelectCharPicPacket(const std::string& pic, int32_t cid)
+    SelectCharPicPacket(const std::string& pic, std::int32_t cid)
         : OutPacket(SELECT_CHAR_PIC)
     {
         write_string(pic);
@@ -73,7 +73,7 @@ public:
 class DeleteCharPacket : public OutPacket
 {
 public:
-    DeleteCharPacket(const std::string& pic, int32_t cid)
+    DeleteCharPacket(const std::string& pic, std::int32_t cid)
         : OutPacket(DELETE_CHAR)
     {
         write_string(pic);

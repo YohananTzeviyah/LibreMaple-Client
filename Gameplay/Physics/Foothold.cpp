@@ -19,7 +19,7 @@
 
 namespace jrc
 {
-Foothold::Foothold(nl::node src, uint16_t id, uint8_t ly)
+Foothold::Foothold(nl::node src, std::uint16_t id, std::uint8_t ly)
     : m_id(id),
       m_prev(src["prev"]),
       m_next(src["next"]),
@@ -33,72 +33,72 @@ Foothold::Foothold() : m_id(0), m_prev(0), m_next(0), m_layer(0)
 {
 }
 
-uint16_t Foothold::id() const
+std::uint16_t Foothold::id() const
 {
     return m_id;
 }
 
-uint16_t Foothold::prev() const
+std::uint16_t Foothold::prev() const
 {
     return m_prev;
 }
 
-uint16_t Foothold::next() const
+std::uint16_t Foothold::next() const
 {
     return m_next;
 }
 
-uint8_t Foothold::layer() const
+std::uint8_t Foothold::layer() const
 {
     return m_layer;
 }
 
-const Range<int16_t>& Foothold::horizontal() const
+const Range<std::int16_t>& Foothold::horizontal() const
 {
     return m_horizontal;
 }
 
-const Range<int16_t>& Foothold::vertical() const
+const Range<std::int16_t>& Foothold::vertical() const
 {
     return m_vertical;
 }
 
-int16_t Foothold::l() const
+std::int16_t Foothold::l() const
 {
     return m_horizontal.smaller();
 }
 
-int16_t Foothold::r() const
+std::int16_t Foothold::r() const
 {
     return m_horizontal.greater();
 }
 
-int16_t Foothold::t() const
+std::int16_t Foothold::t() const
 {
     return m_vertical.smaller();
 }
 
-int16_t Foothold::b() const
+std::int16_t Foothold::b() const
 {
     return m_vertical.greater();
 }
 
-int16_t Foothold::x1() const
+std::int16_t Foothold::x1() const
 {
     return m_horizontal.first();
 }
 
-int16_t Foothold::x2() const
+std::int16_t Foothold::x2() const
 {
     return m_horizontal.second();
 }
 
-int16_t Foothold::y1() const
+std::int16_t Foothold::y1() const
 {
     return m_vertical.first();
 }
 
-int16_t Foothold::y2() const
+std::int16_t Foothold::y2() const
 {
     return m_vertical.second();
 }
@@ -123,27 +123,27 @@ bool Foothold::is_right_edge() const
     return m_id && m_next == 0;
 }
 
-bool Foothold::hcontains(int16_t x) const
+bool Foothold::hcontains(std::int16_t x) const
 {
     return m_id && m_horizontal.contains(x);
 }
 
-bool Foothold::vcontains(int16_t y) const
+bool Foothold::vcontains(std::int16_t y) const
 {
     return m_id && m_vertical.contains(y);
 }
 
-bool Foothold::is_blocking(const Range<int16_t>& vertical) const
+bool Foothold::is_blocking(const Range<std::int16_t>& vertical) const
 {
     return is_wall() && m_vertical.overlaps(vertical);
 }
 
-int16_t Foothold::hdelta() const
+std::int16_t Foothold::hdelta() const
 {
     return m_horizontal.delta();
 }
 
-int16_t Foothold::vdelta() const
+std::int16_t Foothold::vdelta() const
 {
     return m_vertical.delta();
 }

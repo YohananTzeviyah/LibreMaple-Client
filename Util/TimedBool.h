@@ -37,7 +37,7 @@ public:
         return value;
     }
 
-    void set_for(int64_t millis)
+    void set_for(std::int64_t millis)
     {
         last = millis;
         delay = millis;
@@ -49,7 +49,7 @@ public:
         update(Constants::TIMESTEP);
     }
 
-    void update(uint16_t timestep)
+    void update(std::uint16_t timestep)
     {
         if (value) {
             if (timestep >= delay) {
@@ -84,8 +84,8 @@ public:
     }
 
 private:
-    int64_t last;
-    int64_t delay;
+    std::int64_t last;
+    std::int64_t delay;
     bool value;
 };
 } // namespace jrc

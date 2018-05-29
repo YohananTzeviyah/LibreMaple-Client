@@ -23,7 +23,7 @@ namespace jrc
 namespace KeyAction
 {
 // Maple-specific keycodes, sent via the Keymap Packet.
-enum Id : int32_t {
+enum Id : std::int32_t {
     EQUIPS = 0,
     INVENTORY = 1,
     CHARSTATS = 2,
@@ -86,7 +86,7 @@ enum Id : int32_t {
     FACE7 = 106
 };
 
-inline Id actionbyid(int32_t id)
+inline Id actionbyid(std::int32_t id)
 {
     return static_cast<Id>(id);
 }

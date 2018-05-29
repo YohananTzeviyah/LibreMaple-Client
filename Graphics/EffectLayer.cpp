@@ -19,7 +19,7 @@
 
 namespace jrc
 {
-void EffectLayer::drawbelow(Point<int16_t> position, float alpha) const
+void EffectLayer::drawbelow(Point<std::int16_t> position, float alpha) const
 {
     for (auto iter = effects.begin(); iter != effects.upper_bound(-1);
          ++iter) {
@@ -29,7 +29,7 @@ void EffectLayer::drawbelow(Point<int16_t> position, float alpha) const
     }
 }
 
-void EffectLayer::drawabove(Point<int16_t> position, float alpha) const
+void EffectLayer::drawabove(Point<std::int16_t> position, float alpha) const
 {
     for (auto iter = effects.upper_bound(-1); iter != effects.end(); ++iter) {
         for (auto& effect : iter->second) {
@@ -48,7 +48,7 @@ void EffectLayer::update()
 
 void EffectLayer::add(const Animation& animation,
                       const DrawArgument& args,
-                      int8_t z,
+                      std::int8_t z,
                       float speed)
 {
     effects[z].emplace_back(animation, args, speed);
@@ -56,7 +56,7 @@ void EffectLayer::add(const Animation& animation,
 
 void EffectLayer::add(const Animation& animation,
                       const DrawArgument& args,
-                      int8_t z)
+                      std::int8_t z)
 {
     add(animation, args, z, 1.0f);
 }

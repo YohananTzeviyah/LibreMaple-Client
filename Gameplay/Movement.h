@@ -24,14 +24,14 @@ struct Movement {
     enum Type { NONE, _ABSOLUTE, _RELATIVE, CHAIR, JUMPDOWN };
 
     Movement(Type t,
-             uint8_t c,
-             int16_t x,
-             int16_t y,
-             int16_t lx,
-             int16_t ly,
-             uint16_t f,
-             uint8_t s,
-             int16_t d)
+             std::uint8_t c,
+             std::int16_t x,
+             std::int16_t y,
+             std::int16_t lx,
+             std::int16_t ly,
+             std::uint16_t f,
+             std::uint8_t s,
+             std::int16_t d)
         : type(t),
           command(c),
           xpos(x),
@@ -45,12 +45,12 @@ struct Movement {
     }
 
     Movement(
-        int16_t x, int16_t y, int16_t lx, int16_t ly, uint8_t s, int16_t d)
+        std::int16_t x, std::int16_t y, std::int16_t lx, std::int16_t ly, std::uint8_t s, std::int16_t d)
         : Movement(_ABSOLUTE, 0, x, y, lx, ly, 0, s, d)
     {
     }
 
-    Movement(const PhysicsObject& phobj, uint8_t s)
+    Movement(const PhysicsObject& phobj, std::uint8_t s)
         : Movement(_ABSOLUTE,
                    0,
                    phobj.get_x(),
@@ -75,13 +75,13 @@ struct Movement {
     }
 
     Type type;
-    uint8_t command;
-    int16_t xpos;
-    int16_t ypos;
-    int16_t lastx;
-    int16_t lasty;
-    uint16_t fh;
-    uint8_t newstate;
-    int16_t duration;
+    std::uint8_t command;
+    std::int16_t xpos;
+    std::int16_t ypos;
+    std::int16_t lastx;
+    std::int16_t lasty;
+    std::uint16_t fh;
+    std::uint8_t newstate;
+    std::int16_t duration;
 };
 } // namespace jrc

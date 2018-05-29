@@ -37,10 +37,11 @@ enum Id {
     LENGTH
 };
 
-inline Id typebyid(uint8_t id)
+inline Id typebyid(std::uint8_t id)
 {
-    if (id <= NONE || id >= LENGTH)
+    if (id <= NONE || id >= LENGTH) {
         return NONE;
+    }
 
     return static_cast<Id>(id);
 }

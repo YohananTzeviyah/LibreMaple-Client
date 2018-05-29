@@ -39,7 +39,7 @@ bool SocketAsio::open(const char* adress, const char* port)
     error_code error;
     asio::connect(socket, endpointiter, error);
     if (!error) {
-        size_t result = socket.read_some(asio::buffer(buffer), error);
+        std::size_t result = socket.read_some(asio::buffer(buffer), error);
         return !error && (result == HANDSHAKE_LEN);
     }
     return !error;
@@ -53,26 +53,26 @@ bool SocketAsio::close()
     return !error;
 }
 
-size_t SocketAsio::receive(bool* recvok)
+std::size_t SocketAsio::receive(bool* recvok)
 {
     if (socket.available() > 0) {
         error_code error;
-        size_t result = socket.read_some(asio::buffer(buffer), error);
+        std::size_t result = socket.read_some(asio::buffer(buffer), error);
         *recvok = !error;
         return result;
     }
     return 0;
 }
 
-const int8_t* SocketAsio::get_buffer() const
+const std::int8_t* SocketAsio::get_buffer() const
 {
     return buffer;
 }
 
-bool SocketAsio::dispatch(const int8_t* bytes, size_t length)
+bool SocketAsio::dispatch(const std::int8_t* bytes, std::size_t length)
 {
     error_code error;
-    size_t result = asio::write(socket, asio::buffer(bytes, length), error);
+    std::size_t result = asio::write(socket, asio::buffer(bytes, length), error);
     return !error && (result == length);
 }
 } // namespace jrc

@@ -98,20 +98,20 @@ enum Id {
     LENGTH
 };
 
-extern const std::unordered_map<Id, uint64_t> first_codes;
-extern const std::unordered_map<Id, uint64_t> second_codes;
+extern const std::unordered_map<Id, std::uint64_t> first_codes;
+extern const std::unordered_map<Id, std::uint64_t> second_codes;
 } // namespace Buffstat
 
 struct Buff {
     Buffstat::Id stat;
-    int16_t value;
-    int32_t skillid;
-    int32_t duration;
+    std::int16_t value;
+    std::int32_t skillid;
+    std::int32_t duration;
 
     constexpr Buff(Buffstat::Id stat,
-                   int16_t value,
-                   int32_t skillid,
-                   int32_t duration)
+                   std::int16_t value,
+                   std::int32_t skillid,
+                   std::int32_t duration)
         : stat(stat), value(value), skillid(skillid), duration(duration)
     {
     }

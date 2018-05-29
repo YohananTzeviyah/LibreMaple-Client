@@ -21,7 +21,7 @@ namespace jrc
 {
 namespace Buffstat
 {
-const std::unordered_map<Id, uint64_t> first_codes = {
+const std::unordered_map<Id, std::uint64_t> first_codes = {
     {DASH2, 0x8000000000000L},
     {DASH, 0x10000000000000L},
     {ELEMENTAL_RESET, 0x200000000L},
@@ -36,7 +36,7 @@ const std::unordered_map<Id, uint64_t> first_codes = {
     {HOMING_BEACON, 0x80000000000000L},
     {SPEED_INFUSION, 0x100000000000000L}};
 
-const std::unordered_map<Id, uint64_t> second_codes = {
+const std::unordered_map<Id, std::uint64_t> second_codes = {
     {NONE, 0x0},
     {MORPH, 0x2},
     {RECOVERY, 0x4},

@@ -35,7 +35,7 @@ public:
     // Spawn a new reactor.
     void spawn(ReactorSpawn&& spawn);
     // Remove a reactor.
-    void remove(int32_t oid, int8_t state, Point<int16_t> position);
+    void remove(std::int32_t oid, std::int8_t state, Point<std::int16_t> position);
     // Remove all reactors.
     void clear();
 

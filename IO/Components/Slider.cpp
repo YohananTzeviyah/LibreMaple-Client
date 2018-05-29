@@ -21,11 +21,11 @@
 
 namespace jrc
 {
-Slider::Slider(int32_t type,
-               Range<int16_t> ver,
-               int16_t xp,
-               int16_t ur,
-               int16_t rm,
+Slider::Slider(std::int32_t type,
+               Range<std::int16_t> ver,
+               std::int16_t xp,
+               std::int16_t ur,
+               std::int16_t rm,
                std::function<void(bool)> om)
 {
     vertical = ver;
@@ -73,7 +73,7 @@ void Slider::setenabled(bool en)
     enabled = en;
 }
 
-void Slider::setrows(int16_t nr, int16_t ur, int16_t rm)
+void Slider::setrows(std::int16_t nr, std::int16_t ur, std::int16_t rm)
 {
     rowmax = rm - ur;
     if (rowmax > 0) {
@@ -84,12 +84,12 @@ void Slider::setrows(int16_t nr, int16_t ur, int16_t rm)
     row = nr;
 }
 
-void Slider::setrows(int16_t ur, int16_t rm)
+void Slider::setrows(std::int16_t ur, std::int16_t rm)
 {
     setrows(0, ur, rm);
 }
 
-void Slider::setvertical(Range<int16_t> ver)
+void Slider::setvertical(Range<std::int16_t> ver)
 {
     vertical = ver;
     start = {x, vertical.first()};
@@ -103,9 +103,9 @@ void Slider::setvertical(Range<int16_t> ver)
     }
 }
 
-void Slider::draw(Point<int16_t> position) const
+void Slider::draw(Point<std::int16_t> position) const
 {
-    Point<int16_t> fill(0, vertical.length() + buttonheight);
+    Point<std::int16_t> fill(0, vertical.length() + buttonheight);
 
     if (enabled) {
         base.draw({position + start, fill});
@@ -133,21 +133,21 @@ bool Slider::remove_cursor(bool clicked)
     }
 }
 
-Point<int16_t> Slider::getthumbpos() const
+Point<std::int16_t> Slider::getthumbpos() const
 {
-    int16_t y = row < rowmax
+    std::int16_t y = row < rowmax
                     ? vertical.first() + row * rowheight + buttonheight
                     : vertical.second() - buttonheight * 2 - 2;
     return {x, y};
 }
 
-Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed)
+Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
 {
-    Point<int16_t> relative = cursor - start;
+    Point<std::int16_t> relative = cursor - start;
     if (scrolling) {
         if (pressed) {
-            int16_t thumby = row * rowheight + buttonheight * 2;
-            int16_t delta = relative.y() - thumby;
+            std::int16_t thumby = row * rowheight + buttonheight * 2;
+            std::int16_t delta = relative.y() - thumby;
             if (delta > rowheight / 2 && row < rowmax) {
                 row++;
                 onmoved(false);
@@ -167,7 +167,7 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed)
         return Cursor::IDLE;
     }
 
-    Point<int16_t> thumbpos = getthumbpos();
+    Point<std::int16_t> thumbpos = getthumbpos();
     if (thumb.bounds(thumbpos).contains(cursor)) {
         if (pressed) {
             scrolling = true;
@@ -181,7 +181,7 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed)
         thumb.set_state(Button::NORMAL);
     }
 
-    if (prev.bounds(Point<int16_t>()).contains(cursor)) {
+    if (prev.bounds(Point<std::int16_t>()).contains(cursor)) {
         if (pressed) {
             if (row > 0) {
                 row--;
@@ -198,7 +198,7 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed)
         prev.set_state(Button::NORMAL);
     }
 
-    if (next.bounds(Point<int16_t>()).contains(cursor)) {
+    if (next.bounds(Point<std::int16_t>()).contains(cursor)) {
         if (pressed) {
             if (row < rowmax) {
                 row++;
@@ -217,12 +217,12 @@ Cursor::State Slider::send_cursor(Point<int16_t> cursor, bool pressed)
 
     if (pressed) {
         auto yoffset = static_cast<double>(relative.y() - buttonheight * 2);
-        auto cursorrow = static_cast<int16_t>(std::round(yoffset / rowheight));
+        auto cursorrow = static_cast<std::int16_t>(std::round(yoffset / rowheight));
         if (cursorrow < 0)
             cursorrow = 0;
         else if (cursorrow > rowmax)
             cursorrow = rowmax;
-        int16_t delta = row - cursorrow;
+        std::int16_t delta = row - cursorrow;
         while (delta > 0) {
             delta--;
             onmoved(true);

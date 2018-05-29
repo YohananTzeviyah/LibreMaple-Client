@@ -39,7 +39,7 @@ void MapMobs::update(const Physics& physics)
         const MobSpawn& spawn = spawns.front();
 
         if (nullable_ptr<Mob> mob = mobs.get(spawn.get_oid())) {
-            int8_t mode = spawn.get_mode();
+            std::int8_t mode = spawn.get_mode();
             if (mode > 0) {
                 mob->set_control(mode);
             }
@@ -57,7 +57,7 @@ void MapMobs::spawn(MobSpawn&& spawn)
     spawns.emplace(std::move(spawn));
 }
 
-void MapMobs::remove(int32_t oid, int8_t animation)
+void MapMobs::remove(std::int32_t oid, std::int8_t animation)
 {
     if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->kill(animation);
@@ -69,23 +69,23 @@ void MapMobs::clear()
     mobs.clear();
 }
 
-void MapMobs::set_control(int32_t oid, bool control)
+void MapMobs::set_control(std::int32_t oid, bool control)
 {
-    int8_t mode = control ? 1 : 0;
+    auto mode = static_cast<std::int8_t>(control ? 1 : 0);
     if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->set_control(mode);
     }
 }
 
-void MapMobs::send_mobhp(int32_t oid, int8_t percent, uint16_t playerlevel)
+void MapMobs::send_mobhp(std::int32_t oid, std::int8_t percent, std::uint16_t playerlevel)
 {
     if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->show_hp(percent, playerlevel);
     }
 }
 
-void MapMobs::send_movement(int32_t oid,
-                            Point<int16_t> start,
+void MapMobs::send_movement(std::int32_t oid,
+                            Point<std::int16_t> start,
                             std::vector<Movement>&& movements)
 {
     if (nullable_ptr<Mob> mob = mobs.get(oid)) {
@@ -95,9 +95,9 @@ void MapMobs::send_movement(int32_t oid,
 
 AttackResult MapMobs::send_attack(const Attack& attack)
 {
-    Point<int16_t> origin = attack.origin;
-    Rectangle<int16_t> range = attack.range;
-    int16_t hrange = static_cast<int16_t>(range.l() * attack.hrange);
+    Point<std::int16_t> origin = attack.origin;
+    Rectangle<std::int16_t> range = attack.range;
+    std::int16_t hrange = static_cast<std::int16_t>(range.l() * attack.hrange);
     if (attack.toleft) {
         range = {origin.x() + hrange,
                  origin.x() + range.r(),
@@ -110,9 +110,9 @@ AttackResult MapMobs::send_attack(const Attack& attack)
                  origin.y() + range.b()};
     }
 
-    uint8_t mobcount = attack.mobcount;
+    std::uint8_t mobcount = attack.mobcount;
     AttackResult result = attack;
-    std::vector<int32_t> targets = find_closest(range, origin, mobcount);
+    std::vector<std::int32_t> targets = find_closest(range, origin, mobcount);
     for (const auto& target : targets) {
         if (nullable_ptr<Mob> mob = mobs.get(target)) {
             result.damagelines[target] = mob->calculate_damage(attack);
@@ -129,8 +129,8 @@ AttackResult MapMobs::send_attack(const Attack& attack)
     return result;
 }
 
-void MapMobs::apply_damage(int32_t oid,
-                           int32_t damage,
+void MapMobs::apply_damage(std::int32_t oid,
+                           std::int32_t damage,
                            bool toleft,
                            const AttackUser& user,
                            const SpecialMove& move)
@@ -138,26 +138,26 @@ void MapMobs::apply_damage(int32_t oid,
     if (nullable_ptr<Mob> mob = mobs.get(oid)) {
         mob->apply_damage(damage, toleft);
 
-        // maybe move this into the method above too?
+        // Maybe move this into the method above too?
         move.apply_hiteffects(user, *mob);
     }
 }
 
-std::vector<int32_t> MapMobs::find_closest(Rectangle<int16_t> range,
-                                           Point<int16_t> origin,
-                                           uint8_t mobcount) const
+std::vector<std::int32_t> MapMobs::find_closest(Rectangle<std::int16_t> range,
+                                           Point<std::int16_t> origin,
+                                           std::uint8_t mobcount) const
 {
-    std::multimap<uint16_t, int32_t> distances;
+    std::multimap<std::uint16_t, std::int32_t> distances;
     for (const auto& mmo : mobs) {
         const Mob* mob = static_cast<const Mob*>(mmo.second.get());
         if (mob && mob->is_alive() && mob->is_in_range(range)) {
-            int32_t oid = mob->get_oid();
-            uint16_t distance = mob->get_position().distance(origin);
+            std::int32_t oid = mob->get_oid();
+            auto distance = static_cast<std::uint16_t>(mob->get_position().distance(origin));
             distances.emplace(distance, oid);
         }
     }
 
-    std::vector<int32_t> targets;
+    std::vector<std::int32_t> targets;
     for (auto& iter : distances) {
         if (targets.size() >= mobcount) {
             break;
@@ -168,18 +168,18 @@ std::vector<int32_t> MapMobs::find_closest(Rectangle<int16_t> range,
     return targets;
 }
 
-bool MapMobs::contains(int32_t oid) const
+bool MapMobs::contains(std::int32_t oid) const
 {
     return mobs.contains(oid);
 }
 
-int32_t MapMobs::find_colliding(const MovingObject& moveobj) const
+std::int32_t MapMobs::find_colliding(const MovingObject& moveobj) const
 {
-    Range<int16_t> horizontal{moveobj.get_last_x(), moveobj.get_x()};
-    Range<int16_t> vertical{moveobj.get_last_y(), moveobj.get_y()};
-    Rectangle<int16_t> player_rect{horizontal.smaller(),
+    Range<std::int16_t> horizontal{moveobj.get_last_x(), moveobj.get_x()};
+    Range<std::int16_t> vertical{moveobj.get_last_y(), moveobj.get_y()};
+    Rectangle<std::int16_t> player_rect{horizontal.smaller(),
                                    horizontal.greater(),
-                                   vertical.smaller() - 50,
+                                   vertical.smaller() - static_cast<std::int16_t>(50),
                                    vertical.greater()};
 
     auto iter =
@@ -195,7 +195,7 @@ int32_t MapMobs::find_colliding(const MovingObject& moveobj) const
     return iter->second->get_oid();
 }
 
-MobAttack MapMobs::create_attack(int32_t oid) const
+MobAttack MapMobs::create_attack(std::int32_t oid) const
 {
     if (nullable_ptr<const Mob> mob = mobs.get(oid)) {
         return mob->create_touch_attack();
@@ -204,7 +204,7 @@ MobAttack MapMobs::create_attack(int32_t oid) const
     }
 }
 
-Point<int16_t> MapMobs::get_mob_position(int32_t oid) const
+Point<std::int16_t> MapMobs::get_mob_position(std::int32_t oid) const
 {
     if (auto mob = mobs.get(oid)) {
         return mob->get_position();
@@ -213,7 +213,7 @@ Point<int16_t> MapMobs::get_mob_position(int32_t oid) const
     }
 }
 
-Point<int16_t> MapMobs::get_mob_head_position(int32_t oid) const
+Point<std::int16_t> MapMobs::get_mob_head_position(std::int32_t oid) const
 {
     if (nullable_ptr<const Mob> mob = mobs.get(oid)) {
         return mob->get_head_position();

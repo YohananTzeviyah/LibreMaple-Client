@@ -20,7 +20,7 @@
 namespace jrc
 {
 Gauge::Gauge(
-    Texture front, Texture mid, Texture end, int16_t max, float percent)
+    Texture front, Texture mid, Texture end, std::int16_t max, float percent)
 {
     barfront = front;
     barmid = mid;
@@ -37,7 +37,7 @@ Gauge::Gauge()
 
 void Gauge::draw(const DrawArgument& args) const
 {
-    int16_t length = static_cast<int16_t>(percentage * maximum);
+    std::int16_t length = static_cast<std::int16_t>(percentage * maximum);
     if (length > 0) {
         barfront.draw(args);
         barmid.draw(args + DrawArgument({1, 0}, {length, 0}));

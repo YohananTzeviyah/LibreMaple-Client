@@ -22,10 +22,10 @@
 
 namespace jrc
 {
-Afterimage::Afterimage(int32_t skill_id,
+Afterimage::Afterimage(std::int32_t skill_id,
                        const std::string& name,
                        const std::string& stance_name,
-                       int16_t level)
+                       std::int16_t level)
 {
     nl::node src;
     if (skill_id > 0) {
@@ -44,8 +44,8 @@ Afterimage::Afterimage(int32_t skill_id,
     displayed = false;
 
     for (nl::node sub : src) {
-        uint8_t frame =
-            string_conversion::or_default<uint8_t>(sub.name(), 255);
+        std::uint8_t frame =
+            string_conversion::or_default<std::uint8_t>(sub.name(), 255);
         if (frame < 255) {
             animation = sub;
             firstframe = frame;
@@ -59,7 +59,7 @@ Afterimage::Afterimage()
     displayed = true;
 }
 
-void Afterimage::draw(uint8_t stframe,
+void Afterimage::draw(std::uint8_t stframe,
                       const DrawArgument& args,
                       float alpha) const
 {
@@ -68,19 +68,19 @@ void Afterimage::draw(uint8_t stframe,
     }
 }
 
-void Afterimage::update(uint8_t stframe, uint16_t timestep)
+void Afterimage::update(std::uint8_t stframe, std::uint16_t timestep)
 {
     if (!displayed && stframe >= firstframe) {
         displayed = animation.update(timestep);
     }
 }
 
-uint8_t Afterimage::get_first_frame() const
+std::uint8_t Afterimage::get_first_frame() const
 {
     return firstframe;
 }
 
-Rectangle<int16_t> Afterimage::get_range() const
+Rectangle<std::int16_t> Afterimage::get_range() const
 {
     return range;
 }

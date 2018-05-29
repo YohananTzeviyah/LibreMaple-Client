@@ -24,10 +24,10 @@ namespace jrc
 class ChatBalloon
 {
 public:
-    ChatBalloon(int8_t type);
+    ChatBalloon(std::int8_t type);
     ChatBalloon();
 
-    void draw(Point<int16_t> position) const;
+    void draw(Point<std::int16_t> position) const;
     void update();
 
     void change_text(const std::string& text);
@@ -35,11 +35,11 @@ public:
 
 private:
     // How long a line stays on screen. 4 seconds.
-    static constexpr int16_t DURATION = 4000;
+    static constexpr std::int16_t DURATION = 4000;
 
     MapleFrame frame;
     Text textlabel;
     Texture arrow;
-    int16_t duration;
+    std::int16_t duration;
 };
 } // namespace jrc

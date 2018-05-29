@@ -25,20 +25,20 @@ namespace jrc
 class Drop : public MapObject
 {
 public:
-    virtual int8_t update(const Physics& physics) override;
+    virtual std::int8_t update(const Physics& physics) override;
 
-    void init(int8_t);
-    void expire(int8_t, const PhysicsObject*);
+    void init(std::int8_t);
+    void expire(std::int8_t, const PhysicsObject*);
 
-    Rectangle<int16_t> bounds() const;
+    Rectangle<std::int16_t> bounds() const;
 
 protected:
-    Drop(int32_t oid,
-         int32_t owner,
-         Point<int16_t> start,
-         Point<int16_t> dest,
-         int8_t type,
-         int8_t mode,
+    Drop(std::int32_t oid,
+         std::int32_t owner,
+         Point<std::int16_t> start,
+         Point<std::int16_t> dest,
+         std::int8_t type,
+         std::int8_t mode,
          bool playerdrop);
 
     Linear<float> opacity;
@@ -47,14 +47,14 @@ protected:
 private:
     enum State { DROPPED, FLOATING, PICKEDUP };
 
-    int32_t owner;
-    int8_t pickuptype;
+    std::int32_t owner;
+    std::int8_t pickuptype;
     bool playerdrop;
 
     const PhysicsObject* looter;
     State state;
 
-    Point<int16_t> dest;
+    Point<std::int16_t> dest;
     double basey;
     double moved;
 };

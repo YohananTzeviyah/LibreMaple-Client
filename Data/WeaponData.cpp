@@ -23,9 +23,9 @@
 
 namespace jrc
 {
-WeaponData::WeaponData(int32_t equipid) : equipdata(EquipData::get(equipid))
+WeaponData::WeaponData(std::int32_t equipid) : equipdata(EquipData::get(equipid))
 {
-    int32_t prefix = equipid / 10000;
+    std::int32_t prefix = equipid / 10000;
     type = Weapon::by_value(prefix);
     twohanded = (prefix == Weapon::STAFF) ||
                 (prefix >= Weapon::SWORD_2H && prefix <= Weapon::POLEARM) ||
@@ -34,8 +34,8 @@ WeaponData::WeaponData(int32_t equipid) : equipdata(EquipData::get(equipid))
     nl::node src = nl::nx::character["Weapon"]["0" + std::to_string(equipid) +
                                                ".img"]["info"];
 
-    attackspeed = static_cast<uint8_t>(src["attackSpeed"]);
-    attack = static_cast<uint8_t>(src["attack"]);
+    attackspeed = static_cast<std::uint8_t>(src["attackSpeed"]);
+    attack = static_cast<std::uint8_t>(src["attack"]);
 
     nl::node soundsrc = nl::nx::sound["Weapon.img"][src["sfx"]];
 
@@ -66,12 +66,12 @@ bool WeaponData::is_twohanded() const
     return twohanded;
 }
 
-uint8_t WeaponData::get_speed() const
+std::uint8_t WeaponData::get_speed() const
 {
     return attackspeed;
 }
 
-uint8_t WeaponData::get_attack() const
+std::uint8_t WeaponData::get_attack() const
 {
     return attack;
 }
@@ -102,7 +102,7 @@ std::string WeaponData::getspeedstring() const
     }
 }
 
-uint8_t WeaponData::get_attackdelay() const
+std::uint8_t WeaponData::get_attackdelay() const
 {
     if (type == Weapon::NONE)
         return 0;

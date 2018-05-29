@@ -26,12 +26,12 @@
 
 namespace jrc
 {
-NpcSpawn::NpcSpawn(int32_t o, int32_t i, Point<int16_t> p, bool fl, uint16_t f)
+NpcSpawn::NpcSpawn(std::int32_t o, std::int32_t i, Point<std::int16_t> p, bool fl, std::uint16_t f)
     : oid(o), id(i), position(p), flip(fl), fh(f)
 {
 }
 
-int32_t NpcSpawn::get_oid() const
+std::int32_t NpcSpawn::get_oid() const
 {
     return oid;
 }
@@ -42,14 +42,14 @@ std::unique_ptr<MapObject> NpcSpawn::instantiate(const Physics& physics) const
     return std::make_unique<Npc>(id, oid, flip, fh, false, spawnposition);
 }
 
-MobSpawn::MobSpawn(int32_t o,
-                   int32_t i,
-                   int8_t m,
-                   int8_t st,
-                   uint16_t f,
+MobSpawn::MobSpawn(std::int32_t o,
+                   std::int32_t i,
+                   std::int8_t m,
+                   std::int8_t st,
+                   std::uint16_t f,
                    bool ns,
-                   int8_t t,
-                   Point<int16_t> p)
+                   std::int8_t t,
+                   Point<std::int16_t> p)
     : oid(o),
       id(i),
       mode(m),
@@ -61,12 +61,12 @@ MobSpawn::MobSpawn(int32_t o,
 {
 }
 
-int8_t MobSpawn::get_mode() const
+std::int8_t MobSpawn::get_mode() const
 {
     return mode;
 }
 
-int32_t MobSpawn::get_oid() const
+std::int32_t MobSpawn::get_oid() const
 {
     return oid;
 }
@@ -77,12 +77,12 @@ std::unique_ptr<MapObject> MobSpawn::instantiate() const
         oid, id, mode, stance, fh, newspawn, team, position);
 }
 
-ReactorSpawn::ReactorSpawn(int32_t o, int32_t r, int8_t s, Point<int16_t> p)
+ReactorSpawn::ReactorSpawn(std::int32_t o, std::int32_t r, std::int8_t s, Point<std::int16_t> p)
     : oid(o), rid(r), state(s), position(p)
 {
 }
 
-int32_t ReactorSpawn::get_oid() const
+std::int32_t ReactorSpawn::get_oid() const
 {
     return oid;
 }
@@ -94,14 +94,14 @@ ReactorSpawn::instantiate(const Physics& physics) const
     return std::make_unique<Reactor>(oid, rid, state, spawnposition);
 }
 
-DropSpawn::DropSpawn(int32_t o,
-                     int32_t i,
+DropSpawn::DropSpawn(std::int32_t o,
+                     std::int32_t i,
                      bool ms,
-                     int32_t ow,
-                     Point<int16_t> p,
-                     Point<int16_t> d,
-                     int8_t t,
-                     int8_t m,
+                     std::int32_t ow,
+                     Point<std::int16_t> p,
+                     Point<std::int16_t> d,
+                     std::int8_t t,
+                     std::int8_t m,
                      bool pd)
     : oid(o),
       id(i),
@@ -120,12 +120,12 @@ bool DropSpawn::is_meso() const
     return meso;
 }
 
-int32_t DropSpawn::get_itemid() const
+std::int32_t DropSpawn::get_itemid() const
 {
     return id;
 }
 
-int32_t DropSpawn::get_oid() const
+std::int32_t DropSpawn::get_oid() const
 {
     return oid;
 }
@@ -142,18 +142,18 @@ std::unique_ptr<MapObject> DropSpawn::instantiate(const Texture& icon) const
         oid, owner, start, dest, droptype, mode, id, playerdrop, icon);
 }
 
-CharSpawn::CharSpawn(int32_t c,
+CharSpawn::CharSpawn(std::int32_t c,
                      const LookEntry& lk,
-                     uint8_t l,
-                     int16_t j,
+                     std::uint8_t l,
+                     std::int16_t j,
                      const std::string& nm,
-                     int8_t st,
-                     Point<int16_t> p)
+                     std::int8_t st,
+                     Point<std::int16_t> p)
     : cid(c), level(l), job(j), name(nm), stance(st), position(p), look(lk)
 {
 }
 
-int32_t CharSpawn::get_cid() const
+std::int32_t CharSpawn::get_cid() const
 {
     return cid;
 }

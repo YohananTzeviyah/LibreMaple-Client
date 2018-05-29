@@ -21,15 +21,15 @@
 
 namespace jrc
 {
-InventoryType::Id InventoryType::by_item_id(int32_t item_id)
+InventoryType::Id InventoryType::by_item_id(std::int32_t item_id)
 {
     constexpr Id values_by_id[6] = {NONE, EQUIP, USE, SETUP, ETC, CASH};
 
-    int32_t prefix = item_id / 1000000;
+    std::int32_t prefix = item_id / 1000000;
     return (prefix > NONE && prefix <= CASH) ? values_by_id[prefix] : NONE;
 }
 
-InventoryType::Id InventoryType::by_value(int8_t value)
+InventoryType::Id InventoryType::by_value(std::int8_t value)
 {
     switch (value) {
     case -1:

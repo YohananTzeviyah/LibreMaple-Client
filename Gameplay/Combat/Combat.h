@@ -37,29 +37,29 @@ public:
     void update();
 
     // Make the player use a special move.
-    void use_move(int32_t move_id);
+    void use_move(std::int32_t move_id);
 
     // Add an attack to the attack queue.
     void push_attack(const AttackResult& attack);
     // Show a buff effect.
-    void show_buff(int32_t cid, int32_t skillid, int8_t level);
+    void show_buff(std::int32_t cid, std::int32_t skillid, std::int8_t level);
     // Show a buff effect.
-    void show_player_buff(int32_t skillid);
+    void show_player_buff(std::int32_t skillid);
 
 private:
     struct DamageEffect {
         AttackUser user;
         DamageNumber number;
-        int32_t damage;
+        std::int32_t damage;
         bool toleft;
-        int32_t target_oid;
-        int32_t move_id;
+        std::int32_t target_oid;
+        std::int32_t move_id;
     };
 
     struct BulletEffect {
         DamageEffect damageeffect;
         Bullet bullet;
-        Point<int16_t> target;
+        Point<std::int16_t> target;
     };
 
     void apply_attack(const AttackResult& attack);
@@ -74,15 +74,15 @@ private:
                          const SpecialMove& move,
                          const AttackResult& result);
     std::vector<DamageNumber>
-    place_numbers(int32_t oid,
-                  const std::vector<std::pair<int32_t, bool>>& damagelines);
-    const SpecialMove& get_move(int32_t move_id);
+    place_numbers(std::int32_t oid,
+                  const std::vector<std::pair<std::int32_t, bool>>& damagelines);
+    const SpecialMove& get_move(std::int32_t move_id);
 
     Player& player;
     MapChars& chars;
     MapMobs& mobs;
 
-    std::unordered_map<int32_t, Skill> skills;
+    std::unordered_map<std::int32_t, Skill> skills;
     RegularAttack regularattack;
 
     TimedQueue<AttackResult> attackresults;

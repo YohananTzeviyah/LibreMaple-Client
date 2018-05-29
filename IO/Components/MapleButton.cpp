@@ -19,7 +19,7 @@
 
 namespace jrc
 {
-MapleButton::MapleButton(nl::node src, Point<int16_t> pos)
+MapleButton::MapleButton(nl::node src, Point<std::int16_t> pos)
 {
     textures[PRESSED] = src["pressed"]["0"];
     textures[MOUSEOVER] = src["mouseOver"]["0"];
@@ -30,26 +30,26 @@ MapleButton::MapleButton(nl::node src, Point<int16_t> pos)
     active = true;
 }
 
-MapleButton::MapleButton(nl::node src, int16_t x, int16_t y)
-    : MapleButton(src, Point<int16_t>(x, y))
+MapleButton::MapleButton(nl::node src, std::int16_t x, std::int16_t y)
+    : MapleButton(src, Point<std::int16_t>(x, y))
 {
 }
 
-MapleButton::MapleButton(nl::node src) : MapleButton(src, Point<int16_t>())
+MapleButton::MapleButton(nl::node src) : MapleButton(src, Point<std::int16_t>())
 {
 }
 
-void MapleButton::draw(Point<int16_t> parentpos) const
+void MapleButton::draw(Point<std::int16_t> parentpos) const
 {
     if (active) {
         textures[state].draw(position + parentpos);
     }
 }
 
-Rectangle<int16_t> MapleButton::bounds(Point<int16_t> parentpos) const
+Rectangle<std::int16_t> MapleButton::bounds(Point<std::int16_t> parentpos) const
 {
     auto lt = parentpos + position - textures[state].get_origin();
     auto rb = lt + textures[state].get_dimensions();
-    return Rectangle<int16_t>(lt, rb);
+    return Rectangle<std::int16_t>(lt, rb);
 }
 } // namespace jrc

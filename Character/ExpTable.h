@@ -22,7 +22,7 @@ namespace jrc
 {
 namespace ExpTable
 {
-constexpr size_t LEVELCAP = 201;
-extern const std::array<int64_t, LEVELCAP> values;
+constexpr std::size_t LEVELCAP = 201;
+extern const std::array<std::int64_t, LEVELCAP> values;
 } // namespace ExpTable
 } // namespace jrc

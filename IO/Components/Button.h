@@ -34,10 +34,10 @@ public:
     {
     }
 
-    virtual void draw(Point<int16_t> parentpos) const = 0;
-    virtual Rectangle<int16_t> bounds(Point<int16_t> parentpos) const = 0;
+    virtual void draw(Point<std::int16_t> parentpos) const = 0;
+    virtual Rectangle<std::int16_t> bounds(Point<std::int16_t> parentpos) const = 0;
 
-    void set_position(Point<int16_t> position);
+    void set_position(Point<std::int16_t> position);
     void set_state(State state);
     void set_active(bool active);
 
@@ -46,7 +46,7 @@ public:
 
 protected:
     State state;
-    Point<int16_t> position;
+    Point<std::int16_t> position;
     bool active;
 };
 } // namespace jrc

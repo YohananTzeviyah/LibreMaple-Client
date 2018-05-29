@@ -51,17 +51,17 @@ public:
     void draw(float alpha) const;
     void update();
     void set_state(State state);
-    void set_position(Point<int16_t> position);
+    void set_position(Point<std::int16_t> position);
     State get_state() const;
-    Point<int16_t> get_position() const;
+    Point<std::int16_t> get_position() const;
 
 private:
     EnumMap<State, Animation> animations;
 
     State state;
-    Point<int16_t> position;
-    int32_t hide_counter;
+    Point<std::int16_t> position;
+    std::int32_t hide_counter;
 
-    static constexpr int64_t HIDE_TIME = 15'000;
+    static constexpr std::int64_t HIDE_TIME = 15'000;
 };
 } // namespace jrc

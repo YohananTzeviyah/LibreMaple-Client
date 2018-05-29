@@ -29,7 +29,7 @@ public:
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 
-    enum Message : int8_t {
+    enum Message : std::int8_t {
         VULGAR_NAME,
         DELETE_CHAR_ENTER_BIRTHDAY,
         WRONG_EMAIL,
@@ -91,12 +91,12 @@ public:
         FAMILY_AND_CASH_ITEMS_CONFIRM_DELETION
     };
 
-    UILoginNotice(int8_t message);
+    UILoginNotice(std::int8_t message);
 
     void draw(float alpha) const override;
 
 protected:
-    Button::State button_pressed(uint16_t id) override;
+    Button::State button_pressed(std::uint16_t id) override;
 
 private:
     enum Buttons { BT_OK };

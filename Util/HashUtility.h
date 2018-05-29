@@ -28,7 +28,7 @@ namespace jrc
 namespace HashUtility
 {
 // Calculate file hash using the fast xxhash algorithm.
-std::string get_filehash(const char* filename, uint64_t seed);
+std::string get_filehash(const char* filename, std::uint64_t seed);
 } // namespace HashUtility
 } // namespace jrc
 #endif

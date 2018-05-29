@@ -33,23 +33,23 @@ public:
 
     void draw(const DrawArgument& args) const;
 
-    uint8_t start_opacity() const;
-    uint16_t start_scale() const;
-    uint16_t get_delay() const;
-    Point<int16_t> get_origin() const;
-    Point<int16_t> get_dimensions() const;
-    Point<int16_t> get_head() const;
-    Rectangle<int16_t> get_bounds() const;
-    float opcstep(uint16_t timestep) const;
-    float scalestep(uint16_t timestep) const;
+    std::uint8_t start_opacity() const;
+    std::uint16_t start_scale() const;
+    std::uint16_t get_delay() const;
+    Point<std::int16_t> get_origin() const;
+    Point<std::int16_t> get_dimensions() const;
+    Point<std::int16_t> get_head() const;
+    Rectangle<std::int16_t> get_bounds() const;
+    float opcstep(std::uint16_t timestep) const;
+    float scalestep(std::uint16_t timestep) const;
 
 private:
     Texture texture;
-    uint16_t delay;
-    std::pair<uint8_t, uint8_t> opacities;
-    std::pair<int16_t, int16_t> scales;
-    Rectangle<int16_t> bounds;
-    Point<int16_t> head;
+    std::uint16_t delay;
+    std::pair<std::uint8_t, std::uint8_t> opacities;
+    std::pair<std::int16_t, std::int16_t> scales;
+    Rectangle<std::int16_t> bounds;
+    Point<std::int16_t> head;
 };
 
 // Class which consists of multiple textures to make an Animation.
@@ -60,17 +60,17 @@ public:
     Animation();
 
     bool update();
-    bool update(uint16_t timestep);
+    bool update(std::uint16_t timestep);
     void reset();
 
     void draw(const DrawArgument& arguments, float inter) const;
 
-    uint16_t get_delay(int16_t frame) const;
-    uint16_t getdelayuntil(int16_t frame) const;
-    Point<int16_t> get_origin() const;
-    Point<int16_t> get_dimensions() const;
-    Point<int16_t> get_head() const;
-    Rectangle<int16_t> get_bounds() const;
+    std::uint16_t get_delay(std::int16_t frame) const;
+    std::uint16_t getdelayuntil(std::int16_t frame) const;
+    Point<std::int16_t> get_origin() const;
+    Point<std::int16_t> get_dimensions() const;
+    Point<std::int16_t> get_head() const;
+    Rectangle<std::int16_t> get_bounds() const;
 
 private:
     const Frame& get_frame() const;
@@ -79,12 +79,12 @@ private:
     bool animated;
     bool zigzag;
 
-    Nominal<int16_t> frame;
+    Nominal<std::int16_t> frame;
     Linear<float> opacity;
     Linear<float> xyscale;
 
-    uint16_t delay;
-    int16_t framestep;
+    std::uint16_t delay;
+    std::int16_t framestep;
     float opcstep;
 };
 } // namespace jrc

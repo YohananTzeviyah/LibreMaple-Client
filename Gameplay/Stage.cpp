@@ -39,7 +39,7 @@ void Stage::init()
     drops.init();
 }
 
-void Stage::load(int32_t mapid, int8_t portalid)
+void Stage::load(std::int32_t mapid, std::int8_t portalid)
 {
     switch (state) {
     case INACTIVE:
@@ -73,7 +73,7 @@ void Stage::clear()
     reactors.clear();
 }
 
-void Stage::load_map(int32_t mapid)
+void Stage::load_map(std::int32_t mapid)
 {
     std::string strid = string_format::extend_id(mapid, 9);
     std::string prefix = std::to_string(mapid / 100000000);
@@ -87,13 +87,13 @@ void Stage::load_map(int32_t mapid)
     portals = MapPortals(src["portal"], mapid);
 }
 
-void Stage::respawn(int8_t portalid)
+void Stage::respawn(std::int8_t portalid)
 {
     Music(mapinfo.get_bgm()).play();
 
-    Point<int16_t> spawnpoint =
-        portals.get_portal_by_id(static_cast<uint8_t>(portalid));
-    Point<int16_t> startpos = physics.get_y_below(spawnpoint);
+    Point<std::int16_t> spawnpoint =
+        portals.get_portal_by_id(static_cast<std::uint8_t>(portalid));
+    Point<std::int16_t> startpos = physics.get_y_below(spawnpoint);
 
     player.respawn(startpos, mapinfo.is_underwater());
     camera.set_position(startpos);
@@ -106,7 +106,7 @@ void Stage::draw(float alpha) const
         return;
     }
 
-    Point<int16_t> viewpos = camera.position(alpha);
+    Point<std::int16_t> viewpos = camera.position(alpha);
     Point<double> viewrpos = camera.realposition(alpha);
     double viewx = viewrpos.x();
     double viewy = viewrpos.y();
@@ -150,7 +150,7 @@ void Stage::update()
         return;
     }
 
-    if (int32_t oid_id = mobs.find_colliding(player.get_phobj())) {
+    if (std::int32_t oid_id = mobs.find_colliding(player.get_phobj())) {
         if (MobAttack attack = mobs.create_attack(oid_id)) {
             MobAttackResult result = player.damage(attack);
             TakeDamagePacket(result, TakeDamagePacket::TOUCH).dispatch();
@@ -158,7 +158,7 @@ void Stage::update()
     }
 }
 
-void Stage::show_character_effect(int32_t cid, CharEffect::Id effect)
+void Stage::show_character_effect(std::int32_t cid, CharEffect::Id effect)
 {
     if (auto character = get_character(cid)) {
         character->show_effect_id(effect);
@@ -171,12 +171,12 @@ void Stage::check_portals()
         return;
     }
 
-    Point<int16_t> playerpos = player.get_position();
+    Point<std::int16_t> playerpos = player.get_position();
     Portal::WarpInfo warpinfo = portals.find_warp_at(playerpos);
     if (warpinfo.intramap) {
-        Point<int16_t> spawnpoint =
+        Point<std::int16_t> spawnpoint =
             portals.get_portal_by_name(warpinfo.toname);
-        Point<int16_t> startpos = physics.get_y_below(spawnpoint);
+        Point<std::int16_t> startpos = physics.get_y_below(spawnpoint);
         player.respawn(startpos, mapinfo.is_underwater());
     } else if (warpinfo.valid) {
         ChangeMapPacket(false, warpinfo.mapid, warpinfo.name, false)
@@ -207,14 +207,14 @@ void Stage::check_ladders(bool up)
 
 void Stage::check_drops()
 {
-    Point<int16_t> playerpos = player.get_position();
+    Point<std::int16_t> playerpos = player.get_position();
     MapDrops::Loot loot = drops.find_loot_at(playerpos);
     if (loot.first) {
         PickupItemPacket(loot.first, loot.second).dispatch();
     }
 }
 
-void Stage::send_key(KeyType::Id type, int32_t action, bool down)
+void Stage::send_key(KeyType::Id type, std::int32_t action, bool down)
 {
     if (state != ACTIVE || !playable) {
         return;
@@ -261,12 +261,12 @@ void Stage::send_key(KeyType::Id type, int32_t action, bool down)
     }
 }
 
-Cursor::State Stage::send_cursor(bool pressed, Point<int16_t> position)
+Cursor::State Stage::send_cursor(bool pressed, Point<std::int16_t> position)
 {
     return npcs.send_cursor(pressed, position, camera.position());
 }
 
-bool Stage::is_player(int32_t cid) const
+bool Stage::is_player(std::int32_t cid) const
 {
     return cid == player.get_oid();
 }
@@ -306,7 +306,7 @@ Combat& Stage::get_combat()
     return combat;
 }
 
-nullable_ptr<Char> Stage::get_character(int32_t cid)
+nullable_ptr<Char> Stage::get_character(std::int32_t cid)
 {
     if (is_player(cid)) {
         return player;

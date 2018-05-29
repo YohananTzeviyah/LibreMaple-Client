@@ -45,24 +45,24 @@ UINpcTalk::UINpcTalk()
 
 void UINpcTalk::draw(float inter) const
 {
-    Point<int16_t> drawpos = position;
+    Point<std::int16_t> drawpos = position;
     top.draw(drawpos);
     drawpos.shift_y(top.height());
-    fill.draw({drawpos, Point<int16_t>(0, vtile) * fill.height()});
+    fill.draw({drawpos, Point<std::int16_t>(0, vtile) * fill.height()});
     drawpos.shift_y(vtile * fill.height());
     bottom.draw(drawpos);
 
     UIElement::draw(inter);
 
-    speaker.draw({position + Point<int16_t>(80, 100), true});
-    nametag.draw(position + Point<int16_t>(25, 100));
-    name.draw(position + Point<int16_t>(80, 99));
+    speaker.draw({position + Point<std::int16_t>(80, 100), true});
+    nametag.draw(position + Point<std::int16_t>(25, 100));
+    name.draw(position + Point<std::int16_t>(80, 99));
     text.draw(position +
-              Point<int16_t>(
+              Point<std::int16_t>(
                   156, 16 + ((vtile * fill.height() - text.height()) / 2)));
 }
 
-Button::State UINpcTalk::button_pressed(uint16_t buttonid)
+Button::State UINpcTalk::button_pressed(std::uint16_t buttonid)
 {
     switch (buttonid) {
     case END:
@@ -73,10 +73,10 @@ Button::State UINpcTalk::button_pressed(uint16_t buttonid)
     return Button::PRESSED;
 }
 
-void UINpcTalk::change_text(int32_t npcid,
-                            int8_t msgtype,
-                            int16_t,
-                            int8_t speakerbyte,
+void UINpcTalk::change_text(std::int32_t npcid,
+                            std::int8_t msgtype,
+                            std::int16_t,
+                            std::int8_t speakerbyte,
                             const std::string& tx)
 {
     text = {Text::A12M, Text::LEFT, Text::DARKGREY, tx, 320};

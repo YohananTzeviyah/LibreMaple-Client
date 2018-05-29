@@ -25,7 +25,7 @@
 
 namespace jrc
 {
-Skill::Skill(int32_t id) : skillid(id)
+Skill::Skill(std::int32_t id) : skillid(id)
 {
     const SkillData& data = SkillData::get(skillid);
 
@@ -135,7 +135,7 @@ void Skill::apply_stats(const Char& user, Attack& attack) const
 {
     attack.skill = skillid;
 
-    int32_t level = user.get_skilllevel(skillid);
+    std::int32_t level = user.get_skilllevel(skillid);
     const SkillData::Stats stats = SkillData::get(skillid).get_stats(level);
 
     if (stats.fixdamage) {
@@ -200,7 +200,7 @@ void Skill::apply_hiteffects(const AttackUser& user, Mob& target) const
     sound->play_hit();
 }
 
-Animation Skill::get_bullet(const Char& user, int32_t bulletid) const
+Animation Skill::get_bullet(const Char& user, std::int32_t bulletid) const
 {
     return bullet->get(user, bulletid);
 }
@@ -215,17 +215,17 @@ bool Skill::is_skill() const
     return true;
 }
 
-int32_t Skill::get_id() const
+std::int32_t Skill::get_id() const
 {
     return skillid;
 }
 
-SpecialMove::ForbidReason Skill::can_use(int32_t level,
+SpecialMove::ForbidReason Skill::can_use(std::int32_t level,
                                          Weapon::Type weapon,
                                          const Job& job,
-                                         uint16_t hp,
-                                         uint16_t mp,
-                                         uint16_t bullets) const
+                                         std::uint16_t hp,
+                                         std::uint16_t mp,
+                                         std::uint16_t bullets) const
 {
     if (level <= 0 || level > SkillData::get(skillid).get_masterlevel())
         return FBR_OTHER;

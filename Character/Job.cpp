@@ -19,7 +19,7 @@
 
 namespace jrc
 {
-Job::Job(uint16_t i)
+Job::Job(std::uint16_t i)
 {
     change_job(i);
 }
@@ -29,7 +29,7 @@ Job::Job()
     change_job(0);
 }
 
-void Job::change_job(uint16_t i)
+void Job::change_job(std::uint16_t i)
 {
     id = i;
     name = get_name(id);
@@ -47,9 +47,9 @@ void Job::change_job(uint16_t i)
     }
 }
 
-bool Job::is_sub_job(uint16_t subid) const
+bool Job::is_sub_job(std::uint16_t subid) const
 {
-    for (int32_t lvit = BEGINNER; lvit <= FOURTH; ++lvit) {
+    for (std::int32_t lvit = BEGINNER; lvit <= FOURTH; ++lvit) {
         Level lv = static_cast<Level>(lvit);
         if (subid == get_subjob(lv)) {
             return true;
@@ -59,18 +59,18 @@ bool Job::is_sub_job(uint16_t subid) const
     return false;
 }
 
-bool Job::can_use(int32_t skill_id) const
+bool Job::can_use(std::int32_t skill_id) const
 {
-    auto required = static_cast<uint16_t>(skill_id / 10000);
+    auto required = static_cast<std::uint16_t>(skill_id / 10000);
     return is_sub_job(required);
 }
 
-uint16_t Job::get_id() const
+std::uint16_t Job::get_id() const
 {
     return id;
 }
 
-uint16_t Job::get_subjob(Level lv) const
+std::uint16_t Job::get_subjob(Level lv) const
 {
     if (lv <= level) {
         switch (lv) {
@@ -99,7 +99,7 @@ Job::Level Job::get_level() const
     return level;
 }
 
-std::string Job::get_name(uint16_t jid) const
+std::string Job::get_name(std::uint16_t jid) const
 {
     switch (jid) {
     case 0:

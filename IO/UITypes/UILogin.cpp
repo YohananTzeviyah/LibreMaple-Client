@@ -25,6 +25,7 @@
 #include "../UI.h"
 #include "UILoginWait.h"
 #include "nlnx/nx.hpp"
+#include "../../Constants.h"
 
 namespace jrc
 {
@@ -35,14 +36,14 @@ UILogin::UILogin()
     nl::node title = nl::nx::ui["Login.img"]["Title"];
     nl::node common = nl::nx::ui["Login.img"]["Common"];
 
-    sprites.emplace_back(title["11"], Point<int16_t>(410, 300));
-    sprites.emplace_back(title["35"], Point<int16_t>(410, 260));
-    sprites.emplace_back(title["Logo"], Point<int16_t>(410, 130));
-    sprites.emplace_back(title["signboard"], Point<int16_t>(410, 300));
-    sprites.emplace_back(common["frame"], Point<int16_t>(400, 290));
+    sprites.emplace_back(title["11"], Point<std::int16_t>(410, 300));
+    sprites.emplace_back(title["35"], Point<std::int16_t>(410, 260));
+    sprites.emplace_back(title["Logo"], Point<std::int16_t>(410, 130));
+    sprites.emplace_back(title["signboard"], Point<std::int16_t>(410, 300));
+    sprites.emplace_back(common["frame"], Point<std::int16_t>(400, 290));
 
     // I prefer the title without this.
-    /*auto effectpos = Point<int16_t>(420, -50);
+    /*auto effectpos = Point<std::int16_t>(420, -50);
     node effect = title["effect"];
     for (node sub : effect)
     {
@@ -51,19 +52,19 @@ UILogin::UILogin()
     }*/
 
     buttons[BT_LOGIN] = std::make_unique<MapleButton>(
-        title["BtLogin"], Point<int16_t>(475, 248));
+        title["BtLogin"], Point<std::int16_t>(475, 248));
     buttons[BT_REGISTER] = std::make_unique<MapleButton>(
-        title["BtNew"], Point<int16_t>(309, 320));
+        title["BtNew"], Point<std::int16_t>(309, 320));
     buttons[BT_HOMEPAGE] = std::make_unique<MapleButton>(
-        title["BtHomePage"], Point<int16_t>(382, 320));
+        title["BtHomePage"], Point<std::int16_t>(382, 320));
     buttons[BT_PASSLOST] = std::make_unique<MapleButton>(
-        title["BtPasswdLost"], Point<int16_t>(470, 300));
+        title["BtPasswdLost"], Point<std::int16_t>(470, 300));
     buttons[BT_QUIT] = std::make_unique<MapleButton>(title["BtQuit"],
-                                                     Point<int16_t>(455, 320));
+                                                     Point<std::int16_t>(455, 320));
     buttons[BT_IDLOST] = std::make_unique<MapleButton>(
-        title["BtLoginIDLost"], Point<int16_t>(395, 300));
+        title["BtLoginIDLost"], Point<std::int16_t>(395, 300));
     buttons[BT_SAVEID] = std::make_unique<MapleButton>(
-        title["BtLoginIDSave"], Point<int16_t>(325, 300));
+        title["BtLoginIDSave"], Point<std::int16_t>(325, 300));
 
     checkbox[false] = title["check"]["0"];
     checkbox[true] = title["check"]["1"];
@@ -96,7 +97,7 @@ UILogin::UILogin()
     }
 
     position = {0, 0};
-    dimension = {800, 600};
+    dimension = {Constants::VIEWWIDTH, Constants::VIEWHEIGHT};
     active = true;
 }
 
@@ -108,14 +109,14 @@ void UILogin::draw(float alpha) const
     password.draw(position);
 
     if (account.get_state() == Textfield::NORMAL && account.empty()) {
-        accountbg.draw({position + Point<int16_t>(310, 249)});
+        accountbg.draw({position + Point<std::int16_t>(310, 249)});
     }
 
     if (password.get_state() == Textfield::NORMAL && password.empty()) {
-        passwordbg.draw({position + Point<int16_t>(310, 275)});
+        passwordbg.draw({position + Point<std::int16_t>(310, 275)});
     }
 
-    checkbox[saveid].draw({position + Point<int16_t>(313, 304)});
+    checkbox[saveid].draw({position + Point<std::int16_t>(313, 304)});
 }
 
 void UILogin::update()
@@ -137,7 +138,7 @@ void UILogin::login()
     LoginPacket(account.get_text(), password.get_text()).dispatch();
 }
 
-Button::State UILogin::button_pressed(uint16_t id)
+Button::State UILogin::button_pressed(std::uint16_t id)
 {
     switch (id) {
     case BT_LOGIN:
@@ -155,7 +156,7 @@ Button::State UILogin::button_pressed(uint16_t id)
     }
 }
 
-Cursor::State UILogin::send_cursor(bool clicked, Point<int16_t> cursorpos)
+Cursor::State UILogin::send_cursor(bool clicked, Point<std::int16_t> cursorpos)
 {
     if (Cursor::State new_state = account.send_cursor(cursorpos, clicked))
         return new_state;

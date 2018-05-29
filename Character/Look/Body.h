@@ -39,11 +39,11 @@ public:
         NUM_LAYERS
     };
 
-    Body(int32_t skin, const BodyDrawinfo& drawinfo);
+    Body(std::int32_t skin, const BodyDrawinfo& drawinfo);
 
     void draw(Stance::Id stance,
               Layer layer,
-              uint8_t frame,
+              std::uint8_t frame,
               const DrawArgument& args) const;
 
     const std::string& get_name() const;
@@ -51,7 +51,7 @@ public:
     static Layer layer_by_name(const std::string& name);
 
 private:
-    std::unordered_map<uint8_t, Texture> stances[Stance::LENGTH]
+    std::unordered_map<std::uint8_t, Texture> stances[Stance::LENGTH]
                                                 [Layer::NUM_LAYERS];
     std::string name;
 

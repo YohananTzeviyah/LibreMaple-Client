@@ -24,19 +24,19 @@ namespace jrc
 class Pet
 {
 public:
-    Pet(int32_t item_id,
-        int64_t expiration,
+    Pet(std::int32_t item_id,
+        std::int64_t expiration,
         const std::string& name,
-        uint8_t level,
-        uint16_t closeness,
-        uint8_t fullness);
+        std::uint8_t level,
+        std::uint16_t closeness,
+        std::uint8_t fullness);
 
 private:
-    int32_t item_id;
-    int64_t expiration;
+    std::int32_t item_id;
+    std::int64_t expiration;
     std::string petname;
-    uint8_t petlevel;
-    uint16_t closeness;
-    uint8_t fullness;
+    std::uint8_t petlevel;
+    std::uint16_t closeness;
+    std::uint8_t fullness;
 };
 } // namespace jrc

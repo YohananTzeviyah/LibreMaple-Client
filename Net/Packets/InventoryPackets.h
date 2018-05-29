@@ -51,9 +51,9 @@ class MoveItemPacket : public OutPacket
 {
 public:
     MoveItemPacket(InventoryType::Id type,
-                   int16_t slot,
-                   int16_t action,
-                   int16_t qty)
+                   std::int16_t slot,
+                   std::int16_t action,
+                   std::int16_t qty)
         : OutPacket(MOVE_ITEM)
     {
         write_time();
@@ -69,7 +69,7 @@ public:
 class EquipItemPacket : public MoveItemPacket
 {
 public:
-    EquipItemPacket(int16_t src, Equipslot::Id dest)
+    EquipItemPacket(std::int16_t src, Equipslot::Id dest)
         : MoveItemPacket(InventoryType::EQUIP, src, -dest, 1)
     {
     }
@@ -80,7 +80,7 @@ public:
 class UnequipItemPacket : public MoveItemPacket
 {
 public:
-    UnequipItemPacket(int16_t src, int16_t dest)
+    UnequipItemPacket(std::int16_t src, std::int16_t dest)
         : MoveItemPacket(InventoryType::EQUIPPED, -src, dest, 1)
     {
     }
@@ -91,7 +91,7 @@ public:
 class UseItemPacket : public OutPacket
 {
 public:
-    UseItemPacket(int16_t slot, int32_t itemid) : OutPacket(USE_ITEM)
+    UseItemPacket(std::int16_t slot, std::int32_t itemid) : OutPacket(USE_ITEM)
     {
         write_time();
         write_short(slot);
@@ -104,9 +104,9 @@ public:
 class ScrollEquipPacket : public OutPacket
 {
 public:
-    enum Flag : uint8_t { NONE = 0x00, UNKNOWN = 0x01, WHITESCROLL = 0x02 };
+    enum Flag : std::uint8_t { NONE = 0x00, UNKNOWN = 0x01, WHITESCROLL = 0x02 };
 
-    ScrollEquipPacket(int16_t source, Equipslot::Id target, uint8_t flags)
+    ScrollEquipPacket(std::int16_t source, Equipslot::Id target, std::uint8_t flags)
         : OutPacket(SCROLL_EQUIP)
     {
         write_time();
@@ -115,7 +115,7 @@ public:
         write_short(flags);
     }
 
-    ScrollEquipPacket(int16_t source, Equipslot::Id target)
+    ScrollEquipPacket(std::int16_t source, Equipslot::Id target)
         : ScrollEquipPacket(source, target, 0)
     {
     }

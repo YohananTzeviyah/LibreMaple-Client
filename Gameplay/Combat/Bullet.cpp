@@ -19,7 +19,7 @@
 
 namespace jrc
 {
-Bullet::Bullet(Animation a, Point<int16_t> origin, bool toleft)
+Bullet::Bullet(Animation a, Point<std::int16_t> origin, bool toleft)
 {
     animation = a;
 
@@ -29,12 +29,12 @@ Bullet::Bullet(Animation a, Point<int16_t> origin, bool toleft)
 
 void Bullet::draw(double viewx, double viewy, float alpha) const
 {
-    Point<int16_t> bulletpos = moveobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> bulletpos = moveobj.get_absolute(viewx, viewy, alpha);
     DrawArgument args(bulletpos, flip);
     animation.draw(args, alpha);
 }
 
-bool Bullet::settarget(Point<int16_t> target)
+bool Bullet::settarget(Point<std::int16_t> target)
 {
     double xdelta = target.x() - moveobj.crnt_x();
     double ydelta = target.y() - moveobj.crnt_y();
@@ -61,12 +61,12 @@ bool Bullet::settarget(Point<int16_t> target)
     return false;
 }
 
-bool Bullet::update(Point<int16_t> target)
+bool Bullet::update(Point<std::int16_t> target)
 {
     animation.update();
     moveobj.move();
 
-    int16_t xdelta = target.x() - moveobj.get_x();
+    std::int16_t xdelta = target.x() - moveobj.get_x();
     return moveobj.hspeed > 0.0 ? xdelta < 10 : xdelta > 10;
 }
 } // namespace jrc

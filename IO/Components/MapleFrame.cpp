@@ -35,35 +35,35 @@ MapleFrame::MapleFrame(nl::node src)
     south = src["s"];
     southeast = src["se"];
 
-    xtile = std::max<int16_t>(north.width(), 1);
-    ytile = std::max<int16_t>(west.height(), 1);
+    xtile = std::max<std::int16_t>(north.width(), 1);
+    ytile = std::max<std::int16_t>(west.height(), 1);
 }
 
 MapleFrame::MapleFrame()
 {
 }
 
-void MapleFrame::draw(Point<int16_t> position,
-                      int16_t rwidth,
-                      int16_t rheight) const
+void MapleFrame::draw(Point<std::int16_t> position,
+                      std::int16_t rwidth,
+                      std::int16_t rheight) const
 {
-    int16_t numhor = rwidth / xtile + 2;
-    int16_t numver = rheight / ytile;
-    int16_t width = numhor * xtile;
-    int16_t height = numver * ytile;
-    int16_t left = position.x() - width / 2;
-    int16_t top = position.y() - height;
-    int16_t right = left + width;
-    int16_t bottom = top + height;
+    std::int16_t numhor = rwidth / xtile + 2;
+    std::int16_t numver = rheight / ytile;
+    std::int16_t width = numhor * xtile;
+    std::int16_t height = numver * ytile;
+    std::int16_t left = position.x() - width / 2;
+    std::int16_t top = position.y() - height;
+    std::int16_t right = left + width;
+    std::int16_t bottom = top + height;
 
     northwest.draw({left, top});
     southwest.draw({left, bottom});
-    for (int16_t y = top; y < bottom; y += ytile) {
+    for (std::int16_t y = top; y < bottom; y += ytile) {
         west.draw({left, y});
         east.draw({right, y});
     }
     center.draw({{left, top}, {width, height}});
-    for (int16_t x = left; x < right; x += xtile) {
+    for (std::int16_t x = left; x < right; x += xtile) {
         north.draw({x, top});
         south.draw({x, bottom});
     }

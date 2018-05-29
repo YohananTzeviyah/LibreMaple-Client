@@ -38,7 +38,7 @@ public:
 class SpendSpPacket : public OutPacket
 {
 public:
-    SpendSpPacket(int32_t skill_id) : OutPacket(SPEND_SP)
+    SpendSpPacket(std::int32_t skill_id) : OutPacket(SPEND_SP)
     {
         write_time();
         write_int(skill_id);

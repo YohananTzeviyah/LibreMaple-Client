@@ -35,10 +35,10 @@ public:
     void update() override;
 
     Cursor::State send_cursor(bool clicked,
-                              Point<int16_t> cursor_pos) override;
+                              Point<std::int16_t> cursor_pos) override;
 
 protected:
-    Button::State button_pressed(uint16_t id) override;
+    Button::State button_pressed(std::uint16_t id) override;
 
 private:
     void login();

@@ -89,14 +89,14 @@ bool running()
 void loop()
 {
     Timer::get().start();
-    int64_t timestep = Constants::TIMESTEP * 1000;
-    int64_t accumulator = timestep;
+    std::int64_t timestep = Constants::TIMESTEP * 1000;
+    std::int64_t accumulator = timestep;
 
-    int64_t period = 0;
-    int32_t samples = 0;
+    std::int64_t period = 0;
+    std::int32_t samples = 0;
 
     while (running()) {
-        int64_t elapsed = Timer::get().stop();
+        std::int64_t elapsed = Timer::get().stop();
 
         // Update game with constant timestep as many times as possible.
         for (accumulator += elapsed; accumulator >= timestep;
@@ -112,7 +112,7 @@ void loop()
             period += elapsed;
             ++samples;
         } else if (period) {
-            // int64_t fps = (samples * 1000000) / period;
+            // std::int64_t fps = (samples * 1000000) / period;
             // std::cout << "FPS: " << fps << '\n';
 
             period = 0;

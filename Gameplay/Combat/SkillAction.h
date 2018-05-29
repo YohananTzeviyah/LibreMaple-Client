@@ -70,12 +70,12 @@ private:
 class ByLevelAction : public SkillAction
 {
 public:
-    ByLevelAction(nl::node src, int32_t skillid);
+    ByLevelAction(nl::node src, std::int32_t skillid);
 
     void apply(Char& target, Attack::Type atype) const override;
 
 private:
-    std::map<int32_t, std::string> actions;
-    int32_t skillid;
+    std::map<std::int32_t, std::string> actions;
+    std::int32_t skillid;
 };
 } // namespace jrc

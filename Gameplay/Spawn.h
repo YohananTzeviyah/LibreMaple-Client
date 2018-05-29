@@ -28,120 +28,120 @@ namespace jrc
 class NpcSpawn
 {
 public:
-    NpcSpawn(int32_t oid,
-             int32_t npcid,
-             Point<int16_t> position,
+    NpcSpawn(std::int32_t oid,
+             std::int32_t npcid,
+             Point<std::int16_t> position,
              bool mirrored,
-             uint16_t fh);
+             std::uint16_t fh);
 
-    int32_t get_oid() const;
+    std::int32_t get_oid() const;
     std::unique_ptr<MapObject> instantiate(const Physics& physics) const;
 
 private:
-    int32_t oid;
-    int32_t id;
-    Point<int16_t> position;
+    std::int32_t oid;
+    std::int32_t id;
+    Point<std::int16_t> position;
     bool flip;
-    uint16_t fh;
+    std::uint16_t fh;
 };
 
 class MobSpawn
 {
 public:
-    MobSpawn(int32_t oid,
-             int32_t id,
-             int8_t mode,
-             int8_t stance,
-             uint16_t fh,
+    MobSpawn(std::int32_t oid,
+             std::int32_t id,
+             std::int8_t mode,
+             std::int8_t stance,
+             std::uint16_t fh,
              bool newspawn,
-             int8_t team,
-             Point<int16_t> position);
+             std::int8_t team,
+             Point<std::int16_t> position);
 
-    int8_t get_mode() const;
-    int32_t get_oid() const;
+    std::int8_t get_mode() const;
+    std::int32_t get_oid() const;
     std::unique_ptr<MapObject> instantiate() const;
 
 private:
-    int32_t oid;
-    int32_t id;
-    int8_t mode;
-    int8_t stance;
-    uint16_t fh;
+    std::int32_t oid;
+    std::int32_t id;
+    std::int8_t mode;
+    std::int8_t stance;
+    std::uint16_t fh;
     bool newspawn;
-    int8_t team;
-    Point<int16_t> position;
+    std::int8_t team;
+    Point<std::int16_t> position;
 };
 
 class ReactorSpawn
 {
 public:
-    ReactorSpawn(int32_t oid,
-                 int32_t rid,
-                 int8_t state,
-                 Point<int16_t> position);
+    ReactorSpawn(std::int32_t oid,
+                 std::int32_t rid,
+                 std::int8_t state,
+                 Point<std::int16_t> position);
 
-    int32_t get_oid() const;
+    std::int32_t get_oid() const;
     std::unique_ptr<MapObject> instantiate(const Physics& physics) const;
 
 private:
-    int32_t oid;
-    int32_t rid;
-    int8_t state;
-    Point<int16_t> position;
+    std::int32_t oid;
+    std::int32_t rid;
+    std::int8_t state;
+    Point<std::int16_t> position;
 };
 
 class DropSpawn
 {
 public:
-    DropSpawn(int32_t oid,
-              int32_t id,
+    DropSpawn(std::int32_t oid,
+              std::int32_t id,
               bool meso,
-              int32_t owner,
-              Point<int16_t> position,
-              Point<int16_t> destination,
-              int8_t droptype,
-              int8_t mode,
+              std::int32_t owner,
+              Point<std::int16_t> position,
+              Point<std::int16_t> destination,
+              std::int8_t droptype,
+              std::int8_t mode,
               bool playerdrop);
 
     bool is_meso() const;
-    int32_t get_itemid() const;
-    int32_t get_oid() const;
+    std::int32_t get_itemid() const;
+    std::int32_t get_oid() const;
     std::unique_ptr<MapObject> instantiate(const Animation& icon) const;
     std::unique_ptr<MapObject> instantiate(const Texture& icon) const;
 
 private:
-    int32_t oid;
-    int32_t id;
+    std::int32_t oid;
+    std::int32_t id;
     bool meso;
-    int32_t owner;
-    Point<int16_t> start;
-    Point<int16_t> dest;
-    int8_t droptype;
-    int8_t mode;
+    std::int32_t owner;
+    Point<std::int16_t> start;
+    Point<std::int16_t> dest;
+    std::int8_t droptype;
+    std::int8_t mode;
     bool playerdrop;
 };
 
 class CharSpawn
 {
 public:
-    CharSpawn(int32_t cid,
+    CharSpawn(std::int32_t cid,
               const LookEntry& look,
-              uint8_t level,
-              int16_t job,
+              std::uint8_t level,
+              std::int16_t job,
               const std::string& name,
-              int8_t stance,
-              Point<int16_t> position);
+              std::int8_t stance,
+              Point<std::int16_t> position);
 
-    int32_t get_cid() const;
+    std::int32_t get_cid() const;
     std::unique_ptr<MapObject> instantiate() const;
 
 private:
-    int32_t cid;
-    uint8_t level;
-    int16_t job;
+    std::int32_t cid;
+    std::uint8_t level;
+    std::int16_t job;
     std::string name;
-    int8_t stance;
-    Point<int16_t> position;
+    std::int8_t stance;
+    Point<std::int16_t> position;
     LookEntry look;
 };
 } // namespace jrc

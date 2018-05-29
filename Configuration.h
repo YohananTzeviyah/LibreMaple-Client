@@ -86,12 +86,12 @@ public:
         using Entry::Entry;
     };
 
-    // Setting which converts to a Point<int16_t>.
+    // Setting which converts to a Point<std::int16_t>.
     class PointEntry : public Entry
     {
     public:
-        void save(Point<int16_t> p);
-        Point<int16_t> load() const;
+        void save(Point<std::int16_t> p);
+        Point<std::int16_t> load() const;
 
     protected:
         using Entry::Entry;
@@ -117,28 +117,28 @@ public:
     };
 
     // Setting which converts to a byte.
-    class ByteEntry : public IntegerEntry<uint8_t>
+    class ByteEntry : public IntegerEntry<std::uint8_t>
     {
     protected:
         using IntegerEntry::IntegerEntry;
     };
 
     // Setting which converts to a short.
-    class ShortEntry : public IntegerEntry<uint16_t>
+    class ShortEntry : public IntegerEntry<std::uint16_t>
     {
     protected:
         using IntegerEntry::IntegerEntry;
     };
 
     // Setting which converts to an int.
-    class IntEntry : public IntegerEntry<uint32_t>
+    class IntEntry : public IntegerEntry<std::uint32_t>
     {
     protected:
         using IntegerEntry::IntegerEntry;
     };
 
     // Setting which converts to a long.
-    class LongEntry : public IntegerEntry<uint64_t>
+    class LongEntry : public IntegerEntry<std::uint64_t>
     {
     protected:
         using IntegerEntry::IntegerEntry;

@@ -25,7 +25,7 @@ namespace ItemParser
 {
 void parse_item(InPacket& recv,
                 InventoryType::Id invtype,
-                int16_t slot,
+                std::int16_t slot,
                 Inventory& inventory);
 }
 } // namespace jrc

@@ -21,13 +21,13 @@
 
 namespace jrc
 {
-OtherChar::OtherChar(int32_t id,
+OtherChar::OtherChar(std::int32_t id,
                      const CharLook& lk,
-                     uint8_t lvl,
-                     int16_t jb,
+                     std::uint8_t lvl,
+                     std::int16_t jb,
                      const std::string& nm,
-                     int8_t st,
-                     Point<int16_t> pos)
+                     std::int8_t st,
+                     Point<std::int16_t> pos)
     : Char(id, lk, nm)
 {
     level = lvl;
@@ -43,7 +43,7 @@ OtherChar::OtherChar(int32_t id,
     attacking = false;
 }
 
-int8_t OtherChar::update(const Physics& physics)
+std::int8_t OtherChar::update(const Physics& physics)
 {
     if (timer > 1) {
         timer--;
@@ -57,7 +57,7 @@ int8_t OtherChar::update(const Physics& physics)
     }
 
     if (!attacking) {
-        uint8_t laststate = lastmove.newstate;
+        std::uint8_t laststate = lastmove.newstate;
         set_state(laststate);
     }
 
@@ -80,17 +80,17 @@ void OtherChar::send_movement(const std::vector<Movement>& newmoves)
     movements.push(newmoves.back());
 
     if (timer == 0) {
-        constexpr uint16_t DELAY = 50;
+        constexpr std::uint16_t DELAY = 50;
         timer = DELAY;
     }
 }
 
-void OtherChar::update_skill(int32_t skillid, uint8_t skilllevel)
+void OtherChar::update_skill(std::int32_t skillid, std::uint8_t skilllevel)
 {
     skilllevels[skillid] = skilllevel;
 }
 
-void OtherChar::update_speed(uint8_t as)
+void OtherChar::update_speed(std::uint8_t as)
 {
     attackspeed = as;
 }
@@ -99,21 +99,21 @@ void OtherChar::update_look(const LookEntry& newlook)
 {
     look = newlook;
 
-    uint8_t laststate = lastmove.newstate;
+    std::uint8_t laststate = lastmove.newstate;
     set_state(laststate);
 }
 
-int8_t OtherChar::get_integer_attackspeed() const
+std::int8_t OtherChar::get_integer_attackspeed() const
 {
     return attackspeed;
 }
 
-uint16_t OtherChar::get_level() const
+std::uint16_t OtherChar::get_level() const
 {
     return level;
 }
 
-int32_t OtherChar::get_skilllevel(int32_t skillid) const
+std::int32_t OtherChar::get_skilllevel(std::int32_t skillid) const
 {
     auto iter = skilllevels.find(skillid);
     if (iter == skilllevels.end()) {

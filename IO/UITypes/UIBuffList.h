@@ -28,18 +28,18 @@ namespace jrc
 class BuffIcon
 {
 public:
-    BuffIcon(int32_t buff, int32_t dur);
+    BuffIcon(std::int32_t buff, std::int32_t dur);
 
-    void draw(Point<int16_t> position, float alpha) const;
+    void draw(Point<std::int16_t> position, float alpha) const;
     bool update();
 
 private:
-    static const uint16_t FLASH_TIME = 3'000;
+    static const std::uint16_t FLASH_TIME = 3'000;
 
     Texture icon;
     IconCover cover;
-    int32_t buffid;
-    int32_t duration;
+    std::int32_t buffid;
+    std::int32_t duration;
     Linear<float> opacity;
     float opcstep;
 };
@@ -55,11 +55,11 @@ public:
 
     void draw(float inter) const override;
     void update() override;
-    Cursor::State send_cursor(bool pressed, Point<int16_t> position) override;
+    Cursor::State send_cursor(bool pressed, Point<std::int16_t> position) override;
 
-    void add_buff(int32_t buffid, int32_t duration);
+    void add_buff(std::int32_t buffid, std::int32_t duration);
 
 private:
-    std::unordered_map<int32_t, BuffIcon> icons;
+    std::unordered_map<std::int32_t, BuffIcon> icons;
 };
 } // namespace jrc

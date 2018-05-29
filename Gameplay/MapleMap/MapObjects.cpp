@@ -37,12 +37,12 @@ void MapObjects::update(const Physics& physics)
     for (auto iter = objects.begin(); iter != objects.end();) {
         bool remove_mob = false;
         if (auto& mmo = iter->second) {
-            int8_t oldlayer = mmo->get_layer();
-            int8_t newlayer = mmo->update(physics);
+            std::int8_t oldlayer = mmo->get_layer();
+            std::int8_t newlayer = mmo->update(physics);
             if (newlayer == -1) {
                 remove_mob = true;
             } else if (newlayer != oldlayer) {
-                int32_t oid = iter->first;
+                std::int32_t oid = iter->first;
                 layers[oldlayer].erase(oid);
                 layers[newlayer].insert(oid);
             }
@@ -67,37 +67,37 @@ void MapObjects::clear()
     }
 }
 
-bool MapObjects::contains(int32_t oid) const
+bool MapObjects::contains(std::int32_t oid) const
 {
     return objects.count(oid) > 0;
 }
 
 void MapObjects::add(std::unique_ptr<MapObject> toadd)
 {
-    int32_t oid = toadd->get_oid();
-    int8_t layer = toadd->get_layer();
+    std::int32_t oid = toadd->get_oid();
+    std::int8_t layer = toadd->get_layer();
     objects[oid] = std::move(toadd);
     layers[layer].insert(oid);
 }
 
-void MapObjects::remove(int32_t oid)
+void MapObjects::remove(std::int32_t oid)
 {
     auto iter = objects.find(oid);
     if (iter != objects.end() && iter->second) {
-        int8_t layer = iter->second->get_layer();
+        std::int8_t layer = iter->second->get_layer();
         objects.erase(iter);
 
         layers[layer].erase(oid);
     }
 }
 
-nullable_ptr<MapObject> MapObjects::get(int32_t oid)
+nullable_ptr<MapObject> MapObjects::get(std::int32_t oid)
 {
     auto iter = objects.find(oid);
     return iter != objects.end() ? iter->second.get() : nullptr;
 }
 
-nullable_ptr<const MapObject> MapObjects::get(int32_t oid) const
+nullable_ptr<const MapObject> MapObjects::get(std::int32_t oid) const
 {
     auto iter = objects.find(oid);
     return iter != objects.end() ? iter->second.get() : nullptr;

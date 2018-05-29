@@ -23,12 +23,12 @@
 
 namespace jrc
 {
-Npc::Npc(int32_t id,
-         int32_t o,
+Npc::Npc(std::int32_t id,
+         std::int32_t o,
          bool fl,
-         uint16_t f,
+         std::uint16_t f,
          bool cnt,
-         Point<int16_t> position)
+         Point<std::int16_t> position)
     : MapObject(o)
 {
     std::string strid = std::to_string(id);
@@ -79,18 +79,18 @@ Npc::Npc(int32_t id,
 
 void Npc::draw(double viewx, double viewy, float alpha) const
 {
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
     if (animations.count(stance)) {
         animations.at(stance).draw(DrawArgument(absp, flip), alpha);
     }
 
     if (!hidename) {
         namelabel.draw(absp);
-        funclabel.draw(absp + Point<int16_t>(0, 18));
+        funclabel.draw(absp + Point<std::int16_t>(0, 18));
     }
 }
 
-int8_t Npc::update(const Physics& physics)
+std::int8_t Npc::update(const Physics& physics)
 {
     if (!active) {
         return phobj.fhlayer;
@@ -101,7 +101,7 @@ int8_t Npc::update(const Physics& physics)
     if (animations.count(stance)) {
         bool aniend = animations.at(stance).update();
         if (aniend && states.size() > 0) {
-            size_t next_stance = random.next_int(states.size());
+            std::size_t next_stance = random.next_int(states.size());
             std::string new_stance = states[next_stance];
             set_stance(new_stance);
         }
@@ -129,18 +129,18 @@ bool Npc::isscripted() const
     return scripted;
 }
 
-bool Npc::inrange(Point<int16_t> cursorpos, Point<int16_t> viewpos) const
+bool Npc::inrange(Point<std::int16_t> cursorpos, Point<std::int16_t> viewpos) const
 {
     if (!active) {
         return false;
     }
 
-    Point<int16_t> absp = get_position() + viewpos;
-    Point<int16_t> dim = animations.count(stance)
+    Point<std::int16_t> absp = get_position() + viewpos;
+    Point<std::int16_t> dim = animations.count(stance)
                              ? animations.at(stance).get_dimensions()
-                             : Point<int16_t>();
+                             : Point<std::int16_t>();
 
-    return Rectangle<int16_t>(absp.x() - dim.x() / 2,
+    return Rectangle<std::int16_t>(absp.x() - dim.x() / 2,
                               absp.x() + dim.x() / 2,
                               absp.y() - dim.y(),
                               absp.y())

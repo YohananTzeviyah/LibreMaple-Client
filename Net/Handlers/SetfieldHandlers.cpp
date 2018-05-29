@@ -30,11 +30,11 @@
 #include "Helpers/ItemParser.h"
 #include "Helpers/LoginParser.h"
 
-#include <Net/Packets/GameplayPackets.h>
+#include "../Packets/GameplayPackets.h"
 
 namespace jrc
 {
-void SetfieldHandler::transition(int32_t mapid, uint8_t portalid) const
+void SetfieldHandler::transition(std::int32_t mapid, std::uint8_t portalid) const
 {
     float fadestep = 0.025f;
     Window::get().fadeout(fadestep, [mapid, portalid]() {
@@ -52,9 +52,9 @@ void SetfieldHandler::transition(int32_t mapid, uint8_t portalid) const
 
 void SetfieldHandler::handle(InPacket& recv) const
 {
-    int32_t channel = recv.read_int();
-    int8_t mode1 = recv.read_byte();
-    int8_t mode2 = recv.read_byte();
+    std::int32_t channel = recv.read_int();
+    std::int8_t mode1 = recv.read_byte();
+    std::int8_t mode2 = recv.read_byte();
     if (mode1 == 0 && mode2 == 0) {
         change_map(recv, channel);
     } else {
@@ -62,12 +62,12 @@ void SetfieldHandler::handle(InPacket& recv) const
     }
 }
 
-void SetfieldHandler::change_map(InPacket& recv, int32_t) const
+void SetfieldHandler::change_map(InPacket& recv, std::int32_t) const
 {
     recv.skip(3);
 
-    int32_t mapid = recv.read_int();
-    auto portalid = static_cast<uint8_t>(recv.read_byte());
+    std::int32_t mapid = recv.read_int();
+    auto portalid = static_cast<std::uint8_t>(recv.read_byte());
 
     transition(mapid, portalid);
 
@@ -78,7 +78,7 @@ void SetfieldHandler::set_field(InPacket& recv) const
 {
     recv.skip(23);
 
-    int32_t cid = recv.read_int();
+    std::int32_t cid = recv.read_int();
 
     auto charselect = UI::get().get_element<UICharSelect>();
     if (!charselect) {
@@ -116,8 +116,8 @@ void SetfieldHandler::set_field(InPacket& recv) const
 
     player.recalc_stats(true);
 
-    uint8_t portalid = player.get_stats().get_portal();
-    int32_t mapid = player.get_stats().get_mapid();
+    std::uint8_t portalid = player.get_stats().get_portal();
+    std::int32_t mapid = player.get_stats().get_mapid();
 
     transition(mapid, portalid);
 
@@ -132,24 +132,24 @@ void SetfieldHandler::parse_inventory(InPacket& recv, Inventory& invent) const
 {
     invent.set_meso(recv.read_int());
     invent.set_slotmax(InventoryType::EQUIP,
-                       static_cast<uint8_t>(recv.read_byte()));
+                       static_cast<std::uint8_t>(recv.read_byte()));
     invent.set_slotmax(InventoryType::USE,
-                       static_cast<uint8_t>(recv.read_byte()));
+                       static_cast<std::uint8_t>(recv.read_byte()));
     invent.set_slotmax(InventoryType::SETUP,
-                       static_cast<uint8_t>(recv.read_byte()));
+                       static_cast<std::uint8_t>(recv.read_byte()));
     invent.set_slotmax(InventoryType::ETC,
-                       static_cast<uint8_t>(recv.read_byte()));
+                       static_cast<std::uint8_t>(recv.read_byte()));
     invent.set_slotmax(InventoryType::CASH,
-                       static_cast<uint8_t>(recv.read_byte()));
+                       static_cast<std::uint8_t>(recv.read_byte()));
 
     recv.skip(8);
 
-    for (size_t i = 0; i < 3; ++i) {
+    for (std::size_t i = 0; i < 3; ++i) {
         InventoryType::Id inv =
             i == 0 ? InventoryType::EQUIPPED : InventoryType::EQUIP;
-        int16_t pos = recv.read_short();
+        std::int16_t pos = recv.read_short();
         while (pos != 0) {
-            int16_t slot = i == 1 ? -pos : pos;
+            std::int16_t slot = i == 1 ? -pos : pos;
             ItemParser::parse_item(recv, inv, slot, invent);
             pos = recv.read_short();
         }
@@ -163,7 +163,7 @@ void SetfieldHandler::parse_inventory(InPacket& recv, Inventory& invent) const
                                     InventoryType::CASH};
 
     for (auto inv : toparse) {
-        int8_t pos = recv.read_byte();
+        std::int8_t pos = recv.read_byte();
         while (pos != 0) {
             ItemParser::parse_item(recv, inv, pos, invent);
             pos = recv.read_byte();
@@ -173,35 +173,35 @@ void SetfieldHandler::parse_inventory(InPacket& recv, Inventory& invent) const
 
 void SetfieldHandler::parse_skillbook(InPacket& recv, Skillbook& skills) const
 {
-    int16_t size = recv.read_short();
-    for (int16_t i = 0; i < size; ++i) {
-        int32_t skill_id = recv.read_int();
-        int32_t level = recv.read_int();
-        int64_t expiration = recv.read_long();
+    std::int16_t size = recv.read_short();
+    for (std::int16_t i = 0; i < size; ++i) {
+        std::int32_t skill_id = recv.read_int();
+        std::int32_t level = recv.read_int();
+        std::int64_t expiration = recv.read_long();
         bool fourthtjob = ((skill_id % 100000) / 10000 == 2);
-        int32_t masterlevel = fourthtjob ? recv.read_int() : 0;
+        std::int32_t masterlevel = fourthtjob ? recv.read_int() : 0;
         skills.set_skill(skill_id, level, masterlevel, expiration);
     }
 }
 
 void SetfieldHandler::parse_cooldowns(InPacket& recv, Player& player) const
 {
-    int16_t size = recv.read_short();
-    for (int16_t i = 0; i < size; ++i) {
-        int32_t skill_id = recv.read_int();
-        int32_t cooltime = recv.read_short();
+    std::int16_t size = recv.read_short();
+    for (std::int16_t i = 0; i < size; ++i) {
+        std::int32_t skill_id = recv.read_int();
+        std::int32_t cooltime = recv.read_short();
         player.add_cooldown(skill_id, cooltime);
     }
 }
 
 void SetfieldHandler::parse_questlog(InPacket& recv, Questlog& quests) const
 {
-    int16_t size = recv.read_short();
-    for (int16_t i = 0; i < size; ++i) {
-        int16_t qid = recv.read_short();
+    std::int16_t size = recv.read_short();
+    for (std::int16_t i = 0; i < size; ++i) {
+        std::int16_t qid = recv.read_short();
         std::string qdata = recv.read_string();
         if (quests.is_started(qid)) {
-            int16_t qidl = quests.get_last_started();
+            std::int16_t qidl = quests.get_last_started();
             quests.add_in_progress(qidl, qid, qdata);
             i--;
         } else {
@@ -209,19 +209,19 @@ void SetfieldHandler::parse_questlog(InPacket& recv, Questlog& quests) const
         }
     }
 
-    std::map<int16_t, int64_t> completed = {};
+    std::map<std::int16_t, std::int64_t> completed = {};
     size = recv.read_short();
-    for (int16_t i = 0; i < size; ++i) {
-        int16_t qid = recv.read_short();
-        int64_t time = recv.read_long();
+    for (std::int16_t i = 0; i < size; ++i) {
+        std::int16_t qid = recv.read_short();
+        std::int64_t time = recv.read_long();
         quests.add_completed(qid, time);
     }
 }
 
 void SetfieldHandler::parse_ring1(InPacket& recv) const
 {
-    int16_t rsize = recv.read_short();
-    for (int16_t i = 0; i < rsize; ++i) {
+    std::int16_t rsize = recv.read_short();
+    for (std::int16_t i = 0; i < rsize; ++i) {
         recv.read_int();
         recv.read_padded_string(13);
         recv.read_int();
@@ -233,8 +233,8 @@ void SetfieldHandler::parse_ring1(InPacket& recv) const
 
 void SetfieldHandler::parse_ring2(InPacket& recv) const
 {
-    int16_t rsize = recv.read_short();
-    for (int16_t i = 0; i < rsize; ++i) {
+    std::int16_t rsize = recv.read_short();
+    for (std::int16_t i = 0; i < rsize; ++i) {
         recv.read_int();
         recv.read_padded_string(13);
         recv.read_int();
@@ -247,8 +247,8 @@ void SetfieldHandler::parse_ring2(InPacket& recv) const
 
 void SetfieldHandler::parse_ring3(InPacket& recv) const
 {
-    int16_t rsize = recv.read_short();
-    for (int16_t i = 0; i < rsize; ++i) {
+    std::int16_t rsize = recv.read_short();
+    for (std::int16_t i = 0; i < rsize; ++i) {
         recv.read_int();
         recv.read_int();
         recv.read_int();
@@ -262,8 +262,8 @@ void SetfieldHandler::parse_ring3(InPacket& recv) const
 
 void SetfieldHandler::parse_minigame(InPacket& recv) const
 {
-    int16_t mgsize = recv.read_short();
-    for (int16_t i = 0; i < mgsize; ++i) {
+    std::int16_t mgsize = recv.read_short();
+    for (std::int16_t i = 0; i < mgsize; ++i) {
         // TODO
     }
 }
@@ -275,10 +275,10 @@ void SetfieldHandler::parse_monsterbook(InPacket& recv,
 
     recv.skip(1);
 
-    int16_t size = recv.read_short();
-    for (int16_t i = 0; i < size; ++i) {
-        int16_t cid = recv.read_short();
-        int8_t mblv = recv.read_byte();
+    std::int16_t size = recv.read_short();
+    for (std::int16_t i = 0; i < size; ++i) {
+        std::int16_t cid = recv.read_short();
+        std::int8_t mblv = recv.read_byte();
 
         monsterbook.add_card(cid, mblv);
     }
@@ -286,29 +286,29 @@ void SetfieldHandler::parse_monsterbook(InPacket& recv,
 
 void SetfieldHandler::parse_telerock(InPacket& recv, Telerock& trock) const
 {
-    for (size_t i = 0; i < 5; ++i) {
+    for (std::size_t i = 0; i < 5; ++i) {
         trock.addlocation(recv.read_int());
     }
 
-    for (size_t i = 0; i < 10; ++i) {
+    for (std::size_t i = 0; i < 10; ++i) {
         trock.addviplocation(recv.read_int());
     }
 }
 
 void SetfieldHandler::parse_nyinfo(InPacket& recv) const
 {
-    int16_t nysize = recv.read_short();
-    for (int16_t i = 0; i < nysize; ++i) {
+    std::int16_t nysize = recv.read_short();
+    for (std::int16_t i = 0; i < nysize; ++i) {
         // TODO
     }
 }
 
 void SetfieldHandler::parse_areainfo(InPacket& recv) const
 {
-    std::map<int16_t, std::string> areainfo = {};
-    int16_t arsize = recv.read_short();
-    for (int16_t i = 0; i < arsize; ++i) {
-        int16_t area = recv.read_short();
+    std::map<std::int16_t, std::string> areainfo = {};
+    std::int16_t arsize = recv.read_short();
+    for (std::int16_t i = 0; i < arsize; ++i) {
+        std::int16_t area = recv.read_short();
         areainfo[area] = recv.read_string();
     }
 }

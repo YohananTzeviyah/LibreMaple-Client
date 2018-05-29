@@ -33,18 +33,18 @@ public:
     {
     }
 
-    void push(int64_t delay, const T& t)
+    void push(std::int64_t delay, const T& t)
     {
         queue.emplace(time + delay, t);
     }
 
     template<typename... Args>
-    void emplace(int64_t delay, Args&&... args)
+    void emplace(std::int64_t delay, Args&&... args)
     {
         queue.emplace(time + delay, std::move(args)...);
     }
 
-    void update(int64_t timestep = Constants::TIMESTEP)
+    void update(std::int64_t timestep = Constants::TIMESTEP)
     {
         time += timestep;
 
@@ -61,14 +61,14 @@ public:
 private:
     struct Timed {
         T value;
-        int64_t when;
+        std::int64_t when;
 
-        Timed(int64_t w, const T& v) : value{v}, when{w}
+        Timed(std::int64_t w, const T& v) : value{v}, when{w}
         {
         }
 
         template<typename... Args>
-        Timed(int64_t w, Args&&... args)
+        Timed(std::int64_t w, Args&&... args)
             : value{std::forward<Args>(args)...}, when{w}
         {
         }
@@ -83,6 +83,6 @@ private:
 
     std::priority_queue<Timed, std::vector<Timed>, TimedComparator> queue;
     std::function<void(const T&)> action;
-    int64_t time;
+    std::int64_t time;
 };
 } // namespace jrc

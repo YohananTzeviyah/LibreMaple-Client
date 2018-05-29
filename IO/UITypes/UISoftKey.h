@@ -39,11 +39,11 @@ public:
     void draw(float alpha) const override;
 
 protected:
-    Button::State button_pressed(uint16_t) override;
+    Button::State button_pressed(std::uint16_t) override;
 
 private:
     void shufflekeys();
-    Point<int16_t> keypos(uint8_t) const;
+    Point<std::int16_t> keypos(std::uint8_t) const;
 
     enum Buttons {
         BT_0,
@@ -62,9 +62,9 @@ private:
         BT_OK
     };
 
-    static constexpr size_t MIN_SIZE = 6;
-    static constexpr size_t MAX_SIZE = 12;
-    static constexpr uint8_t NUM_KEYS = 10;
+    static constexpr std::size_t MIN_SIZE = 6;
+    static constexpr std::size_t MAX_SIZE = 12;
+    static constexpr std::uint8_t NUM_KEYS = 10;
 
     Callback callback;
     Text entry;

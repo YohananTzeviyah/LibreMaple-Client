@@ -53,7 +53,7 @@ public:
         LENGTH
     };
 
-    static Id byaction(size_t action);
+    static Id byaction(std::size_t action);
 
     static const EnumMap<Id, std::string> names;
 };
@@ -61,26 +61,26 @@ public:
 class Face
 {
 public:
-    Face(int32_t faceid);
+    Face(std::int32_t faceid);
 
     void draw(Expression::Id expression,
-              uint8_t frame,
+              std::uint8_t frame,
               const DrawArgument& args) const;
 
-    uint8_t nextframe(Expression::Id expression, uint8_t frame) const;
-    int16_t get_delay(Expression::Id expression, uint8_t frame) const;
+    std::uint8_t nextframe(Expression::Id expression, std::uint8_t frame) const;
+    std::int16_t get_delay(Expression::Id expression, std::uint8_t frame) const;
     const std::string& get_name() const;
 
 private:
     struct Frame {
         Texture texture;
-        uint16_t delay;
+        std::uint16_t delay;
 
         Frame(nl::node src)
         {
             texture = src["face"];
 
-            Point<int16_t> shift = src["face"]["map"]["brow"];
+            Point<std::int16_t> shift = src["face"]["map"]["brow"];
             texture.shift(-shift);
 
             delay = src["delay"];
@@ -89,7 +89,7 @@ private:
         }
     };
 
-    std::unordered_map<uint8_t, Frame> expressions[Expression::LENGTH];
+    std::unordered_map<std::uint8_t, Frame> expressions[Expression::LENGTH];
     std::string name;
 };
 } // namespace jrc

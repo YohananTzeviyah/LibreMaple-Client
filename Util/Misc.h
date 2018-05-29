@@ -18,7 +18,9 @@
 #pragma once
 #include "../Console.h"
 
+#include <algorithm>
 #include <cstdint>
+#include <limits>
 #include <string>
 
 namespace jrc
@@ -29,7 +31,7 @@ template<typename T>
 inline T or_default(const std::string& str, T def)
 {
     try {
-        const int32_t intval = std::stoi(str);
+        const std::int32_t intval = std::stoi(str);
         return static_cast<T>(intval);
     } catch (const std::exception& ex) {
         Console::get().print(__func__, ex.what());
@@ -51,12 +53,52 @@ namespace string_format
 void split_number(std::string& input);
 
 // Prefix an id with zeroes so that it has the minimum specified length.
-std::string extend_id(int32_t id, size_t length);
+std::string extend_id(std::int32_t id, std::size_t length);
 }; // namespace string_format
 
 namespace bytecode
 {
 // Check if a bit mask contains the specified value.
-bool compare(int32_t mask, int32_t value);
+bool compare(std::int32_t mask, std::int32_t value);
 } // namespace bytecode
+
+namespace math
+{
+    template<typename T, typename U>
+    T saturating_cast(U u)
+    {
+        static_assert(std::numeric_limits<T>::is_specialized);
+        static_assert(std::numeric_limits<U>::is_specialized);
+
+        if constexpr (std::numeric_limits<T>::is_integer) {
+            if constexpr (std::numeric_limits<U>::is_integer) {
+                if constexpr (sizeof(T) > sizeof(U)) {
+                    return static_cast<T>(u);
+                } else if constexpr (sizeof(T) == sizeof(U)) {
+                    if constexpr (std::numeric_limits<T>::is_signed == std::numeric_limits<U>::is_signed) {
+                        return static_cast<T>(u);
+                    } else if constexpr (std::numeric_limits<T>::is_signed) {
+                        return static_cast<T>(std::min(u, static_cast<U>(std::numeric_limits<T>::max())));
+                    } else {
+                        return static_cast<T>(std::max(u, static_cast<U>(std::numeric_limits<T>::lowest())));
+                    }
+                } else {
+                    return static_cast<T>(std::min(std::max(u, static_cast<U>(std::numeric_limits<T>::lowest())), static_cast<U>(std::numeric_limits<T>::max())));
+                }
+            } else {
+                return static_cast<T>(std::min(std::max(u, static_cast<U>(std::numeric_limits<T>::lowest())), static_cast<U>(std::numeric_limits<T>::max())));
+            }
+        } else {
+            if constexpr (std::numeric_limits<U>::is_integer) {
+                return static_cast<T>(u);
+            } else {
+                if constexpr (sizeof(T) >= sizeof(U)) {
+                    return static_cast<T>(u);
+                } else {
+                    return static_cast<T>(std::min(std::max(u, static_cast<U>(std::numeric_limits<T>::lowest())), static_cast<U>(std::numeric_limits<T>::max())));
+                }
+            }
+        }
+    }
+} // namespace math
 } // namespace jrc

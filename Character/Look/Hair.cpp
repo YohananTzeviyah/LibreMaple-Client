@@ -22,7 +22,7 @@
 
 namespace jrc
 {
-Hair::Hair(int32_t hairid, const BodyDrawinfo& drawinfo)
+Hair::Hair(std::int32_t hairid, const BodyDrawinfo& drawinfo)
 {
     nl::node hairnode =
         nl::nx::character["Hair"]["000" + std::to_string(hairid) + ".img"];
@@ -35,7 +35,7 @@ Hair::Hair(int32_t hairid, const BodyDrawinfo& drawinfo)
         if (!stancenode)
             continue;
 
-        for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
+        for (std::uint8_t frame = 0; nl::node framenode = stancenode[frame];
              ++frame) {
             for (nl::node layernode : framenode) {
                 std::string layername = layernode.name();
@@ -47,8 +47,8 @@ Hair::Hair(int32_t hairid, const BodyDrawinfo& drawinfo)
                 }
                 Layer layer = layer_iter->second;
 
-                Point<int16_t> brow = layernode["map"]["brow"];
-                Point<int16_t> shift =
+                Point<std::int16_t> brow = layernode["map"]["brow"];
+                Point<std::int16_t> shift =
                     drawinfo.gethairpos(stance, frame) - brow;
 
                 stances[stance][layer]
@@ -62,7 +62,7 @@ Hair::Hair(int32_t hairid, const BodyDrawinfo& drawinfo)
                          ["name"]
                              .get_string();
 
-    constexpr size_t NUM_COLORS = 8;
+    constexpr std::size_t NUM_COLORS = 8;
     constexpr char const* haircolors[NUM_COLORS] = {"Black",
                                                     "Red",
                                                     "Orange",
@@ -71,13 +71,13 @@ Hair::Hair(int32_t hairid, const BodyDrawinfo& drawinfo)
                                                     "Blue",
                                                     "Violet",
                                                     "Brown"};
-    size_t index = hairid % 10;
+    std::size_t index = hairid % 10;
     color = (index < NUM_COLORS) ? haircolors[index] : "";
 }
 
 void Hair::draw(Stance::Id stance,
                 Layer layer,
-                uint8_t frame,
+                std::uint8_t frame,
                 const DrawArgument& args) const
 {
     auto frameit = stances[stance][layer].find(frame);

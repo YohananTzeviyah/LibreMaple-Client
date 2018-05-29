@@ -53,30 +53,30 @@ public:
     {
     public:
         struct Word {
-            size_t first;
-            size_t last;
+            std::size_t first;
+            std::size_t last;
             Font font;
             Color color;
         };
 
         struct Line {
             std::vector<Word> words;
-            Point<int16_t> position;
+            Point<std::int16_t> position;
         };
 
         Layout(const std::vector<Line>& lines,
-               const std::vector<int16_t>& advances,
-               int16_t width,
-               int16_t height,
-               int16_t endx,
-               int16_t endy);
+               const std::vector<std::int16_t>& advances,
+               std::int16_t width,
+               std::int16_t height,
+               std::int16_t endx,
+               std::int16_t endy);
         Layout();
 
-        int16_t width() const;
-        int16_t height() const;
-        int16_t advance(size_t index) const;
-        Point<int16_t> get_dimensions() const;
-        Point<int16_t> get_endoffset() const;
+        std::int16_t width() const;
+        std::int16_t height() const;
+        std::int16_t advance(std::size_t index) const;
+        Point<std::int16_t> get_dimensions() const;
+        Point<std::int16_t> get_endoffset() const;
 
         using iterator = std::vector<Line>::const_iterator;
         iterator begin() const;
@@ -84,9 +84,9 @@ public:
 
     private:
         std::vector<Line> lines;
-        std::vector<int16_t> advances;
-        Point<int16_t> dimensions;
-        Point<int16_t> endoffset;
+        std::vector<std::int16_t> advances;
+        Point<std::int16_t> dimensions;
+        Point<std::int16_t> endoffset;
     };
 
     Text(Font font,
@@ -94,13 +94,13 @@ public:
          Color color,
          Background background,
          const std::string& text = "",
-         uint16_t maxwidth = 0,
+         std::uint16_t maxwidth = 0,
          bool formatted = true);
     Text(Font font,
          Alignment alignment,
          Color color,
          const std::string& text = "",
-         uint16_t maxwidth = 0,
+         std::uint16_t maxwidth = 0,
          bool formatted = true);
     Text();
 
@@ -111,12 +111,12 @@ public:
     void set_background(Background background);
 
     bool empty() const;
-    size_t length() const;
-    int16_t width() const;
-    int16_t height() const;
-    uint16_t advance(size_t pos) const;
-    Point<int16_t> dimensions() const;
-    Point<int16_t> endoffset() const;
+    std::size_t length() const;
+    std::int16_t width() const;
+    std::int16_t height() const;
+    std::uint16_t advance(std::size_t pos) const;
+    Point<std::int16_t> dimensions() const;
+    Point<std::int16_t> endoffset() const;
     const std::string& get_text() const;
 
 private:
@@ -127,7 +127,7 @@ private:
     Color color;
     Background background;
     Layout layout;
-    uint16_t maxwidth;
+    std::uint16_t maxwidth;
     bool formatted;
     std::string text;
 };

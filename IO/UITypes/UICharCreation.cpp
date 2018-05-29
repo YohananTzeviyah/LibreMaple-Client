@@ -37,74 +37,74 @@ UICharcreation::UICharcreation()
     sky = bgsrc["2"];
     cloud = bgsrc["27"];
 
-    sprites.emplace_back(bgsrc["15"], Point<int16_t>(153, 685));
-    sprites.emplace_back(bgsrc["16"], Point<int16_t>(200, 400));
-    sprites.emplace_back(bgsrc["17"], Point<int16_t>(160, 263));
-    sprites.emplace_back(bgsrc["18"], Point<int16_t>(349, 1220));
-    sprites.emplace_back(src["Common"]["frame"], Point<int16_t>(400, 290));
+    sprites.emplace_back(bgsrc["15"], Point<std::int16_t>(153, 685));
+    sprites.emplace_back(bgsrc["16"], Point<std::int16_t>(200, 400));
+    sprites.emplace_back(bgsrc["17"], Point<std::int16_t>(160, 263));
+    sprites.emplace_back(bgsrc["18"], Point<std::int16_t>(349, 1220));
+    sprites.emplace_back(src["Common"]["frame"], Point<std::int16_t>(400, 290));
 
     nameboard = crsrc["charName"];
 
-    sprites_lookboard.emplace_back(crsrc["charSet"], Point<int16_t>(450, 115));
+    sprites_lookboard.emplace_back(crsrc["charSet"], Point<std::int16_t>(450, 115));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["0"]["normal"],
-                                   Point<int16_t>(461, 217));
+                                   Point<std::int16_t>(461, 217));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["1"]["normal"],
-                                   Point<int16_t>(461, 236));
+                                   Point<std::int16_t>(461, 236));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["2"]["normal"],
-                                   Point<int16_t>(461, 255));
+                                   Point<std::int16_t>(461, 255));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["3"]["normal"],
-                                   Point<int16_t>(461, 274));
+                                   Point<std::int16_t>(461, 274));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["4"]["normal"],
-                                   Point<int16_t>(461, 293));
+                                   Point<std::int16_t>(461, 293));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["5"]["normal"],
-                                   Point<int16_t>(461, 312));
+                                   Point<std::int16_t>(461, 312));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["6"]["normal"],
-                                   Point<int16_t>(461, 331));
+                                   Point<std::int16_t>(461, 331));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["7"]["normal"],
-                                   Point<int16_t>(461, 350));
+                                   Point<std::int16_t>(461, 350));
     sprites_lookboard.emplace_back(crsrc["avatarSel"]["8"]["normal"],
-                                   Point<int16_t>(461, 369));
+                                   Point<std::int16_t>(461, 369));
 
     buttons[BT_CHARC_OK] = std::make_unique<MapleButton>(
-        crsrc["BtYes"], Point<int16_t>(482, 292));
+        crsrc["BtYes"], Point<std::int16_t>(482, 292));
     buttons[BT_CHARC_CANCEL] =
-        std::make_unique<MapleButton>(crsrc["BtNo"], Point<int16_t>(555, 292));
+        std::make_unique<MapleButton>(crsrc["BtNo"], Point<std::int16_t>(555, 292));
     buttons[BT_CHARC_FACEL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<int16_t>(521, 216));
+        crsrc["BtLeft"], Point<std::int16_t>(521, 216));
     buttons[BT_CHARC_FACER] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<int16_t>(645, 216));
+        crsrc["BtRight"], Point<std::int16_t>(645, 216));
     buttons[BT_CHARC_HAIRL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<int16_t>(521, 235));
+        crsrc["BtLeft"], Point<std::int16_t>(521, 235));
     buttons[BT_CHARC_HAIRR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<int16_t>(645, 235));
+        crsrc["BtRight"], Point<std::int16_t>(645, 235));
     buttons[BT_CHARC_HAIRCL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<int16_t>(521, 254));
+        crsrc["BtLeft"], Point<std::int16_t>(521, 254));
     buttons[BT_CHARC_HAIRCR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<int16_t>(645, 254));
+        crsrc["BtRight"], Point<std::int16_t>(645, 254));
     buttons[BT_CHARC_SKINL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<int16_t>(521, 273));
+        crsrc["BtLeft"], Point<std::int16_t>(521, 273));
     buttons[BT_CHARC_SKINR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<int16_t>(645, 273));
+        crsrc["BtRight"], Point<std::int16_t>(645, 273));
     buttons[BT_CHARC_TOPL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<int16_t>(521, 292));
+        crsrc["BtLeft"], Point<std::int16_t>(521, 292));
     buttons[BT_CHARC_TOPR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<int16_t>(645, 292));
+        crsrc["BtRight"], Point<std::int16_t>(645, 292));
     buttons[BT_CHARC_BOTL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<int16_t>(521, 311));
+        crsrc["BtLeft"], Point<std::int16_t>(521, 311));
     buttons[BT_CHARC_BOTR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<int16_t>(645, 311));
+        crsrc["BtRight"], Point<std::int16_t>(645, 311));
     buttons[BT_CHARC_SHOESL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<int16_t>(521, 330));
+        crsrc["BtLeft"], Point<std::int16_t>(521, 330));
     buttons[BT_CHARC_SHOESR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<int16_t>(645, 330));
+        crsrc["BtRight"], Point<std::int16_t>(645, 330));
     buttons[BT_CHARC_WEPL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<int16_t>(521, 349));
+        crsrc["BtLeft"], Point<std::int16_t>(521, 349));
     buttons[BT_CHARC_WEPR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<int16_t>(645, 348));
+        crsrc["BtRight"], Point<std::int16_t>(645, 348));
     buttons[BT_CHARC_GENDERL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<int16_t>(521, 368));
+        crsrc["BtLeft"], Point<std::int16_t>(521, 368));
     buttons[BT_CHARC_GEMDERR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<int16_t>(645, 368));
+        crsrc["BtRight"], Point<std::int16_t>(645, 368));
 
     buttons[BT_CHARC_FACEL]->set_active(false);
     buttons[BT_CHARC_FACER]->set_active(false);
@@ -140,7 +140,7 @@ UICharcreation::UICharcreation()
     gendername = {Text::A11M, Text::CENTER, Text::BLACK};
 
     nl::node mkinfo = nl::nx::etc["MakeCharInfo.img"]["Info"];
-    for (int32_t i = 0; i < 2; i++) {
+    for (std::int32_t i = 0; i < 2; i++) {
         bool f;
         nl::node mk_n;
         if (i == 0) {
@@ -163,10 +163,10 @@ UICharcreation::UICharcreation()
                     hairs[f].push_back(value);
                     break;
                 case 2:
-                    haircolors[f].push_back(static_cast<uint8_t>(value));
+                    haircolors[f].push_back(static_cast<std::uint8_t>(value));
                     break;
                 case 3:
-                    skins[f].push_back(static_cast<uint8_t>(value));
+                    skins[f].push_back(static_cast<std::uint8_t>(value));
                     break;
                 case 4:
                     tops[f].push_back(value);
@@ -191,7 +191,7 @@ UICharcreation::UICharcreation()
     newchar.set_direction(true);
 
     position = {0, 0};
-    dimension = {800, 600};
+    dimension = {Constants::VIEWWIDTH, Constants::VIEWHEIGHT};
     active = true;
     cloudfx = 200.0f;
 }
@@ -227,21 +227,21 @@ void UICharcreation::randomize_look()
     gendername.change_text(female ? "Female" : "Male");
 }
 
-Button::State UICharcreation::button_pressed(uint16_t id)
+Button::State UICharcreation::button_pressed(std::uint16_t id)
 {
     switch (id) {
     case BT_CHARC_OK:
         if (named) {
             std::string cname = namechar.get_text();
-            uint16_t cjob = 1;
-            int32_t cface = faces[female][face];
-            int32_t chair = hairs[female][hair];
-            uint8_t chairc = haircolors[female][haircolor];
-            uint8_t cskin = skins[female][skin];
-            int32_t ctop = tops[female][top];
-            int32_t cbot = bots[female][bot];
-            int32_t cshoe = shoes[female][shoe];
-            int32_t cwep = weapons[female][weapon];
+            std::uint16_t cjob = 1;
+            std::int32_t cface = faces[female][face];
+            std::int32_t chair = hairs[female][hair];
+            std::uint8_t chairc = haircolors[female][haircolor];
+            std::uint8_t cskin = skins[female][skin];
+            std::int32_t ctop = tops[female][top];
+            std::int32_t cbot = bots[female][bot];
+            std::int32_t cshoe = shoes[female][shoe];
+            std::int32_t cwep = weapons[female][weapon];
             CreateCharPacket(cname,
                              cjob,
                              cface,
@@ -404,7 +404,7 @@ Button::State UICharcreation::button_pressed(uint16_t id)
 }
 
 Cursor::State UICharcreation::send_cursor(bool clicked,
-                                          Point<int16_t> cursorpos)
+                                          Point<std::int16_t> cursorpos)
 {
     if (Cursor::State new_state = namechar.send_cursor(cursorpos, clicked))
         return new_state;
@@ -419,8 +419,8 @@ void UICharcreation::send_naming_result(bool nameused)
             namechar.change_text("");
         } else {
             named = true;
-            buttons[BT_CHARC_OK]->set_position(Point<int16_t>(486, 445));
-            buttons[BT_CHARC_CANCEL]->set_position(Point<int16_t>(560, 445));
+            buttons[BT_CHARC_OK]->set_position(Point<std::int16_t>(486, 445));
+            buttons[BT_CHARC_CANCEL]->set_position(Point<std::int16_t>(560, 445));
             buttons[BT_CHARC_FACEL]->set_active(true);
             buttons[BT_CHARC_FACER]->set_active(true);
             buttons[BT_CHARC_HAIRL]->set_active(true);
@@ -447,19 +447,19 @@ void UICharcreation::send_naming_result(bool nameused)
 
 void UICharcreation::draw(float alpha) const
 {
-    for (int16_t i = 0; i < 2; i++) {
-        for (int16_t k = 0; k < 800; k += sky.width()) {
-            sky.draw(Point<int16_t>(k, (400 * i) - 100));
+    for (std::int16_t i = 0; i < 2; ++i) {
+        for (std::int16_t k = 0; k < Constants::VIEWWIDTH; k += sky.width()) {
+            sky.draw(Point<std::int16_t>(k, static_cast<std::int16_t>((400 * i) - 100)));
         }
     }
 
-    int16_t cloudx = static_cast<int16_t>(cloudfx) % 800;
-    cloud.draw(Point<int16_t>(cloudx - cloud.width(), 300));
-    cloud.draw(Point<int16_t>(cloudx, 300));
-    cloud.draw(Point<int16_t>(cloudx + cloud.width(), 300));
+    std::int16_t cloudx = static_cast<std::int16_t>(cloudfx) % Constants::VIEWWIDTH;
+    cloud.draw(Point<std::int16_t>(cloudx - cloud.width(), 300));
+    cloud.draw(Point<std::int16_t>(cloudx, 300));
+    cloud.draw(Point<std::int16_t>(cloudx + cloud.width(), 300));
 
     if (!named) {
-        nameboard.draw(Point<int16_t>(455, 115));
+        nameboard.draw(Point<std::int16_t>(455, 115));
         namechar.draw(position);
     } else {
         for (auto& sprite : sprites_lookboard) {
@@ -472,15 +472,15 @@ void UICharcreation::draw(float alpha) const
     newchar.draw({360, 348}, alpha);
 
     if (named) {
-        facename.draw(Point<int16_t>(591, 214));
-        hairname.draw(Point<int16_t>(591, 233));
-        haircname.draw(Point<int16_t>(591, 252));
-        bodyname.draw(Point<int16_t>(591, 271));
-        topname.draw(Point<int16_t>(591, 290));
-        botname.draw(Point<int16_t>(591, 309));
-        shoename.draw(Point<int16_t>(591, 328));
-        wepname.draw(Point<int16_t>(591, 347));
-        gendername.draw(Point<int16_t>(591, 366));
+        facename.draw(Point<std::int16_t>(591, 214));
+        hairname.draw(Point<std::int16_t>(591, 233));
+        haircname.draw(Point<std::int16_t>(591, 252));
+        bodyname.draw(Point<std::int16_t>(591, 271));
+        topname.draw(Point<std::int16_t>(591, 290));
+        botname.draw(Point<std::int16_t>(591, 309));
+        shoename.draw(Point<std::int16_t>(591, 328));
+        wepname.draw(Point<std::int16_t>(591, 347));
+        gendername.draw(Point<std::int16_t>(591, 366));
     }
 }
 
@@ -502,7 +502,7 @@ void UICharcreation::update()
 
 const std::string& UICharcreation::get_equipname(Equipslot::Id slot) const
 {
-    if (int32_t item_id = newchar.get_equips().get_equip(slot)) {
+    if (std::int32_t item_id = newchar.get_equips().get_equip(slot)) {
         return ItemData::get(item_id).get_name();
     } else {
         static const std::string& nullstr = "Missing name.";

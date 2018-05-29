@@ -51,6 +51,6 @@ public:
 
     virtual ~Tooltip() = default;
 
-    virtual void draw(Point<int16_t> cursorpos) const = 0;
+    virtual void draw(Point<std::int16_t> cursorpos) const = 0;
 };
 } // namespace jrc

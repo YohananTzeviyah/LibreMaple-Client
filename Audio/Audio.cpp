@@ -68,7 +68,7 @@ Error Sound::init()
     add_sound(Sound::PORTAL, gamesrc["Portal"]);
     add_sound(Sound::LEVELUP, gamesrc["LevelUp"]);
 
-    uint8_t volume = Setting<SFXVolume>::get().load();
+    std::uint8_t volume = Setting<SFXVolume>::get().load();
 
     if (!set_sfxvolume(volume)) {
         return Error::AUDIO;
@@ -82,12 +82,12 @@ void Sound::close()
     BASS_Free();
 }
 
-bool Sound::set_sfxvolume(uint8_t vol)
+bool Sound::set_sfxvolume(std::uint8_t vol)
 {
     return BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, vol * 100u) == TRUE;
 }
 
-void Sound::play(size_t id)
+void Sound::play(std::size_t id)
 {
     if (!samples.count(id)) {
         return;
@@ -98,14 +98,14 @@ void Sound::play(size_t id)
     BASS_ChannelPlay(channel, true);
 }
 
-size_t Sound::add_sound(nl::node src)
+std::size_t Sound::add_sound(nl::node src)
 {
     nl::audio ad = src;
 
     const void* data = ad.data();
 
     if (data) {
-        size_t id = ad.id();
+        std::size_t id = ad.id();
 
         samples[id] = BASS_SampleLoad(true,
                                       data,
@@ -122,15 +122,15 @@ size_t Sound::add_sound(nl::node src)
 
 void Sound::add_sound(Name name, nl::node src)
 {
-    size_t id = add_sound(src);
+    std::size_t id = add_sound(src);
 
     if (id) {
         soundids[name] = id;
     }
 }
 
-std::unordered_map<size_t, uint64_t> Sound::samples;
-EnumMap<Sound::Name, size_t> Sound::soundids;
+std::unordered_map<std::size_t, std::uint64_t> Sound::samples;
+EnumMap<Sound::Name, std::size_t> Sound::soundids;
 
 Music::Music(const std::string& p) : path(p)
 {
@@ -164,7 +164,7 @@ void Music::play() const
 
 Error Music::init()
 {
-    uint8_t volume = Setting<BGMVolume>::get().load();
+    std::uint8_t volume = Setting<BGMVolume>::get().load();
 
     if (!set_bgmvolume(volume)) {
         return Error::AUDIO;
@@ -173,7 +173,7 @@ Error Music::init()
     return Error::NONE;
 }
 
-bool Music::set_bgmvolume(uint8_t vol)
+bool Music::set_bgmvolume(std::uint8_t vol)
 {
     return BASS_SetConfig(BASS_CONFIG_GVOL_SAMPLE, vol * 100u) == TRUE;
 }

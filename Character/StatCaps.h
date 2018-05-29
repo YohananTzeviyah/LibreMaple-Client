@@ -22,7 +22,7 @@
 namespace jrc
 {
 // Externalising this for easier configurability.
-const std::unordered_map<Equipstat::Id, int32_t> EQSTAT_CAPS = {
+const std::unordered_map<Equipstat::Id, std::int32_t> EQSTAT_CAPS = {
     {Equipstat::STR, 999},
     {Equipstat::DEX, 999},
     {Equipstat::INT, 999},

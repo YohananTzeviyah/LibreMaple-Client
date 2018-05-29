@@ -37,46 +37,46 @@ public:
     {
     }
 
-    virtual void draw(float inter, Point<int16_t> cursor) const = 0;
+    virtual void draw(float inter, Point<std::int16_t> cursor) const = 0;
     virtual void update() = 0;
 
-    virtual void doubleclick(Point<int16_t> pos) = 0;
-    virtual void send_key(KeyType::Id type, int32_t action, bool pressed) = 0;
+    virtual void doubleclick(Point<std::int16_t> pos) = 0;
+    virtual void send_key(KeyType::Id type, std::int32_t action, bool pressed) = 0;
     virtual Cursor::State send_cursor(Cursor::State mst,
-                                      Point<int16_t> pos) = 0;
+                                      Point<std::int16_t> pos) = 0;
 
     virtual void drag_icon(Icon* icon) = 0;
     virtual void clear_tooltip(Tooltip::Parent parent) = 0;
-    virtual void show_equip(Tooltip::Parent parent, int16_t slot) = 0;
-    virtual void show_item(Tooltip::Parent parent, int32_t itemid) = 0;
+    virtual void show_equip(Tooltip::Parent parent, std::int16_t slot) = 0;
+    virtual void show_item(Tooltip::Parent parent, std::int32_t itemid) = 0;
     virtual void show_skill(Tooltip::Parent parent,
-                            int32_t skill_id,
-                            int32_t level,
-                            int32_t masterlevel,
-                            int64_t expiration) = 0;
+                            std::int32_t skill_id,
+                            std::int32_t level,
+                            std::int32_t masterlevel,
+                            std::int64_t expiration) = 0;
 
     virtual Iterator
     pre_add(UIElement::Type type, bool toggled, bool focused) = 0;
     virtual void remove(UIElement::Type type) = 0;
     virtual UIElement* get(UIElement::Type type) = 0;
-    virtual UIElement* get_front(Point<int16_t> pos) = 0;
+    virtual UIElement* get_front(Point<std::int16_t> pos) = 0;
 };
 
 class UIStateNull : public UIState
 {
-    void draw(float, Point<int16_t>) const override
+    void draw(float, Point<std::int16_t>) const override
     {
     }
     void update() override
     {
     }
-    void doubleclick(Point<int16_t>) override
+    void doubleclick(Point<std::int16_t>) override
     {
     }
-    void send_key(KeyType::Id, int32_t, bool) override
+    void send_key(KeyType::Id, std::int32_t, bool) override
     {
     }
-    Cursor::State send_cursor(Cursor::State, Point<int16_t>) override
+    Cursor::State send_cursor(Cursor::State, Point<std::int16_t>) override
     {
         return Cursor::IDLE;
     }
@@ -86,14 +86,14 @@ class UIStateNull : public UIState
     void clear_tooltip(Tooltip::Parent) override
     {
     }
-    void show_equip(Tooltip::Parent, int16_t) override
+    void show_equip(Tooltip::Parent, std::int16_t) override
     {
     }
-    void show_item(Tooltip::Parent, int32_t) override
+    void show_item(Tooltip::Parent, std::int32_t) override
     {
     }
     void show_skill(
-        Tooltip::Parent, int32_t, int32_t, int32_t, int64_t) override
+        Tooltip::Parent, std::int32_t, std::int32_t, std::int32_t, std::int64_t) override
     {
     }
     Iterator pre_add(UIElement::Type, bool, bool) override
@@ -107,7 +107,7 @@ class UIStateNull : public UIState
     {
         return nullptr;
     }
-    UIElement* get_front(Point<int16_t>) override
+    UIElement* get_front(Point<std::int16_t>) override
     {
         return nullptr;
     }

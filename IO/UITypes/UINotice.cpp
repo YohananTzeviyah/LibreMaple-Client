@@ -38,26 +38,26 @@ UINotice::UINotice(std::string q)
 
     height = question.height();
     dimension =
-        Point<int16_t>(top.width(), top.height() + height + bottom.height());
+        Point<std::int16_t>(top.width(), top.height() + height + bottom.height());
     position =
-        Point<int16_t>(400 - dimension.x() / 2, 240 - dimension.y() / 2);
+        Point<std::int16_t>(400 - dimension.x() / 2, 240 - dimension.y() / 2);
 }
 
 void UINotice::draw_notice(bool textfield) const
 {
-    Point<int16_t> start = position;
+    Point<std::int16_t> start = position;
 
     top.draw(start);
     start.shift_y(top.height());
     centerbox.draw(start);
     start.shift_y(centerbox.height());
 
-    Point<int16_t> textpos = start;
-    box.draw(DrawArgument(textpos, Point<int16_t>(0, height)));
+    Point<std::int16_t> textpos = start;
+    box.draw(DrawArgument(textpos, Point<std::int16_t>(0, height)));
     start.shift_y(box.height() * (height / box.height()));
     box.draw(start);
     start.shift_y(box.height());
-    question.draw(textpos + Point<int16_t>(130, -3));
+    question.draw(textpos + Point<std::int16_t>(130, -3));
 
     if (textfield) {
         box2.draw(start);
@@ -69,7 +69,7 @@ void UINotice::draw_notice(bool textfield) const
     bottombox.draw(start);
 }
 
-int16_t UINotice::box2offset() const
+std::int16_t UINotice::box2offset() const
 {
     return top.height() + centerbox.height() +
            box.height() * (1 + height / box.height());
@@ -79,7 +79,7 @@ UIYesNo::UIYesNo(std::string q, std::function<void(bool)> yh) : UINotice(q)
 {
     yesnohandler = yh;
 
-    int16_t belowtext = UINotice::box2offset();
+    std::int16_t belowtext = UINotice::box2offset();
 
     nl::node src = nl::nx::ui["Basic.img"];
 
@@ -95,7 +95,7 @@ void UIYesNo::draw(float alpha) const
     UIElement::draw(alpha);
 }
 
-Button::State UIYesNo::button_pressed(uint16_t buttonid)
+Button::State UIYesNo::button_pressed(std::uint16_t buttonid)
 {
     switch (buttonid) {
     case YES:
@@ -112,17 +112,17 @@ Button::State UIYesNo::button_pressed(uint16_t buttonid)
 }
 
 UIEnterNumber::UIEnterNumber(std::string q,
-                             std::function<void(int32_t)> nh,
-                             int32_t mi,
-                             int32_t ma,
-                             int32_t de)
+                             std::function<void(std::int32_t)> nh,
+                             std::int32_t mi,
+                             std::int32_t ma,
+                             std::int32_t de)
     : UINotice(q)
 {
     numhandler = nh;
     min = mi;
     max = ma;
 
-    int16_t belowtext = UINotice::box2offset();
+    std::int16_t belowtext = UINotice::box2offset();
 
     nl::node src = nl::nx::ui["Basic.img"];
 
@@ -131,7 +131,7 @@ UIEnterNumber::UIEnterNumber(std::string q,
     buttons[CANCEL] =
         std::make_unique<MapleButton>(src["BtCancel4"], 132, belowtext + 21);
 
-    Rectangle<int16_t> area(26, 232, belowtext, belowtext + 20);
+    Rectangle<std::int16_t> area(26, 232, belowtext, belowtext + 20);
     numfield = Textfield(Text::A11M, Text::LEFT, Text::LIGHTGREY, area, 9);
     numfield.set_state(Textfield::FOCUSED);
     numfield.change_text(std::to_string(de));
@@ -155,7 +155,7 @@ void UIEnterNumber::update()
 }
 
 Cursor::State UIEnterNumber::send_cursor(bool clicked,
-                                         Point<int16_t> cursorpos)
+                                         Point<std::int16_t> cursorpos)
 {
     if (numfield.get_state() == Textfield::NORMAL) {
         Cursor::State nstate = numfield.send_cursor(cursorpos, clicked);
@@ -166,7 +166,7 @@ Cursor::State UIEnterNumber::send_cursor(bool clicked,
     return UIElement::send_cursor(clicked, cursorpos);
 }
 
-Button::State UIEnterNumber::button_pressed(uint16_t buttonid)
+Button::State UIEnterNumber::button_pressed(std::uint16_t buttonid)
 {
     switch (buttonid) {
     case OK:
@@ -182,7 +182,7 @@ Button::State UIEnterNumber::button_pressed(uint16_t buttonid)
 void UIEnterNumber::handlestring(const std::string& numstr)
 {
     if (numstr.size() > 0) {
-        const auto num = [&]() -> int32_t {
+        const auto num = [&]() -> std::int32_t {
             try {
                 return std::stoi(numstr);
             } catch (const std::exception&) {

@@ -30,16 +30,16 @@ class EffectLayer
 {
 public:
     /// Draws all effects with a z-value strictly less than 0.
-    void drawbelow(Point<int16_t> position, float alpha) const;
+    void drawbelow(Point<std::int16_t> position, float alpha) const;
     /// Draws all effects with a z-value greater than or equal to 0.
-    void drawabove(Point<int16_t> position, float alpha) const;
+    void drawabove(Point<std::int16_t> position, float alpha) const;
     /// Remove effects whose animations are done, i.e. they have expired.
     void update();
     void add(const Animation& effect,
              const DrawArgument& args,
-             int8_t z,
+             std::int8_t z,
              float speed);
-    void add(const Animation& effect, const DrawArgument& args, int8_t z);
+    void add(const Animation& effect, const DrawArgument& args, std::int8_t z);
     void add(const Animation& effect, const DrawArgument& args);
     void add(const Animation& effect);
 
@@ -52,7 +52,7 @@ private:
         {
         }
 
-        void draw(Point<int16_t> position, float alpha) const
+        void draw(Point<std::int16_t> position, float alpha) const
         {
             sprite.draw(position, alpha);
         }
@@ -60,7 +60,7 @@ private:
         bool update()
         {
             return sprite.update(
-                static_cast<uint16_t>(Constants::TIMESTEP * speed));
+                static_cast<std::uint16_t>(Constants::TIMESTEP * speed));
         }
 
     private:
@@ -70,6 +70,6 @@ private:
 
     /// Sorted (red-black) tree that associates z-indices (can be negative
     /// or non-negative) with the effects at that z-index.
-    std::map<int8_t, std::list<Effect>> effects;
+    std::map<std::int8_t, std::list<Effect>> effects;
 };
 } // namespace jrc

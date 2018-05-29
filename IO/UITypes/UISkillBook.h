@@ -30,13 +30,13 @@ namespace jrc
 class SkillIcon
 {
 public:
-    SkillIcon(int32_t id, int32_t level);
+    SkillIcon(std::int32_t id, std::int32_t level);
 
     void draw(const DrawArgument& args) const;
 
-    Cursor::State send_cursor(Point<int16_t> cursorpos, bool clicked);
+    Cursor::State send_cursor(Point<std::int16_t> cursorpos, bool clicked);
 
-    int32_t get_id() const;
+    std::int32_t get_id() const;
 
 private:
     enum State { NORMAL, DISABLED, MOUSEOVER };
@@ -46,7 +46,7 @@ private:
     Texture mouseover;
     Text name;
     Text level;
-    int32_t id;
+    std::int32_t id;
 
     State state;
     bool enabled;
@@ -63,32 +63,32 @@ public:
 
     void draw(float alpha) const override;
 
-    void doubleclick(Point<int16_t> cursorpos) override;
-    bool remove_cursor(bool clicked, Point<int16_t> cursorpos) override;
-    Cursor::State send_cursor(bool clicked, Point<int16_t> cursorpos) override;
+    void doubleclick(Point<std::int16_t> cursorpos) override;
+    bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
+    Cursor::State send_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
 
-    void update_stat(Maplestat::Id stat, int16_t value);
-    void update_skills(int32_t skill_id);
+    void update_stat(Maplestat::Id stat, std::int16_t value);
+    void update_skills(std::int32_t skill_id);
 
 protected:
-    Button::State button_pressed(uint16_t id) override;
+    Button::State button_pressed(std::uint16_t id) override;
 
 private:
-    void change_job(uint16_t id);
-    void change_sp(int16_t value);
-    void change_tab(uint16_t new_tab);
-    void change_offset(uint16_t new_offset);
+    void change_job(std::uint16_t id);
+    void change_sp(std::int16_t value);
+    void change_tab(std::uint16_t new_tab);
+    void change_offset(std::uint16_t new_offset);
 
-    void show_skill(int32_t skill_id);
+    void show_skill(std::int32_t skill_id);
     void clear_tooltip();
 
-    bool can_raise(int32_t skill_id) const;
-    void send_spup(uint16_t row);
+    bool can_raise(std::int32_t skill_id) const;
+    void send_spup(std::uint16_t row);
 
-    Job::Level joblevel_by_tab(uint16_t tab) const;
-    SkillIcon* icon_by_position(Point<int16_t> cursorpos);
+    Job::Level joblevel_by_tab(std::uint16_t tab) const;
+    SkillIcon* icon_by_position(Point<std::int16_t> cursorpos);
 
-    enum Buttons {
+    enum Buttons : std::uint16_t {
         BT_GUILD,
         BT_HYPER,
         BT_TAB0,
@@ -102,11 +102,11 @@ private:
         BT_SPUP3
     };
 
-    static constexpr int16_t ROWS = 4;
-    static constexpr int16_t ROW_HEIGHT = 40;
-    static constexpr Point<int16_t> SKILL_OFFSET = {11, 93};
-    static constexpr Point<int16_t> ICON_OFFSET = {2, 33};
-    static constexpr Point<int16_t> LINE_OFFSET = {2, 37};
+    static constexpr std::int16_t ROWS = 4;
+    static constexpr std::int16_t ROW_HEIGHT = 40;
+    static constexpr Point<std::int16_t> SKILL_OFFSET = {11, 93};
+    static constexpr Point<std::int16_t> ICON_OFFSET = {2, 33};
+    static constexpr Point<std::int16_t> LINE_OFFSET = {2, 37};
 
     const CharStats& stats;
     const Skillbook& skillbook;
@@ -120,11 +120,11 @@ private:
     Text splabel;
 
     Job job;
-    int16_t sp;
+    std::int16_t sp;
 
-    uint16_t tab;
-    uint16_t skillcount;
-    uint16_t offset;
+    std::uint16_t tab;
+    std::uint16_t skillcount;
+    std::uint16_t offset;
 
     std::vector<SkillIcon> icons;
 };

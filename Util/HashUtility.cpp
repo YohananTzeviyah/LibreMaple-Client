@@ -27,18 +27,18 @@ namespace jrc
 namespace HashUtility
 {
 // 128 MB.
-const size_t CHUNK_SIZE = 134217728;
+const std::size_t CHUNK_SIZE = 134217728;
 
-std::string get_filehash(const char* filename, uint64_t seed)
+std::string get_filehash(const char* filename, std::uint64_t seed)
 {
     // Open file stream.
     std::ifstream file(filename);
 
-    uint64_t result;
+    std::uint64_t result;
     if (file.good()) {
         // Get size of file.
         file.seekg(0, std::ios_base::end);
-        size_t end = file.tellg();
+        std::size_t end = file.tellg();
         file.seekg(0, std::ios_base::beg);
 
         if (end < CHUNK_SIZE) {
@@ -54,13 +54,13 @@ std::string get_filehash(const char* filename, uint64_t seed)
             XXH_errorcode error;
 
             error = XXH64_reset(&xxhstate, seed);
-            size_t offset = 0;
+            std::size_t offset = 0;
             while (offset < end && error == XXH_OK) {
                 file.read(buffer, CHUNK_SIZE);
                 error = XXH64_update(&xxhstate, buffer, CHUNK_SIZE);
                 offset += CHUNK_SIZE;
             }
-            size_t remaining = offset - end;
+            std::size_t remaining = offset - end;
             if (remaining > 0) {
                 file.read(buffer, CHUNK_SIZE);
                 error = XXH64_update(&xxhstate, buffer, remaining);

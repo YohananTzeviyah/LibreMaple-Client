@@ -50,23 +50,23 @@ public:
     /// Overload of `draw` that is inherited from `Char`.
     void draw(double viewx, double viewy, float alpha) const override;
     /// Update the player's animation, physics and states.
-    int8_t update(const Physics& physics) override;
+    std::int8_t update(const Physics& physics) override;
     /// Set flipped ignore if attacking.
     void set_direction(bool flipped) override;
     /// Set state ignore if attacking.
     void set_state(State stance) override;
 
     /// Respawn the player at the given position.
-    void respawn(Point<int16_t> position, bool underwater);
+    void respawn(Point<std::int16_t> position, bool underwater);
     /// Sends a Keyaction to the player's state, to apply forces, change the
     /// state and other behaviour.
     void send_action(KeyAction::Id action, bool pressed) override;
     /// Recalculates the total stats from base stats, inventories and skills.
     void recalc_stats(bool equipchanged);
     /// Change the equipment at the specified slot and recalculate stats.
-    void change_equip(int16_t slot);
+    void change_equip(std::int16_t slot);
     /// Use the item from the player's inventory with the given id.
-    void use_item(int32_t itemid);
+    void use_item(std::int32_t itemid);
 
     /// Return if the player is attacking.
     bool is_attacking() const;
@@ -93,26 +93,26 @@ public:
     bool has_buff(Buffstat::Id stat) const;
 
     /// Change a skill.
-    void change_skill(int32_t skill_id,
-                      int32_t level,
-                      int32_t masterlevel,
-                      int64_t expiration);
+    void change_skill(std::int32_t skill_id,
+                      std::int32_t level,
+                      std::int32_t masterlevel,
+                      std::int64_t expiration);
     /// Put a skill on cooldown.
-    void add_cooldown(int32_t skill_id, int32_t time);
+    void add_cooldown(std::int32_t skill_id, std::int32_t time);
     /// Check if a skill is on cooldown.
-    bool has_cooldown(int32_t skill_id) const;
+    bool has_cooldown(std::int32_t skill_id) const;
 
     /// Change the player's level, display the levelup effect.
-    void change_level(uint16_t level);
+    void change_level(std::uint16_t level);
     /// Change the player's job, display the job change effect.
-    void change_job(uint16_t jobid);
+    void change_job(std::uint16_t jobid);
 
     /// Return the character's level.
-    uint16_t get_level() const override;
+    std::uint16_t get_level() const override;
     /// Return the character's level of a skill.
-    int32_t get_skilllevel(int32_t skillid) const override;
+    std::int32_t get_skilllevel(std::int32_t skillid) const override;
     /// Return the character's attacking speed.
-    int8_t get_integer_attackspeed() const override;
+    std::int8_t get_integer_attackspeed() const override;
 
     /// Returns the current walking force, calculated from the total ES_SPEED
     /// stat.
@@ -167,7 +167,7 @@ private:
     ActiveBuffs active_buffs;
     PassiveBuffs passive_buffs;
 
-    std::unordered_map<int32_t, int32_t> cooldowns;
+    std::unordered_map<std::int32_t, std::int32_t> cooldowns;
 
     std::map<KeyAction::Id, bool> keysdown;
 

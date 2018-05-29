@@ -24,8 +24,8 @@ namespace ItemParser
 // Parse a normal item from a packet.
 void add_item(InPacket& recv,
               InventoryType::Id invtype,
-              int16_t slot,
-              int32_t id,
+              std::int16_t slot,
+              std::int32_t id,
               Inventory& inventory)
 {
     // Read all item stats.
@@ -33,10 +33,10 @@ void add_item(InPacket& recv,
     if (cash) {
         recv.skip(8); // unique id
     }
-    int64_t expire = recv.read_long();
-    int16_t count = recv.read_short();
+    std::int64_t expire = recv.read_long();
+    std::int16_t count = recv.read_short();
     std::string owner = recv.read_string();
-    int16_t flag = recv.read_short();
+    std::int16_t flag = recv.read_short();
 
     // If the item is a rechargable projectile, some additional bytes are sent.
     if ((id / 10000 == 233) || (id / 10000 == 207)) {
@@ -49,8 +49,8 @@ void add_item(InPacket& recv,
 // Parse a pet from a packet.
 void add_pet(InPacket& recv,
              InventoryType::Id invtype,
-             int16_t slot,
-             int32_t id,
+             std::int16_t slot,
+             std::int32_t id,
              Inventory& inventory)
 {
     // Read all pet stats.
@@ -58,11 +58,11 @@ void add_pet(InPacket& recv,
     if (cash) {
         recv.skip(8); // unique id
     }
-    int64_t expire = recv.read_long();
+    std::int64_t expire = recv.read_long();
     std::string petname = recv.read_padded_string(13);
-    int8_t petlevel = recv.read_byte();
-    int16_t closeness = recv.read_short();
-    int8_t fullness = recv.read_byte();
+    std::int8_t petlevel = recv.read_byte();
+    std::int16_t closeness = recv.read_short();
+    std::int8_t fullness = recv.read_byte();
 
     // Some unused bytes.
     recv.skip(18);
@@ -81,8 +81,8 @@ void add_pet(InPacket& recv,
 // Parse an equip from a packet.
 void add_equip(InPacket& recv,
                InventoryType::Id invtype,
-               int16_t slot,
-               int32_t id,
+               std::int16_t slot,
+               std::int32_t id,
                Inventory& inventory)
 {
     // Read equip information.
@@ -90,22 +90,22 @@ void add_equip(InPacket& recv,
     if (cash) {
         recv.skip(8); // unique id
     }
-    int64_t expire = recv.read_long();
-    uint8_t slots = recv.read_byte();
-    uint8_t level = recv.read_byte();
+    std::int64_t expire = recv.read_long();
+    std::uint8_t slots = recv.read_byte();
+    std::uint8_t level = recv.read_byte();
 
     // Read equip stats.
-    EnumMap<Equipstat::Id, uint16_t> stats;
+    EnumMap<Equipstat::Id, std::uint16_t> stats;
     for (auto iter : stats) {
         iter.second = recv.read_short();
     }
 
     // Some more information.
     std::string owner = recv.read_string();
-    int16_t flag = recv.read_short();
-    uint8_t itemlevel = 0;
-    uint16_t itemexp = 0;
-    int32_t vicious = 0;
+    std::int16_t flag = recv.read_short();
+    std::uint8_t itemlevel = 0;
+    std::uint16_t itemexp = 0;
+    std::int32_t vicious = 0;
     if (cash) {
         // Some unused bytes.
         recv.skip(10);
@@ -142,12 +142,12 @@ void add_equip(InPacket& recv,
 
 void parse_item(InPacket& recv,
                 InventoryType::Id invtype,
-                int16_t slot,
+                std::int16_t slot,
                 Inventory& inventory)
 {
     // Read type and item id.
     recv.read_byte(); // 'type' byte
-    int32_t iid = recv.read_int();
+    std::int32_t iid = recv.read_int();
 
     if (invtype == InventoryType::EQUIP ||
         invtype == InventoryType::EQUIPPED) {

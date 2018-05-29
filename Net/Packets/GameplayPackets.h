@@ -16,7 +16,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "../../IO/Keyboard.h"
 #include "MovementPacket.h"
+
+#include <unordered_map>
 
 namespace jrc
 {
@@ -26,7 +29,7 @@ class ChangeMapPacket : public OutPacket
 {
 public:
     ChangeMapPacket(bool died,
-                    int32_t targetid,
+                    std::int32_t targetid,
                     const std::string& targetp,
                     bool usewheel)
         : OutPacket(CHANGEMAP)
@@ -35,7 +38,7 @@ public:
         write_int(targetid);
         write_string(targetp);
         skip(1);
-        write_short(usewheel ? 1 : 0);
+        write_short(static_cast<std::int16_t>(usewheel ? 1 : 0));
     }
 };
 
@@ -52,12 +55,36 @@ public:
     }
 };
 
+/// Requests one or more new keybindings to be registered.
+/// Opcode: CHANGE_KEYMAP(0x87)
+class ChangeKeymapPacket : public OutPacket
+{
+public:
+    ChangeKeymapPacket(const std::unordered_map<std::int32_t, Keyboard::Mapping>& maplekeys)
+        : OutPacket(CHANGE_KEYMAP)
+    {
+        // mode
+        write_int(0);
+
+        // number of changes
+        write_int(static_cast<std::int32_t>(maplekeys.size()));
+
+        for (const auto& [key, mapping] : maplekeys) {
+            const auto& [type, action] = mapping;
+
+            write_int(key);
+            write_byte(static_cast<std::int8_t>(type));
+            write_int(action);
+        }
+    }
+};
+
 /// Requests various party-related things.
 /// Opcode: PARTY_OPERATION(124)
 class PartyOperationPacket : public OutPacket
 {
 public:
-    enum Operation : int8_t {
+    enum Operation : std::int8_t {
         CREATE = 1,
         LEAVE = 2,
         JOIN = 3,
@@ -98,7 +125,7 @@ public:
 class JoinPartyPacket : public PartyOperationPacket
 {
 public:
-    JoinPartyPacket(int32_t party_id) : PartyOperationPacket(JOIN)
+    JoinPartyPacket(std::int32_t party_id) : PartyOperationPacket(JOIN)
     {
         write_int(party_id);
     }
@@ -120,7 +147,7 @@ public:
 class ExpelFromPartyPacket : public PartyOperationPacket
 {
 public:
-    ExpelFromPartyPacket(int32_t cid) : PartyOperationPacket(EXPEL)
+    ExpelFromPartyPacket(std::int32_t cid) : PartyOperationPacket(EXPEL)
     {
         write_int(cid);
     }
@@ -131,7 +158,7 @@ public:
 class ChangePartyLeaderPacket : public PartyOperationPacket
 {
 public:
-    ChangePartyLeaderPacket(int32_t cid) : PartyOperationPacket(PASS_LEADER)
+    ChangePartyLeaderPacket(std::int32_t cid) : PartyOperationPacket(PASS_LEADER)
     {
         write_int(cid);
     }
@@ -142,15 +169,15 @@ public:
 class MoveMobPacket : public MovementPacket
 {
 public:
-    MoveMobPacket(int32_t oid,
-                  int16_t type,
-                  int8_t skillb,
-                  int8_t skill0,
-                  int8_t skill1,
-                  int8_t skill2,
-                  int8_t skill3,
-                  int8_t skill4,
-                  Point<int16_t> startpos,
+    MoveMobPacket(std::int32_t oid,
+                  std::int16_t type,
+                  std::int8_t skillb,
+                  std::int8_t skill0,
+                  std::int8_t skill1,
+                  std::int8_t skill2,
+                  std::int8_t skill3,
+                  std::int8_t skill4,
+                  Point<std::int16_t> startpos,
                   const Movement& movement)
         : MovementPacket(MOVE_MONSTER)
     {
@@ -177,7 +204,7 @@ public:
 class PickupItemPacket : public OutPacket
 {
 public:
-    PickupItemPacket(int32_t oid, Point<int16_t> position)
+    PickupItemPacket(std::int32_t oid, Point<std::int16_t> position)
         : OutPacket(PICKUP_ITEM)
     {
         write_int(0);

@@ -27,13 +27,13 @@ class ItemTooltip : public Tooltip
 public:
     ItemTooltip();
 
-    void draw(Point<int16_t> position) const override;
+    void draw(Point<std::int16_t> position) const override;
 
-    bool set_item(int32_t itemid);
+    bool set_item(std::int32_t itemid);
 
 private:
-    int32_t itemid;
-    int16_t filllength;
+    std::int32_t itemid;
+    std::int16_t filllength;
     Texture itemicon;
 
     Text name;

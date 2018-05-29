@@ -24,8 +24,8 @@
 
 namespace jrc
 {
-constexpr Point<int16_t> UIStatusbar::POSITION;
-constexpr Point<int16_t> UIStatusbar::DIMENSION;
+constexpr Point<std::int16_t> UIStatusbar::POSITION;
+constexpr Point<std::int16_t> UIStatusbar::DIMENSION;
 
 UIStatusbar::UIStatusbar(const CharStats& st)
     : UIElement(POSITION, DIMENSION), stats(st), chatbar(POSITION)
@@ -76,35 +76,36 @@ UIStatusbar::UIStatusbar(const CharStats& st)
     buttons[BT_INVENTORY] = std::make_unique<MapleButton>(mainbar["BtInven"]);
     buttons[BT_EQUIPS] = std::make_unique<MapleButton>(mainbar["BtEquip"]);
     buttons[BT_SKILL] = std::make_unique<MapleButton>(mainbar["BtSkill"]);
+    buttons[BT_KEYSETTING] = std::make_unique<MapleButton>(mainbar["BtKeysetting"]);
 }
 
 void UIStatusbar::draw(float alpha) const
 {
     UIElement::draw(alpha);
 
-    expbar.draw(position + Point<int16_t>(-261, -15));
-    hpbar.draw(position + Point<int16_t>(-261, -31));
-    mpbar.draw(position + Point<int16_t>(-90, -31));
+    expbar.draw(position + Point<std::int16_t>(-261, -15));
+    hpbar.draw(position + Point<std::int16_t>(-261, -31));
+    mpbar.draw(position + Point<std::int16_t>(-90, -31));
 
-    int16_t level = stats.get_stat(Maplestat::LEVEL);
-    int16_t hp = stats.get_stat(Maplestat::HP);
-    int16_t mp = stats.get_stat(Maplestat::MP);
-    int32_t maxhp = stats.get_total(Equipstat::HP);
-    int32_t maxmp = stats.get_total(Equipstat::MP);
-    int64_t exp = stats.get_exp();
+    std::int16_t level = stats.get_stat(Maplestat::LEVEL);
+    std::int16_t hp = stats.get_stat(Maplestat::HP);
+    std::int16_t mp = stats.get_stat(Maplestat::MP);
+    std::int32_t maxhp = stats.get_total(Equipstat::HP);
+    std::int32_t maxmp = stats.get_total(Equipstat::MP);
+    std::int64_t exp = stats.get_exp();
 
     std::string expstring = std::to_string(100 * getexppercent());
     statset.draw(std::to_string(exp) + "[" +
                      expstring.substr(0, expstring.find('.') + 3) + "%]",
-                 position + Point<int16_t>(47, -13));
+                 position + Point<std::int16_t>(47, -13));
     statset.draw("[" + std::to_string(hp) + "/" + std::to_string(maxhp) + "]",
-                 position + Point<int16_t>(-124, -29));
+                 position + Point<std::int16_t>(-124, -29));
     statset.draw("[" + std::to_string(mp) + "/" + std::to_string(maxmp) + "]",
-                 position + Point<int16_t>(47, -29));
-    levelset.draw(std::to_string(level), position + Point<int16_t>(-480, -24));
+                 position + Point<std::int16_t>(47, -29));
+    levelset.draw(std::to_string(level), position + Point<std::int16_t>(-480, -24));
 
-    joblabel.draw(position + Point<int16_t>(-435, -21));
-    namelabel.draw(position + Point<int16_t>(-435, -36));
+    joblabel.draw(position + Point<std::int16_t>(-435, -21));
+    namelabel.draw(position + Point<std::int16_t>(-435, -36));
 
     chatbar.draw(alpha);
 }
@@ -127,7 +128,7 @@ void UIStatusbar::update()
     }
 }
 
-Button::State UIStatusbar::button_pressed(uint16_t id)
+Button::State UIStatusbar::button_pressed(std::uint16_t id)
 {
     switch (id) {
     case BT_STATS:
@@ -142,20 +143,24 @@ Button::State UIStatusbar::button_pressed(uint16_t id)
     case BT_SKILL:
         UI::get().send_menu(KeyAction::SKILLBOOK);
         return Button::NORMAL;
+    case BT_KEYSETTING:
+        UI::get().send_menu(KeyAction::KEYCONFIG);
+        return Button::NORMAL;
     default:
         return Button::PRESSED;
     }
 }
 
-bool UIStatusbar::is_in_range(Point<int16_t> cursorpos) const
+bool UIStatusbar::is_in_range(Point<std::int16_t> cursorpos) const
 {
-    Rectangle<int16_t> bounds(position - Point<int16_t>(512, 84),
-                              position - Point<int16_t>(512, 84) + dimension);
+    Rectangle<std::int16_t> bounds(
+        position - Point<std::int16_t>(512, 84),
+        position - Point<std::int16_t>(512, 84) + dimension);
 
     return bounds.contains(cursorpos) || chatbar.is_in_range(cursorpos);
 }
 
-bool UIStatusbar::remove_cursor(bool clicked, Point<int16_t> cursorpos)
+bool UIStatusbar::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
 {
     if (chatbar.remove_cursor(clicked, cursorpos)) {
         return true;
@@ -164,7 +169,7 @@ bool UIStatusbar::remove_cursor(bool clicked, Point<int16_t> cursorpos)
     return UIElement::remove_cursor(clicked, cursorpos);
 }
 
-Cursor::State UIStatusbar::send_cursor(bool pressed, Point<int16_t> cursorpos)
+Cursor::State UIStatusbar::send_cursor(bool pressed, Point<std::int16_t> cursorpos)
 {
     if (chatbar.is_in_range(cursorpos)) {
         UIElement::send_cursor(pressed, cursorpos);
@@ -196,28 +201,28 @@ void UIStatusbar::display_message(Messages::Type line,
 
 float UIStatusbar::getexppercent() const
 {
-    int16_t level = stats.get_stat(Maplestat::LEVEL);
+    std::int16_t level = stats.get_stat(Maplestat::LEVEL);
     if (level >= ExpTable::LEVELCAP) {
         return 0.0f;
     }
 
-    int64_t exp = stats.get_exp();
+    std::int64_t exp = stats.get_exp();
     return static_cast<float>(static_cast<double>(exp) /
                               ExpTable::values[level]);
 }
 
 float UIStatusbar::gethppercent() const
 {
-    int16_t hp = stats.get_stat(Maplestat::HP);
-    int32_t maxhp = stats.get_total(Equipstat::HP);
+    std::int16_t hp = stats.get_stat(Maplestat::HP);
+    std::int32_t maxhp = stats.get_total(Equipstat::HP);
 
     return static_cast<float>(hp) / maxhp;
 }
 
 float UIStatusbar::getmppercent() const
 {
-    int16_t mp = stats.get_stat(Maplestat::MP);
-    int32_t maxmp = stats.get_total(Equipstat::MP);
+    std::int16_t mp = stats.get_stat(Maplestat::MP);
+    std::int32_t maxmp = stats.get_total(Equipstat::MP);
 
     return static_cast<float>(mp) / maxmp;
 }

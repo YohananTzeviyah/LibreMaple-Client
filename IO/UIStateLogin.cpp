@@ -28,7 +28,7 @@ UIStateLogin::UIStateLogin()
     emplace<UILogin>();
 }
 
-void UIStateLogin::draw(float inter, Point<int16_t>) const
+void UIStateLogin::draw(float inter, Point<std::int16_t>) const
 {
     for (auto iter : elements) {
         UIElement* element = iter.second.get();
@@ -46,15 +46,15 @@ void UIStateLogin::update()
     }
 }
 
-void UIStateLogin::doubleclick(Point<int16_t>)
+void UIStateLogin::doubleclick(Point<std::int16_t>)
 {
 }
 
-void UIStateLogin::send_key(KeyType::Id, int32_t, bool)
+void UIStateLogin::send_key(KeyType::Id, std::int32_t, bool)
 {
 }
 
-Cursor::State UIStateLogin::send_cursor(Cursor::State mst, Point<int16_t> pos)
+Cursor::State UIStateLogin::send_cursor(Cursor::State mst, Point<std::int16_t> pos)
 {
     if (UIElement* focusedelement = get(focused)) {
         if (focusedelement->is_active()) {
@@ -99,16 +99,16 @@ void UIStateLogin::clear_tooltip(Tooltip::Parent)
 {
 }
 
-void UIStateLogin::show_equip(Tooltip::Parent, int16_t)
+void UIStateLogin::show_equip(Tooltip::Parent, std::int16_t)
 {
 }
 
-void UIStateLogin::show_item(Tooltip::Parent, int32_t)
+void UIStateLogin::show_item(Tooltip::Parent, std::int32_t)
 {
 }
 
 void UIStateLogin::show_skill(
-    Tooltip::Parent, int32_t, int32_t, int32_t, int64_t)
+    Tooltip::Parent, std::int32_t, std::int32_t, std::int32_t, std::int64_t)
 {
 }
 
@@ -147,7 +147,7 @@ UIElement* UIStateLogin::get(UIElement::Type type)
     return elements[type].get();
 }
 
-UIElement* UIStateLogin::get_front(Point<int16_t> pos)
+UIElement* UIStateLogin::get_front(Point<std::int16_t> pos)
 {
     auto begin = elements.values().rbegin();
     auto end = elements.values().rend();

@@ -21,7 +21,7 @@
 
 namespace jrc
 {
-Equipslot::Id Equipslot::by_id(size_t id)
+Equipslot::Id Equipslot::by_id(std::size_t id)
 {
     if (id >= LENGTH) {
         Console::get().print("Invalid Equipslot id: " + std::to_string(id));

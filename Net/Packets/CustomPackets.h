@@ -31,7 +31,7 @@ namespace jrc
 class NxCheckPacket : public OutPacket
 {
 public:
-    NxCheckPacket(uint64_t seed) : OutPacket(HASH_CHECK)
+    NxCheckPacket(std::uint64_t seed) : OutPacket(HASH_CHECK)
     {
         write_byte(NxFiles::NUM_FILES);
         for (auto filename : NxFiles::filenames) {

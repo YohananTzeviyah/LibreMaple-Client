@@ -26,7 +26,7 @@ public:
     Gauge(Texture front,
           Texture mid,
           Texture end,
-          int16_t maximum,
+          std::int16_t maximum,
           float percentage);
     Gauge();
 
@@ -37,7 +37,7 @@ private:
     Texture barfront;
     Texture barmid;
     Texture barend;
-    int16_t maximum;
+    std::int16_t maximum;
 
     float percentage;
     float target;

@@ -20,6 +20,7 @@
 #include "UIStateGame.h"
 #include "UIStateLogin.h"
 #include "Window.h"
+#include "../Graphics/GraphicsGL.h"
 
 namespace jrc
 {
@@ -33,6 +34,7 @@ void UI::init()
 {
     cursor.init();
     change_state(LOGIN);
+    keyboard.load_from_toml();
 }
 
 void UI::draw(float alpha) const
@@ -65,9 +67,13 @@ void UI::change_state(State id)
 {
     switch (id) {
     case LOGIN:
+        Window::get().resize(false);
+        GraphicsGL::get().reinit();
         state = std::make_unique<UIStateLogin>();
         break;
     case GAME:
+        Window::get().resize(true);
+        GraphicsGL::get().reinit();
         state = std::make_unique<UIStateGame>();
         break;
     }
@@ -83,7 +89,7 @@ bool UI::not_quitted() const
     return !quitted;
 }
 
-void UI::send_cursor(Point<int16_t> cursorpos, Cursor::State cursorstate)
+void UI::send_cursor(Point<std::int16_t> cursorpos, Cursor::State cursorstate)
 {
     Cursor::State nextstate = state->send_cursor(cursorstate, cursorpos);
     cursor.set_state(nextstate);
@@ -94,7 +100,7 @@ void UI::send_cursor(bool pressed)
 {
     Cursor::State cursorstate =
         (pressed && enabled) ? Cursor::CLICKING : Cursor::IDLE;
-    Point<int16_t> cursorpos = cursor.get_position();
+    Point<std::int16_t> cursorpos = cursor.get_position();
     send_cursor(cursorpos, cursorstate);
 
     if (focusedtextfield && pressed) {
@@ -110,18 +116,18 @@ void UI::send_cursor(bool pressed)
     }
 }
 
-void UI::send_cursor(Point<int16_t> pos)
+void UI::send_cursor(Point<std::int16_t> pos)
 {
     send_cursor(pos, cursor.get_state());
 }
 
 void UI::doubleclick()
 {
-    Point<int16_t> pos = cursor.get_position();
+    Point<std::int16_t> pos = cursor.get_position();
     state->doubleclick(pos);
 }
 
-void UI::send_key(int32_t keycode, bool pressed)
+void UI::send_key(std::int32_t keycode, bool pressed)
 {
     if (focusedtextfield) {
         bool ctrl = is_key_down[keyboard.ctrlcode()];
@@ -179,7 +185,7 @@ void UI::drag_icon(Icon* icon)
     state->drag_icon(icon);
 }
 
-void UI::add_keymapping(uint8_t no, uint8_t type, int32_t action)
+void UI::add_keymapping(std::uint8_t no, std::uint8_t type, std::int32_t action)
 {
     keyboard.assign(no, type, action);
 }
@@ -189,21 +195,21 @@ void UI::clear_tooltip(Tooltip::Parent parent)
     state->clear_tooltip(parent);
 }
 
-void UI::show_equip(Tooltip::Parent parent, int16_t slot)
+void UI::show_equip(Tooltip::Parent parent, std::int16_t slot)
 {
     state->show_equip(parent, slot);
 }
 
-void UI::show_item(Tooltip::Parent parent, int32_t item_id)
+void UI::show_item(Tooltip::Parent parent, std::int32_t item_id)
 {
     state->show_item(parent, item_id);
 }
 
 void UI::show_skill(Tooltip::Parent parent,
-                    int32_t skill_id,
-                    int32_t level,
-                    int32_t masterlevel,
-                    int64_t expiration)
+                    std::int32_t skill_id,
+                    std::int32_t level,
+                    std::int32_t masterlevel,
+                    std::int64_t expiration)
 {
     state->show_skill(parent, skill_id, level, masterlevel, expiration);
 }

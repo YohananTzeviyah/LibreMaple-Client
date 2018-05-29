@@ -29,7 +29,7 @@ namespace jrc
 {
 using namespace std::string_literals;
 
-Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
+Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
 {
     const EquipData& equipdata = EquipData::get(itemid);
 
@@ -40,9 +40,9 @@ Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
         twohanded = false;
     }
 
-    constexpr size_t NON_WEAPON_TYPES = 15;
-    constexpr size_t WEAPON_OFFSET = NON_WEAPON_TYPES + 15;
-    constexpr size_t WEAPON_TYPES = 20;
+    constexpr std::size_t NON_WEAPON_TYPES = 15;
+    constexpr std::size_t WEAPON_OFFSET = NON_WEAPON_TYPES + 15;
+    constexpr std::size_t WEAPON_TYPES = 20;
     constexpr Layer layers[NON_WEAPON_TYPES] = {Layer::CAP,
                                                 Layer::FACEACC,
                                                 Layer::EYEACC,
@@ -77,7 +77,7 @@ Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
 
     vslot = info["vslot"].get_string();
 
-    switch (int32_t standno = info["stand"]) {
+    switch (std::int32_t standno = info["stand"]) {
     case 1:
         stand = Stance::STAND1;
         break;
@@ -89,7 +89,7 @@ Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
         break;
     }
 
-    switch (int32_t walkno = info["walk"]) {
+    switch (std::int32_t walkno = info["walk"]) {
     case 1:
         walk = Stance::WALK1;
         break;
@@ -110,7 +110,7 @@ Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
             continue;
         }
 
-        for (uint8_t frame = 0; nl::node framenode = stancenode[frame];
+        for (std::uint8_t frame = 0; nl::node framenode = stancenode[frame];
              ++frame) {
             for (nl::node partnode : framenode) {
                 std::string part = partnode.name();
@@ -130,7 +130,7 @@ Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
                 }
 
                 std::string parent;
-                Point<int16_t> parentpos;
+                Point<std::int16_t> parentpos;
                 for (const auto& mapnode : partnode["map"]) {
                     if (mapnode.data_type() == nl::node::type::vector) {
                         parent = mapnode.name();
@@ -139,7 +139,7 @@ Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
                 }
 
                 // nl::node mapnode = partnode["map"];
-                Point<int16_t> shift;
+                Point<std::int16_t> shift;
                 switch (eqslot) {
                 case Equipslot::FACEACC:
                     shift -= parentpos;
@@ -179,13 +179,13 @@ Clothing::Clothing(int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
         }
     }
 
-    static const std::unordered_set<int32_t> transparents = {1002186};
+    static const std::unordered_set<std::int32_t> transparents = {1002186};
     transparent = transparents.count(itemid) > 0;
 }
 
 void Clothing::draw(Stance::Id stance,
                     Layer layer,
-                    uint8_t frame,
+                    std::uint8_t frame,
                     const DrawArgument& args) const
 {
     auto range = stances[stance][layer].equal_range(frame);
@@ -209,7 +209,7 @@ bool Clothing::is_twohanded() const
     return twohanded;
 }
 
-int32_t Clothing::get_id() const
+std::int32_t Clothing::get_id() const
 {
     return itemid;
 }

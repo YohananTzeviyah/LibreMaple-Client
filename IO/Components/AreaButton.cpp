@@ -19,7 +19,7 @@
 
 namespace jrc
 {
-AreaButton::AreaButton(Point<int16_t> pos, Point<int16_t> dim)
+AreaButton::AreaButton(Point<std::int16_t> pos, Point<std::int16_t> dim)
 {
     position = pos;
     dimension = dim;
@@ -27,9 +27,9 @@ AreaButton::AreaButton(Point<int16_t> pos, Point<int16_t> dim)
     active = true;
 }
 
-Rectangle<int16_t> AreaButton::bounds(Point<int16_t> parentpos) const
+Rectangle<std::int16_t> AreaButton::bounds(Point<std::int16_t> parentpos) const
 {
-    Point<int16_t> absp = position + parentpos;
-    return Rectangle<int16_t>(absp, absp + dimension);
+    Point<std::int16_t> absp = position + parentpos;
+    return Rectangle<std::int16_t>(absp, absp + dimension);
 }
 } // namespace jrc

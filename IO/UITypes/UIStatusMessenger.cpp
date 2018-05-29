@@ -28,10 +28,10 @@ StatusInfo::StatusInfo(const std::string& str, Text::Color color)
     opacity.set(1.0f);
 }
 
-void StatusInfo::draw(Point<int16_t> position, float alpha) const
+void StatusInfo::draw(Point<std::int16_t> position, float alpha) const
 {
     float interopc = opacity.get(alpha);
-    shadow.draw({position + Point<int16_t>(1, 1), interopc});
+    shadow.draw({position + Point<std::int16_t>(1, 1), interopc});
     text.draw({position, interopc});
 }
 
@@ -50,7 +50,7 @@ UIStatusMessenger::UIStatusMessenger()
 
 void UIStatusMessenger::draw(float inter) const
 {
-    Point<int16_t> infopos = {position.x(), position.y()};
+    Point<std::int16_t> infopos = {position.x(), position.y()};
     for (const StatusInfo& info : statusinfos) {
         info.draw(infopos, inter);
         infopos.shift_y(-16);
@@ -67,9 +67,10 @@ void UIStatusMessenger::update()
 void UIStatusMessenger::show_status(Text::Color color,
                                     const std::string& message)
 {
-    statusinfos.push_front({message, color});
+    statusinfos.emplace_front(message, color);
 
-    if (statusinfos.size() > MAX_MESSAGES)
+    if (statusinfos.size() > MAX_MESSAGES) {
         statusinfos.pop_back();
+    }
 }
 } // namespace jrc

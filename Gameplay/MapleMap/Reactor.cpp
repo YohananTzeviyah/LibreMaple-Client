@@ -22,7 +22,7 @@
 
 namespace jrc
 {
-Reactor::Reactor(int32_t o, int32_t r, int8_t s, Point<int16_t> p)
+Reactor::Reactor(std::int32_t o, std::int32_t r, std::int8_t s, Point<std::int16_t> p)
     : MapObject(o, p), rid(r), state(s)
 {
     std::string strid = string_format::extend_id(rid, 7);
@@ -33,12 +33,12 @@ Reactor::Reactor(int32_t o, int32_t r, int8_t s, Point<int16_t> p)
 
 void Reactor::draw(double viewx, double viewy, float alpha) const
 {
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
-    Point<int16_t> shift = {0, normal.get_dimensions().y() / 2};
+    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> shift = {0, normal.get_dimensions().y() / 2};
     normal.draw(absp - shift, alpha);
 }
 
-void Reactor::destroy(int8_t, Point<int16_t>)
+void Reactor::destroy(std::int8_t, Point<std::int16_t>)
 {
     deactivate();
 }

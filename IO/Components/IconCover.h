@@ -27,9 +27,9 @@ class IconCover
 public:
     enum Type { BUFF, COOLDOWN };
 
-    IconCover(Type type, int32_t duration);
+    IconCover(Type type, std::int32_t duration);
 
-    void draw(Point<int16_t> position, float alpha) const;
+    void draw(Point<std::int16_t> position, float alpha) const;
     void update();
 
 private:

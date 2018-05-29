@@ -25,18 +25,18 @@ Tile::Tile(nl::node src, const std::string& ts)
 {
     nl::node dsrc = nl::nx::map["Tile"][ts][src["u"]][src["no"]];
     texture = Texture(nl::nx::map["Tile"][ts][src["u"]][src["no"]]);
-    pos = Point<int16_t>(src["x"], src["y"]);
+    pos = Point<std::int16_t>(src["x"], src["y"]);
     z = dsrc["z"];
     if (z == 0)
         z = dsrc["zM"];
 }
 
-void Tile::draw(Point<int16_t> viewpos) const
+void Tile::draw(Point<std::int16_t> viewpos) const
 {
     texture.draw(pos + viewpos);
 }
 
-uint8_t Tile::getz() const
+std::uint8_t Tile::getz() const
 {
     return z;
 }

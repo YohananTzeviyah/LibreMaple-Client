@@ -23,16 +23,16 @@
 
 namespace jrc
 {
-UILoginNotice::UILoginNotice(int8_t id)
+UILoginNotice::UILoginNotice(std::int8_t id)
 {
     nl::node notice = nl::nx::ui["Login.img"]["Notice"];
 
-    int8_t back = (id == 16) ? 1 : 0;
+    std::int8_t back = (id == 16) ? 1 : 0;
     background = notice["backgrnd"][back];
     text = {notice["text"][id], {17, 13}};
 
     buttons[BT_OK] = std::make_unique<MapleButton>(notice["BtYes"],
-                                                   Point<int16_t>(100, 100));
+                                                   Point<std::int16_t>(100, 100));
 
     position = {292, 200};
     dimension = {362, 219};
@@ -47,7 +47,7 @@ void UILoginNotice::draw(float alpha) const
     UIElement::draw(alpha);
 }
 
-Button::State UILoginNotice::button_pressed(uint16_t)
+Button::State UILoginNotice::button_pressed(std::uint16_t)
 {
     active = false;
     return Button::PRESSED;

@@ -27,12 +27,12 @@ namespace jrc
 class TwoSpriteButton : public Button
 {
 public:
-    TwoSpriteButton(nl::node nsrc, nl::node ssrc, Point<int16_t> position);
+    TwoSpriteButton(nl::node nsrc, nl::node ssrc, Point<std::int16_t> position);
     TwoSpriteButton(nl::node nsrc, nl::node ssrc);
     TwoSpriteButton();
 
-    void draw(Point<int16_t> position) const;
-    Rectangle<int16_t> bounds(Point<int16_t> position) const;
+    void draw(Point<std::int16_t> position) const;
+    Rectangle<std::int16_t> bounds(Point<std::int16_t> position) const;
 
 private:
     BoolPair<Texture> textures;

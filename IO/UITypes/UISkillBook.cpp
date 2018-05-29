@@ -30,11 +30,11 @@
 
 namespace jrc
 {
-constexpr Point<int16_t> UISkillbook::SKILL_OFFSET;
-constexpr Point<int16_t> UISkillbook::ICON_OFFSET;
-constexpr Point<int16_t> UISkillbook::LINE_OFFSET;
+constexpr Point<std::int16_t> UISkillbook::SKILL_OFFSET;
+constexpr Point<std::int16_t> UISkillbook::ICON_OFFSET;
+constexpr Point<std::int16_t> UISkillbook::LINE_OFFSET;
 
-SkillIcon::SkillIcon(int32_t i, int32_t lv) : id(i)
+SkillIcon::SkillIcon(std::int32_t i, std::int32_t lv) : id(i)
 {
     const SkillData& data = SkillData::get(id);
 
@@ -49,8 +49,8 @@ SkillIcon::SkillIcon(int32_t i, int32_t lv) : id(i)
     level = {Text::A11L, Text::LEFT, Text::DARKGREY, levelstr};
     state = NORMAL;
 
-    constexpr uint16_t MAX_NAME_WIDTH = 96;
-    size_t overhang = 3;
+    constexpr std::uint16_t MAX_NAME_WIDTH = 96;
+    std::size_t overhang = 3;
     while (name.width() > MAX_NAME_WIDTH) {
         namestr.replace(namestr.end() - overhang, namestr.end(), "...");
         overhang++;
@@ -73,13 +73,13 @@ void SkillIcon::draw(const DrawArgument& args) const
         break;
     }
 
-    name.draw(args + Point<int16_t>(38, -34));
-    level.draw(args + Point<int16_t>(38, -16));
+    name.draw(args + Point<std::int16_t>(38, -34));
+    level.draw(args + Point<std::int16_t>(38, -16));
 }
 
-Cursor::State SkillIcon::send_cursor(Point<int16_t> cursorpos, bool clicked)
+Cursor::State SkillIcon::send_cursor(Point<std::int16_t> cursorpos, bool clicked)
 {
-    constexpr Rectangle<int16_t> bounds(0, 32, 0, 32);
+    constexpr Rectangle<std::int16_t> bounds(0, 32, 0, 32);
     bool inrange = bounds.contains(cursorpos);
     switch (state) {
     case NORMAL:
@@ -113,7 +113,7 @@ Cursor::State SkillIcon::send_cursor(Point<int16_t> cursorpos, bool clicked)
     }
 }
 
-int32_t SkillIcon::get_id() const
+std::int32_t SkillIcon::get_id() const
 {
     return id;
 }
@@ -135,15 +135,15 @@ UISkillbook::UISkillbook(const CharStats& in_stats,
     nl::node tabe = main["Tab"]["enabled"];
     nl::node tabd = main["Tab"]["disabled"];
 
-    for (uint16_t i = BT_TAB0; i <= BT_TAB4; ++i) {
-        uint16_t tabid = i - BT_TAB0;
+    for (std::uint16_t i = BT_TAB0; i <= BT_TAB4; ++i) {
+        std::uint16_t tabid = i - BT_TAB0;
         buttons[i] =
             std::make_unique<TwoSpriteButton>(tabd[tabid], tabe[tabid]);
     }
-    for (uint16_t i = BT_SPUP0; i <= BT_SPUP3; ++i) {
-        uint16_t spupid = i - BT_SPUP0;
-        Point<int16_t> spup_position =
-            SKILL_OFFSET + Point<int16_t>(124, 20 + spupid * ROW_HEIGHT);
+    for (std::uint16_t i = BT_SPUP0; i <= BT_SPUP3; ++i) {
+        std::uint16_t spupid = i - BT_SPUP0;
+        Point<std::int16_t> spup_position =
+            SKILL_OFFSET + Point<std::int16_t>(124, 20 + spupid * ROW_HEIGHT);
         buttons[i] =
             std::make_unique<MapleButton>(main["BtSpUp"], spup_position);
     }
@@ -152,7 +152,7 @@ UISkillbook::UISkillbook(const CharStats& in_stats,
     splabel = {Text::A11M, Text::RIGHT, Text::LIGHTGREY};
 
     slider = {11, {92, 236}, 154, ROWS, 1, [&](bool upwards) {
-                  int16_t shift = upwards ? -1 : 1;
+                  std::int16_t shift = upwards ? -1 : 1;
                   bool above = offset + shift >= 0;
                   bool below = offset + 4 + shift <= skillcount;
                   if (above && below) {
@@ -164,15 +164,17 @@ UISkillbook::UISkillbook(const CharStats& in_stats,
     change_sp(stats.get_stat(Maplestat::SP));
 
     dimension = {174, 299};
+
+    tab = 0;
 }
 
 void UISkillbook::draw(float alpha) const
 {
     draw_sprites(alpha);
 
-    bookicon.draw(position + Point<int16_t>(12, 85));
-    booktext.draw(position + Point<int16_t>(100, 49));
-    splabel.draw(position + Point<int16_t>(162, 254));
+    bookicon.draw(position + Point<std::int16_t>(12, 85));
+    booktext.draw(position + Point<std::int16_t>(100, 49));
+    splabel.draw(position + Point<std::int16_t>(162, 254));
 
     auto begin = icons.begin();
     if (icons.size() > offset) {
@@ -184,7 +186,7 @@ void UISkillbook::draw(float alpha) const
         end = begin + ROWS;
     }
 
-    Point<int16_t> skill_position = position + SKILL_OFFSET;
+    Point<std::int16_t> skill_position = position + SKILL_OFFSET;
     for (auto iter = begin; iter != end; ++iter) {
         skille.draw(skill_position);
         iter->draw(skill_position + ICON_OFFSET);
@@ -200,7 +202,7 @@ void UISkillbook::draw(float alpha) const
     slider.draw(position);
 }
 
-Button::State UISkillbook::button_pressed(uint16_t id)
+Button::State UISkillbook::button_pressed(std::uint16_t id)
 {
     switch (id) {
     case BT_TAB0:
@@ -221,19 +223,19 @@ Button::State UISkillbook::button_pressed(uint16_t id)
     }
 }
 
-void UISkillbook::doubleclick(Point<int16_t> cursorpos)
+void UISkillbook::doubleclick(Point<std::int16_t> cursorpos)
 {
     const SkillIcon* icon = icon_by_position(cursorpos - position);
     if (icon) {
-        int32_t skill_id = icon->get_id();
-        int32_t skill_level = skillbook.get_level(skill_id);
+        std::int32_t skill_id = icon->get_id();
+        std::int32_t skill_level = skillbook.get_level(skill_id);
         if (skill_level > 0) {
             Stage::get().get_combat().use_move(skill_id);
         }
     }
 }
 
-bool UISkillbook::remove_cursor(bool clicked, Point<int16_t> cursorpos)
+bool UISkillbook::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
 {
     if (UIDragElement::remove_cursor(clicked, cursorpos)) {
         return true;
@@ -242,14 +244,14 @@ bool UISkillbook::remove_cursor(bool clicked, Point<int16_t> cursorpos)
     return slider.remove_cursor(clicked);
 }
 
-Cursor::State UISkillbook::send_cursor(bool clicked, Point<int16_t> cursorpos)
+Cursor::State UISkillbook::send_cursor(bool clicked, Point<std::int16_t> cursorpos)
 {
     Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
     if (dragged) {
         return dstate;
     }
 
-    Point<int16_t> cursor_relative = cursorpos - position;
+    Point<std::int16_t> cursor_relative = cursorpos - position;
     if (slider.isenabled()) {
         if (Cursor::State new_state =
                 slider.send_cursor(cursor_relative, clicked)) {
@@ -268,7 +270,7 @@ Cursor::State UISkillbook::send_cursor(bool clicked, Point<int16_t> cursorpos)
         end = begin + ROWS;
     }
 
-    Point<int16_t> skill_position = position + SKILL_OFFSET;
+    Point<std::int16_t> skill_position = position + SKILL_OFFSET;
     for (auto iter = begin; iter != end; ++iter) {
         if (Cursor::State state =
                 iter->send_cursor(cursorpos - skill_position, clicked)) {
@@ -292,7 +294,7 @@ Cursor::State UISkillbook::send_cursor(bool clicked, Point<int16_t> cursorpos)
     return Cursor::IDLE;
 }
 
-void UISkillbook::update_stat(Maplestat::Id stat, int16_t value)
+void UISkillbook::update_stat(Maplestat::Id stat, std::int16_t value)
 {
     switch (stat) {
     case Maplestat::JOB:
@@ -306,26 +308,26 @@ void UISkillbook::update_stat(Maplestat::Id stat, int16_t value)
     }
 }
 
-void UISkillbook::update_skills(int32_t skill_id)
+void UISkillbook::update_skills(std::int32_t skill_id)
 {
     if (skill_id / 10000 == job.get_id()) {
         change_tab(tab);
     }
 }
 
-void UISkillbook::change_job(uint16_t id)
+void UISkillbook::change_job(std::uint16_t id)
 {
     job.change_job(id);
 
     Job::Level level = job.get_level();
-    for (uint16_t i = 0; i <= Job::FOURTH; ++i) {
+    for (std::uint16_t i = 0; i <= Job::FOURTH; ++i) {
         buttons[BT_TAB0 + i]->set_active(i <= level);
     }
 
     change_tab(level - Job::BEGINNER);
 }
 
-void UISkillbook::change_sp(int16_t s)
+void UISkillbook::change_sp(std::int16_t s)
 {
     sp = s;
     splabel.change_text(std::to_string(sp));
@@ -333,7 +335,7 @@ void UISkillbook::change_sp(int16_t s)
     change_offset(offset);
 }
 
-void UISkillbook::change_tab(uint16_t new_tab)
+void UISkillbook::change_tab(std::uint16_t new_tab)
 {
     buttons[BT_TAB0 + tab]->set_state(Button::NORMAL);
     buttons[BT_TAB0 + new_tab]->set_state(Button::PRESSED);
@@ -343,16 +345,16 @@ void UISkillbook::change_tab(uint16_t new_tab)
     skillcount = 0;
 
     Job::Level joblevel = joblevel_by_tab(tab);
-    uint16_t subid = job.get_subjob(joblevel);
+    std::uint16_t subid = job.get_subjob(joblevel);
 
     const JobData& data = JobData::get(subid);
 
     bookicon = data.get_icon();
     booktext.change_text(data.get_name());
 
-    for (int32_t skill_id : data.get_skills()) {
-        int32_t level = skillbook.get_level(skill_id);
-        int32_t masterlevel = skillbook.get_masterlevel(skill_id);
+    for (std::int32_t skill_id : data.get_skills()) {
+        std::int32_t level = skillbook.get_level(skill_id);
+        std::int32_t masterlevel = skillbook.get_masterlevel(skill_id);
 
         bool invisible = SkillData::get(skill_id).is_invisible();
         if (invisible && masterlevel == 0) {
@@ -367,16 +369,16 @@ void UISkillbook::change_tab(uint16_t new_tab)
     change_offset(0);
 }
 
-void UISkillbook::change_offset(uint16_t new_offset)
+void UISkillbook::change_offset(std::uint16_t new_offset)
 {
     offset = new_offset;
 
-    for (int16_t i = 0; i < ROWS; ++i) {
-        uint16_t index = BT_SPUP0 + i;
-        uint16_t row = offset + i;
+    for (std::int16_t i = 0; i < ROWS; ++i) {
+        std::uint16_t index = BT_SPUP0 + i;
+        std::uint16_t row = offset + i;
         buttons[index]->set_active(row < skillcount);
         if (row < icons.size()) {
-            int32_t skill_id = icons[row].get_id();
+            std::int32_t skill_id = icons[row].get_id();
             bool canraise = can_raise(skill_id);
             buttons[index]->set_state(canraise ? Button::NORMAL
                                                : Button::DISABLED);
@@ -384,12 +386,12 @@ void UISkillbook::change_offset(uint16_t new_offset)
     }
 }
 
-void UISkillbook::show_skill(int32_t id)
+void UISkillbook::show_skill(std::int32_t id)
 {
-    int32_t skill_id = id;
-    int32_t level = skillbook.get_level(id);
-    int32_t masterlevel = skillbook.get_masterlevel(id);
-    int64_t expiration = skillbook.get_expiration(id);
+    std::int32_t skill_id = id;
+    std::int32_t level = skillbook.get_level(id);
+    std::int32_t masterlevel = skillbook.get_masterlevel(id);
+    std::int64_t expiration = skillbook.get_expiration(id);
 
     UI::get().show_skill(
         Tooltip::SKILLBOOK, skill_id, level, masterlevel, expiration);
@@ -400,14 +402,14 @@ void UISkillbook::clear_tooltip()
     UI::get().clear_tooltip(Tooltip::SKILLBOOK);
 }
 
-bool UISkillbook::can_raise(int32_t skill_id) const
+bool UISkillbook::can_raise(std::int32_t skill_id) const
 {
     if (sp <= 0) {
         return false;
     }
 
-    int32_t level = skillbook.get_level(skill_id);
-    int32_t masterlevel = skillbook.get_masterlevel(skill_id);
+    std::int32_t level = skillbook.get_level(skill_id);
+    std::int32_t masterlevel = skillbook.get_masterlevel(skill_id);
     if (masterlevel == 0) {
         masterlevel = SkillData::get(skill_id).get_masterlevel();
     }
@@ -424,19 +426,19 @@ bool UISkillbook::can_raise(int32_t skill_id) const
     }
 }
 
-void UISkillbook::send_spup(uint16_t row)
+void UISkillbook::send_spup(std::uint16_t row)
 {
     if (row >= icons.size()) {
         return;
     }
 
-    int32_t skill_id = icons[row].get_id();
+    std::int32_t skill_id = icons[row].get_id();
 
     SpendSpPacket(skill_id).dispatch();
     UI::get().disable();
 }
 
-Job::Level UISkillbook::joblevel_by_tab(uint16_t t) const
+Job::Level UISkillbook::joblevel_by_tab(std::uint16_t t) const
 {
     switch (t) {
     case 1:
@@ -452,24 +454,24 @@ Job::Level UISkillbook::joblevel_by_tab(uint16_t t) const
     }
 }
 
-SkillIcon* UISkillbook::icon_by_position(Point<int16_t> cursorpos)
+SkillIcon* UISkillbook::icon_by_position(Point<std::int16_t> cursorpos)
 {
-    int16_t x = cursorpos.x();
+    std::int16_t x = cursorpos.x();
     if (x < SKILL_OFFSET.x() || x > 148) {
         return nullptr;
     }
 
-    int16_t y = cursorpos.y();
+    std::int16_t y = cursorpos.y();
     if (y < SKILL_OFFSET.y()) {
         return nullptr;
     }
 
-    uint16_t row = (y - SKILL_OFFSET.y()) / ROW_HEIGHT;
+    std::uint16_t row = (y - SKILL_OFFSET.y()) / ROW_HEIGHT;
     if (row < 0 || row >= ROWS) {
         return nullptr;
     }
 
-    uint16_t absrow = offset + row;
+    std::uint16_t absrow = offset + row;
     if (icons.size() <= absrow) {
         return nullptr;
     }

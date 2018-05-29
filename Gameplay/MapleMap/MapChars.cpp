@@ -32,7 +32,7 @@ void MapChars::update(const Physics& physics)
     for (; !spawns.empty(); spawns.pop()) {
         const CharSpawn& spawn = spawns.front();
 
-        int32_t cid = spawn.get_cid();
+        std::int32_t cid = spawn.get_cid();
         nullable_ptr<OtherChar> ochar = get_char(cid);
         if (ochar) {
         } else {
@@ -48,7 +48,7 @@ void MapChars::spawn(CharSpawn&& spawn)
     spawns.emplace(std::move(spawn));
 }
 
-void MapChars::remove(int32_t cid)
+void MapChars::remove(std::int32_t cid)
 {
     chars.remove(cid);
 }
@@ -58,7 +58,7 @@ void MapChars::clear()
     chars.clear();
 }
 
-void MapChars::send_movement(int32_t cid,
+void MapChars::send_movement(std::int32_t cid,
                              const std::vector<Movement>& movements)
 {
     if (nullable_ptr<OtherChar> otherchar = get_char(cid)) {
@@ -66,14 +66,14 @@ void MapChars::send_movement(int32_t cid,
     }
 }
 
-void MapChars::update_look(int32_t cid, const LookEntry& look)
+void MapChars::update_look(std::int32_t cid, const LookEntry& look)
 {
     if (nullable_ptr<OtherChar> otherchar = get_char(cid)) {
         otherchar->update_look(look);
     }
 }
 
-nullable_ptr<OtherChar> MapChars::get_char(int32_t cid)
+nullable_ptr<OtherChar> MapChars::get_char(std::int32_t cid)
 {
     return chars.get(cid);
 }

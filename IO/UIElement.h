@@ -21,7 +21,7 @@
 #include "Components/Icon.h"
 #include "Cursor.h"
 
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <vector>
 
@@ -65,26 +65,26 @@ public:
     bool is_active() const;
 
     virtual void toggle_active();
-    virtual Button::State button_pressed(uint16_t buttonid);
-    virtual void send_icon(const Icon& icon, Point<int16_t> cursorpos);
+    virtual Button::State button_pressed(std::uint16_t buttonid);
+    virtual void send_icon(const Icon& icon, Point<std::int16_t> cursorpos);
 
-    virtual void doubleclick(Point<int16_t> cursorpos);
-    virtual bool is_in_range(Point<int16_t> cursorpos) const;
-    virtual bool remove_cursor(bool clicked, Point<int16_t> cursorpos);
-    virtual Cursor::State send_cursor(bool clicked, Point<int16_t> cursorpos);
+    virtual void doubleclick(Point<std::int16_t> cursorpos);
+    virtual bool is_in_range(Point<std::int16_t> cursorpos) const;
+    virtual bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos);
+    virtual Cursor::State send_cursor(bool clicked, Point<std::int16_t> cursorpos);
 
 protected:
-    UIElement(Point<int16_t> position, Point<int16_t> dimension, bool active);
-    UIElement(Point<int16_t> position, Point<int16_t> dimension);
+    UIElement(Point<std::int16_t> position, Point<std::int16_t> dimension, bool active);
+    UIElement(Point<std::int16_t> position, Point<std::int16_t> dimension);
     UIElement();
 
     void draw_sprites(float alpha) const;
     void draw_buttons(float alpha) const;
 
-    std::map<uint16_t, std::unique_ptr<Button>> buttons;
+    std::unordered_map<std::uint16_t, std::unique_ptr<Button>> buttons;
     std::vector<Sprite> sprites;
-    Point<int16_t> position;
-    Point<int16_t> dimension;
+    Point<std::int16_t> position;
+    Point<std::int16_t> dimension;
     bool active;
 };
 } // namespace jrc

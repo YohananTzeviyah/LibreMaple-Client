@@ -27,7 +27,7 @@ namespace jrc
 class Job
 {
 public:
-    enum Level : uint16_t { BEGINNER, FIRST, SECOND, THIRD, FOURTH };
+    enum Level : std::uint16_t { BEGINNER, FIRST, SECOND, THIRD, FOURTH };
 
     static Level get_next_level(Level level)
     {
@@ -43,24 +43,24 @@ public:
         }
     }
 
-    Job(uint16_t id);
+    Job(std::uint16_t id);
     Job();
 
-    void change_job(uint16_t id);
-    bool is_sub_job(uint16_t subid) const;
-    bool can_use(int32_t skill_id) const;
-    uint16_t get_id() const;
-    uint16_t get_subjob(Level level) const;
+    void change_job(std::uint16_t id);
+    bool is_sub_job(std::uint16_t subid) const;
+    bool can_use(std::int32_t skill_id) const;
+    std::uint16_t get_id() const;
+    std::uint16_t get_subjob(Level level) const;
     Level get_level() const;
     const std::string& get_name() const;
     Equipstat::Id get_primary(Weapon::Type weapontype) const;
     Equipstat::Id get_secondary(Weapon::Type weapontype) const;
 
 private:
-    std::string get_name(uint16_t id) const;
+    std::string get_name(std::uint16_t id) const;
 
     std::string name;
-    uint16_t id;
+    std::uint16_t id;
     Level level;
 };
 } // namespace jrc

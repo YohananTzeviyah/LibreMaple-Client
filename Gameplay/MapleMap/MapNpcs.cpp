@@ -35,7 +35,7 @@ void MapNpcs::update(const Physics& physics)
     for (; !spawns.empty(); spawns.pop()) {
         const NpcSpawn& spawn = spawns.front();
 
-        int32_t oid = spawn.get_oid();
+        std::int32_t oid = spawn.get_oid();
         nullable_ptr<MapObject> npc = npcs.get(oid);
         if (npc) {
             npc->makeactive();
@@ -52,7 +52,7 @@ void MapNpcs::spawn(NpcSpawn&& spawn)
     spawns.emplace(std::move(spawn));
 }
 
-void MapNpcs::remove(int32_t oid)
+void MapNpcs::remove(std::int32_t oid)
 {
     if (auto npc = npcs.get(oid))
         npc->deactivate();
@@ -64,8 +64,8 @@ void MapNpcs::clear()
 }
 
 Cursor::State MapNpcs::send_cursor(bool pressed,
-                                   Point<int16_t> position,
-                                   Point<int16_t> viewpos)
+                                   Point<std::int16_t> position,
+                                   Point<std::int16_t> viewpos)
 {
     for (auto& mmo : npcs) {
         Npc* npc = static_cast<Npc*>(mmo.second.get());

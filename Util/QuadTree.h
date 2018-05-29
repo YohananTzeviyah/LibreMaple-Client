@@ -71,7 +71,7 @@ public:
         Node& toerase = nodes[key];
 
         std::vector<K> leaves;
-        for (size_t i = LEFT; i <= DOWN; ++i) {
+        for (std::size_t i = LEFT; i <= DOWN; ++i) {
             K leafkey = toerase[i];
             if (leafkey) {
                 leaves.push_back(leafkey);
@@ -282,7 +282,7 @@ private:
             }
         }
 
-        K operator[](size_t d)
+        K operator[](std::size_t d)
         {
             auto dir = static_cast<Direction>(d);
             return leaf(dir);

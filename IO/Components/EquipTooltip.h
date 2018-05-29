@@ -32,12 +32,12 @@ class EquipTooltip : public Tooltip
 public:
     EquipTooltip();
 
-    void set_equip(Parent parent, int16_t invpos);
-    void draw(Point<int16_t> position) const override;
+    void set_equip(Parent parent, std::int16_t invpos);
+    void draw(Point<std::int16_t> position) const override;
 
 private:
-    int16_t invpos;
-    int16_t height;
+    std::int16_t invpos;
+    std::int16_t height;
     bool hasdesc;
     bool hasslots;
     bool is_weapon;
@@ -69,11 +69,11 @@ private:
     std::vector<Maplestat::Id> requirements;
     EnumMap<Maplestat::Id, BoolPair<Texture>> reqstattextures;
     EnumMap<Maplestat::Id, bool> canequip;
-    EnumMap<Maplestat::Id, Point<int16_t>> reqstatpositions;
+    EnumMap<Maplestat::Id, Point<std::int16_t>> reqstatpositions;
     BoolPair<Charset> reqset;
 
     Texture jobsback;
-    BoolPair<std::map<uint8_t, Texture>> jobs;
-    std::vector<uint8_t> okjobs;
+    BoolPair<std::map<std::uint8_t, Texture>> jobs;
+    std::vector<std::uint8_t> okjobs;
 };
 } // namespace jrc

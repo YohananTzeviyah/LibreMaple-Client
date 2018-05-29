@@ -38,6 +38,7 @@
 
 # IntelliJ
 .idea/
+.project
 
 # Qt Creator
 *.user
@@ -46,6 +47,7 @@
 build/
 build-*/
 cmake-build-debug/
+compile_commands.json
 
 ## Includes ##
 include/

@@ -33,17 +33,17 @@ class Npc : public MapObject
 public:
     // Constructs an npc by combining data from game files with
     // data sent by the server.
-    Npc(int32_t npcid,
-        int32_t oid,
+    Npc(std::int32_t npcid,
+        std::int32_t oid,
         bool mirrored,
-        uint16_t fhid,
+        std::uint16_t fhid,
         bool control,
-        Point<int16_t> position);
+        Point<std::int16_t> position);
 
     // Draws the current animation and name/function tags.
     void draw(double viewx, double viewy, float alpha) const override;
     // Updates the current animation and physics.
-    int8_t update(const Physics& physics) override;
+    std::int8_t update(const Physics& physics) override;
 
     // Changes stance and resets animation.
     void set_stance(const std::string& stance);
@@ -51,7 +51,7 @@ public:
     // Check wether this is a server-sided npc.
     bool isscripted() const;
     // Check if the npc is in range of the cursor.
-    bool inrange(Point<int16_t> cursorpos, Point<int16_t> viewpos) const;
+    bool inrange(Point<std::int16_t> cursorpos, Point<std::int16_t> viewpos) const;
 
 private:
     std::map<std::string, Animation> animations;
@@ -63,7 +63,7 @@ private:
     bool scripted;
     bool mouseonly;
 
-    int32_t npcid;
+    std::int32_t npcid;
     bool flip;
     std::string stance;
     bool control;

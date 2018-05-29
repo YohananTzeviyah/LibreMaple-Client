@@ -39,10 +39,10 @@ Frame::Frame(nl::node src)
     if (hasa0 && hasa1) {
         opacities = {src["a0"], src["a1"]};
     } else if (hasa0) {
-        uint8_t a0 = src["a0"];
+        std::uint8_t a0 = src["a0"];
         opacities = {a0, 255 - a0};
     } else if (hasa1) {
-        uint8_t a1 = src["a1"];
+        std::uint8_t a1 = src["a1"];
         opacities = {255 - a1, a1};
     } else {
         opacities = {255, 255};
@@ -73,42 +73,42 @@ void Frame::draw(const DrawArgument& args) const
     texture.draw(args);
 }
 
-uint8_t Frame::start_opacity() const
+std::uint8_t Frame::start_opacity() const
 {
     return opacities.first;
 }
 
-uint16_t Frame::start_scale() const
+std::uint16_t Frame::start_scale() const
 {
     return scales.first;
 }
 
-uint16_t Frame::get_delay() const
+std::uint16_t Frame::get_delay() const
 {
     return delay;
 }
 
-Point<int16_t> Frame::get_origin() const
+Point<std::int16_t> Frame::get_origin() const
 {
     return texture.get_origin();
 }
 
-Point<int16_t> Frame::get_dimensions() const
+Point<std::int16_t> Frame::get_dimensions() const
 {
     return texture.get_dimensions();
 }
 
-Point<int16_t> Frame::get_head() const
+Point<std::int16_t> Frame::get_head() const
 {
     return head;
 }
 
-Rectangle<int16_t> Frame::get_bounds() const
+Rectangle<std::int16_t> Frame::get_bounds() const
 {
     return bounds;
 }
 
-float Frame::opcstep(uint16_t timestep) const
+float Frame::opcstep(std::uint16_t timestep) const
 {
     if (delay == 0) {
         return 0.0f;
@@ -118,7 +118,7 @@ float Frame::opcstep(uint16_t timestep) const
            delay;
 }
 
-float Frame::scalestep(uint16_t timestep) const
+float Frame::scalestep(std::uint16_t timestep) const
 {
     if (delay == 0) {
         return 0.0f;
@@ -133,11 +133,11 @@ Animation::Animation(nl::node src)
     if (istexture) {
         frames.emplace_back(src);
     } else {
-        std::set<int16_t> frameids;
+        std::set<std::int16_t> frameids;
         for (auto sub : src) {
             if (sub.data_type() == nl::node::type::bitmap) {
                 auto fid =
-                    string_conversion::or_default<int16_t>(sub.name(), -1);
+                    string_conversion::or_default<std::int16_t>(sub.name(), -1);
                 if (fid >= 0) {
                     frameids.insert(fid);
                 }
@@ -180,7 +180,7 @@ void Animation::reset()
 
 void Animation::draw(const DrawArgument& args, float alpha) const
 {
-    int16_t interframe = frame.get(alpha);
+    std::int16_t interframe = frame.get(alpha);
     float interopc = opacity.get(alpha) / 255;
     float interscale = xyscale.get(alpha) / 100;
 
@@ -199,7 +199,7 @@ bool Animation::update()
     return update(Constants::TIMESTEP);
 }
 
-bool Animation::update(uint16_t timestep)
+bool Animation::update(std::uint16_t timestep)
 {
     const Frame& framedata = get_frame();
 
@@ -216,8 +216,8 @@ bool Animation::update(uint16_t timestep)
     }
 
     if (timestep >= delay) {
-        auto lastframe = static_cast<int16_t>(frames.size() - 1);
-        int16_t nextframe;
+        auto lastframe = static_cast<std::int16_t>(frames.size() - 1);
+        std::int16_t nextframe;
         bool ended;
         if (zigzag && lastframe > 0) {
             if (framestep == 1 && frame == lastframe) {
@@ -241,7 +241,7 @@ bool Animation::update(uint16_t timestep)
             }
         }
 
-        uint16_t delta = timestep - delay;
+        std::uint16_t delta = timestep - delay;
         float threshold = static_cast<float>(delta) / timestep;
         frame.next(nextframe, threshold);
 
@@ -262,16 +262,16 @@ bool Animation::update(uint16_t timestep)
     }
 }
 
-uint16_t Animation::get_delay(int16_t frame_id) const
+std::uint16_t Animation::get_delay(std::int16_t frame_id) const
 {
     return frame_id < frames.size() ? frames[frame_id].get_delay()
-                                    : static_cast<uint16_t>(0u);
+                                    : static_cast<std::uint16_t>(0u);
 }
 
-uint16_t Animation::getdelayuntil(int16_t frame_id) const
+std::uint16_t Animation::getdelayuntil(std::int16_t frame_id) const
 {
-    uint16_t total = 0;
-    for (int16_t i = 0; i < frame_id; ++i) {
+    std::uint16_t total = 0;
+    for (std::int16_t i = 0; i < frame_id; ++i) {
         if (i >= frames.size()) {
             break;
         }
@@ -282,22 +282,22 @@ uint16_t Animation::getdelayuntil(int16_t frame_id) const
     return total;
 }
 
-Point<int16_t> Animation::get_origin() const
+Point<std::int16_t> Animation::get_origin() const
 {
     return get_frame().get_origin();
 }
 
-Point<int16_t> Animation::get_dimensions() const
+Point<std::int16_t> Animation::get_dimensions() const
 {
     return get_frame().get_dimensions();
 }
 
-Point<int16_t> Animation::get_head() const
+Point<std::int16_t> Animation::get_head() const
 {
     return get_frame().get_head();
 }
 
-Rectangle<int16_t> Animation::get_bounds() const
+Rectangle<std::int16_t> Animation::get_bounds() const
 {
     return get_frame().get_bounds();
 }

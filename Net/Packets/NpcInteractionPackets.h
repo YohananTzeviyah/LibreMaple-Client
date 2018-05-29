@@ -25,7 +25,7 @@ namespace jrc
 class TalkToNPCPacket : public OutPacket
 {
 public:
-    TalkToNPCPacket(int32_t oid) : OutPacket(TALK_TO_NPC)
+    TalkToNPCPacket(std::int32_t oid) : OutPacket(TALK_TO_NPC)
     {
         write_int(oid);
     }
@@ -36,7 +36,7 @@ public:
 class NpcTalkMorePacket : public OutPacket
 {
 public:
-    NpcTalkMorePacket(int8_t lastmsg, int8_t response)
+    NpcTalkMorePacket(std::int8_t lastmsg, std::int8_t response)
         : OutPacket(NPC_TALK_MORE)
     {
         write_byte(lastmsg);
@@ -48,7 +48,7 @@ public:
         write_string(response);
     }
 
-    NpcTalkMorePacket(int32_t selection) : NpcTalkMorePacket(4, 1)
+    NpcTalkMorePacket(std::int32_t selection) : NpcTalkMorePacket(4, 1)
     {
         write_int(selection);
     }
@@ -60,7 +60,7 @@ class NpcShopActionPacket : public OutPacket
 {
 public:
     // Requests that an item should be bought from or sold to a npc shop.
-    NpcShopActionPacket(int16_t slot, int32_t itemid, int16_t qty, bool buy)
+    NpcShopActionPacket(std::int16_t slot, std::int32_t itemid, std::int16_t qty, bool buy)
         : NpcShopActionPacket(buy ? BUY : SELL)
     {
         write_short(slot);
@@ -69,7 +69,7 @@ public:
     }
 
     // Requests that an item should be recharged at a npc shop.
-    NpcShopActionPacket(int16_t slot) : NpcShopActionPacket(RECHARGE)
+    NpcShopActionPacket(std::int16_t slot) : NpcShopActionPacket(RECHARGE)
     {
         write_short(slot);
     }
@@ -80,7 +80,7 @@ public:
     }
 
 protected:
-    enum Mode : int8_t { BUY, SELL, RECHARGE, LEAVE };
+    enum Mode : std::int8_t { BUY, SELL, RECHARGE, LEAVE };
 
     NpcShopActionPacket(Mode mode) : OutPacket(NPC_SHOP_ACTION)
     {

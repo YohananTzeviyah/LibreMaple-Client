@@ -82,9 +82,9 @@ public:
 
     // Apply a passive skill effect to the character stats.
     void
-    apply_buff(CharStats& stats, int32_t skill_id, int32_t skill_level) const;
+    apply_buff(CharStats& stats, std::int32_t skill_id, std::int32_t skill_level) const;
 
 private:
-    std::unordered_map<int32_t, std::unique_ptr<PassiveBuff>> buffs;
+    std::unordered_map<std::int32_t, std::unique_ptr<PassiveBuff>> buffs;
 };
 } // namespace jrc

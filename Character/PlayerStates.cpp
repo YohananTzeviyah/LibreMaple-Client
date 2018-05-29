@@ -406,7 +406,7 @@ void PlayerClimbState::update(Player& player) const
 
 void PlayerClimbState::update_state(Player& player) const
 {
-    int16_t y = player.get_phobj().get_y();
+    std::int16_t y = player.get_phobj().get_y();
     bool downwards = player.is_key_down(KeyAction::DOWN);
     auto ladder = player.get_ladder();
     if (ladder && ladder->felloff(y, downwards)) {

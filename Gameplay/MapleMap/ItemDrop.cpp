@@ -19,13 +19,13 @@
 
 namespace jrc
 {
-ItemDrop::ItemDrop(int32_t oid,
-                   int32_t owner,
-                   Point<int16_t> start,
-                   Point<int16_t> dest,
-                   int8_t type,
-                   int8_t mode,
-                   int32_t iid,
+ItemDrop::ItemDrop(std::int32_t oid,
+                   std::int32_t owner,
+                   Point<std::int16_t> start,
+                   Point<std::int16_t> dest,
+                   std::int8_t type,
+                   std::int8_t mode,
+                   std::int32_t iid,
                    bool pd,
                    const Texture& icn)
     : Drop(oid, owner, start, dest, type, mode, pd), icon(icn), itemid(iid)
@@ -37,7 +37,7 @@ void ItemDrop::draw(double viewx, double viewy, float alpha) const
     if (!active)
         return;
 
-    Point<int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
     icon.draw({angle.get(alpha), absp, opacity.get(alpha)});
 }
 } // namespace jrc

@@ -28,10 +28,12 @@
 #include "Handlers/PlayerHandlers.h"
 #include "Handlers/SetfieldHandlers.h"
 
+#include <cstdint>
+
 namespace jrc
 {
 // Opcodes for InPackets.
-enum PacketSwitch::Opcode : uint16_t {
+enum PacketSwitch::Opcode : std::uint16_t {
     // Login 1
     LOGIN_RESULT = 0,
     SERVERLIST = 10,
@@ -222,12 +224,12 @@ PacketSwitch::PacketSwitch()
     emplace<UPDATE_GENDER, NullHandler>();
 }
 
-void PacketSwitch::forward(const int8_t* bytes, size_t length) const
+void PacketSwitch::forward(const std::int8_t* bytes, std::size_t length) const
 {
     // Wrap the bytes with a parser.
     InPacket recv = {bytes, length};
     // Read the opcode to determine handler responsible.
-    auto opcode = static_cast<uint16_t>(recv.read_short());
+    auto opcode = static_cast<std::uint16_t>(recv.read_short());
 
     if (opcode < NUM_HANDLERS) {
         if (auto& handler = handlers[opcode]) {
@@ -248,7 +250,7 @@ void PacketSwitch::forward(const int8_t* bytes, size_t length) const
     }
 }
 
-void PacketSwitch::warn(const std::string& message, size_t opcode) const
+void PacketSwitch::warn(const std::string& message, std::size_t opcode) const
 {
     Console::get().print(message + ", Opcode: " + std::to_string(opcode));
 }

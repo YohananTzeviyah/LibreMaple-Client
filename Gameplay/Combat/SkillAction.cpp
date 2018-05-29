@@ -61,10 +61,10 @@ void TwoHAction::apply(Char& target, Attack::Type) const
     target.attack(action);
 }
 
-ByLevelAction::ByLevelAction(nl::node src, int32_t id)
+ByLevelAction::ByLevelAction(nl::node src, std::int32_t id)
 {
     for (auto sub : src["level"]) {
-        int32_t level = string_conversion::or_zero<int32_t>(sub.name());
+        std::int32_t level = string_conversion::or_zero<std::int32_t>(sub.name());
         actions[level] = sub["action"].get_string();
     }
 
@@ -73,7 +73,7 @@ ByLevelAction::ByLevelAction(nl::node src, int32_t id)
 
 void ByLevelAction::apply(Char& target, Attack::Type) const
 {
-    int32_t level = target.get_skilllevel(skillid);
+    std::int32_t level = target.get_skilllevel(skillid);
     auto iter = actions.find(level);
     if (iter != actions.end()) {
         target.attack(iter->second);

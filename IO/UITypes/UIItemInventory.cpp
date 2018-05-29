@@ -28,7 +28,7 @@
 namespace jrc
 {
 UIItemInventory::UIItemInventory(const Inventory& invent)
-    : UIDragElement<PosINV>(Point<int16_t>(172, 20)), inventory(invent)
+    : UIDragElement<PosINV>(Point<std::int16_t>(172, 20)), inventory(invent)
 {
     nl::node src = nl::nx::ui["UIWindow2.img"]["Item"];
 
@@ -44,15 +44,15 @@ UIItemInventory::UIItemInventory(const Inventory& invent)
     nl::node tabdis = src["Tab"]["disabled"];
 
     buttons[BT_TAB_EQUIP] = std::make_unique<TwoSpriteButton>(
-        tabdis["0"], taben["0"], Point<int16_t>(-1, -4));
+        tabdis["0"], taben["0"], Point<std::int16_t>(-1, -4));
     buttons[BT_TAB_USE] = std::make_unique<TwoSpriteButton>(
-        tabdis["1"], taben["1"], Point<int16_t>(-1, -4));
+        tabdis["1"], taben["1"], Point<std::int16_t>(-1, -4));
     buttons[BT_TAB_ETC] = std::make_unique<TwoSpriteButton>(
-        tabdis["2"], taben["2"], Point<int16_t>(0, -4));
+        tabdis["2"], taben["2"], Point<std::int16_t>(0, -4));
     buttons[BT_TAB_SETUP] = std::make_unique<TwoSpriteButton>(
-        tabdis["3"], taben["3"], Point<int16_t>(-1, -4));
+        tabdis["3"], taben["3"], Point<std::int16_t>(-1, -4));
     buttons[BT_TAB_CASH] = std::make_unique<TwoSpriteButton>(
-        tabdis["4"], taben["4"], Point<int16_t>(-1, -4));
+        tabdis["4"], taben["4"], Point<std::int16_t>(-1, -4));
 
     buttons[BT_DROPMESO] = std::make_unique<MapleButton>(src["BtCoin"]);
     buttons[BT_POINTS] = std::make_unique<MapleButton>(src["BtPoint0"]);
@@ -81,7 +81,7 @@ UIItemInventory::UIItemInventory(const Inventory& invent)
               6,
               1 + inventory.get_slotmax(tab) / 4,
               [&](bool upwards) {
-                  int16_t shift = upwards ? -4 : 4;
+                  std::int16_t shift = upwards ? -4 : 4;
                   bool above = slotrange.first + shift > 0;
                   bool below = slotrange.second + shift <
                                inventory.get_slotmax(tab) + 1 + 4;
@@ -104,30 +104,30 @@ void UIItemInventory::draw(float alpha) const
     slider.draw(position);
 
     for (auto& icon : icons) {
-        int16_t slot = icon.first;
+        std::int16_t slot = icon.first;
         if (icon.second && slot >= slotrange.first &&
             slot <= slotrange.second) {
-            Point<int16_t> slotpos = get_slotpos(slot);
+            Point<std::int16_t> slotpos = get_slotpos(slot);
             icon.second->draw(position + slotpos);
         }
     }
 
-    int16_t bulletslot = inventory.get_bulletslot();
+    std::int16_t bulletslot = inventory.get_bulletslot();
     if (tab == InventoryType::USE && is_visible(bulletslot)) {
-        Point<int16_t> bulletslotpos = position + get_slotpos(bulletslot);
+        Point<std::int16_t> bulletslotpos = position + get_slotpos(bulletslot);
         projectile.draw({bulletslotpos});
     } else if (newtab == tab && is_visible(newslot)) {
-        Point<int16_t> newslotpos = position + get_slotpos(newslot);
+        Point<std::int16_t> newslotpos = position + get_slotpos(newslot);
         newslotpos.shift_y(1);
         newitemslot.draw({newslotpos}, alpha);
     }
 
     if (newtab != tab && newtab != InventoryType::NONE) {
-        Point<int16_t> newtabpos = position + get_tabpos(newtab);
+        Point<std::int16_t> newtabpos = position + get_tabpos(newtab);
         newitemtab.draw({newtabpos}, alpha);
     }
 
-    Point<int16_t> mesopos = position + Point<int16_t>(124, 264);
+    Point<std::int16_t> mesopos = position + Point<std::int16_t>(124, 264);
     mesolabel.draw(mesopos);
 }
 
@@ -138,16 +138,16 @@ void UIItemInventory::update()
     newitemtab.update(6);
     newitemslot.update(6);
 
-    int64_t meso = inventory.get_meso();
+    std::int64_t meso = inventory.get_meso();
     std::string mesostr = std::to_string(meso);
     string_format::split_number(mesostr);
     mesolabel.change_text(mesostr);
 }
 
-void UIItemInventory::update_slot(int16_t slot)
+void UIItemInventory::update_slot(std::int16_t slot)
 {
-    if (int32_t item_id = inventory.get_item_id(tab, slot)) {
-        int16_t count;
+    if (std::int32_t item_id = inventory.get_item_id(tab, slot)) {
+        std::int16_t count;
         if (tab == InventoryType::EQUIP) {
             count = -1;
         } else {
@@ -167,13 +167,13 @@ void UIItemInventory::load_icons()
 {
     icons.clear();
 
-    uint8_t numslots = inventory.get_slotmax(tab);
-    for (uint8_t i = 1; i < numslots; ++i) {
+    std::uint8_t numslots = inventory.get_slotmax(tab);
+    for (std::uint8_t i = 1; i < numslots; ++i) {
         update_slot(i);
     }
 }
 
-Button::State UIItemInventory::button_pressed(uint16_t buttonid)
+Button::State UIItemInventory::button_pressed(std::uint16_t buttonid)
 {
     InventoryType::Id oldtab = tab;
     switch (buttonid) {
@@ -204,7 +204,7 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid)
         slotrange.first = 1;
         slotrange.second = 24;
 
-        slider.setrows(6, 1 + inventory.get_slotmax(tab) / 4);
+        slider.setrows(6, static_cast<std::int16_t>(1 + inventory.get_slotmax(tab) / 4));
 
         buttons[button_by_tab(oldtab)]->set_state(Button::NORMAL);
 
@@ -214,11 +214,11 @@ Button::State UIItemInventory::button_pressed(uint16_t buttonid)
     return Button::PRESSED;
 }
 
-void UIItemInventory::doubleclick(Point<int16_t> cursorpos)
+void UIItemInventory::doubleclick(Point<std::int16_t> cursorpos)
 {
-    int16_t slot = slot_by_position(cursorpos - position);
+    std::int16_t slot = slot_by_position(cursorpos - position);
     if (icons.count(slot) && is_visible(slot)) {
-        if (int32_t item_id = inventory.get_item_id(tab, slot)) {
+        if (std::int32_t item_id = inventory.get_item_id(tab, slot)) {
             switch (tab) {
             case InventoryType::EQUIP:
                 EquipItemPacket(slot, inventory.find_equipslot(item_id))
@@ -237,11 +237,11 @@ void UIItemInventory::doubleclick(Point<int16_t> cursorpos)
     }
 }
 
-void UIItemInventory::send_icon(const Icon& icon, Point<int16_t> cursorpos)
+void UIItemInventory::send_icon(const Icon& icon, Point<std::int16_t> cursorpos)
 {
-    int16_t slot = slot_by_position(cursorpos - position);
+    std::int16_t slot = slot_by_position(cursorpos - position);
     if (slot > 0) {
-        int32_t item_id = inventory.get_item_id(tab, slot);
+        std::int32_t item_id = inventory.get_item_id(tab, slot);
         Equipslot::Id eqslot;
         bool equip;
         if (item_id && tab == InventoryType::EQUIP) {
@@ -256,7 +256,7 @@ void UIItemInventory::send_icon(const Icon& icon, Point<int16_t> cursorpos)
 }
 
 Cursor::State UIItemInventory::send_cursor(bool pressed,
-                                           Point<int16_t> cursorpos)
+                                           Point<std::int16_t> cursorpos)
 {
     Cursor::State dstate = UIDragElement::send_cursor(pressed, cursorpos);
     if (dragged) {
@@ -264,7 +264,7 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
         return dstate;
     }
 
-    Point<int16_t> cursor_relative = cursorpos - position;
+    Point<std::int16_t> cursor_relative = cursorpos - position;
     if (slider.isenabled()) {
         Cursor::State sstate = slider.send_cursor(cursor_relative, pressed);
         if (sstate != Cursor::IDLE) {
@@ -273,11 +273,11 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
         }
     }
 
-    int16_t slot = slot_by_position(cursor_relative);
+    std::int16_t slot = slot_by_position(cursor_relative);
     Icon* icon = get_icon(slot);
     if (icon && is_visible(slot)) {
         if (pressed) {
-            Point<int16_t> slotpos = get_slotpos(slot);
+            Point<std::int16_t> slotpos = get_slotpos(slot);
             icon->start_drag(cursor_relative - slotpos);
             UI::get().drag_icon(icon);
 
@@ -294,12 +294,13 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
 }
 
 void UIItemInventory::modify(InventoryType::Id type,
-                             int16_t slot,
-                             int8_t mode,
-                             int16_t arg)
+                             std::int16_t slot,
+                             std::int8_t mode,
+                             std::int16_t arg)
 {
-    if (slot <= 0)
+    if (slot <= 0) {
         return;
+    }
 
     if (type == tab) {
         switch (mode) {
@@ -362,20 +363,21 @@ void UIItemInventory::toggle_active()
     UIElement::toggle_active();
 }
 
-bool UIItemInventory::remove_cursor(bool clicked, Point<int16_t> cursorpos)
+bool UIItemInventory::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
 {
-    if (UIDragElement::remove_cursor(clicked, cursorpos))
+    if (UIDragElement::remove_cursor(clicked, cursorpos)) {
         return true;
+    }
 
     return slider.remove_cursor(clicked);
 }
 
-void UIItemInventory::show_item(int16_t slot)
+void UIItemInventory::show_item(std::int16_t slot)
 {
     if (tab == InventoryType::EQUIP) {
         UI::get().show_equip(Tooltip::ITEMINVENTORY, slot);
     } else {
-        int32_t item_id = inventory.get_item_id(tab, slot);
+        std::int32_t item_id = inventory.get_item_id(tab, slot);
         UI::get().show_item(Tooltip::ITEMINVENTORY, item_id);
     }
 }
@@ -385,52 +387,53 @@ void UIItemInventory::clear_tooltip()
     UI::get().clear_tooltip(Tooltip::ITEMINVENTORY);
 }
 
-bool UIItemInventory::is_visible(int16_t slot) const
+bool UIItemInventory::is_visible(std::int16_t slot) const
 {
     return !is_not_visible(slot);
 }
 
-bool UIItemInventory::is_not_visible(int16_t slot) const
+bool UIItemInventory::is_not_visible(std::int16_t slot) const
 {
     return slot < slotrange.first || slot > slotrange.second;
 }
 
-int16_t UIItemInventory::slot_by_position(Point<int16_t> cursorpos) const
+std::int16_t UIItemInventory::slot_by_position(Point<std::int16_t> cursorpos) const
 {
-    int16_t xoff = cursorpos.x() - 11;
-    int16_t yoff = cursorpos.y() - 51;
-    if (xoff < 1 || xoff > 143 || yoff < 1)
+    std::int16_t xoff = cursorpos.x() - 11;
+    std::int16_t yoff = cursorpos.y() - 51;
+    if (xoff < 1 || xoff > 143 || yoff < 1) {
         return 0;
+    }
 
-    int16_t slot = slotrange.first + (xoff / 36) + 4 * (yoff / 35);
+    std::int16_t slot = slotrange.first + (xoff / 36) + 4 * (yoff / 35);
     return is_visible(slot) ? slot : 0;
 }
 
-Point<int16_t> UIItemInventory::get_slotpos(int16_t slot) const
+Point<std::int16_t> UIItemInventory::get_slotpos(std::int16_t slot) const
 {
-    int16_t absslot = slot - slotrange.first;
-    return Point<int16_t>(11 + (absslot % 4) * 36, 51 + (absslot / 4) * 35);
+    std::int16_t absslot = slot - slotrange.first;
+    return Point<std::int16_t>(11 + (absslot % 4) * 36, 51 + (absslot / 4) * 35);
 }
 
-Point<int16_t> UIItemInventory::get_tabpos(InventoryType::Id tb) const
+Point<std::int16_t> UIItemInventory::get_tabpos(InventoryType::Id tb) const
 {
     switch (tb) {
     case InventoryType::EQUIP:
-        return Point<int16_t>(10, 28);
+        return Point<std::int16_t>(10, 28);
     case InventoryType::USE:
-        return Point<int16_t>(42, 28);
+        return Point<std::int16_t>(42, 28);
     case InventoryType::SETUP:
-        return Point<int16_t>(74, 28);
+        return Point<std::int16_t>(74, 28);
     case InventoryType::ETC:
-        return Point<int16_t>(105, 28);
+        return Point<std::int16_t>(105, 28);
     case InventoryType::CASH:
-        return Point<int16_t>(138, 28);
+        return Point<std::int16_t>(138, 28);
     default:
-        return Point<int16_t>();
+        return Point<std::int16_t>();
     }
 }
 
-uint16_t UIItemInventory::button_by_tab(InventoryType::Id tb) const
+std::uint16_t UIItemInventory::button_by_tab(InventoryType::Id tb) const
 {
     switch (tb) {
     case InventoryType::EQUIP:
@@ -446,7 +449,7 @@ uint16_t UIItemInventory::button_by_tab(InventoryType::Id tb) const
     }
 }
 
-Icon* UIItemInventory::get_icon(int16_t slot)
+Icon* UIItemInventory::get_icon(std::int16_t slot)
 {
     auto iter = icons.find(slot);
     if (iter != icons.end()) {
@@ -458,7 +461,7 @@ Icon* UIItemInventory::get_icon(int16_t slot)
 
 UIItemInventory::ItemIcon::ItemIcon(InventoryType::Id st,
                                     Equipslot::Id eqs,
-                                    int16_t s)
+                                    std::int16_t s)
 {
     sourcetab = st;
     eqsource = eqs;
@@ -488,7 +491,7 @@ void UIItemInventory::ItemIcon::drop_on_equips(Equipslot::Id eqslot) const
 
 void UIItemInventory::ItemIcon::drop_on_items(InventoryType::Id tab_id,
                                               Equipslot::Id,
-                                              int16_t slot,
+                                              std::int16_t slot,
                                               bool) const
 {
     if (tab_id != sourcetab || slot == source) {

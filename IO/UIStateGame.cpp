@@ -19,6 +19,7 @@
 
 #include "../Gameplay/Stage.h"
 #include "UI.h"
+#include "Window.h"
 #include "UITypes/UIBuffList.h"
 #include "UITypes/UIEquipInventory.h"
 #include "UITypes/UIItemInventory.h"
@@ -47,7 +48,7 @@ UIStateGame::UIStateGame()
     emplace<UIShop>(look, inventory);
 }
 
-void UIStateGame::draw(float inter, Point<int16_t> cursor) const
+void UIStateGame::draw(float inter, Point<std::int16_t> cursor) const
 {
     for (const auto& type : elementorder) {
         auto& element = elements[type];
@@ -75,7 +76,7 @@ void UIStateGame::update()
     }
 }
 
-void UIStateGame::drop_icon(const Icon& icon, Point<int16_t> pos)
+void UIStateGame::drop_icon(const Icon& icon, Point<std::int16_t> pos)
 {
     if (UIElement* front = get_front(pos)) {
         front->send_icon(icon, pos);
@@ -84,14 +85,14 @@ void UIStateGame::drop_icon(const Icon& icon, Point<int16_t> pos)
     }
 }
 
-void UIStateGame::doubleclick(Point<int16_t> pos)
+void UIStateGame::doubleclick(Point<std::int16_t> pos)
 {
     if (UIElement* front = get_front(pos)) {
         front->doubleclick(pos);
     }
 }
 
-void UIStateGame::send_key(KeyType::Id type, int32_t action, bool pressed)
+void UIStateGame::send_key(KeyType::Id type, std::int32_t action, bool pressed)
 {
     switch (type) {
     case KeyType::MENU:
@@ -128,7 +129,7 @@ void UIStateGame::send_key(KeyType::Id type, int32_t action, bool pressed)
     }
 }
 
-Cursor::State UIStateGame::send_cursor(Cursor::State mst, Point<int16_t> pos)
+Cursor::State UIStateGame::send_cursor(Cursor::State mst, Point<std::int16_t> pos)
 {
     if (draggedicon) {
         switch (mst) {
@@ -202,7 +203,7 @@ void UIStateGame::clear_tooltip(Tooltip::Parent parent)
     }
 }
 
-void UIStateGame::show_equip(Tooltip::Parent parent, int16_t slot)
+void UIStateGame::show_equip(Tooltip::Parent parent, std::int16_t slot)
 {
     eqtooltip.set_equip(parent, slot);
 
@@ -212,7 +213,7 @@ void UIStateGame::show_equip(Tooltip::Parent parent, int16_t slot)
     }
 }
 
-void UIStateGame::show_item(Tooltip::Parent parent, int32_t itemid)
+void UIStateGame::show_item(Tooltip::Parent parent, std::int32_t itemid)
 {
     ittooltip.set_item(itemid);
 
@@ -223,10 +224,10 @@ void UIStateGame::show_item(Tooltip::Parent parent, int32_t itemid)
 }
 
 void UIStateGame::show_skill(Tooltip::Parent parent,
-                             int32_t skill_id,
-                             int32_t level,
-                             int32_t masterlevel,
-                             int64_t expiration)
+                             std::int32_t skill_id,
+                             std::int32_t level,
+                             std::int32_t masterlevel,
+                             std::int64_t expiration)
 {
     sktooltip.set_skill(skill_id, level, masterlevel, expiration);
 
@@ -288,7 +289,7 @@ UIElement* UIStateGame::get(UIElement::Type type)
     return elements[type].get();
 }
 
-UIElement* UIStateGame::get_front(Point<int16_t> pos)
+UIElement* UIStateGame::get_front(Point<std::int16_t> pos)
 {
     auto begin = elementorder.rbegin();
     auto end = elementorder.rend();

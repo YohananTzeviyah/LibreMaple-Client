@@ -34,7 +34,7 @@ public:
 
 private:
     ColorBox background;
-    Point<int16_t> backposition;
+    Point<std::int16_t> backposition;
     Text notice;
     Linear<double> xpos;
     bool active;

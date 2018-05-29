@@ -59,7 +59,7 @@ public:
 class CharlistRequestPacket : public OutPacket
 {
 public:
-    CharlistRequestPacket(uint8_t world, uint8_t channel)
+    CharlistRequestPacket(std::uint8_t world, std::uint8_t channel)
         : OutPacket(CHARLIST_REQUEST)
     {
         write_byte(0);
@@ -73,7 +73,7 @@ public:
 class PlayerLoginPacket : public OutPacket
 {
 public:
-    PlayerLoginPacket(int32_t cid) : OutPacket(PLAYER_LOGIN)
+    PlayerLoginPacket(std::int32_t cid) : OutPacket(PLAYER_LOGIN)
     {
         write_int(cid);
     }

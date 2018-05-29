@@ -18,17 +18,17 @@ Nametag::Nametag(nl::node src, Text::Font f, Text::Color c, std::string n)
     selected = false;
 }
 
-void Nametag::draw(Point<int16_t> position) const
+void Nametag::draw(Point<std::int16_t> position) const
 {
     auto& tag = textures[selected];
 
-    int16_t width = name.width();
-    auto startpos = position - Point<int16_t>(8 + width / 2, -2);
+    std::int16_t width = name.width();
+    auto startpos = position - Point<std::int16_t>(8 + width / 2, -2);
 
     tag[0].draw(startpos);
-    tag[1].draw(DrawArgument(startpos + Point<int16_t>(8, 0),
-                             Point<int16_t>(width, 0)));
-    tag[2].draw(DrawArgument(startpos + Point<int16_t>(width + 8, 0)));
+    tag[1].draw(DrawArgument(startpos + Point<std::int16_t>(8, 0),
+                             Point<std::int16_t>(width, 0)));
+    tag[2].draw(DrawArgument(startpos + Point<std::int16_t>(width + 8, 0)));
 
     name.draw(position);
 }

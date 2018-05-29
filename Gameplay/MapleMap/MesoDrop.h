@@ -24,12 +24,12 @@ namespace jrc
 class MesoDrop : public Drop
 {
 public:
-    MesoDrop(int32_t oid,
-             int32_t owner,
-             Point<int16_t> start,
-             Point<int16_t> dest,
-             int8_t type,
-             int8_t mode,
+    MesoDrop(std::int32_t oid,
+             std::int32_t owner,
+             Point<std::int16_t> start,
+             Point<std::int16_t> dest,
+             std::int8_t type,
+             std::int8_t mode,
              bool playerdrop,
              const Animation& icon);
 

@@ -22,7 +22,7 @@
 
 namespace jrc
 {
-Icon::Icon(std::unique_ptr<Type> t, Texture tx, int16_t c)
+Icon::Icon(std::unique_ptr<Type> t, Texture tx, std::int16_t c)
     : type(std::move(t)), texture(tx), count(c)
 {
     texture.shift({0, 32});
@@ -34,7 +34,7 @@ Icon::Icon() : Icon(std::make_unique<NullType>(), {}, -1)
 {
 }
 
-void Icon::draw(Point<int16_t> position) const
+void Icon::draw(Point<std::int16_t> position) const
 {
     float opacity = dragged ? 0.5f : 1.0f;
     texture.draw({position, opacity});
@@ -42,13 +42,13 @@ void Icon::draw(Point<int16_t> position) const
     if (showcount) {
         static const Charset countset = {nl::nx::ui["Basic.img"]["ItemNo"],
                                          Charset::LEFT};
-        int16_t tempc = dragged ? (count - 1) : count;
+        std::int16_t tempc = dragged ? (count - 1) : count;
         std::string countstr = std::to_string(tempc);
-        countset.draw(countstr, position + Point<int16_t>(0, 20));
+        countset.draw(countstr, position + Point<std::int16_t>(0, 20));
     }
 }
 
-void Icon::dragdraw(Point<int16_t> cursorpos) const
+void Icon::dragdraw(Point<std::int16_t> cursorpos) const
 {
     if (dragged) {
         texture.draw({cursorpos - cursoroffset, 0.5f});
@@ -67,13 +67,13 @@ void Icon::drop_on_equips(Equipslot::Id eqslot) const
 
 void Icon::drop_on_items(InventoryType::Id tab,
                          Equipslot::Id eqslot,
-                         int16_t slot,
+                         std::int16_t slot,
                          bool equip) const
 {
     type->drop_on_items(tab, eqslot, slot, equip);
 }
 
-void Icon::start_drag(Point<int16_t> offset)
+void Icon::start_drag(Point<std::int16_t> offset)
 {
     cursoroffset = offset;
     dragged = true;
@@ -84,12 +84,12 @@ void Icon::reset()
     dragged = false;
 }
 
-void Icon::set_count(int16_t c)
+void Icon::set_count(std::int16_t c)
 {
     count = c;
 }
 
-int16_t Icon::get_count() const
+std::int16_t Icon::get_count() const
 {
     return count;
 }

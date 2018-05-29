@@ -31,17 +31,17 @@ public:
     ~Texture();
 
     void draw(const DrawArgument& args) const;
-    void shift(Point<int16_t> amount);
+    void shift(Point<std::int16_t> amount);
 
     bool is_valid() const;
-    int16_t width() const;
-    int16_t height() const;
-    Point<int16_t> get_origin() const;
-    Point<int16_t> get_dimensions() const;
+    std::int16_t width() const;
+    std::int16_t height() const;
+    Point<std::int16_t> get_origin() const;
+    Point<std::int16_t> get_dimensions() const;
 
 private:
     nl::bitmap bitmap;
-    Point<int16_t> origin;
-    Point<int16_t> dimensions;
+    Point<std::int16_t> origin;
+    Point<std::int16_t> dimensions;
 };
 } // namespace jrc

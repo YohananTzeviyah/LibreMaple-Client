@@ -39,12 +39,12 @@ public:
     void draw(float) const override;
     void update() override;
 
-    Cursor::State send_cursor(bool, Point<int16_t>) override;
+    Cursor::State send_cursor(bool, Point<std::int16_t>) override;
 
     void send_naming_result(bool success);
 
 protected:
-    Button::State button_pressed(uint16_t button_id) override;
+    Button::State button_pressed(std::uint16_t button_id) override;
 
 private:
     void randomize_look();
@@ -82,25 +82,25 @@ private:
     CharLook newchar;
     Randomizer randomizer;
 
-    BoolPair<std::vector<uint8_t>> skins;
-    BoolPair<std::vector<uint8_t>> haircolors;
-    BoolPair<std::vector<int32_t>> faces;
-    BoolPair<std::vector<int32_t>> hairs;
-    BoolPair<std::vector<int32_t>> tops;
-    BoolPair<std::vector<int32_t>> bots;
-    BoolPair<std::vector<int32_t>> shoes;
-    BoolPair<std::vector<int32_t>> weapons;
+    BoolPair<std::vector<std::uint8_t>> skins;
+    BoolPair<std::vector<std::uint8_t>> haircolors;
+    BoolPair<std::vector<std::int32_t>> faces;
+    BoolPair<std::vector<std::int32_t>> hairs;
+    BoolPair<std::vector<std::int32_t>> tops;
+    BoolPair<std::vector<std::int32_t>> bots;
+    BoolPair<std::vector<std::int32_t>> shoes;
+    BoolPair<std::vector<std::int32_t>> weapons;
 
     bool named;
     bool female;
-    size_t skin;
-    size_t haircolor;
-    size_t face;
-    size_t hair;
-    size_t top;
-    size_t bot;
-    size_t shoe;
-    size_t weapon;
+    std::size_t skin;
+    std::size_t haircolor;
+    std::size_t face;
+    std::size_t hair;
+    std::size_t top;
+    std::size_t bot;
+    std::size_t shoe;
+    std::size_t weapon;
     Text facename;
     Text hairname;
     Text haircname;

@@ -22,8 +22,8 @@ namespace jrc
 std::vector<Movement> MovementParser::parse_movements(InPacket& recv)
 {
     std::vector<Movement> movements;
-    uint8_t length = recv.read_byte();
-    for (uint8_t i = 0; i < length; ++i) {
+    std::uint8_t length = recv.read_byte();
+    for (std::uint8_t i = 0; i < length; ++i) {
         Movement fragment;
         fragment.command = recv.read_byte();
         switch (fragment.command) {

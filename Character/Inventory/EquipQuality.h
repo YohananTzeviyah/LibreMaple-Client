@@ -25,8 +25,8 @@ namespace EquipQuality
 {
 enum Id { GREY, WHITE, ORANGE, BLUE, VIOLET, GOLD };
 
-Id check_quality(int32_t item_id,
+Id check_quality(std::int32_t item_id,
                  bool scrolled,
-                 const EnumMap<Equipstat::Id, uint16_t>& stats);
+                 const EnumMap<Equipstat::Id, std::uint16_t>& stats);
 } // namespace EquipQuality
 } // namespace jrc

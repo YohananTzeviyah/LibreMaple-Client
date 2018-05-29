@@ -172,7 +172,7 @@
 
     ```cpp
     char* linux_banner;
-    uint64_t memparse(std::string& ptr, std::string&& retptr);
+    std::uint64_t memparse(std::string& ptr, std::string&& retptr);
     char* match_strdup(substring_t* s);
     ```
 
@@ -245,7 +245,7 @@
      * - `foo` : Should satisfy `!foo.isBarred()`.
      * - `baz` : Byte to add to the end of the new `foo`.
      */
-    void some_function(const Foo& foo, uint8_t baz) {
+    void some_function(const Foo& foo, std::uint8_t baz) {
         // ...
     }
     ```
@@ -265,7 +265,7 @@
   literals:
 
     ```cpp
-    const std::tuple<uint64_t, std::string, bool> my_tuple{137, "1/137"s, true};
+    const std::tuple<std::uint64_t, std::string, bool> my_tuple{137, "1/137"s, true};
     ```
 
 ## Method
@@ -490,8 +490,8 @@
   brace initialization like so:
 
     ```cpp
-    const int32_t x = 15;
-    const int64_t y{x};
+    const std::int32_t x = 15;
+    const std::int64_t y{x};
     ```
 
 * To convert from one numeric type to another that *does* possibly lose
@@ -523,7 +523,7 @@
     ```
 
 * When dealing with integral types, prefer to use fixed width integer types
-  like `uint64_t`, `int32_t`, etc.
+  like `std::uint64_t`, `std::int32_t`, etc.
 * Use `std::variant`, not `union`s.
 * Use structured bindings, when applicable.
 * Don't ask the compiler to inline your functions. It knows how to do that. If

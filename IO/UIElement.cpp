@@ -22,12 +22,12 @@
 
 namespace jrc
 {
-UIElement::UIElement(Point<int16_t> p, Point<int16_t> d, bool a)
+UIElement::UIElement(Point<std::int16_t> p, Point<std::int16_t> d, bool a)
     : position(p), dimension(d), active(a)
 {
 }
 
-UIElement::UIElement(Point<int16_t> p, Point<int16_t> d)
+UIElement::UIElement(Point<std::int16_t> p, Point<std::int16_t> d)
     : UIElement(p, d, true)
 {
 }
@@ -85,26 +85,26 @@ void UIElement::toggle_active()
     active = !active;
 }
 
-Button::State UIElement::button_pressed(uint16_t)
+Button::State UIElement::button_pressed(std::uint16_t)
 {
     return Button::DISABLED;
 }
 
-void UIElement::send_icon(const Icon&, Point<int16_t>)
+void UIElement::send_icon(const Icon&, Point<std::int16_t>)
 {
 }
 
-void UIElement::doubleclick(Point<int16_t>)
+void UIElement::doubleclick(Point<std::int16_t>)
 {
 }
 
-bool UIElement::is_in_range(Point<int16_t> cursorpos) const
+bool UIElement::is_in_range(Point<std::int16_t> cursorpos) const
 {
-    auto bounds = Rectangle<int16_t>(position, position + dimension);
+    auto bounds = Rectangle<std::int16_t>(position, position + dimension);
     return bounds.contains(cursorpos);
 }
 
-bool UIElement::remove_cursor(bool, Point<int16_t>)
+bool UIElement::remove_cursor(bool, Point<std::int16_t>)
 {
     for (auto& btit : buttons) {
         Button* button = btit.second.get();
@@ -119,7 +119,7 @@ bool UIElement::remove_cursor(bool, Point<int16_t>)
     return false;
 }
 
-Cursor::State UIElement::send_cursor(bool down, Point<int16_t> pos)
+Cursor::State UIElement::send_cursor(bool down, Point<std::int16_t> pos)
 {
     Cursor::State ret = down ? Cursor::CLICKING : Cursor::IDLE;
 

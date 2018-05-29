@@ -46,10 +46,11 @@ private:
         VMOVEB
     };
 
-    static Type typebyid(int32_t id)
+    static Type typebyid(std::int32_t id)
     {
-        if (id >= NORMAL && id <= VMOVEB)
+        if (id >= NORMAL && id <= VMOVEB) {
             return static_cast<Type>(id);
+        }
 
         Console::get().print("Unhandled background type: " +
                              std::to_string(id));
@@ -59,18 +60,18 @@ private:
 
     void settype(Type type);
 
-    static const int16_t WOFFSET = Constants::VIEWWIDTH / 2;
-    static const int16_t HOFFSET =
-        Constants::VIEWHEIGHT / 2 - Constants::VIEWYOFFSET;
+    static const std::int16_t WOFFSET = Constants::GAMEVIEWWIDTH / 2;
+    static const std::int16_t HOFFSET =
+        Constants::GAMEVIEWHEIGHT / 2 - Constants::VIEWYOFFSET;
 
     Animation animation;
     bool animated;
-    int16_t cx;
-    int16_t cy;
+    std::int16_t cx;
+    std::int16_t cy;
     double rx;
     double ry;
-    int16_t htile;
-    int16_t vtile;
+    std::int16_t htile;
+    std::int16_t vtile;
     float opacity;
     bool flipped;
 

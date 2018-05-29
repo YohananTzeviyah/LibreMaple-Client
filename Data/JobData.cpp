@@ -23,7 +23,7 @@
 
 namespace jrc
 {
-JobData::JobData(int32_t id)
+JobData::JobData(std::int32_t id)
 {
     std::string strid = string_format::extend_id(id, 3);
     nl::node src = nl::nx::skill[strid + ".img"];
@@ -34,7 +34,7 @@ JobData::JobData(int32_t id)
     name = strsrc["bookName"].get_string();
 
     for (nl::node sub : src["skill"]) {
-        int32_t skill_id = string_conversion::or_zero<int32_t>(sub.name());
+        std::int32_t skill_id = string_conversion::or_zero<std::int32_t>(sub.name());
         if (skill_id == 0)
             continue;
 

@@ -28,52 +28,52 @@ public:
     {
     }
 
-    constexpr DrawArgument(int16_t x, int16_t y)
-        : DrawArgument(Point<int16_t>{x, y})
+    constexpr DrawArgument(std::int16_t x, std::int16_t y)
+        : DrawArgument(Point<std::int16_t>{x, y})
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p) : DrawArgument(p, 1.0f)
+    constexpr DrawArgument(Point<std::int16_t> p) : DrawArgument(p, 1.0f)
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p, float xs, float ys)
+    constexpr DrawArgument(Point<std::int16_t> p, float xs, float ys)
         : DrawArgument(p, p, xs, ys, 1.0f)
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p, Point<int16_t> s)
+    constexpr DrawArgument(Point<std::int16_t> p, Point<std::int16_t> s)
         : DrawArgument(p, p, s, 1.0f, 1.0f, 1.0f, 0.0f)
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p, bool flip)
+    constexpr DrawArgument(Point<std::int16_t> p, bool flip)
         : DrawArgument(p, flip, 1.0f)
     {
     }
 
-    constexpr DrawArgument(float ang, Point<int16_t> p, float opc)
+    constexpr DrawArgument(float ang, Point<std::int16_t> p, float opc)
         : DrawArgument(ang, p, false, opc)
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p, float opc)
+    constexpr DrawArgument(Point<std::int16_t> p, float opc)
         : DrawArgument(p, false, opc)
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p, Color color)
+    constexpr DrawArgument(Point<std::int16_t> p, Color color)
         : DrawArgument(p, p, {}, 1.0f, 1.0f, color, 0.0f)
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p, bool flip, Point<int16_t> c)
+    constexpr DrawArgument(Point<std::int16_t> p, bool flip, Point<std::int16_t> c)
         : DrawArgument(p, c, flip ? -1.0f : 1.0f, 1.0f, 1.0f)
     {
     }
 
     constexpr DrawArgument(
-        Point<int16_t> p, Point<int16_t> c, float xs, float ys, float opc)
+        Point<std::int16_t> p, Point<std::int16_t> c, float xs, float ys, float opc)
         : DrawArgument(p, c, {}, xs, ys, opc, 0.0f)
     {
     }
@@ -88,24 +88,24 @@ public:
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p, float xs, float ys, float opc)
+    constexpr DrawArgument(Point<std::int16_t> p, float xs, float ys, float opc)
         : DrawArgument(p, p, xs, ys, opc)
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p, bool flip, float opc)
+    constexpr DrawArgument(Point<std::int16_t> p, bool flip, float opc)
         : DrawArgument(p, p, flip ? -1.0f : 1.0f, 1.0f, opc)
     {
     }
 
-    constexpr DrawArgument(float ang, Point<int16_t> p, bool flip, float opc)
+    constexpr DrawArgument(float ang, Point<std::int16_t> p, bool flip, float opc)
         : DrawArgument(p, p, {}, flip ? -1.0f : 1.0f, 1.0f, opc, ang)
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p,
-                           Point<int16_t> c,
-                           Point<int16_t> s,
+    constexpr DrawArgument(Point<std::int16_t> p,
+                           Point<std::int16_t> c,
+                           Point<std::int16_t> s,
                            float xs,
                            float ys,
                            float opc,
@@ -120,9 +120,9 @@ public:
     {
     }
 
-    constexpr DrawArgument(Point<int16_t> p,
-                           Point<int16_t> c,
-                           Point<int16_t> s,
+    constexpr DrawArgument(Point<std::int16_t> p,
+                           Point<std::int16_t> c,
+                           Point<std::int16_t> s,
                            float xs,
                            float ys,
                            Color color,
@@ -137,12 +137,12 @@ public:
     {
     }
 
-    constexpr Point<int16_t> getpos() const
+    constexpr Point<std::int16_t> getpos() const
     {
         return pos;
     }
 
-    constexpr Point<int16_t> getstretch() const
+    constexpr Point<std::int16_t> getstretch() const
     {
         return stretch;
     }
@@ -167,7 +167,7 @@ public:
         return angle;
     }
 
-    constexpr DrawArgument operator+(Point<int16_t> argpos) const
+    constexpr DrawArgument operator+(Point<std::int16_t> argpos) const
     {
         return {pos + argpos,
                 center + argpos,
@@ -206,35 +206,35 @@ public:
                 angle - o.angle};
     }
 
-    Rectangle<int16_t> get_rectangle(Point<int16_t> origin,
-                                     Point<int16_t> dimensions) const
+    Rectangle<std::int16_t> get_rectangle(Point<std::int16_t> origin,
+                                     Point<std::int16_t> dimensions) const
     {
-        int16_t w = stretch.x();
+        std::int16_t w = stretch.x();
         if (w == 0)
             w = dimensions.x();
 
-        int16_t h = stretch.y();
+        std::int16_t h = stretch.y();
         if (h == 0)
             h = dimensions.y();
 
-        Point<int16_t> rlt = pos - center - origin;
-        int16_t rl = rlt.x();
-        int16_t rr = rlt.x() + w;
-        int16_t rt = rlt.y();
-        int16_t rb = rlt.y() + h;
-        int16_t cx = center.x();
-        int16_t cy = center.y();
+        Point<std::int16_t> rlt = pos - center - origin;
+        std::int16_t rl = rlt.x();
+        std::int16_t rr = rlt.x() + w;
+        std::int16_t rt = rlt.y();
+        std::int16_t rb = rlt.y() + h;
+        std::int16_t cx = center.x();
+        std::int16_t cy = center.y();
 
-        return {cx + static_cast<int16_t>(xscale * rl),
-                cx + static_cast<int16_t>(xscale * rr),
-                cy + static_cast<int16_t>(yscale * rt),
-                cy + static_cast<int16_t>(yscale * rb)};
+        return {cx + static_cast<std::int16_t>(xscale * rl),
+                cx + static_cast<std::int16_t>(xscale * rr),
+                cy + static_cast<std::int16_t>(yscale * rt),
+                cy + static_cast<std::int16_t>(yscale * rb)};
     }
 
 private:
-    Point<int16_t> pos;
-    Point<int16_t> center;
-    Point<int16_t> stretch;
+    Point<std::int16_t> pos;
+    Point<std::int16_t> center;
+    Point<std::int16_t> stretch;
     float xscale;
     float yscale;
     float angle;

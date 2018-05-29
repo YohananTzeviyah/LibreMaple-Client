@@ -55,11 +55,11 @@ void MapDrops::update(const Physics& physics)
     for (; !spawns.empty(); spawns.pop()) {
         const DropSpawn& spawn = spawns.front();
 
-        int32_t oid = spawn.get_oid();
+        std::int32_t oid = spawn.get_oid();
         if (nullable_ptr<MapObject> drop = drops.get(oid)) {
             drop->makeactive();
         } else {
-            int32_t itemid = spawn.get_itemid();
+            std::int32_t itemid = spawn.get_itemid();
             bool meso = spawn.is_meso();
             if (meso) {
                 MesoIcon mesotype = (itemid > 999)
@@ -90,7 +90,7 @@ void MapDrops::spawn(DropSpawn&& spawn)
     spawns.emplace(std::move(spawn));
 }
 
-void MapDrops::remove(int32_t oid, int8_t mode, const PhysicsObject* looter)
+void MapDrops::remove(std::int32_t oid, std::int8_t mode, const PhysicsObject* looter)
 {
     if (nullable_ptr<Drop> drop = drops.get(oid)) {
         drop->expire(mode, looter);
@@ -102,7 +102,7 @@ void MapDrops::clear()
     drops.clear();
 }
 
-MapDrops::Loot MapDrops::find_loot_at(Point<int16_t> playerpos)
+MapDrops::Loot MapDrops::find_loot_at(Point<std::int16_t> playerpos)
 {
     if (!lootenabled)
         return {0, {}};
@@ -112,8 +112,8 @@ MapDrops::Loot MapDrops::find_loot_at(Point<int16_t> playerpos)
         if (drop && drop->bounds().contains(playerpos)) {
             lootenabled = false;
 
-            int32_t oid = mmo.first;
-            Point<int16_t> position = drop->get_position();
+            std::int32_t oid = mmo.first;
+            Point<std::int16_t> position = drop->get_position();
             return {oid, position};
         }
     }

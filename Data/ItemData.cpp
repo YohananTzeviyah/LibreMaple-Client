@@ -22,14 +22,14 @@
 
 namespace jrc
 {
-ItemData::ItemData(int32_t id) : itemid(id)
+ItemData::ItemData(std::int32_t id) : itemid(id)
 {
     nl::node src;
     nl::node strsrc;
 
     std::string strprefix = "0" + std::to_string(itemid / 10000);
     std::string strid = "0" + std::to_string(itemid);
-    int32_t prefix = itemid / 1000000;
+    std::int32_t prefix = itemid / 1000000;
     switch (prefix) {
     case 1:
         category = get_eqcategory(itemid);
@@ -73,7 +73,7 @@ ItemData::ItemData(int32_t id) : itemid(id)
     }
 }
 
-std::string ItemData::get_eqcategory(int32_t id) const
+std::string ItemData::get_eqcategory(std::int32_t id) const
 {
     constexpr char const* categorynames[15] = {"Cap",
                                                "Accessory",
@@ -91,7 +91,7 @@ std::string ItemData::get_eqcategory(int32_t id) const
                                                "Accessory",
                                                "Accessory"};
 
-    size_t index = (id / 10000) - 100;
+    std::size_t index = (id / 10000) - 100;
     if (index < 15) {
         return categorynames[index];
     } else if (index >= 30 && index <= 70) {
@@ -111,12 +111,12 @@ ItemData::operator bool() const
     return is_valid();
 }
 
-int32_t ItemData::get_id() const
+std::int32_t ItemData::get_id() const
 {
     return itemid;
 }
 
-int32_t ItemData::get_price() const
+std::int32_t ItemData::get_price() const
 {
     return price;
 }

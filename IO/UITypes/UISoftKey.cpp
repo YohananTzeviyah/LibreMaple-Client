@@ -34,9 +34,9 @@ UISoftkey::UISoftkey(Callback c) : callback(c)
     buttons[BT_NEXT] = std::make_unique<MapleButton>(src["BtNext"]);
     buttons[BT_BACK] = std::make_unique<MapleButton>(src["BtDel"]);
     buttons[BT_OK] =
-        std::make_unique<MapleButton>(src["BtOK"], Point<int16_t>(72, 235));
+        std::make_unique<MapleButton>(src["BtOK"], Point<std::int16_t>(72, 235));
     buttons[BT_CANCEL] = std::make_unique<MapleButton>(
-        src["BtCancel"], Point<int16_t>(13, 235));
+        src["BtCancel"], Point<std::int16_t>(13, 235));
 
     nl::node keys = src["BtNum"];
 
@@ -66,10 +66,10 @@ void UISoftkey::draw(float alpha) const
 {
     UIElement::draw(alpha);
 
-    entry.draw(position + Point<int16_t>(15, 43));
+    entry.draw(position + Point<std::int16_t>(15, 43));
 }
 
-Button::State UISoftkey::button_pressed(uint16_t id)
+Button::State UISoftkey::button_pressed(std::uint16_t id)
 {
     std::string entered = entry.get_text();
 
@@ -115,12 +115,12 @@ Button::State UISoftkey::button_pressed(uint16_t id)
         buttons[BT_OK]->set_state(Button::NORMAL);
         break;
     case MAX_SIZE - 1:
-        for (uint8_t i = 0; i < NUM_KEYS; i++) {
+        for (std::uint8_t i = 0; i < NUM_KEYS; i++) {
             buttons[i]->set_state(Button::NORMAL);
         }
         break;
     case MAX_SIZE:
-        for (uint8_t i = 0; i < NUM_KEYS; i++) {
+        for (std::uint8_t i = 0; i < NUM_KEYS; i++) {
             buttons[i]->set_state(Button::DISABLED);
         }
         break;
@@ -133,19 +133,19 @@ Button::State UISoftkey::button_pressed(uint16_t id)
 
 void UISoftkey::shufflekeys()
 {
-    std::vector<uint8_t> reserve;
-    for (uint8_t i = 0; i < NUM_KEYS; i++) {
+    std::vector<std::uint8_t> reserve;
+    for (std::uint8_t i = 0; i < NUM_KEYS; i++) {
         reserve.push_back(i);
     }
-    for (uint8_t i = 0; i < NUM_KEYS; i++) {
-        size_t rand = random.next_int(reserve.size());
-        Point<int16_t> pos = keypos(reserve[rand]);
+    for (std::uint8_t i = 0; i < NUM_KEYS; i++) {
+        std::size_t rand = random.next_int(reserve.size());
+        Point<std::int16_t> pos = keypos(reserve[rand]);
         buttons[BT_0 + i]->set_position(pos);
         reserve.erase(reserve.begin() + rand);
     }
 }
 
-Point<int16_t> UISoftkey::keypos(uint8_t num) const
+Point<std::int16_t> UISoftkey::keypos(std::uint8_t num) const
 {
     return {12 + (num % 3) * 39, 94 + (num / 3) * 35};
 }

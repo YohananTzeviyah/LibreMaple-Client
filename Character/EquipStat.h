@@ -43,8 +43,8 @@ enum Id {
     LENGTH
 };
 
-Id by_id(size_t id);
-int32_t value_of(Id value);
+Id by_id(std::size_t id);
+std::int32_t value_of(Id value);
 
 constexpr Enumeration<Id> values;
 extern const char* names[LENGTH];

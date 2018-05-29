@@ -21,15 +21,16 @@
 
 namespace jrc
 {
-void Button::set_position(Point<int16_t> pos)
+void Button::set_position(Point<std::int16_t> pos)
 {
     position = pos;
 }
 
 void Button::set_state(State s)
 {
-    if (s == IDENTITY)
+    if (s == IDENTITY) {
         return;
+    }
 
     state = s;
 }

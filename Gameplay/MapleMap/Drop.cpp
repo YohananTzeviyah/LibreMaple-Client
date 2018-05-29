@@ -19,12 +19,12 @@
 
 namespace jrc
 {
-Drop::Drop(int32_t id,
-           int32_t own,
-           Point<int16_t> start,
-           Point<int16_t> dst,
-           int8_t type,
-           int8_t mode,
+Drop::Drop(std::int32_t id,
+           std::int32_t own,
+           Point<std::int16_t> start,
+           Point<std::int16_t> dst,
+           std::int8_t type,
+           std::int8_t mode,
            bool pldrp)
     : MapObject(id)
 {
@@ -59,7 +59,7 @@ Drop::Drop(int32_t id,
     }
 }
 
-int8_t Drop::update(const Physics& physics)
+std::int8_t Drop::update(const Physics& physics)
 {
     physics.move_object(phobj);
 
@@ -82,7 +82,7 @@ int8_t Drop::update(const Physics& physics)
     }
 
     if (state == PICKEDUP) {
-        static const uint16_t PICKUPTIME = 48;
+        static const std::uint16_t PICKUPTIME = 48;
         static const float OPCSTEP = 1.0f / PICKUPTIME;
 
         if (looter) {
@@ -102,7 +102,7 @@ int8_t Drop::update(const Physics& physics)
     return phobj.fhlayer;
 }
 
-void Drop::expire(int8_t type, const PhysicsObject* lt)
+void Drop::expire(std::int8_t type, const PhysicsObject* lt)
 {
     switch (type) {
     case 0:
@@ -121,10 +121,10 @@ void Drop::expire(int8_t type, const PhysicsObject* lt)
     }
 }
 
-Rectangle<int16_t> Drop::bounds() const
+Rectangle<std::int16_t> Drop::bounds() const
 {
     auto lt = get_position();
-    auto rb = lt + Point<int16_t>(32, 32);
-    return Rectangle<int16_t>(lt, rb);
+    auto rb = lt + Point<std::int16_t>(32, 32);
+    return Rectangle<std::int16_t>(lt, rb);
 }
 } // namespace jrc

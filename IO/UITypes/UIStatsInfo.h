@@ -37,12 +37,12 @@ public:
     void update_stat(Maplestat::Id stat);
 
 protected:
-    Button::State button_pressed(uint16_t buttonid) override;
+    Button::State button_pressed(std::uint16_t buttonid) override;
 
 private:
-    static const size_t NUMLABELS = 27;
-    static const size_t NUMNORMAL = 12;
-    static const size_t NUMDETAIL = 15;
+    static const std::size_t NUMLABELS = 27;
+    static const std::size_t NUMNORMAL = 12;
+    static const std::size_t NUMDETAIL = 15;
     enum StatLabel {
         // Normal
         NAME,
@@ -107,6 +107,6 @@ private:
     bool hasap;
 
     Text statlabels[NUMLABELS];
-    Point<int16_t> statoffsets[NUMLABELS];
+    Point<std::int16_t> statoffsets[NUMLABELS];
 };
 } // namespace jrc

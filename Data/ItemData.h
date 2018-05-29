@@ -33,9 +33,9 @@ public:
     explicit operator bool() const;
 
     // Returns the item id.
-    int32_t get_id() const;
+    std::int32_t get_id() const;
     // Returns the item price.
-    int32_t get_price() const;
+    std::int32_t get_price() const;
     // Returns the item's name loaded from the String.nx file.
     const std::string& get_name() const;
     // Returns the item's description loaded from the String.nx file.
@@ -50,13 +50,13 @@ private:
     // Allow the cache to use the constructor.
     friend Cache<ItemData>;
     // Creates an item from the game's Item.nx with the specified id.
-    ItemData(int32_t itemid);
+    ItemData(std::int32_t itemid);
 
-    std::string get_eqcategory(int32_t) const;
+    std::string get_eqcategory(std::int32_t) const;
 
     BoolPair<Texture> icons;
-    int32_t itemid;
-    int32_t price;
+    std::int32_t itemid;
+    std::int32_t price;
     std::string name;
     std::string desc;
     std::string category;
