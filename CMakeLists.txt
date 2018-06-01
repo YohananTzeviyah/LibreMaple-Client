@@ -39,7 +39,7 @@ if(NOT WIN32)
     elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
         SET(CMAKE_CXX_FLAGS "-O3 -flto=full -DNDEBUG ${REQUIRED_FLAGS}")
     elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
-        SET(CMAKE_CXX_FLAGS "-Oz -flto=full -DNDEBUG ${REQUIRED_FLAGS}")
+        SET(CMAKE_CXX_FLAGS "-Oz -DNDEBUG ${REQUIRED_FLAGS}") # LTO doesn't work with "-Os" nor "-Oz" on clang :(
     elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
         SET(CMAKE_CXX_FLAGS "-O2 -flto=thin -g ${REQUIRED_FLAGS}")
     else()

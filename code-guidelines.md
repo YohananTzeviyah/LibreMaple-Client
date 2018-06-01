@@ -255,7 +255,7 @@
   pure or not.
 * Try to avoid the use of macros (`constexpr` and templates should eliminate
   the need for them), but when you do have to use them, make sure that their
-  names are in SHOUTING_SNAKE_CASE:
+  names are in SHOUTING\_SNAKE\_CASE:
 
     ```cpp
     #define MY_MACRO "don't use macros, ya silly goose."
@@ -351,7 +351,7 @@
     {
         vector<double> res(10000);
         // ...
-        return &res;
+        return res;
     }
 
     // Ok.
@@ -369,7 +369,7 @@
   circumstances should you resort to the use of `std::forward_list` or
   `std::list`, unless you **REALLY** know what you're doing.
 * **Use the `unordered_` versions of set/map/multiset/multimap containers**,
-  unless you know what you're doing (e.g. you do need to *persist* a sorted
+  unless you know what you're doing (e.g. you do need to persist a sorted
   order).
 * Make things pure whenever possible, and when a function/method is pure, it
   should (of course) be `const` and also indicate that it is pure within its
@@ -379,19 +379,42 @@
   it when applicable, and **respect const-correctness**. Use it some more. Use
   it a lot.
 * Use `constexpr` *wherever applicable*, including on functions.
-* All functions/methods that are incapable of throwing an exception must be
-  marked as `noexcept`.
-* **Do not use exceptions at all**. If you are forced to interface with code
-  that *does* use exceptions, snuff them as close as possible to that interface
-  (catch and handle them directly at the interface) so that the evil, nasty
-  exceptionful code has the smallest spread and you can return to the wonderful
-  and glorious land of `noexcept`.
-* Instead of using exceptions, just implement "failure modes" for your
+* All functions/methods that are incapable of throwing an exception should be
+  marked as `noexcept`, and even more importantly, *functions/methods that*
+  *make use of exceptions for error handling at all must be marked*
+  `noexcept(false)`.
+* Do **not** use exceptions in situations where you know that the
+  exception-throwing case is actually not that rare (i.e. it is not an
+  exceptional case at all).
+* Avoid using exceptions, just in general. If you are forced to interface with
+  code that *does* use exceptions, there are three approaches that can be
+  suitable depending on the context:
+    1. Check all preconditions of the exception-throwing function(s) that you
+       are calling and make sure that none can be violated before you call the
+       function(s). This is usually(?) an acceptable approach so long as the
+       preconditions are more than rarely violated and the
+       precondition-checking is relatively cheap. This has the advantage of
+       allowing your function to be `noexcept` while also not using any `try`
+       machinery yourself.
+    2. Wrap exception-throwing functions with `try` blocks and handle the
+       exceptions yourself. This is acceptable whenever you expect that you
+       will rarely or never actually have to `catch` anything (as the catching
+       is rather expensive). Such an approach also allows for `noexcept` to be
+       specified for your function, assuming of course that you do not
+       re-throw or anything like that.
+    3. Consider the exceptions (possibly) thrown by the exception-throwing
+       interface to be part of the exception contract of your function. Such
+       an approach requires your function to be `noexcept(false)`, and
+       description of exception-throwing contracts should of course appear in
+       the doc comment of your function.
+* Instead of using exceptions, you can implement "failure modes" for your
   functions/methods. Things that make this easy are `std::optional<T>` and
-  `std::variant<T...>`. Optionals can represent a success (useful value) or
-  failure (nothing at all). Variants can be used to represent a success (the
-  first type parameter, a useful value) or failure (the second type parameter,
-  a useful bit of info about what went wrong):
+  `std::variant<T...>`. NOTE: It may be wise to adopt the `expected` library
+  [from here](https://github.com/TartanLlama/expected). Optionals can
+  represent a success (useful value) or failure (nothing at all). Variants can
+  be used to represent a success (the first type parameter, a useful value) or
+  failure (the second type parameter, a useful bit of info about what went
+  wrong):
 
     ```cpp
     // Using an idiom from Rust.
@@ -441,32 +464,11 @@
 * Avoid using bare `for` and `while` blocks; use iterator-style `for` blocks
   (`for (const auto item : container) { ... }`) instead, or *even better*, use
   standard algorithms and container methods like `for_each`, `find_if`, etc.
-* If you end up being **forced** to use bare `for` and `while` and so need some
-  kind of index type, use `gsl::index`:
-
-    ```cpp
-    // BAD!!!
-    int i = 0;
-    while (condition()) {
-        // do stuff...
-        i++;
-        // do more stuff...
-    }
-
-    // Ok.
-    gsl::index i = 0;
-    while (condition()) {
-        // do stuff...
-        ++i;
-        // do more stuff...
-    }
-    ```
-
 * Limit the scope of your variables to be *as small as possible*. Even better,
   don't declare variables at all and simply place the value where it's needed
   (when applicable).
 * Use `if`-statement init statements, when applicable, to limit the scope of
-  your variables as much as possible:
+  your variables as much as possible (also applies to `switch`):
 
     ```cpp
     if (auto foo = get_foo(); foo.isBarred()) {
@@ -487,16 +489,20 @@
   shoot anyone (including yourself) in the foot.
 * Avoid using casts. This is part of type-safety. Templates can help.
 * To convert from one numeric type to another that doesn't lose precision, use
-  brace initialization like so:
+  brace initialization like so (`static_cast` is also acceptable):
 
     ```cpp
     const std::int32_t x = 15;
     const std::int64_t y{x};
     ```
 
-* To convert from one numeric type to another that *does* possibly lose
-  precision, use `gsl::narrow_cast`.
-* If you *have* to use a cast, use `static_cast` (except on numeric types).
+* To convert from one numeric type to another that possibly loses
+  precision, consider using `gsl::narrow_cast`, or even
+  `math::saturating_cast` if saturation is the appropriate semantics for
+  "overflow".
+* If you *have* to use a cast that is not one of the aforementioned, use
+  `static_cast`, but be wary of possible undefined behavior when using it on
+  numeric types.
 * **Do not use `const_cast` to cast away const-ness**.
 * Do not use `reinterpret_cast` nor C-style casts (e.g. `(int) some_float`)
   unless you are a super wizard whom'st knows **exactly** what they are doing.
@@ -517,14 +523,15 @@
   preferred:
 
     ```cpp
-    for (auto&& [k, v] : some_map) {
+    for (auto&& [k, v] : consumable_map) {
         do_thing(k);
     }
     ```
 
 * When dealing with integral types, prefer to use fixed width integer types
   like `std::uint64_t`, `std::int32_t`, etc.
-* Use `std::variant`, not `union`s.
+* Use `std::variant`, not `union`s. NOTE: It may be wise to adopt the scelta
+  library, [from here](https://github.com/SuperV1234/scelta).
 * Use structured bindings, when applicable.
 * Don't ask the compiler to inline your functions. It knows how to do that. If
   you really think that you know what you're doing, profile it.
@@ -533,9 +540,8 @@
 * Use `enum class`, not `enum`.
 * If you require the use of bare null pointers (you shouldn't since you
   shouldn't be using raw pointers at all, and even if you had a reason, you
-  should use `std::optional<gsl::not_null<T*>>`, but it's possible that you're
-  interfacing with someone else's code that uses nasty raw nullable pointers),
-  use `nullptr`.
+  should use `nullable_ptr<T>`, but it's possible that you're interfacing with
+  someone else's code that uses nasty raw nullable pointers), use `nullptr`.
 * Use `if constexpr` for conditional compilation when applicable.
 * What cannot be checked at compile time should be checkable at run time.
 * Keep the number of function/method parameters low. If you find yourself
@@ -544,7 +550,9 @@
 * A function should perform a single logical operation. Keep functions short
   and simple.
 * **Only** ever return a `T*` to indicate a position, unless you **really**
-  know what you're doing, as explained above.
+  know what you're doing, as explained above. If you want to return a view,
+  use a reference (`&`) or special type like `std::string_view`, and if you
+  want to transfer ownership, use `std::unique_ptr<T>`.
 * Use lambdas for complex initialization, especially of `const` variables (this
   is sometimes called an "IIFE", immediately invoked function expression, due
   to Javascript). This allows more liberal use of `const`, allows for shorter
@@ -571,6 +579,8 @@
 
 * Use a lambda when a function won't do (to capture local variables, or to
   write a local function).
+* Explicitly list exactly those and only those captures that your lambda
+  needs, when possible. I.e., generally avoid `[&]` and `[=]`.
 * Prefer capturing by reference in lambdas that will be used locally.
 * Avoid capturing by reference in lambdas that will be used nonlocally,
   including returned, stored on the heap, or passed to another thread.
@@ -587,11 +597,13 @@
 * Minimize allocations in general. Use the stack (don't overflow it, though,
   of course).
 * `std::regex` is good, but please don't use regex for simple things or when
-  you really just need a more complex hand-written parser.
+  you really just need a more complex hand-written parser or a parser library.
 * Use `gsl::string_span` for when you need something *like* a
   `std::string_view`, but want to mutate the string being viewed.
 * When working with time, use `std::chrono`.
 * `using namespace std;` is bad, and you should feel bad. "Use" as needed.
+  Things that originate from the standard library should have the marker
+  `std::`, and likewise for other foreign namespaces.
 * Pure functions should have the `[[nodiscard]]` attribute. Other functions may
   have a use for the attribute as well; use your judgement.
 * Don't use `std::endl`. Use `'\n'` instead.

@@ -67,12 +67,10 @@ void UI::change_state(State id)
     switch (id) {
     case LOGIN:
         Window::get().resize(false);
-        GraphicsGL::get().reinit();
         state = std::make_unique<UIStateLogin>();
         break;
     case GAME:
         Window::get().resize(true);
-        GraphicsGL::get().reinit();
         state = std::make_unique<UIStateGame>();
         break;
     }
