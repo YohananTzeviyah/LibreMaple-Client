@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -24,7 +24,7 @@
 
 namespace jrc
 {
-// The Equip inventory.
+//! The Equip inventory UI.
 class UIEquipInventory : public UIDragElement<PosEQINV>
 {
 public:
@@ -37,7 +37,7 @@ public:
     void draw(float inter) const override;
 
     void toggle_active() override;
-    void doubleclick(Point<std::int16_t> position) override;
+    void double_click(Point<std::int16_t> position) override;
     void send_icon(const Icon& icon, Point<std::int16_t> position) override;
     Cursor::State send_cursor(bool pressed,
                               Point<std::int16_t> position) override;
@@ -45,19 +45,19 @@ public:
     void modify(std::int16_t pos, std::int8_t mode, std::int16_t arg);
 
 protected:
-    Button::State button_pressed(std::uint16_t buttonid) override;
+    Button::State button_pressed(std::uint16_t button_id) override;
 
 private:
     void show_equip(Equipslot::Id slot);
     void clear_tooltip();
     void load_icons();
     void update_slot(Equipslot::Id slot);
-    Equipslot::Id slot_by_position(Point<std::int16_t> position) const;
+    Equipslot::Id slot_by_position(Point<std::int16_t> cursor_pos) const;
 
     class EquipIcon : public Icon::Type
     {
     public:
-        EquipIcon(std::int16_t source);
+        EquipIcon(std::int16_t source) noexcept;
 
         void drop_on_stage() const override;
         void drop_on_equips(Equipslot::Id) const override
@@ -77,9 +77,9 @@ private:
     const Inventory& inventory;
 
     std::vector<Texture> textures_pet;
-    EnumMap<Equipslot::Id, Point<std::int16_t>> iconpositions;
+    EnumMap<Equipslot::Id, Point<std::int16_t>> icon_positions;
     EnumMap<Equipslot::Id, std::unique_ptr<Icon>> icons;
 
-    bool showpetequips;
+    bool show_pet_equips;
 };
 } // namespace jrc

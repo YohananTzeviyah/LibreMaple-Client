@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -75,6 +75,8 @@ public:
     template<class T>
     nullable_ptr<T> get_element();
     void remove(UIElement::Type type);
+
+    const Keyboard& get_keyboard() const noexcept;
 
 private:
     std::unique_ptr<UIState> state;

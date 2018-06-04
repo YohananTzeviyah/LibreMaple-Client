@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -94,7 +94,7 @@ Mob::Mob(std::int32_t oid,
     set_position(position);
     set_control(mode);
     phobj.fhid = fh;
-    phobj.set_flag(PhysicsObject::TURNATEDGES);
+    phobj.set_flag(PhysicsObject::TURN_AT_EDGES);
 
     hppercent = 0;
     dying = false;
@@ -179,9 +179,9 @@ std::int8_t Mob::update(const Physics& physics)
 
     if (!dying) {
         if (!canfly) {
-            if (phobj.is_flag_not_set(PhysicsObject::TURNATEDGES)) {
+            if (phobj.is_flag_not_set(PhysicsObject::TURN_AT_EDGES)) {
                 flip = !flip;
-                phobj.set_flag(PhysicsObject::TURNATEDGES);
+                phobj.set_flag(PhysicsObject::TURN_AT_EDGES);
 
                 if (stance == HIT) {
                     set_stance(STAND);

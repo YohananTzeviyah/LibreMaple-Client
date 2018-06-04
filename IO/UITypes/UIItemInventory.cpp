@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -378,16 +378,16 @@ bool UIItemInventory::remove_cursor(bool clicked,
 void UIItemInventory::show_item(std::int16_t slot)
 {
     if (tab == InventoryType::EQUIP) {
-        UI::get().show_equip(Tooltip::ITEMINVENTORY, slot);
+        UI::get().show_equip(Tooltip::ITEM_INVENTORY, slot);
     } else {
         std::int32_t item_id = inventory.get_item_id(tab, slot);
-        UI::get().show_item(Tooltip::ITEMINVENTORY, item_id);
+        UI::get().show_item(Tooltip::ITEM_INVENTORY, item_id);
     }
 }
 
 void UIItemInventory::clear_tooltip()
 {
-    UI::get().clear_tooltip(Tooltip::ITEMINVENTORY);
+    UI::get().clear_tooltip(Tooltip::ITEM_INVENTORY);
 }
 
 bool UIItemInventory::is_visible(std::int16_t slot) const

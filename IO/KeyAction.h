@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -22,55 +22,55 @@ namespace jrc
 {
 namespace KeyAction
 {
-// Maple-specific keycodes, sent via the Keymap Packet.
+//! Maple-specific keycodes, sent via the Keymap Packet.
 enum Id : std::int32_t {
-    EQUIPS = 0,
+    EQUIPMENT_TAB = 0,
     INVENTORY = 1,
-    CHARSTATS = 2,
-    SKILLBOOK = 3,
-    BUDDYLIST = 4,
-    WORLDMAP = 5,
-    MESSAGE = 6,
-    MINIMAP = 7,
-    QUESTLOG = 8,
-    KEYCONFIG = 9,
-    CHATALL = 10,
+    CHAR_STATS = 2,
+    SKILL_TAB = 3,
+    BUDDY_TAB = 4,
+    WORLD_MAP = 5,
+    MESSENGER = 6,
+    MINI_MAP = 7,
+    QUEST_LOG = 8,
+    KEY_CONFIG = 9,
+    TO_ALL = 10,
     WHISPER = 11,
-    CHATPT = 12,
-    CHATBUDDY = 13,
-    MAINMENU = 14,
-    TOGGLEQS = 15,
-    CHATWINDOW = 16,
-    GUILD = 17,
-    CHATGUILD = 18,
-    PARTY = 19,
+    TO_PARTY = 12,
+    TO_FRIEND = 13,
+    MAIN_MENU = 14,
+    TOGGLE_QUICK_SLOT = 15,
+    CHAT_WINDOW = 16,
+    GUILD_TAB = 17,
+    TO_GUILD = 18,
+    PARTY_TAB = 19,
     HELPER = 20,
-    CHATSPOUSE = 21,
-    MONSTERBOOK = 22,
-    CASHSHOP = 23,
-    CHATALLIANCE = 24,
-    PARTYSEARCH = 25,
-    FAMILY = 26,
-    GMSMEDALS = 27,
-    BOSS = 28,
-    CHATSQUAD = 29,
-    PROFESSION = 30,
-    ITEMPOT = 31,
-    EVENT = 32,
-    WHEEL = 33,
-    LEVELGUIDE = 34,
-    CRUSADE = 35,
-    BITS = 36,
-    KNOWHOW = 37,
-    EPISODE = 38,
+    MONSTER_BOOK = 21,
+    CASH_SHOP = 22,
+    TO_ALLIANCE = 23,
+    PARTY_SEARCH = 24,
+    TO_TALK = 25,
+    MEDALS = 26,
+    BOSS = 27,
+    TO_EXPED = 28,
+    PROFESSION = 29,
+    ITEM_POT = 30,
+    EVENT = 31,
+    LEVEL_UP_GUIDE = 32,
+    SILENT_CRUSADE = 33,
+    BITS = 34,
+    CHECK_NEW_TALK = 35,
+    TOTS_KNOWHOW = 36,
+    EPISODE = 37,
+    HELPER_2 = 38, // ???
     GUIDE = 39,
-    EQUIPENHANCE = 40,
-    EQUIPENHANCE2 = 41,
-    PICKUP = 50,
+    TO_SPOUSE = 40,
+    EQUIP_ENHANCE = 41,
+    PICK_UP = 50,
     SIT = 51,
     ATTACK = 52,
     JUMP = 53,
-    NPCCHAT = 54,
+    NPC_CHAT = 54,
     LEFT = 60,
     RIGHT = 61,
     UP = 62,
@@ -81,12 +81,17 @@ enum Id : std::int32_t {
     TAB = 67,
     COPY = 68,
     PASTE = 69,
-    NOACTION = 70,
-    FACE1 = 100,
-    FACE7 = 106
+    NO_ACTION = 70,
+    FACE_1 = 100,
+    FACE_2 = 101,
+    FACE_3 = 102,
+    FACE_4 = 103,
+    FACE_5 = 104,
+    FACE_6 = 105,
+    FACE_7 = 106
 };
 
-inline Id actionbyid(std::int32_t id)
+inline Id action_by_id(std::int32_t id) noexcept
 {
     return static_cast<Id>(id);
 }

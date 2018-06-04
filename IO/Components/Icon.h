@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -18,6 +18,7 @@
 #pragma once
 #include "../../Character/Inventory/Inventory.h"
 #include "../../Graphics/Texture.h"
+#include "../KeyAction.h"
 
 #include <memory>
 
@@ -39,6 +40,10 @@ public:
                                    Equipslot::Id eqslot,
                                    std::int16_t slot,
                                    bool equip) const = 0;
+        virtual KeyAction::Id get_action_id() const noexcept
+        {
+            return KeyAction::NO_ACTION;
+        }
     };
 
     class NullType : public Type
@@ -61,13 +66,14 @@ public:
     Icon();
 
     void draw(Point<std::int16_t> position) const;
-    void dragdraw(Point<std::int16_t> cursorpos) const;
+    void dragdraw(Point<std::int16_t> cursor_pos) const;
     void drop_on_stage() const;
     void drop_on_equips(Equipslot::Id eqslot) const;
     void drop_on_items(InventoryType::Id tab,
                        Equipslot::Id eqslot,
                        std::int16_t slot,
                        bool equip) const;
+    KeyAction::Id get_action_id() const noexcept;
     void start_drag(Point<std::int16_t> offset);
     void reset();
     void set_count(std::int16_t count);

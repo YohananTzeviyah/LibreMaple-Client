@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -154,8 +154,8 @@ std::vector<std::int32_t> MapMobs::find_closest(Rectangle<std::int16_t> range,
         const Mob* mob = static_cast<const Mob*>(mmo.second.get());
         if (mob && mob->is_alive() && mob->is_in_range(range)) {
             std::int32_t oid = mob->get_oid();
-            auto distance = static_cast<std::uint16_t>(
-                mob->get_position().distance(origin));
+            auto distance =
+                static_cast<std::uint16_t>(mob->get_position().disp(origin));
             distances.emplace(distance, oid);
         }
     }

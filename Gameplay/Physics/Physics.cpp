@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -87,7 +87,7 @@ void Physics::move_normal(PhysicsObject& phobj) const
             phobj.hacc -=
                 (FRICTION + SLOPEFACTOR * (1.0 + slopef * -inertia)) * inertia;
         }
-    } else if (phobj.is_flag_not_set(PhysicsObject::NOGRAVITY)) {
+    } else if (phobj.is_flag_not_set(PhysicsObject::NO_GRAVITY)) {
         phobj.vacc += GRAVFORCE;
     }
     phobj.hforce = 0.0;
@@ -129,7 +129,7 @@ void Physics::move_swimming(PhysicsObject& phobj) const
     phobj.hacc -= SWIMFRICTION * phobj.hspeed;
     phobj.vacc -= SWIMFRICTION * phobj.vspeed;
 
-    if (phobj.is_flag_not_set(PhysicsObject::NOGRAVITY)) {
+    if (phobj.is_flag_not_set(PhysicsObject::NO_GRAVITY)) {
         phobj.vacc += SWIMGRAVFORCE;
     }
 

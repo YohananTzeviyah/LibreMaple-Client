@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -106,11 +106,11 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
 
     InventoryType::Id invtype;
     switch (parent) {
-    case ITEMINVENTORY:
+    case ITEM_INVENTORY:
     case SHOP:
         invtype = InventoryType::EQUIP;
         break;
-    case EQUIPINVENTORY:
+    case EQUIP_INVENTORY:
         invtype = InventoryType::EQUIPPED;
         break;
     default:

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -316,7 +316,7 @@ void Player::rush(double targetx)
     if (phobj.onground) {
         std::uint16_t delay = get_attackdelay(1);
         phobj.movexuntil(targetx, delay);
-        phobj.set_flag(PhysicsObject::TURNATEDGES);
+        phobj.set_flag(PhysicsObject::TURN_AT_EDGES);
     }
 }
 

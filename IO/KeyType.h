@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -37,7 +37,7 @@ enum Id {
     LENGTH
 };
 
-inline Id typebyid(std::uint8_t id)
+inline Id type_by_id(std::uint8_t id)
 {
     if (id <= NONE || id >= LENGTH) {
         return NONE;

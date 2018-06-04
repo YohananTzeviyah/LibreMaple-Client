@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -97,7 +97,7 @@ void PlayerStandState::send_action(Player& player,
 void PlayerStandState::update(Player& player) const
 {
     if (!player.get_phobj().enablejd) {
-        player.get_phobj().set_flag(PhysicsObject::CHECKBELOW);
+        player.get_phobj().set_flag(PhysicsObject::CHECK_BELOW);
     }
 }
 
@@ -158,7 +158,7 @@ void PlayerWalkState::update(Player& player) const
     }
 
     if (!player.get_phobj().enablejd) {
-        player.get_phobj().set_flag(PhysicsObject::CHECKBELOW);
+        player.get_phobj().set_flag(PhysicsObject::CHECK_BELOW);
     }
 }
 
@@ -265,7 +265,7 @@ void PlayerProneState::send_action(Player& player,
 void PlayerProneState::update(Player& player) const
 {
     if (!player.get_phobj().enablejd) {
-        player.get_phobj().set_flag(PhysicsObject::CHECKBELOW);
+        player.get_phobj().set_flag(PhysicsObject::CHECK_BELOW);
     }
 }
 

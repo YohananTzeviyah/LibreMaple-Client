@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -23,30 +23,30 @@
 namespace jrc
 {
 template<typename K, typename V, K LENGTH = K::LENGTH>
-// Wraps an array so that it is adressable by enum values.
+//! Wraps an array so that it is adressable by enum values.
 class EnumMap
 {
 public:
     template<typename... Args>
-    // Initialize with an initializer list.
-    EnumMap(Args&&... args) : m_values{{std::forward<Args>(args)...}}
+    //! Initialize with an initializer list.
+    EnumMap(Args&&... args) noexcept : m_values{{std::forward<Args>(args)...}}
     {
         static_assert(std::is_enum<K>::value,
-                      "Template parameter 'K' for EnumMap must be an enum.");
+                      "Template parameter `K` for EnumMap must be an enum");
 
         for (std::size_t i = 0; i < LENGTH; ++i) {
             m_keys[i] = static_cast<K>(i);
         }
     }
 
-    void clear()
+    void clear() noexcept
     {
         for (std::size_t i = 0; i < LENGTH; ++i) {
             m_values[i] = V();
         }
     }
 
-    void erase(K key)
+    void erase(K key) noexcept
     {
         if (key >= 0 && key < LENGTH) {
             m_values[key] = V();
@@ -54,17 +54,17 @@ public:
     }
 
     template<typename... Args>
-    void emplace(K key, Args&&... args)
+    void emplace(K key, Args&&... args) noexcept
     {
         m_values[key] = {std::forward<Args>(args)...};
     }
 
-    V& operator[](K key)
+    V& operator[](K key) noexcept
     {
         return m_values[key];
     }
 
-    const V& operator[](K key) const
+    const V& operator[](K key) const noexcept
     {
         return m_values[key];
     }
@@ -75,7 +75,7 @@ public:
     public:
         using index_type = typename std::underlying_type<K>::type;
 
-        base_iterator(T* p, index_type i) : value(p), index(i)
+        base_iterator(T* p, index_type i) noexcept : value(p), index(i)
         {
         }
 
@@ -83,58 +83,50 @@ public:
             K first;
             T& second;
 
-            node(K f, T& s) : first(f), second(s)
+            node(K f, T& s) noexcept : first(f), second(s)
             {
             }
 
             node& operator=(const node&) = delete;
 
-            void set(const T& t)
+            void set(const T& t) noexcept
             {
                 second = t;
             }
         };
 
-        node operator*()
+        node operator*() noexcept
         {
             return node{first(), second()};
         }
 
-        explicit operator bool() const
+        explicit operator bool() const noexcept
         {
             return index >= 0 && index < LENGTH;
         }
 
-        K first() const
+        K first() const noexcept
         {
             return static_cast<K>(index);
         }
 
-        T& second()
+        T& second() noexcept
         {
-            /*
-            if (!this) // Clang says this never happens
-            {
-                throw std::out_of_range("iterator out of range");
-            }
-            else
-            {*/
             return *(value + index);
-            /*}*/
         }
 
-        base_iterator& operator++()
+        base_iterator& operator++() noexcept
         {
             index++;
             return *this;
         }
 
-        bool operator!=(const base_iterator& other) const
+        bool operator!=(const base_iterator& other) const noexcept
         {
             return index != other.index;
         }
 
-        bool operator==(const base_iterator& other) const
+        bool operator==(const base_iterator& other) const noexcept
         {
             return index == other.index;
         }
@@ -149,47 +141,47 @@ public:
     using node = typename iterator::node;
     using cnode = typename const_iterator::node;
 
-    iterator find(K key)
+    iterator find(K key) noexcept
     {
         return {m_values.data(), key};
     }
 
-    const_iterator find(K key) const
+    const_iterator find(K key) const noexcept
     {
         return {m_values.data(), key};
     }
 
-    iterator begin()
+    iterator begin() noexcept
     {
         return {m_values.data(), 0};
     }
 
-    iterator end()
+    iterator end() noexcept
     {
         return {m_values.data(), LENGTH};
     }
 
-    const_iterator begin() const
+    const_iterator begin() const noexcept
     {
         return {m_values.data(), 0};
     }
 
-    const_iterator end() const
+    const_iterator end() const noexcept
     {
         return {m_values.data(), LENGTH};
     }
 
-    const std::array<K, LENGTH>& keys() const
+    const std::array<K, LENGTH>& keys() const noexcept
     {
         return m_keys;
     }
 
-    std::array<V, LENGTH>& values()
+    std::array<V, LENGTH>& values() noexcept
     {
         return m_values;
     }
 
-    const std::array<V, LENGTH>& values() const
+    const std::array<V, LENGTH>& values() const noexcept
     {
         return m_values;
     }

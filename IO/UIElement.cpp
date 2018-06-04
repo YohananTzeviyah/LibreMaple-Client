@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -94,20 +94,19 @@ void UIElement::send_icon(const Icon&, Point<std::int16_t>)
 {
 }
 
-void UIElement::doubleclick(Point<std::int16_t>)
+void UIElement::double_click(Point<std::int16_t>)
 {
 }
 
 bool UIElement::is_in_range(Point<std::int16_t> cursorpos) const
 {
-    auto bounds = Rectangle<std::int16_t>(position, position + dimension);
+    const Rectangle<std::int16_t> bounds(position, position + dimension);
     return bounds.contains(cursorpos);
 }
 
 bool UIElement::remove_cursor(bool, Point<std::int16_t>)
 {
-    for (auto& btit : buttons) {
-        Button* button = btit.second.get();
+    for (auto& [_, button] : buttons) {
         switch (button->get_state()) {
         case Button::MOUSEOVER:
             button->set_state(Button::NORMAL);
@@ -123,27 +122,26 @@ Cursor::State UIElement::send_cursor(bool down, Point<std::int16_t> pos)
 {
     Cursor::State ret = down ? Cursor::CLICKING : Cursor::IDLE;
 
-    for (auto& btit : buttons) {
-        if (btit.second->is_active() &&
-            btit.second->bounds(position).contains(pos)) {
-            if (btit.second->get_state() == Button::NORMAL) {
+    for (auto& [button_id, button] : buttons) {
+        if (button->is_active() && button->bounds(position).contains(pos)) {
+            if (button->get_state() == Button::NORMAL) {
                 Sound(Sound::BUTTONOVER).play();
 
-                btit.second->set_state(Button::MOUSEOVER);
+                button->set_state(Button::MOUSEOVER);
                 ret = Cursor::CANCLICK;
-            } else if (btit.second->get_state() == Button::MOUSEOVER) {
+            } else if (button->get_state() == Button::MOUSEOVER) {
                 if (down) {
                     Sound(Sound::BUTTONCLICK).play();
 
-                    btit.second->set_state(button_pressed(btit.first));
+                    button->set_state(button_pressed(button_id));
 
                     ret = Cursor::IDLE;
                 } else {
                     ret = Cursor::CANCLICK;
                 }
             }
-        } else if (btit.second->get_state() == Button::MOUSEOVER) {
-            btit.second->set_state(Button::NORMAL);
+        } else if (button->get_state() == Button::MOUSEOVER) {
+            button->set_state(Button::NORMAL);
         }
     }
 

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -22,40 +22,41 @@
 namespace jrc
 {
 template<typename E, E LENGTH = E::LENGTH>
-// Makes contiguous enums iterable.
+//! Makes contiguous `enum`s iterable.
 class Enumeration
 {
 public:
     using underlying_t = typename std::array<E, LENGTH>;
 
     template<std::size_t... VS>
-    constexpr Enumeration(std::index_sequence<VS...>)
+    constexpr Enumeration(std::index_sequence<VS...>) noexcept
         : values{{static_cast<E>(VS)...}}
     {
     }
 
-    constexpr Enumeration() : Enumeration(std::make_index_sequence<LENGTH>{})
+    constexpr Enumeration() noexcept
+        : Enumeration(std::make_index_sequence<LENGTH>{})
     {
         static_assert(std::is_enum<E>::value,
-                      "Template parameter E for Enumeration must be an enum.");
+                      "Template parameter E for Enumeration must be an enum");
     }
 
-    auto begin() const
+    auto begin() const noexcept
     {
         return values.begin();
     }
 
-    auto end() const
+    auto end() const noexcept
     {
         return values.end();
     }
 
-    auto cbegin() const
+    auto cbegin() const noexcept
     {
         return values.cbegin();
     }
 
-    auto cend() const
+    auto cend() const noexcept
     {
         return values.cend();
     }

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -42,16 +42,16 @@ void Icon::draw(Point<std::int16_t> position) const
     if (showcount) {
         static const Charset countset = {nl::nx::ui["Basic.img"]["ItemNo"],
                                          Charset::LEFT};
-        std::int16_t tempc = dragged ? (count - 1) : count;
-        std::string countstr = std::to_string(tempc);
-        countset.draw(countstr, position + Point<std::int16_t>(0, 20));
+        std::int16_t tempc =
+            dragged ? (count - static_cast<std::int16_t>(1)) : count;
+        countset.draw(std::to_string(tempc), position + Point{0, 20});
     }
 }
 
-void Icon::dragdraw(Point<std::int16_t> cursorpos) const
+void Icon::dragdraw(Point<std::int16_t> cursor_pos) const
 {
     if (dragged) {
-        texture.draw({cursorpos - cursoroffset, 0.5f});
+        texture.draw({cursor_pos - cursoroffset, 0.5f});
     }
 }
 
@@ -71,6 +71,11 @@ void Icon::drop_on_items(InventoryType::Id tab,
                          bool equip) const
 {
     type->drop_on_items(tab, eqslot, slot, equip);
+}
+
+KeyAction::Id Icon::get_action_id() const noexcept
+{
+    return type->get_action_id();
 }
 
 void Icon::start_drag(Point<std::int16_t> offset)

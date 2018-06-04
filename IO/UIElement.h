@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -27,7 +27,7 @@
 
 namespace jrc
 {
-/// Base class for all types of user interfaces on screen.
+//! Base class for all types of user interfaces on screen.
 class UIElement
 {
 public:
@@ -52,7 +52,8 @@ public:
         ITEMINVENTORY,
         EQUIPINVENTORY,
         SKILLBOOK,
-        NUM_TYPES
+        NUM_TYPES,
+        KEYCONFIG
     };
 
     virtual ~UIElement() = default;
@@ -68,7 +69,7 @@ public:
     virtual Button::State button_pressed(std::uint16_t buttonid);
     virtual void send_icon(const Icon& icon, Point<std::int16_t> cursorpos);
 
-    virtual void doubleclick(Point<std::int16_t> cursorpos);
+    virtual void double_click(Point<std::int16_t> cursorpos);
     virtual bool is_in_range(Point<std::int16_t> cursorpos) const;
     virtual bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos);
     virtual Cursor::State send_cursor(bool clicked,

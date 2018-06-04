@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -26,28 +26,28 @@
 namespace jrc
 {
 UIEquipInventory::UIEquipInventory(const Inventory& invent)
-    : UIDragElement<PosEQINV>(Point<std::int16_t>(184, 20)), inventory(invent)
+    : UIDragElement<PosEQINV>({184, 20}), inventory(invent)
 {
-    iconpositions[Equipslot::CAP] = Point<std::int16_t>(43, 25);
-    iconpositions[Equipslot::FACEACC] = Point<std::int16_t>(43, 91);
-    iconpositions[Equipslot::EYEACC] = Point<std::int16_t>(43, 68);
-    iconpositions[Equipslot::EARRINGS] = Point<std::int16_t>(109, 91);
-    iconpositions[Equipslot::TOP] = Point<std::int16_t>(43, 124);
-    iconpositions[Equipslot::PANTS] = Point<std::int16_t>(43, 157);
-    iconpositions[Equipslot::SHOES] = Point<std::int16_t>(76, 190);
-    iconpositions[Equipslot::GLOVES] = Point<std::int16_t>(10, 157);
-    iconpositions[Equipslot::CAPE] = Point<std::int16_t>(10, 124);
-    iconpositions[Equipslot::SHIELD] = Point<std::int16_t>(142, 124);
-    iconpositions[Equipslot::WEAPON] = Point<std::int16_t>(109, 124);
-    iconpositions[Equipslot::RING] = Point<std::int16_t>(109, 157);
-    iconpositions[Equipslot::RING2] = Point<std::int16_t>(142, 157);
-    iconpositions[Equipslot::RING3] = Point<std::int16_t>(109, 91);
-    iconpositions[Equipslot::RING4] = Point<std::int16_t>(142, 91);
-    iconpositions[Equipslot::PENDANT] = Point<std::int16_t>(76, 124);
-    iconpositions[Equipslot::TAMEDMOB] = Point<std::int16_t>(142, 91);
-    iconpositions[Equipslot::SADDLE] = Point<std::int16_t>(76, 124);
-    iconpositions[Equipslot::MEDAL] = Point<std::int16_t>(10, 58);
-    iconpositions[Equipslot::BELT] = Point<std::int16_t>(76, 157);
+    icon_positions[Equipslot::CAP] = {43, 25};
+    icon_positions[Equipslot::FACEACC] = {43, 91};
+    icon_positions[Equipslot::EYEACC] = {43, 68};
+    icon_positions[Equipslot::EARRINGS] = {109, 91};
+    icon_positions[Equipslot::TOP] = {43, 124};
+    icon_positions[Equipslot::PANTS] = {43, 157};
+    icon_positions[Equipslot::SHOES] = {76, 190};
+    icon_positions[Equipslot::GLOVES] = {10, 157};
+    icon_positions[Equipslot::CAPE] = {10, 124};
+    icon_positions[Equipslot::SHIELD] = {142, 124};
+    icon_positions[Equipslot::WEAPON] = {109, 124};
+    icon_positions[Equipslot::RING] = {109, 157};
+    icon_positions[Equipslot::RING2] = {142, 157};
+    icon_positions[Equipslot::RING3] = {109, 91};
+    icon_positions[Equipslot::RING4] = {142, 91};
+    icon_positions[Equipslot::PENDANT] = {76, 124};
+    icon_positions[Equipslot::TAMEDMOB] = {142, 91};
+    icon_positions[Equipslot::SADDLE] = {76, 124};
+    icon_positions[Equipslot::MEDAL] = {10, 58};
+    icon_positions[Equipslot::BELT] = {76, 157};
 
     nl::node source = nl::nx::ui["UIWindow2.img"]["Equip"]["character"];
     nl::node petsource = nl::nx::ui["UIWindow2.img"]["Equip"]["pet"];
@@ -69,32 +69,32 @@ UIEquipInventory::UIEquipInventory(const Inventory& invent)
 
     dimension = {184, 290};
     active = true;
-    showpetequips = false;
+    show_pet_equips = false;
 }
 
 void UIEquipInventory::draw(float alpha) const
 {
     UIElement::draw(alpha);
 
-    for (auto iter : icons) {
-        if (iter.second)
-            iter.second->draw(position + iconpositions[iter.first]);
+    for (auto [equip_slot, icon] : icons) {
+        if (icon) {
+            icon->draw(position + icon_positions[equip_slot]);
+        }
     }
 
-    if (showpetequips) {
-        Point<std::int16_t> position_pet(position +
-                                         Point<std::int16_t>(184, 0));
-        for (auto& texture : textures_pet) {
+    if (show_pet_equips) {
+        auto position_pet = position + {184, 0};
+        for (const auto& texture : textures_pet) {
             texture.draw(position_pet);
         }
     }
 }
 
-Button::State UIEquipInventory::button_pressed(std::uint16_t id)
+Button::State UIEquipInventory::button_pressed(std::uint16_t button_id)
 {
-    switch (id) {
+    switch (button_id) {
     case BT_TOGGLEPETS:
-        showpetequips = !showpetequips;
+        show_pet_equips = !show_pet_equips;
         return Button::NORMAL;
     default:
         return Button::PRESSED;
@@ -136,7 +136,7 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
     Equipslot::Id slot = slot_by_position(cursorpos);
     if (auto icon = icons[slot].get()) {
         if (pressed) {
-            icon->start_drag(cursorpos - position - iconpositions[slot]);
+            icon->start_drag(cursorpos - position - icon_positions[slot]);
             UI::get().drag_icon(icon);
 
             clear_tooltip();
@@ -151,7 +151,7 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
     }
 }
 
-void UIEquipInventory::doubleclick(Point<std::int16_t> cursorpos)
+void UIEquipInventory::double_click(Point<std::int16_t> cursorpos)
 {
     Equipslot::Id slot = slot_by_position(cursorpos);
     if (icons[slot]) {
@@ -196,31 +196,29 @@ void UIEquipInventory::modify(std::int16_t pos,
 
 void UIEquipInventory::show_equip(Equipslot::Id slot)
 {
-    UI::get().show_equip(Tooltip::EQUIPINVENTORY, slot);
+    UI::get().show_equip(Tooltip::EQUIP_INVENTORY, slot);
 }
 
 void UIEquipInventory::clear_tooltip()
 {
-    UI::get().clear_tooltip(Tooltip::EQUIPINVENTORY);
+    UI::get().clear_tooltip(Tooltip::EQUIP_INVENTORY);
 }
 
 Equipslot::Id
-UIEquipInventory::slot_by_position(Point<std::int16_t> cursorpos) const
+UIEquipInventory::slot_by_position(Point<std::int16_t> cursor_pos) const
 {
-    for (auto iter : iconpositions) {
-        Rectangle<std::int16_t> iconrect = Rectangle<std::int16_t>(
-            position + iter.second,
-            position + iter.second + Point<std::int16_t>(32, 32));
-        if (iconrect.contains(cursorpos)) {
-            return iter.first;
+    for (auto [slot, slot_pos] : icon_positions) {
+        Rectangle<std::int16_t> icon_rect{position + slot_pos,
+                                          position + slot_pos + Point{32, 32}};
+        if (icon_rect.contains(cursor_pos)) {
+            return slot;
         }
     }
     return Equipslot::NONE;
 }
 
-UIEquipInventory::EquipIcon::EquipIcon(std::int16_t s)
+UIEquipInventory::EquipIcon::EquipIcon(std::int16_t s) noexcept : source(s)
 {
-    source = s;
 }
 
 void UIEquipInventory::EquipIcon::drop_on_stage() const
@@ -233,8 +231,9 @@ void UIEquipInventory::EquipIcon::drop_on_items(InventoryType::Id tab,
                                                 std::int16_t slot,
                                                 bool equip) const
 {
-    if (tab != InventoryType::EQUIP)
+    if (tab != InventoryType::EQUIP) {
         return;
+    }
 
     if (equip) {
         if (eqslot == source) {

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -396,12 +396,12 @@ void UISkillbook::show_skill(std::int32_t id)
     std::int64_t expiration = skillbook.get_expiration(id);
 
     UI::get().show_skill(
-        Tooltip::SKILLBOOK, skill_id, level, masterlevel, expiration);
+        Tooltip::SKILL_BOOK, skill_id, level, masterlevel, expiration);
 }
 
 void UISkillbook::clear_tooltip()
 {
-    UI::get().clear_tooltip(Tooltip::SKILLBOOK);
+    UI::get().clear_tooltip(Tooltip::SKILL_BOOK);
 }
 
 bool UISkillbook::can_raise(std::int32_t skill_id) const

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -22,7 +22,7 @@
 namespace jrc
 {
 template<typename T>
-// Base class for UI Windows which can be moved with the mouse cursor.
+//! Base class for UI windows which can be moved with the mouse cursor.
 class UIDragElement : public UIElement
 {
 public:
@@ -47,7 +47,7 @@ public:
             if (dragged) {
                 position = cursorpos - cursoroffset;
                 return Cursor::CLICKING;
-            } else if (indragrange(cursorpos)) {
+            } else if (in_drag_range(cursorpos)) {
                 cursoroffset = cursorpos - position;
                 dragged = true;
                 return Cursor::CLICKING;
@@ -72,10 +72,10 @@ protected:
     Point<std::int16_t> cursoroffset;
 
 private:
-    bool indragrange(Point<std::int16_t> cursorpos) const
+    bool in_drag_range(Point<std::int16_t> cursor_pos) const
     {
-        auto bounds = Rectangle<std::int16_t>(position, position + dragarea);
-        return bounds.contains(cursorpos);
+        const Rectangle<std::int16_t> bounds{position, position + dragarea};
+        return bounds.contains(cursor_pos);
     }
 };
 } // namespace jrc

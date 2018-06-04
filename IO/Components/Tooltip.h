@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -23,24 +23,24 @@
 
 namespace jrc
 {
-/// Interface for tooltips, information windows about something
-/// the mouse cursor is pointed at.
+//! Interface for tooltips, information windows about something
+//! the mouse cursor is pointed at.
 class Tooltip
 {
 public:
-    /// Possible parent UIs for Tooltips.
-    enum Parent { NONE, EQUIPINVENTORY, ITEMINVENTORY, SKILLBOOK, SHOP };
+    //! Possible parent UIs for Tooltips.
+    enum Parent { NONE, EQUIP_INVENTORY, ITEM_INVENTORY, SKILL_BOOK, SHOP };
 
     static constexpr bool same_ui_type(Parent p, UIElement::Type t) noexcept
     {
         switch (p) {
         case NONE:
             return t == UIElement::Type::NONE;
-        case EQUIPINVENTORY:
+        case EQUIP_INVENTORY:
             return t == UIElement::Type::EQUIPINVENTORY;
-        case ITEMINVENTORY:
+        case ITEM_INVENTORY:
             return t == UIElement::Type::ITEMINVENTORY;
-        case SKILLBOOK:
+        case SKILL_BOOK:
             return t == UIElement::Type::SKILLBOOK;
         case SHOP:
             return t == UIElement::Type::SHOP;

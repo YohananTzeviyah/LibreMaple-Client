@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -237,7 +237,7 @@ void Stage::send_key(KeyType::Id type, std::int32_t action, bool down)
             case KeyAction::ATTACK:
                 combat.use_move(0);
                 break;
-            case KeyAction::PICKUP:
+            case KeyAction::PICK_UP:
                 check_drops();
                 break;
             default:
@@ -245,7 +245,7 @@ void Stage::send_key(KeyType::Id type, std::int32_t action, bool down)
             }
         }
 
-        playable->send_action(KeyAction::actionbyid(action), down);
+        playable->send_action(KeyAction::action_by_id(action), down);
         break;
     case KeyType::SKILL:
         combat.use_move(action);

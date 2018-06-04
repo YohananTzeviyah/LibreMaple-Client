@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -80,7 +80,7 @@ void PetLook::update(const Physics& physics, Point<std::int16_t> charpos)
     switch (stance) {
     case STAND:
     case MOVE:
-        if (curpos.distance(charpos) > 150) {
+        if (curpos.disp(charpos) > 150) {
             set_position(charpos.x(), charpos.y());
         } else {
             if (charpos.x() - curpos.x() > 50) {
@@ -97,14 +97,14 @@ void PetLook::update(const Physics& physics, Point<std::int16_t> charpos)
             }
         }
         phobj.type = PhysicsObject::NORMAL;
-        phobj.clear_flag(PhysicsObject::NOGRAVITY);
+        phobj.clear_flag(PhysicsObject::NO_GRAVITY);
         break;
     case HANG:
         set_position(charpos.x(), charpos.y());
-        phobj.set_flag(PhysicsObject::NOGRAVITY);
+        phobj.set_flag(PhysicsObject::NO_GRAVITY);
         break;
     case FLY:
-        if ((charpos - curpos).length() > 250) {
+        if ((charpos - curpos).norm() > 250) {
             set_position(charpos.x(), charpos.y());
         } else {
             if (charpos.x() - curpos.x() > 50) {
@@ -126,7 +126,7 @@ void PetLook::update(const Physics& physics, Point<std::int16_t> charpos)
             }
         }
         phobj.type = PhysicsObject::FLYING;
-        phobj.clear_flag(PhysicsObject::NOGRAVITY);
+        phobj.clear_flag(PhysicsObject::NO_GRAVITY);
         break;
     default:
         // TODO: Handle all the other cases

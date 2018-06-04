@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -28,23 +28,23 @@
 
 namespace jrc
 {
-// Manages the 'Settings' file which contains configurations set by user
-// behaviour.
+//! Manages the 'Settings' file which contains configurations set by user
+//! behaviour.
 class Configuration : public Singleton<Configuration>
 {
 public:
-    // Add the settings which will be used and load them.
+    //! Add the settings which will be used and load them.
     Configuration();
-    // Save.
+    //! Save.
     ~Configuration();
 
-    // Load all settings. If something is missing, set the default value. Can
-    // be used for reloading.
+    //! Load all settings. If something is missing, set the default value. Can
+    //! be used for reloading.
     void load();
-    // Save the current settings.
+    //! Save the current settings.
     void save() const;
 
-    // Base class for an entry in the settings file.
+    //! Base class for an entry in the settings file.
     class Entry
     {
     protected:
@@ -64,7 +64,7 @@ public:
         }
     };
 
-    // Setting which converts to a bool.
+    //! Setting which converts to a bool.
     class BoolEntry : public Entry
     {
     public:
@@ -75,7 +75,7 @@ public:
         using Entry::Entry;
     };
 
-    // Setting which uses the raw string.
+    //! Setting which uses the raw string.
     class StringEntry : public Entry
     {
     public:
@@ -86,7 +86,7 @@ public:
         using Entry::Entry;
     };
 
-    // Setting which converts to a Point<std::int16_t>.
+    //! Setting which converts to a Point<std::int16_t>.
     class PointEntry : public Entry
     {
     public:
@@ -97,7 +97,7 @@ public:
         using Entry::Entry;
     };
 
-    // Setting which converts to an integer type.
+    //! Setting which converts to an integer type.
     template<class T>
     class IntegerEntry : public Entry
     {
@@ -116,28 +116,28 @@ public:
         using Entry::Entry;
     };
 
-    // Setting which converts to a byte.
+    //! Setting which converts to a byte.
     class ByteEntry : public IntegerEntry<std::uint8_t>
     {
     protected:
         using IntegerEntry::IntegerEntry;
     };
 
-    // Setting which converts to a short.
+    //! Setting which converts to a short.
     class ShortEntry : public IntegerEntry<std::uint16_t>
     {
     protected:
         using IntegerEntry::IntegerEntry;
     };
 
-    // Setting which converts to an int.
+    //! Setting which converts to an int.
     class IntEntry : public IntegerEntry<std::uint32_t>
     {
     protected:
         using IntegerEntry::IntegerEntry;
     };
 
-    // Setting which converts to a long.
+    //! Setting which converts to a long.
     class LongEntry : public IntegerEntry<std::uint64_t>
     {
     protected:
@@ -152,119 +152,126 @@ private:
     TypeMap<Entry> settings;
 };
 
-// IP Adress which the client will connect to.
+//! IP Adress which the client will connect to.
 struct ServerIP : public Configuration::StringEntry {
     ServerIP() : StringEntry("ServerIP", "127.0.0.1")
     {
     }
 };
 
-// Wether to start in fullscreen mode.
+//! Wether to start in fullscreen mode.
 struct Fullscreen : public Configuration::BoolEntry {
     Fullscreen() : BoolEntry("Fullscreen", "false")
     {
     }
 };
 
-// Wether to use vsync.
+//! Wether to use vsync.
 struct VSync : public Configuration::BoolEntry {
     VSync() : BoolEntry("VSync", "true")
     {
     }
 };
 
-// The normal font which will be used.
+//! The normal font which will be used.
 struct FontPathNormal : public Configuration::StringEntry {
     FontPathNormal() : StringEntry("FontPathNormal", "Noto Serif Regular")
     {
     }
 };
 
-// The bold font which will be used.
+//! The bold font which will be used.
 struct FontPathBold : public Configuration::StringEntry {
     FontPathBold() : StringEntry("FontPathBold", "Noto Serif Bold")
     {
     }
 };
 
-// Music Volume, a number from 0 to 100.
+//! Music Volume, a number from 0 to 100.
 struct BGMVolume : public Configuration::ByteEntry {
     BGMVolume() : ByteEntry("BGMVolume", "50")
     {
     }
 };
 
-// Sound Volume, a number from 0 to 100.
+//! Sound Volume, a number from 0 to 100.
 struct SFXVolume : public Configuration::ByteEntry {
     SFXVolume() : ByteEntry("SFXVolume", "50")
     {
     }
 };
 
-// Wether to save the last used account name.
+//! Wether to save the last used account name.
 struct SaveLogin : public Configuration::BoolEntry {
     SaveLogin() : BoolEntry("SaveLogin", "false")
     {
     }
 };
 
-// The last used account name.
+//! The last used account name.
 struct DefaultAccount : public Configuration::StringEntry {
     DefaultAccount() : StringEntry("Account", "")
     {
     }
 };
 
-// The last used world.
+//! The last used world.
 struct DefaultWorld : public Configuration::ByteEntry {
     DefaultWorld() : ByteEntry("World", "0")
     {
     }
 };
 
-// The last used channel.
+//! The last used channel.
 struct DefaultChannel : public Configuration::ByteEntry {
     DefaultChannel() : ByteEntry("Channel", "0")
     {
     }
 };
 
-// The last used character.
+//! The last used character.
 struct DefaultCharacter : public Configuration::ByteEntry {
     DefaultCharacter() : ByteEntry("Character", "0")
     {
     }
 };
 
-// The default position of the character stats inventory.
+//! The default position of the character stats inventory.
 struct PosSTATS : public Configuration::PointEntry {
     PosSTATS() : PointEntry("PosSTATS", "(100,150)")
     {
     }
 };
 
-// The default position of the equip inventory.
+//! The default position of the equip inventory.
 struct PosEQINV : public Configuration::PointEntry {
     PosEQINV() : PointEntry("PosEQINV", "(250,150)")
     {
     }
 };
 
-// The default position of the item inventory.
+//! The default position of the item inventory.
 struct PosINV : public Configuration::PointEntry {
     PosINV() : PointEntry("PosINV", "(300,150)")
     {
     }
 };
 
-// The default position of the skill inventory.
+//! The default position of the skill inventory.
 struct PosSKILL : public Configuration::PointEntry {
     PosSKILL() : PointEntry("PosSKILL", "(50,150)")
     {
     }
 };
 
-// Can be used to access settings.
+//! The default position of the keybinding configuration UI.
+struct PosKEYCONFIG : public Configuration::PointEntry {
+    PosKEYCONFIG() : PointEntry("PosKEYCONFIG", "(100,100)")
+    {
+    }
+};
+
+//! Can be used to access settings.
 template<typename T>
 struct Setting {
     // Access a setting.

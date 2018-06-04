@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -134,19 +134,19 @@ Button::State UIStatusbar::button_pressed(std::uint16_t id)
 {
     switch (id) {
     case BT_STATS:
-        UI::get().send_menu(KeyAction::CHARSTATS);
+        UI::get().send_menu(KeyAction::CHAR_STATS);
         return Button::NORMAL;
     case BT_INVENTORY:
         UI::get().send_menu(KeyAction::INVENTORY);
         return Button::NORMAL;
     case BT_EQUIPS:
-        UI::get().send_menu(KeyAction::EQUIPS);
+        UI::get().send_menu(KeyAction::EQUIPMENT_TAB);
         return Button::NORMAL;
     case BT_SKILL:
-        UI::get().send_menu(KeyAction::SKILLBOOK);
+        UI::get().send_menu(KeyAction::SKILL_TAB);
         return Button::NORMAL;
     case BT_KEYSETTING:
-        UI::get().send_menu(KeyAction::KEYCONFIG);
+        UI::get().send_menu(KeyAction::KEY_CONFIG);
         return Button::NORMAL;
     default:
         return Button::PRESSED;
@@ -210,8 +210,8 @@ float UIStatusbar::getexppercent() const
     }
 
     std::int64_t exp = stats.get_exp();
-    return static_cast<float>(static_cast<double>(exp) /
-                              ExpTable::values[level]);
+    return static_cast<float>(exp) /
+           static_cast<float>(ExpTable::values[level]);
 }
 
 float UIStatusbar::gethppercent() const

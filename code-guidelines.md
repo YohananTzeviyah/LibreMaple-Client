@@ -377,7 +377,8 @@
   are not pure in their doc comments.
 * **Use `const`**. Use it. Use it again. Wherever you can. Of course only use
   it when applicable, and **respect const-correctness**. Use it some more. Use
-  it a lot.
+  it a lot. Make sure you're not accidentally preventing possible moves (that
+  would be desirable).
 * Use `constexpr` *wherever applicable*, including on functions.
 * All functions/methods that are incapable of throwing an exception should be
   marked as `noexcept`, and even more importantly, *functions/methods that*

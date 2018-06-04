@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -88,7 +88,7 @@ void UIStateGame::drop_icon(const Icon& icon, Point<std::int16_t> pos)
 void UIStateGame::doubleclick(Point<std::int16_t> pos)
 {
     if (UIElement* front = get_front(pos)) {
-        front->doubleclick(pos);
+        front->double_click(pos);
     }
 }
 
@@ -98,20 +98,23 @@ void UIStateGame::send_key(KeyType::Id type, std::int32_t action, bool pressed)
     case KeyType::MENU:
         if (pressed) {
             switch (action) {
-            case KeyAction::CHARSTATS:
+            case KeyAction::CHAR_STATS:
                 emplace<UIStatsinfo>(Stage::get().get_player().get_stats());
                 break;
             case KeyAction::INVENTORY:
                 emplace<UIItemInventory>(
                     Stage::get().get_player().get_inventory());
                 break;
-            case KeyAction::EQUIPS:
+            case KeyAction::EQUIPMENT_TAB:
                 emplace<UIEquipInventory>(
                     Stage::get().get_player().get_inventory());
                 break;
-            case KeyAction::SKILLBOOK:
+            case KeyAction::SKILL_TAB:
                 emplace<UISkillbook>(Stage::get().get_player().get_stats(),
                                      Stage::get().get_player().get_skills());
+                break;
+            case KeyAction::KEY_CONFIG:
+                // TODO
                 break;
             default:
                 break;
@@ -295,7 +298,7 @@ UIElement* UIStateGame::get_front(Point<std::int16_t> pos)
     auto begin = elementorder.rbegin();
     auto end = elementorder.rend();
     for (auto iter = begin; iter != end; ++iter) {
-        auto& element = elements[*iter];
+        const auto& element = elements[*iter];
         if (element && element->is_active() && element->is_in_range(pos)) {
             return element.get();
         }

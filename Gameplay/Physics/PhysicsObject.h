@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
-// This file is part of the Journey MMORPG client                           //
-// Copyright © 2015-2016 Daniel Allendorf                                   //
+// This file is part of the LibreMaple MMORPG client                        //
+// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -163,19 +163,19 @@ struct MovingObject {
     }
 };
 
-// Struct that contains all properties neccessary for physics calculations.
+//! Struct that contains all properties neccessary for physics calculations.
 struct PhysicsObject : public MovingObject {
-    // Determines which physics engine to use.
+    //! Determines which physics engine to use.
     enum Type { NORMAL, ICE, SWIMMING, FLYING, FIXATED };
 
-    enum Flag {
-        NOGRAVITY = 0x0001,
-        TURNATEDGES = 0x0002,
-        CHECKBELOW = 0x0004
+    enum Flag : std::uint32_t {
+        NO_GRAVITY = 0x00'00'00'01,
+        TURN_AT_EDGES = 0x00'00'00'02,
+        CHECK_BELOW = 0x00'00'00'04
     };
 
     Type type = NORMAL;
-    std::int32_t flags = 0;
+    std::uint32_t flags = 0;
     std::uint16_t fhid = 0;
     double fhslope = 0.0;
     std::int8_t fhlayer = 0;
