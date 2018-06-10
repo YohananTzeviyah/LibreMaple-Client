@@ -54,12 +54,12 @@ public:
     void send_key(std::int32_t keycode, bool pressed);
     void send_menu(KeyAction::Id action);
 
-    void set_scrollnotice(const std::string& notice);
-    void focus_textfield(Textfield* textfield);
+    void set_scroll_notice(std::string&& notice) noexcept;
+    void focus_text_field(Textfield* to_focus) noexcept;
     void drag_icon(Icon* icon);
 
     void
-    add_keymapping(std::uint8_t no, std::uint8_t type, std::int32_t action);
+    add_keymapping(std::uint8_t no, std::uint8_t type, KeyAction::Id action);
 
     void clear_tooltip(Tooltip::Parent parent);
     void show_equip(Tooltip::Parent parent, std::int16_t slot);
@@ -67,7 +67,7 @@ public:
     void show_skill(Tooltip::Parent parent,
                     std::int32_t skill_id,
                     std::int32_t level,
-                    std::int32_t masterlevel,
+                    std::int32_t master_level,
                     std::int64_t expiration);
 
     template<class T, typename... Args>
@@ -82,9 +82,9 @@ private:
     std::unique_ptr<UIState> state;
     Keyboard keyboard;
     Cursor cursor;
-    ScrollingNotice scrollingnotice;
+    ScrollingNotice scrolling_notice;
 
-    nullable_ptr<Textfield> focusedtextfield;
+    nullable_ptr<Textfield> focused_text_field;
     std::unordered_map<std::int32_t, bool> is_key_down;
 
     bool enabled;

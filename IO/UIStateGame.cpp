@@ -30,6 +30,8 @@
 #include "UITypes/UIStatusMessenger.h"
 #include "Window.h"
 
+#include <IO/UITypes/UIKeyConfig.h>
+
 namespace jrc
 {
 UIStateGame::UIStateGame()
@@ -114,7 +116,7 @@ void UIStateGame::send_key(KeyType::Id type, std::int32_t action, bool pressed)
                                      Stage::get().get_player().get_skills());
                 break;
             case KeyAction::KEY_CONFIG:
-                // TODO
+                emplace<UIKeyConfig>();
                 break;
             default:
                 break;

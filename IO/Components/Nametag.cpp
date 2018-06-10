@@ -3,10 +3,10 @@
 
 namespace jrc
 {
-Nametag::Nametag(nl::node src, Text::Font f, Text::Color c, std::string n)
+Nametag::Nametag(nl::node src, Text::Font f, Text::Color c, std::string&& n)
 {
     name = Text(f, Text::CENTER, c);
-    name.change_text(n);
+    name.change_text(std::move(n));
 
     textures[false].push_back(src["0"]["0"]);
     textures[false].push_back(src["0"]["1"]);
@@ -33,7 +33,7 @@ void Nametag::draw(Point<std::int16_t> position) const
     name.draw(position);
 }
 
-void Nametag::set_selected(bool s)
+void Nametag::set_selected(bool s) noexcept
 {
     selected = s;
 }

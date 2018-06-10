@@ -18,6 +18,7 @@
 #pragma once
 #include "../../Graphics/Texture.h"
 
+#include <string_view>
 #include <unordered_map>
 
 namespace jrc
@@ -31,8 +32,8 @@ public:
     Charset();
 
     void draw(std::int8_t character, const DrawArgument& args) const;
-    std::int16_t draw(const std::string& text, const DrawArgument& args) const;
-    std::int16_t draw(const std::string& text,
+    std::int16_t draw(std::string_view text, const DrawArgument& args) const;
+    std::int16_t draw(std::string_view text,
                       std::int16_t hspace,
                       const DrawArgument& args) const;
     std::int16_t getw(std::int8_t character) const;

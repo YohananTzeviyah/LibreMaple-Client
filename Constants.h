@@ -26,18 +26,18 @@ namespace Constants
 constexpr std::uint16_t TIMESTEP = 8;
 
 //! Initial window and screen width.
-constexpr std::int16_t VIEWWIDTH = 800;
+constexpr std::int16_t VIEW_WIDTH = 800;
 
 //! Initial window and screen height.
-constexpr std::int16_t VIEWHEIGHT = 600;
+constexpr std::int16_t VIEW_HEIGHT = 600;
 
 //! In-game window and screen width.
-constexpr std::int16_t GAMEVIEWWIDTH = 1024;
+constexpr std::int16_t GAME_VIEW_WIDTH = 1024;
 
 //! In-game window and screen height.
-constexpr std::int16_t GAMEVIEWHEIGHT = 768;
+constexpr std::int16_t GAME_VIEW_HEIGHT = 768;
 
-//! View y offset.
-constexpr std::int16_t VIEWYOFFSET = 10;
+//! View y-offset.
+constexpr std::int16_t VIEW_Y_OFFSET = 10;
 } // namespace Constants
 } // namespace jrc

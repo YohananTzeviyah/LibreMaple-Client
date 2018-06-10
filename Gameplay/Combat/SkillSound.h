@@ -17,9 +17,11 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "../../Audio/Audio.h"
 
+#include <string_view>
+
 namespace jrc
 {
-// Interface for skill sound.
+//! Interface for skill sound.
 class SkillSound
 {
 public:
@@ -31,7 +33,7 @@ public:
     virtual void play_hit() const = 0;
 };
 
-// No sound.
+//! No sound.
 class NoSkillSound : public SkillSound
 {
 public:
@@ -43,11 +45,11 @@ public:
     }
 };
 
-// Plays one use and one hit sound.
+//! Plays one use and one hit sound.
 class SingleSkillSound : public SkillSound
 {
 public:
-    SingleSkillSound(std::string strid);
+    SingleSkillSound(std::string_view str_id);
 
     void play_use() const override;
     void play_hit() const override;

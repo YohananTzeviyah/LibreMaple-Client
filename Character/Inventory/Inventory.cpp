@@ -196,7 +196,7 @@ std::int32_t Inventory::add_slot(InventoryType::Id type,
                                  std::int16_t count,
                                  bool cash)
 {
-    running_uid++;
+    ++running_uid;
     inventories[type][slot] = {running_uid, item_id, count, cash};
     return running_uid;
 }
@@ -298,7 +298,7 @@ Equipslot::Id Inventory::find_equipslot(std::int32_t itemid) const
         return Equipslot::NONE;
     }
 
-    Equipslot::Id eqslot = cloth.get_eqslot();
+    Equipslot::Id eqslot = cloth.get_eq_slot();
     if (eqslot == Equipslot::RING) {
         if (!has_equipped(Equipslot::RING2)) {
             return Equipslot::RING2;
@@ -326,7 +326,7 @@ std::int16_t Inventory::find_free_slot(InventoryType::Id type) const
             return counter;
         }
 
-        counter++;
+        ++counter;
     }
     return counter < slotmaxima[type] ? counter : 0;
 }

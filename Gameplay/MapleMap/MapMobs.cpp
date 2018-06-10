@@ -118,7 +118,7 @@ AttackResult MapMobs::send_attack(const Attack& attack)
     for (const auto& target : targets) {
         if (nullable_ptr<Mob> mob = mobs.get(target)) {
             result.damagelines[target] = mob->calculate_damage(attack);
-            result.mobcount++;
+            ++result.mobcount;
 
             if (result.mobcount == 1) {
                 result.first_oid = target;

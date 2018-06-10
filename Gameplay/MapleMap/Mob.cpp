@@ -105,7 +105,11 @@ Mob::Mob(std::int32_t oid,
     flydirection = STRAIGHT;
     counter = 0;
 
-    namelabel = {Text::A13M, Text::CENTER, Text::WHITE, Text::NAMETAG, name};
+    namelabel = {Text::A13M,
+                 Text::CENTER,
+                 Text::WHITE,
+                 Text::NAMETAG,
+                 std::string{name}};
 
     if (newspawn) {
         fadein = true;
@@ -223,7 +227,7 @@ std::int8_t Mob::update(const Physics& physics)
         physics.move_object(phobj);
 
         if (control) {
-            counter++;
+            ++counter;
 
             bool next;
             switch (stance) {

@@ -21,7 +21,7 @@ namespace jrc
 {
 void RegularAction::apply(Char& target, Attack::Type atype) const
 {
-    Weapon::Type weapontype = target.get_weapontype();
+    Weapon::Type weapontype = target.get_weapon_type();
     bool degenerate;
     switch (weapontype) {
     case Weapon::BOW:
@@ -55,7 +55,7 @@ TwoHAction::TwoHAction(nl::node src)
 
 void TwoHAction::apply(Char& target, Attack::Type) const
 {
-    bool twohanded = target.is_twohanded();
+    bool twohanded = target.is_two_handed();
     std::string action = actions[twohanded];
 
     target.attack(action);
@@ -74,7 +74,7 @@ ByLevelAction::ByLevelAction(nl::node src, std::int32_t id)
 
 void ByLevelAction::apply(Char& target, Attack::Type) const
 {
-    std::int32_t level = target.get_skilllevel(skillid);
+    std::int32_t level = target.get_skill_level(skillid);
     auto iter = actions.find(level);
     if (iter != actions.end()) {
         target.attack(iter->second);

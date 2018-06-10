@@ -50,17 +50,18 @@ ChatBalloon::ChatBalloon() : ChatBalloon(0)
 {
 }
 
-void ChatBalloon::change_text(const std::string& text)
+void ChatBalloon::change_text(std::string&& text)
 {
-    textlabel.change_text(text);
+    textlabel.change_text(std::move(text));
 
     duration = DURATION;
 }
 
 void ChatBalloon::draw(Point<std::int16_t> position) const
 {
-    if (duration == 0)
+    if (duration == 0) {
         return;
+    }
 
     std::int16_t width = textlabel.width();
     std::int16_t height = textlabel.height();
@@ -73,8 +74,9 @@ void ChatBalloon::draw(Point<std::int16_t> position) const
 void ChatBalloon::update()
 {
     duration -= Constants::TIMESTEP;
-    if (duration < 0)
+    if (duration < 0) {
         duration = 0;
+    }
 }
 
 void ChatBalloon::expire()

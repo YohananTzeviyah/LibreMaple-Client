@@ -23,7 +23,7 @@
 namespace jrc
 {
 template<typename T>
-// An unordered map which uses the type as key.
+//! An unordered map which uses the type as key.
 class TypeMap
 {
 public:

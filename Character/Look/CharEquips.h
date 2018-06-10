@@ -52,8 +52,8 @@ public:
     bool has_overall() const;
     // Return if there is a weapon equipped.
     bool has_weapon() const;
-    // Return wether the equipped weapon is twohanded.
-    bool is_twohanded() const;
+    // Return wether the equipped weapon is two_handed.
+    bool is_two_handed() const;
     // Return the cap type (vslot).
     CapType getcaptype() const;
     // Return a stance which has been adjusted to the equipped weapon type.

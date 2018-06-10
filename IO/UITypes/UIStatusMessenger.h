@@ -27,7 +27,7 @@ namespace jrc
 class StatusInfo
 {
 public:
-    StatusInfo(const std::string& str, Text::Color color);
+    StatusInfo(std::string&& str, Text::Color color);
 
     void draw(Point<std::int16_t> position, float alpha) const;
     bool update();
@@ -37,7 +37,7 @@ private:
     Text shadow;
     Linear<float> opacity;
 
-    // 8 seconds.
+    //! 8 seconds.
     static constexpr std::int64_t FADE_DURATION = 8'000;
 };
 
@@ -53,10 +53,10 @@ public:
     void draw(float alpha) const override;
     void update() override;
 
-    void show_status(Text::Color color, const std::string& message);
+    void show_status(Text::Color color, std::string&& message);
 
 private:
-    static constexpr std::size_t MAX_MESSAGES = 5;
+    static constexpr std::size_t MAX_MESSAGES = 5ull;
 
     std::deque<StatusInfo> statusinfos;
 };

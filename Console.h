@@ -18,6 +18,7 @@
 #pragma once
 #include "Journey.h"
 #include "Template/Singleton.h"
+#include "Util/Str.h"
 
 #include <iostream>
 #include <string>
@@ -30,7 +31,7 @@ namespace jrc
 class Console : public Singleton<Console>
 {
 public:
-    void print(const char*, const std::string&)
+    void print(const char*, std::string_view)
     {
     }
 
@@ -48,10 +49,9 @@ public:
 class Console : public Singleton<Console>
 {
 public:
-    void print(const char* func, const std::string& msg)
+    void print(const char* func, std::string_view msg)
     {
-        static const std::string delim = ", ";
-        print(func + delim + msg);
+        print(str::concat(std::string_view{func}, ", ", msg));
     }
 
     void print(const char* func, const std::exception& ex)

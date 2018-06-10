@@ -199,13 +199,12 @@ void SetfieldHandler::parse_questlog(InPacket& recv, Questlog& quests) const
     std::int16_t size = recv.read_short();
     for (std::int16_t i = 0; i < size; ++i) {
         std::int16_t qid = recv.read_short();
-        std::string qdata = recv.read_string();
         if (quests.is_started(qid)) {
             std::int16_t qidl = quests.get_last_started();
-            quests.add_in_progress(qidl, qid, qdata);
-            i--;
+            quests.add_in_progress(qidl, qid, recv.read_string());
+            --i;
         } else {
-            quests.add_started(qid, qdata);
+            quests.add_started(qid, recv.read_string());
         }
     }
 

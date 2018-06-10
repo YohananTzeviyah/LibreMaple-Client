@@ -71,7 +71,7 @@ void UISoftkey::draw(float alpha) const
 
 Button::State UISoftkey::button_pressed(std::uint16_t id)
 {
-    std::string entered = entry.get_text();
+    std::string entered{entry.get_text()};
 
     switch (id) {
     case BT_0:
@@ -115,18 +115,18 @@ Button::State UISoftkey::button_pressed(std::uint16_t id)
         buttons[BT_OK]->set_state(Button::NORMAL);
         break;
     case MAX_SIZE - 1:
-        for (std::uint8_t i = 0; i < NUM_KEYS; i++) {
+        for (std::uint8_t i = 0; i < NUM_KEYS; ++i) {
             buttons[i]->set_state(Button::NORMAL);
         }
         break;
     case MAX_SIZE:
-        for (std::uint8_t i = 0; i < NUM_KEYS; i++) {
+        for (std::uint8_t i = 0; i < NUM_KEYS; ++i) {
             buttons[i]->set_state(Button::DISABLED);
         }
         break;
     }
 
-    entry.change_text(entered);
+    entry.change_text(std::move(entered));
 
     return Button::IDENTITY;
 }
@@ -134,10 +134,10 @@ Button::State UISoftkey::button_pressed(std::uint16_t id)
 void UISoftkey::shufflekeys()
 {
     std::vector<std::uint8_t> reserve;
-    for (std::uint8_t i = 0; i < NUM_KEYS; i++) {
+    for (std::uint8_t i = 0; i < NUM_KEYS; ++i) {
         reserve.push_back(i);
     }
-    for (std::uint8_t i = 0; i < NUM_KEYS; i++) {
+    for (std::uint8_t i = 0; i < NUM_KEYS; ++i) {
         std::size_t rand = random.next_int(reserve.size());
         Point<std::int16_t> pos = keypos(reserve[rand]);
         buttons[BT_0 + i]->set_position(pos);

@@ -14,10 +14,10 @@ public:
     Nametag(nl::node src,
             Text::Font font,
             Text::Color color,
-            std::string name);
+            std::string&& name);
 
     void draw(Point<std::int16_t> position) const;
-    void set_selected(bool selected);
+    void set_selected(bool selected) noexcept;
 
 private:
     Text name;

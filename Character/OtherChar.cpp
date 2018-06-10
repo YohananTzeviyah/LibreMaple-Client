@@ -25,10 +25,10 @@ OtherChar::OtherChar(std::int32_t id,
                      const CharLook& lk,
                      std::uint8_t lvl,
                      std::int16_t jb,
-                     const std::string& nm,
+                     std::string&& nm,
                      std::int8_t st,
-                     Point<std::int16_t> pos)
-    : Char(id, lk, nm)
+                     Point<std::int16_t> pos) noexcept
+    : Char{id, lk, std::move(nm)}
 {
     level = lvl;
     job = jb;
@@ -46,7 +46,7 @@ OtherChar::OtherChar(std::int32_t id,
 std::int8_t OtherChar::update(const Physics& physics)
 {
     if (timer > 1) {
-        timer--;
+        --timer;
     } else if (timer == 1) {
         if (!movements.empty()) {
             lastmove = movements.front();
@@ -67,7 +67,7 @@ std::int8_t OtherChar::update(const Physics& physics)
 
     physics.get_fht().update_fh(phobj);
 
-    bool aniend = Char::update(physics, get_stancespeed());
+    bool aniend = Char::update(physics, get_stance_speed());
     if (aniend && attacking) {
         attacking = false;
     }
@@ -103,7 +103,7 @@ void OtherChar::update_look(const LookEntry& newlook)
     set_state(laststate);
 }
 
-std::int8_t OtherChar::get_integer_attackspeed() const
+std::int8_t OtherChar::get_integer_attack_speed() const
 {
     return attackspeed;
 }
@@ -113,7 +113,7 @@ std::uint16_t OtherChar::get_level() const
     return level;
 }
 
-std::int32_t OtherChar::get_skilllevel(std::int32_t skillid) const
+std::int32_t OtherChar::get_skill_level(std::int32_t skillid) const
 {
     auto iter = skilllevels.find(skillid);
     if (iter == skilllevels.end()) {

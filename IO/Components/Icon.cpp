@@ -44,7 +44,8 @@ void Icon::draw(Point<std::int16_t> position) const
                                          Charset::LEFT};
         std::int16_t tempc =
             dragged ? (count - static_cast<std::int16_t>(1)) : count;
-        countset.draw(std::to_string(tempc), position + Point{0, 20});
+        countset.draw(std::to_string(tempc),
+                      position + Point<std::int16_t>{0, 20});
     }
 }
 

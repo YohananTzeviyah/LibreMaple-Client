@@ -16,8 +16,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "../Template/stack_vec.h"
+
+#include <cstdint>
 #include <functional>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace jrc
@@ -51,7 +55,7 @@ public:
             K current = root;
             while (current) {
                 parent = current;
-                current = nodes[parent].addornext(key, value, comparator);
+                current = nodes[parent].add_or_next(key, value, comparator);
             }
         } else {
             root = key;
@@ -68,17 +72,16 @@ public:
             return;
         }
 
-        Node& toerase = nodes[key];
+        Node& to_erase = nodes[key];
 
-        std::vector<K> leaves;
+        stack_vec<K, 4> leaves;
         for (std::size_t i = LEFT; i <= DOWN; ++i) {
-            K leafkey = toerase[i];
-            if (leafkey) {
-                leaves.push_back(leafkey);
+            if (K leaf_key = to_erase[i]; leaf_key) {
+                leaves.push_back(std::move(leaf_key));
             }
         }
 
-        K parent = toerase.parent;
+        K parent = to_erase.parent;
         if (root == key) {
             root = 0;
         } else if (nodes.count(parent)) {
@@ -88,15 +91,15 @@ public:
         nodes.erase(key);
 
         for (auto& leaf : leaves) {
-            readd(parent, leaf);
+            re_add(parent, leaf);
         }
     }
 
-    K findnode(const V& value,
-               std::function<bool(const V&, const V&)> predicate)
+    K find_node(const V& value,
+                std::function<bool(const V&, const V&)> predicate)
     {
         if (root) {
-            K key = findfrom(root, value, predicate);
+            K key = find_from(root, value, predicate);
             return predicate(value, nodes[key].value) ? key : 0;
         } else {
             return 0;
@@ -114,9 +117,9 @@ public:
     }
 
 private:
-    K findfrom(K start,
-               const V& value,
-               std::function<bool(const V&, const V&)> predicate)
+    K find_from(K start,
+                const V& value,
+                std::function<bool(const V&, const V&)> predicate)
     {
         if (!start) {
             return 0;
@@ -125,20 +128,20 @@ private:
         bool fulfilled = predicate(value, nodes[start].value);
         Direction dir = comparator(value, nodes[start].value);
         if (dir == RIGHT) {
-            K right = findfrom(nodes[start].right, value, predicate);
+            K right = find_from(nodes[start].right, value, predicate);
             if (right && predicate(value, nodes[right].value)) {
                 return right;
             } else {
                 return start;
             }
         } else if (dir == DOWN) {
-            K bottom = findfrom(nodes[start].bottom, value, predicate);
+            K bottom = find_from(nodes[start].bottom, value, predicate);
             if (bottom && predicate(value, nodes[bottom].value)) {
                 return bottom;
             } else if (fulfilled) {
                 return start;
             } else {
-                K right = findfrom(nodes[start].right, value, predicate);
+                K right = find_from(nodes[start].right, value, predicate);
                 if (right && predicate(value, nodes[right].value)) {
                     return right;
                 } else {
@@ -146,13 +149,13 @@ private:
                 }
             }
         } else if (dir == UP) {
-            K top = findfrom(nodes[start].top, value, predicate);
+            K top = find_from(nodes[start].top, value, predicate);
             if (top && predicate(value, nodes[top].value)) {
                 return top;
             } else if (fulfilled) {
                 return start;
             } else {
-                K right = findfrom(nodes[start].right, value, predicate);
+                K right = find_from(nodes[start].right, value, predicate);
                 if (right && predicate(value, nodes[right].value)) {
                     return right;
                 } else {
@@ -160,28 +163,24 @@ private:
                 }
             }
         } else {
-            K left = findfrom(nodes[start].left, value, predicate);
+            K left = find_from(nodes[start].left, value, predicate);
             if (left && predicate(value, nodes[left].value)) {
                 return left;
             } else if (fulfilled) {
                 return start;
             }
 
-            K bottom = findfrom(nodes[start].bottom, value, predicate);
+            K bottom = find_from(nodes[start].bottom, value, predicate);
             if (bottom && predicate(value, nodes[bottom].value)) {
                 return bottom;
-            } else if (fulfilled) {
-                return start;
             }
 
-            K top = findfrom(nodes[start].top, value, predicate);
+            K top = find_from(nodes[start].top, value, predicate);
             if (top && predicate(value, nodes[top].value)) {
                 return top;
-            } else if (fulfilled) {
-                return start;
             }
 
-            K right = findfrom(nodes[start].right, value, predicate);
+            K right = find_from(nodes[start].right, value, predicate);
             if (right && predicate(value, nodes[right].value)) {
                 return right;
             } else {
@@ -190,15 +189,15 @@ private:
         }
     }
 
-    void readd(K start, K key)
+    void re_add(K start, K key)
     {
         if (start) {
             K parent = 0;
             K current = start;
             while (current) {
                 parent = current;
-                current =
-                    nodes[parent].addornext(key, nodes[key].value, comparator);
+                current = nodes[parent].add_or_next(
+                    key, nodes[key].value, comparator);
             }
 
             nodes[key].parent = parent;
@@ -207,7 +206,7 @@ private:
 
             nodes[key].parent = 0;
         } else if (root) {
-            readd(root, key);
+            re_add(root, key);
         }
     }
 
@@ -241,9 +240,9 @@ private:
             }
         }
 
-        K addornext(K key,
-                    V val,
-                    std::function<Direction(const V&, const V&)> cmptor)
+        K add_or_next(K key,
+                      V val,
+                      std::function<Direction(const V&, const V&)> cmptor)
         {
             Direction dir = cmptor(val, value);
             K dirkey = leaf(dir);

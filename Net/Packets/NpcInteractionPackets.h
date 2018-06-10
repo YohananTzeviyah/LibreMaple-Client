@@ -20,8 +20,8 @@
 
 namespace jrc
 {
-// Packet which requests a dialogue with a server-sided npc.
-// Opcode: TALK_TO_NPC(58)
+//! Packet which requests a dialogue with a server-sided npc.
+//! Opcode: TALK_TO_NPC(58)
 class TalkToNPCPacket : public OutPacket
 {
 public:
@@ -31,19 +31,19 @@ public:
     }
 };
 
-// Packet which sends a response to an npc dialogue to the server.
-// Opcode: NPC_TALK_MORE(60)
+//! Packet which sends a response to an npc dialogue to the server.
+//! Opcode: NPC_TALK_MORE(60)
 class NpcTalkMorePacket : public OutPacket
 {
 public:
-    NpcTalkMorePacket(std::int8_t lastmsg, std::int8_t response)
+    NpcTalkMorePacket(std::int8_t last_msg, std::int8_t response)
         : OutPacket(NPC_TALK_MORE)
     {
-        write_byte(lastmsg);
+        write_byte(last_msg);
         write_byte(response);
     }
 
-    NpcTalkMorePacket(const std::string& response) : NpcTalkMorePacket(2, 1)
+    NpcTalkMorePacket(std::string_view response) : NpcTalkMorePacket(2, 1)
     {
         write_string(response);
     }
@@ -54,12 +54,12 @@ public:
     }
 };
 
-// Packet which tells the server of an interaction with an npc shop.
-// Opcode: NPC_SHOP_ACTION(61)
+//! Packet which tells the server of an interaction with an npc shop.
+//! Opcode: NPC_SHOP_ACTION(61)
 class NpcShopActionPacket : public OutPacket
 {
 public:
-    // Requests that an item should be bought from or sold to a npc shop.
+    //! Requests that an item should be bought from or sold to a npc shop.
     NpcShopActionPacket(std::int16_t slot,
                         std::int32_t itemid,
                         std::int16_t qty,
@@ -71,13 +71,13 @@ public:
         write_short(qty);
     }
 
-    // Requests that an item should be recharged at a npc shop.
+    //! Requests that an item should be recharged at a npc shop.
     NpcShopActionPacket(std::int16_t slot) : NpcShopActionPacket(RECHARGE)
     {
         write_short(slot);
     }
 
-    // Requests exiting from a npc shop.
+    //! Requests exiting from a npc shop.
     NpcShopActionPacket() : NpcShopActionPacket(LEAVE)
     {
     }

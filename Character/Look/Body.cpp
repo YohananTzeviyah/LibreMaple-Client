@@ -24,74 +24,79 @@
 
 namespace jrc
 {
-Body::Body(std::int32_t skin, const BodyDrawinfo& drawinfo)
+Body::Body(std::int32_t skin, const BodyDrawinfo& draw_info)
 {
-    std::string strid = string_format::extend_id(skin, 2);
-    nl::node bodynode = nl::nx::character["000020" + strid + ".img"];
-    nl::node headnode = nl::nx::character["000120" + strid + ".img"];
+    std::string str_img =
+        str::concat("000020", string_format::extend_id(skin, 2), ".img");
+    nl::node bodynode = nl::nx::character[str_img];
+    str_img[3] = '1';
+    nl::node head_node = nl::nx::character[str_img];
 
     for (auto iter : Stance::names) {
         Stance::Id stance = iter.first;
-        const std::string& stancename = iter.second;
+        const std::string& stance_name = iter.second;
 
-        nl::node stancenode = bodynode[stancename];
-        if (!stancenode)
+        nl::node stance_node = bodynode[stance_name];
+        if (!stance_node) {
             continue;
+        }
 
-        for (std::uint8_t frame = 0; nl::node framenode = stancenode[frame];
+        for (std::uint8_t frame = 0; nl::node frame_node = stance_node[frame];
              ++frame) {
-            for (nl::node partnode : framenode) {
-                std::string part = partnode.name();
+            for (nl::node part_node : frame_node) {
+                std::string part = part_node.name();
                 if (part != "delay" && part != "face") {
-                    std::string z = partnode["z"];
+                    std::string z = part_node["z"];
                     Layer layer = layer_by_name(z);
-                    if (layer == Layer::NONE)
+                    if (layer == Layer::NONE) {
                         continue;
+                    }
 
                     Point<std::int16_t> shift;
                     switch (layer) {
                     case HAND_BELOW_WEAPON:
-                        shift = drawinfo.get_hand_position(stance, frame);
-                        shift -= partnode["map"]["handMove"];
+                        shift = draw_info.get_hand_pos(stance, frame);
+                        shift -= part_node["map"]["handMove"];
                         break;
                     default:
-                        shift = drawinfo.get_body_position(stance, frame);
-                        shift -= partnode["map"]["navel"];
+                        shift = draw_info.get_body_pos(stance, frame);
+                        shift -= part_node["map"]["navel"];
                         break;
                     }
 
                     stances[stance][layer]
-                        .emplace(frame, partnode)
+                        .emplace(frame, part_node)
                         .first->second.shift(shift);
                 }
             }
 
-            if (nl::node headsfnode = headnode[stancename][frame]["head"]) {
+            if (nl::node head_s_f_node =
+                    head_node[stance_name][frame]["head"]) {
                 Point<std::int16_t> shift =
-                    drawinfo.get_head_position(stance, frame);
+                    draw_info.get_head_pos(stance, frame);
 
                 stances[stance][Layer::HEAD]
-                    .emplace(frame, headsfnode)
+                    .emplace(frame, head_s_f_node)
                     .first->second.shift(shift);
             }
         }
     }
 
-    constexpr std::size_t NUM_SKINTYPES = 12;
-    constexpr char const* skintypes[NUM_SKINTYPES] = {"Light",
-                                                      "Tan",
-                                                      "Dark",
-                                                      "Pale",
-                                                      "Blue",
-                                                      "Green",
-                                                      "",
-                                                      "",
-                                                      "",
-                                                      "Grey",
-                                                      "Pink",
-                                                      "Red"};
-    std::size_t index = skin;
-    name = (index < NUM_SKINTYPES) ? skintypes[index] : "";
+    static constexpr const std::size_t NUM_SKIN_TYPES = 12ull;
+    static constexpr const char* const skin_types[NUM_SKIN_TYPES] = {"Light",
+                                                                     "Tan",
+                                                                     "Dark",
+                                                                     "Pale",
+                                                                     "Blue",
+                                                                     "Green",
+                                                                     "",
+                                                                     "",
+                                                                     "",
+                                                                     "Grey",
+                                                                     "Pink",
+                                                                     "Red"};
+    auto index = static_cast<std::size_t>(skin);
+    name = index < NUM_SKIN_TYPES ? skin_types[index] : "";
 }
 
 void Body::draw(Stance::Id stance,
@@ -99,14 +104,15 @@ void Body::draw(Stance::Id stance,
                 std::uint8_t frame,
                 const DrawArgument& args) const
 {
-    auto frameit = stances[stance][layer].find(frame);
-    if (frameit == stances[stance][layer].end())
+    auto frame_it = stances[stance][layer].find(frame);
+    if (frame_it == stances[stance][layer].end()) {
         return;
+    }
 
-    frameit->second.draw(args);
+    frame_it->second.draw(args);
 }
 
-const std::string& Body::get_name() const
+std::string_view Body::get_name() const noexcept
 {
     return name;
 }
@@ -115,7 +121,8 @@ Body::Layer Body::layer_by_name(const std::string& name)
 {
     auto layer_iter = layers_by_name.find(name);
     if (layer_iter == layers_by_name.end()) {
-        Console::get().print("Warning: Unhandled body layer (" + name + ")");
+        Console::get().print(
+            str::concat("Warning: Unhandled body layer (", name, ')'));
         return Layer::NONE;
     }
     return layer_iter->second;

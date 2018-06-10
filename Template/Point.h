@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "../Util/Misc.h"
 #include "nlnx/node.hpp"
 
 #include <cmath>
@@ -82,13 +83,14 @@ public:
     //! Return a string representation of the point.
     std::string to_string() const noexcept
     {
-        return "(" + std::to_string(a) + "," + std::to_string(b) + ")";
+        return str::concat(
+            '(', std::to_string(a), ',', std::to_string(b), ')');
     }
 
     //! Return the displacement from another point.
     constexpr T disp(Point<T> v) const noexcept
     {
-        return Point<T>(a - v.a, b - v.b).norm();
+        return Point<T>{a - v.a, b - v.b}.norm();
     }
 
     //! Set the x-coordinate.

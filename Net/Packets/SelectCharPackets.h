@@ -18,13 +18,15 @@
 #pragma once
 #include "../OutPacket.h"
 
+#include <string_view>
+
 namespace jrc
 {
-constexpr auto MACS = "68-5D-43-F8-B8-6C, 7A-79-19-8B-31-3F";
-constexpr auto HWID = "685D43F8_B86C7A79";
+constexpr std::string_view MACS = "68-5D-43-F8-B8-6C, 7A-79-19-8B-31-3F";
+constexpr std::string_view HWID = "685D43F8_B86C7A79";
 
-// Tell the server which character was picked.
-// Opcode: SELECT_CHAR(19)
+//! Tell the server which character was picked.
+//! Opcode: SELECT_CHAR(19)
 class SelectCharPacket : public OutPacket
 {
 public:
@@ -36,12 +38,12 @@ public:
     }
 };
 
-// Registers a pic and tells the server which character was picked.
-// Opcode: REGISTER_PIC(29)
+//! Registers a pic and tells the server which character was picked.
+//! Opcode: REGISTER_PIC(29)
 class RegisterPicPacket : public OutPacket
 {
 public:
-    RegisterPicPacket(std::int32_t cid, const std::string& pic)
+    RegisterPicPacket(std::int32_t cid, std::string_view pic)
         : OutPacket(REGISTER_PIC)
     {
         skip(1);
@@ -53,12 +55,12 @@ public:
     }
 };
 
-// Requests using the specified character with the specified pic.
-// Opcode: SELECT_CHAR_PIC(30)
+//! Requests using the specified character with the specified pic.
+//! Opcode: SELECT_CHAR_PIC(30)
 class SelectCharPicPacket : public OutPacket
 {
 public:
-    SelectCharPicPacket(const std::string& pic, std::int32_t cid)
+    SelectCharPicPacket(std::string_view pic, std::int32_t cid)
         : OutPacket(SELECT_CHAR_PIC)
     {
         write_string(pic);
@@ -68,12 +70,12 @@ public:
     }
 };
 
-// Requests deleting the specified character with the specified pic.
-// Opcode: DELETE_PIC(23)
+//! Requests deleting the specified character with the specified pic.
+//! Opcode: DELETE_PIC(23)
 class DeleteCharPacket : public OutPacket
 {
 public:
-    DeleteCharPacket(const std::string& pic, std::int32_t cid)
+    DeleteCharPacket(std::string_view pic, std::int32_t cid)
         : OutPacket(DELETE_CHAR)
     {
         write_string(pic);

@@ -31,7 +31,7 @@ class MapPortals
 public:
     static void init();
 
-    MapPortals(nl::node source, std::int32_t mapid);
+    MapPortals(nl::node source, std::int32_t map_id);
     MapPortals();
 
     void update(Point<std::int16_t> playerpos);
@@ -48,7 +48,7 @@ private:
     std::unordered_map<std::uint8_t, Portal> portals_by_id;
     std::unordered_map<std::string, std::uint8_t> portal_ids_by_name;
 
-    static const std::int16_t WARPCD = 48;
+    static const std::int16_t WARP_CD = 48;
     std::int16_t cooldown;
 };
 } // namespace jrc

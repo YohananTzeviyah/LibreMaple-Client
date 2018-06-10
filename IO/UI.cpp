@@ -40,7 +40,7 @@ void UI::draw(float alpha) const
 {
     state->draw(alpha, cursor.get_position());
 
-    scrollingnotice.draw(alpha);
+    scrolling_notice.draw(alpha);
     cursor.draw(alpha);
 }
 
@@ -48,7 +48,7 @@ void UI::update()
 {
     state->update();
 
-    scrollingnotice.update();
+    scrolling_notice.update();
     cursor.update();
 }
 
@@ -96,16 +96,16 @@ void UI::send_cursor(Point<std::int16_t> cursorpos, Cursor::State cursorstate)
 void UI::send_cursor(bool pressed)
 {
     Cursor::State cursorstate =
-        (pressed && enabled) ? Cursor::CLICKING : Cursor::IDLE;
-    Point<std::int16_t> cursorpos = cursor.get_position();
-    send_cursor(cursorpos, cursorstate);
+        pressed && enabled ? Cursor::CLICKING : Cursor::IDLE;
+    Point<std::int16_t> cursor_pos = cursor.get_position();
+    send_cursor(cursor_pos, cursorstate);
 
-    if (focusedtextfield && pressed) {
+    if (focused_text_field && pressed) {
         Cursor::State tstate =
-            focusedtextfield->send_cursor(cursorpos, pressed);
+            focused_text_field->send_cursor(cursor_pos, pressed);
         switch (tstate) {
         case Cursor::IDLE:
-            focusedtextfield = {};
+            focused_text_field = {};
             break;
         default:
             break;
@@ -126,17 +126,19 @@ void UI::doubleclick()
 
 void UI::send_key(std::int32_t keycode, bool pressed)
 {
-    if (focusedtextfield) {
-        bool ctrl = is_key_down[keyboard.ctrlcode()];
+    if (focused_text_field) {
+        bool ctrl = is_key_down[keyboard.ctrl_code()];
         if (ctrl) {
             if (!pressed) {
                 KeyAction::Id action = keyboard.get_ctrl_action(keycode);
                 switch (action) {
                 case KeyAction::COPY:
-                    Window::get().setclipboard(focusedtextfield->get_text());
+                    Window::get().set_clipboard(
+                        focused_text_field->get_text());
                     break;
                 case KeyAction::PASTE:
-                    focusedtextfield->add_string(Window::get().getclipboard());
+                    focused_text_field->add_string(
+                        Window::get().get_clipboard());
                     break;
                 default:
                     break;
@@ -146,7 +148,8 @@ void UI::send_key(std::int32_t keycode, bool pressed)
             bool shift = is_key_down[keyboard.shiftcode()];
             Keyboard::Mapping mapping =
                 keyboard.get_text_mapping(keycode, shift);
-            focusedtextfield->send_key(mapping.type, mapping.action, pressed);
+            focused_text_field->send_key(
+                mapping.type, mapping.action, pressed);
         }
     } else {
         Keyboard::Mapping mapping = keyboard.get_mapping(keycode);
@@ -163,18 +166,18 @@ void UI::send_menu(KeyAction::Id action)
     state->send_key(KeyType::MENU, action, true);
 }
 
-void UI::set_scrollnotice(const std::string& notice)
+void UI::set_scroll_notice(std::string&& notice) noexcept
 {
-    scrollingnotice.setnotice(notice);
+    scrolling_notice.set_notice(std::move(notice));
 }
 
-void UI::focus_textfield(Textfield* tofocus)
+void UI::focus_text_field(Textfield* to_focus) noexcept
 {
-    if (focusedtextfield) {
-        focusedtextfield->set_state(Textfield::NORMAL);
+    if (focused_text_field) {
+        focused_text_field->set_state(Textfield::NORMAL);
     }
 
-    focusedtextfield = tofocus;
+    focused_text_field = to_focus;
 }
 
 void UI::drag_icon(Icon* icon)
@@ -184,7 +187,7 @@ void UI::drag_icon(Icon* icon)
 
 void UI::add_keymapping(std::uint8_t no,
                         std::uint8_t type,
-                        std::int32_t action)
+                        KeyAction::Id action)
 {
     keyboard.assign(no, type, action);
 }
@@ -207,15 +210,15 @@ void UI::show_item(Tooltip::Parent parent, std::int32_t item_id)
 void UI::show_skill(Tooltip::Parent parent,
                     std::int32_t skill_id,
                     std::int32_t level,
-                    std::int32_t masterlevel,
+                    std::int32_t master_level,
                     std::int64_t expiration)
 {
-    state->show_skill(parent, skill_id, level, masterlevel, expiration);
+    state->show_skill(parent, skill_id, level, master_level, expiration);
 }
 
 void UI::remove(UIElement::Type type)
 {
-    focusedtextfield = {};
+    focused_text_field = {};
     state->remove(type);
 }
 

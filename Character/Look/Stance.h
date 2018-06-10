@@ -20,6 +20,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 namespace jrc
 {
@@ -67,11 +68,11 @@ enum Id : std::uint8_t {
 
 Id by_state(std::int8_t state);
 Id by_id(std::uint8_t id);
-Id by_string(const std::string& name);
+Id by_string(std::string_view name);
 
 bool is_climbing(Id value);
-Id baseof(Id value);
-Id secondof(Id value);
+Id base_of(Id value);
+Id second_of(Id value);
 
 extern const EnumMap<Id, std::string> names;
 }; // namespace Stance

@@ -49,7 +49,7 @@ BySkillLevelBullet::BySkillLevelBullet(nl::node src, std::int32_t id)
 
 Animation BySkillLevelBullet::get(const Char& user, std::int32_t) const
 {
-    std::int32_t level = user.get_skilllevel(skillid);
+    std::int32_t level = user.get_skill_level(skillid);
     auto iter = bullets.find(level);
     if (iter != bullets.end()) {
         return iter->second.animation;

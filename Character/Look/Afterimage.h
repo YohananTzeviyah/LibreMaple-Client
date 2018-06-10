@@ -25,10 +25,10 @@ class Afterimage
 {
 public:
     Afterimage(std::int32_t skill_id,
-               const std::string& name,
-               const std::string& stance,
+               std::string_view name,
+               std::string_view stance,
                std::int16_t level);
-    Afterimage();
+    Afterimage() noexcept;
 
     void
     draw(std::uint8_t stframe, const DrawArgument& args, float alpha) const;
@@ -40,7 +40,7 @@ public:
 private:
     Animation animation;
     Rectangle<std::int16_t> range;
-    std::uint8_t firstframe;
+    std::uint8_t first_frame;
     bool displayed;
 };
 } // namespace jrc

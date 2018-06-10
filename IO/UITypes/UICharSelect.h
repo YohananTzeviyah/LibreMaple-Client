@@ -43,7 +43,7 @@ public:
     void update() override;
     Button::State button_pressed(std::uint16_t id) override;
 
-    void add_character(CharEntry&& character);
+    void add_character(CharEntry character);
     void remove_char(std::int32_t cid);
 
     const CharEntry& get_character(std::int32_t cid);
@@ -70,19 +70,19 @@ private:
 
     static constexpr std::uint8_t PAGESIZE = 8;
 
-    Sprite emptyslot;
-    Charset levelset;
-    nl::node nametag;
+    Sprite empty_slot;
+    Charset level_set;
+    nl::node name_tag;
 
     Point<std::int16_t> selworldpos;
     Point<std::int16_t> charinfopos;
 
     std::vector<CharEntry> characters;
     std::vector<CharLook> charlooks;
-    std::vector<Nametag> nametags;
+    std::vector<Nametag> name_tags;
     std::int8_t require_pic;
 
-    std::uint8_t charcount_absolute;
+    std::uint8_t char_count_absolute;
     std::uint8_t charcount_relative;
     std::uint8_t slots_absolute;
     std::uint8_t slots_relative;
@@ -110,23 +110,23 @@ private:
 
         void draw(Point<std::int16_t> parentpos) const
         {
-            l.draw(parentpos + Point<std::int16_t>(-1, 0));
-            r.draw(parentpos + Point<std::int16_t>(1, 0));
-            t.draw(parentpos + Point<std::int16_t>(0, -1));
-            b.draw(parentpos + Point<std::int16_t>(0, 1));
+            l.draw(parentpos + Point<std::int16_t>{-1, 0});
+            r.draw(parentpos + Point<std::int16_t>{1, 0});
+            t.draw(parentpos + Point<std::int16_t>{0, -1});
+            b.draw(parentpos + Point<std::int16_t>{0, 1});
             inner.draw(parentpos);
         }
 
-        void change_text(const std::string& text)
+        void change_text(std::string_view text)
         {
-            inner.change_text(text);
-            l.change_text(text);
-            r.change_text(text);
-            t.change_text(text);
-            b.change_text(text);
+            inner.change_text(std::string{text});
+            l.change_text(std::string{text});
+            r.change_text(std::string{text});
+            t.change_text(std::string{text});
+            b.change_text(std::string{text});
         }
     };
-    OutlinedText namelabel;
+    OutlinedText name_label;
 
     static const std::size_t NUM_LABELS = 7;
     enum InfoLabel { JOB, WORLDRANK, JOBRANK, STR, DEX, INT, LUK };

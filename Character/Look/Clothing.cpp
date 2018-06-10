@@ -29,15 +29,15 @@ namespace jrc
 {
 using namespace std::string_literals;
 
-Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
+Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : item_id(id)
 {
-    const EquipData& equipdata = EquipData::get(itemid);
+    const EquipData& equipdata = EquipData::get(item_id);
 
-    eqslot = equipdata.get_eqslot();
-    if (eqslot == Equipslot::WEAPON) {
-        twohanded = WeaponData::get(itemid).is_twohanded();
+    equip_slot = equipdata.get_eq_slot();
+    if (equip_slot == Equipslot::WEAPON) {
+        two_handed = WeaponData::get(item_id).is_two_handed();
     } else {
-        twohanded = false;
+        two_handed = false;
     }
 
     constexpr std::size_t NON_WEAPON_TYPES = 15;
@@ -60,7 +60,7 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
                                                 Layer::MEDAL};
 
     Layer chlayer;
-    auto index = (itemid / 10000) - 100;
+    auto index = (item_id / 10000) - 100;
     if (index < NON_WEAPON_TYPES) {
         chlayer = layers[index];
     } else if (index >= WEAPON_OFFSET &&
@@ -70,9 +70,11 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
         chlayer = Layer::CAPE;
     }
 
-    std::string strid = "0" + std::to_string(itemid);
-    std::string category = equipdata.get_itemdata().get_category();
-    nl::node src = nl::nx::character[category][strid + ".img"];
+    std::string str_id = std::to_string(item_id);
+    str_id.insert(0, "0", 1);
+    str_id += ".img";
+    nl::node src =
+        nl::nx::character[equipdata.get_item_data().get_category()][str_id];
     nl::node info = src["info"];
 
     vslot = info["vslot"].get_string();
@@ -85,7 +87,7 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
         stand = Stance::STAND2;
         break;
     default:
-        stand = twohanded ? Stance::STAND2 : Stance::STAND1;
+        stand = two_handed ? Stance::STAND2 : Stance::STAND1;
         break;
     }
 
@@ -97,7 +99,7 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
         walk = Stance::WALK2;
         break;
     default:
-        walk = twohanded ? Stance::WALK2 : Stance::WALK1;
+        walk = two_handed ? Stance::WALK2 : Stance::WALK1;
         break;
     }
 
@@ -125,8 +127,9 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
                     z = Layer::MAILARM;
                 } else {
                     auto sublayer_iter = sublayernames.find(zs);
-                    if (sublayer_iter != sublayernames.end())
+                    if (sublayer_iter != sublayernames.end()) {
                         z = sublayer_iter->second;
+                    }
                 }
 
                 std::string parent;
@@ -140,7 +143,7 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
 
                 // nl::node mapnode = partnode["map"];
                 Point<std::int16_t> shift;
-                switch (eqslot) {
+                switch (equip_slot) {
                 case Equipslot::FACEACC:
                     shift -= parentpos;
                     break;
@@ -149,22 +152,21 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
                 case Equipslot::TOP:
                 case Equipslot::PANTS:
                 case Equipslot::CAPE:
-                    shift =
-                        drawinfo.get_body_position(stance, frame) - parentpos;
+                    shift = drawinfo.get_body_pos(stance, frame) - parentpos;
                     break;
                 case Equipslot::CAP:
                 case Equipslot::EARRINGS:
                 case Equipslot::EYEACC:
-                    shift = drawinfo.getfacepos(stance, frame) - parentpos;
+                    shift = drawinfo.get_face_pos(stance, frame) - parentpos;
                     break;
                 case Equipslot::SHIELD:
                 case Equipslot::WEAPON:
                     if (parent == "handMove") {
-                        shift += drawinfo.get_hand_position(stance, frame);
+                        shift += drawinfo.get_hand_pos(stance, frame);
                     } else if (parent == "hand") {
-                        shift += drawinfo.get_arm_position(stance, frame);
+                        shift += drawinfo.get_arm_pos(stance, frame);
                     } else if (parent == "navel") {
-                        shift += drawinfo.get_body_position(stance, frame);
+                        shift += drawinfo.get_body_pos(stance, frame);
                     }
                     shift -= parentpos;
                     break;
@@ -180,7 +182,7 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : itemid(id)
     }
 
     static const std::unordered_set<std::int32_t> transparents = {1002186};
-    transparent = transparents.count(itemid) > 0;
+    transparent = transparents.count(item_id) > 0;
 }
 
 void Clothing::draw(Stance::Id stance,
@@ -194,42 +196,42 @@ void Clothing::draw(Stance::Id stance,
     }
 }
 
-bool Clothing::contains_layer(Stance::Id stance, Layer layer) const
+bool Clothing::contains_layer(Stance::Id stance, Layer layer) const noexcept
 {
     return !stances[stance][layer].empty();
 }
 
-bool Clothing::is_transparent() const
+bool Clothing::is_transparent() const noexcept
 {
     return transparent;
 }
 
-bool Clothing::is_twohanded() const
+bool Clothing::is_two_handed() const noexcept
 {
-    return twohanded;
+    return two_handed;
 }
 
-std::int32_t Clothing::get_id() const
+std::int32_t Clothing::get_id() const noexcept
 {
-    return itemid;
+    return item_id;
 }
 
-Stance::Id Clothing::get_stand() const
+Stance::Id Clothing::get_stand() const noexcept
 {
     return stand;
 }
 
-Stance::Id Clothing::get_walk() const
+Stance::Id Clothing::get_walk() const noexcept
 {
     return walk;
 }
 
-Equipslot::Id Clothing::get_eqslot() const
+Equipslot::Id Clothing::get_equip_slot() const noexcept
 {
-    return eqslot;
+    return equip_slot;
 }
 
-const std::string& Clothing::get_vslot() const
+std::string_view Clothing::get_vslot() const noexcept
 {
     return vslot;
 }

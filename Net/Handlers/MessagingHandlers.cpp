@@ -27,12 +27,13 @@
 
 namespace jrc
 {
-// Modes:
-// 0 - Item(0) or Meso(1)
-// 3 - Exp gain
-// 4 - Fame
-// 5 - Mesos
-// 6 - Guild points
+//! ## Modes:
+//!
+//! - 0 : Item(0) or Meso(1)
+//! - 3 : EXP gain
+//! - 4 : Fame
+//! - 5 : Mesos
+//! - 6 : Guild points
 void ShowStatusInfoHandler::handle(InPacket& recv) const
 {
     std::int8_t mode = recv.read_byte();
@@ -47,21 +48,23 @@ void ShowStatusInfoHandler::handle(InPacket& recv) const
                 return;
             }
 
-            std::string name = idata.get_name();
-            std::string sign = (qty < 0) ? "-" : "+";
-
             show_status(Text::WHITE,
-                        "Gained an item: " + name + " (" + sign +
-                            std::to_string(qty) + ")");
+                        str::concat("Gained an item: ",
+                                    idata.get_name(),
+                                    " (",
+                                    qty < 0 ? '-' : '+',
+                                    std::to_string(qty),
+                                    ')'));
         } else if (mode2 == 1) {
             recv.skip(1);
 
             std::int32_t gain = recv.read_int();
-            std::string sign = (gain < 0) ? "-" : "+";
 
             show_status(Text::WHITE,
-                        "Received mesos (" + sign + std::to_string(gain) +
-                            ")");
+                        str::concat("Received mesos (",
+                                    gain < 0 ? '-' : '+',
+                                    std::to_string(gain),
+                                    ')'));
         }
     } else if (mode == 3) {
         bool white = recv.read_bool();
@@ -76,32 +79,38 @@ void ShowStatusInfoHandler::handle(InPacket& recv) const
         recv.read_int();  // bonus 4
         recv.read_int();  // bonus 5
 
-        std::string message =
-            "You have gained experience (+" + std::to_string(gain) + ")";
         if (inchat) {
             // TODO ?
         } else {
-            show_status(white ? Text::WHITE : Text::YELLOW, message);
-            if (bonus1 > 0)
+            show_status(white ? Text::WHITE : Text::YELLOW,
+                        str::concat("You have gained experience (+",
+                                    std::to_string(gain),
+                                    ')'));
+            if (bonus1 > 0) {
                 show_status(Text::YELLOW,
-                            "+ Bonus EXP (+" + std::to_string(bonus1) + ")");
+                            str::concat("+ Bonus EXP (+",
+                                        std::to_string(bonus1),
+                                        ')'));
+            }
         }
     } else if (mode == 4) {
         std::int32_t gain = recv.read_int();
-        std::string sign = (gain < 0) ? "-" : "+";
 
         show_status(Text::WHITE,
-                    "Received fame (" + sign + std::to_string(gain) + ")");
+                    str::concat("Received fame (",
+                                gain < 0 ? '-' : '+',
+                                std::to_string(gain),
+                                ')'));
     } else if (mode == 5) {
         // TODO ?
     }
 }
 
 void ShowStatusInfoHandler::show_status(Text::Color color,
-                                        const std::string& message) const
+                                        std::string&& message) const
 {
     if (auto messenger = UI::get().get_element<UIStatusMessenger>()) {
-        messenger->show_status(color, message);
+        messenger->show_status(color, std::move(message));
     }
 }
 
@@ -118,9 +127,9 @@ void ServerMessageHandler::handle(InPacket& recv) const
         recv.read_byte(); // channel
         recv.read_bool(); // megaphone
     } else if (type == 4) {
-        UI::get().set_scrollnotice(message);
+        UI::get().set_scroll_notice(std::move(message));
     } else if (type == 7) {
-        recv.read_int(); // npcid
+        recv.read_int(); // npc_id
     }
 }
 
@@ -129,12 +138,14 @@ void WeekEventMessageHandler::handle(InPacket& recv) const
     recv.read_byte(); // always 0xFF in solaxia and moople
     std::string message = recv.read_string();
 
-    static const std::string MAPLETIP = "[MapleTip]";
-    if (message.substr(0, MAPLETIP.length()).compare("[MapleTip]")) {
-        message = "[Notice] " + message;
+    static const std::string_view MAPLETIP = "[MapleTip]";
+    if (std::string_view(message)
+            .substr(0, MAPLETIP.length())
+            .compare(MAPLETIP)) {
+        message.insert(0, "[Notice] ", 9);
     }
 
-    UI::get().get_element<UIStatusbar>()->send_chatline(message,
+    UI::get().get_element<UIStatusbar>()->send_chatline(std::move(message),
                                                         UIChatbar::YELLOW);
 }
 
@@ -146,13 +157,16 @@ void ChatReceivedHandler::handle(InPacket& recv) const
     std::int8_t type = recv.read_byte();
 
     if (auto character = Stage::get().get_character(charid)) {
-        message = character->get_name() + ": " + message;
-        character->speak(message);
+        auto char_name = character->get_name();
+        message.reserve(message.capacity() + char_name.length() + 2);
+        message.insert(0, char_name);
+        message.insert(char_name.length(), ": ");
+        character->speak(std::string{message});
     }
 
     auto linetype = static_cast<UIChatbar::LineType>(type);
     if (auto statusbar = UI::get().get_element<UIStatusbar>()) {
-        statusbar->send_chatline(message, linetype);
+        statusbar->send_chatline(std::move(message), linetype);
     }
 }
 
@@ -203,13 +217,14 @@ void ShowItemGainInChatHandler::handle(InPacket& recv) const
                 return;
             }
 
-            std::string name = idata.get_name();
-            std::string sign = (qty < 0) ? "-" : "+";
-            std::string message = "Gained an item: " + name + " (" + sign +
-                                  std::to_string(qty) + ")";
-
             if (auto statusbar = UI::get().get_element<UIStatusbar>()) {
-                statusbar->send_chatline(message, UIChatbar::BLUE);
+                statusbar->send_chatline(str::concat("Gained an item: ",
+                                                     idata.get_name(),
+                                                     " (",
+                                                     qty < 0 ? '-' : '+',
+                                                     std::to_string(qty),
+                                                     ')'),
+                                         UIChatbar::BLUE);
             }
         }
     } else if (mode1 == 13) // card effect

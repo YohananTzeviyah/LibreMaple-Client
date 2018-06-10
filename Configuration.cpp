@@ -39,6 +39,7 @@ Configuration::Configuration()
     settings.emplace<PosEQINV>();
     settings.emplace<PosINV>();
     settings.emplace<PosSKILL>();
+    settings.emplace<PosKEYCONFIG>();
 
     load();
 }
@@ -50,9 +51,9 @@ Configuration::~Configuration()
 
 void Configuration::load()
 {
-    std::unordered_map<std::string, std::string> rawsettings;
+    std::unordered_map<std::string, std::string> raw_settings;
 
-    std::ifstream file(FILENAME);
+    std::ifstream file{FILENAME};
     if (file.is_open()) {
         // Go through the file line for line.
         std::string line;
@@ -60,17 +61,17 @@ void Configuration::load()
             // If the setting is not empty, load the value.
             std::size_t split = line.find('=');
             if (split != std::string::npos && split + 2 < line.size()) {
-                rawsettings.emplace(line.substr(0, split - 1),
-                                    line.substr(split + 2));
+                raw_settings.emplace(line.substr(0, split - 1),
+                                     line.substr(split + 2));
             }
         }
     }
 
     // Replace default values with loaded values.
-    for (auto& setting : settings) {
-        auto rsiter = rawsettings.find(setting.second->name);
-        if (rsiter != rawsettings.end()) {
-            setting.second->value = rsiter->second;
+    for (auto& [_, setting] : settings) {
+        auto rs_iter = raw_settings.find(setting->name);
+        if (rs_iter != raw_settings.end()) {
+            setting->value = rs_iter->second;
         }
     }
 }
@@ -78,11 +79,11 @@ void Configuration::load()
 void Configuration::save() const
 {
     // Open the settings file.
-    std::ofstream config(FILENAME);
+    std::ofstream config{FILENAME};
     if (config.is_open()) {
         // Save settings line by line.
-        for (auto& setting : settings) {
-            config << setting.second->to_string() << '\n';
+        for (const auto& [_, setting] : settings) {
+            config << setting->to_string() << '\n';
         }
     }
 }
@@ -97,12 +98,12 @@ bool Configuration::BoolEntry::load() const
     return value == "true";
 }
 
-void Configuration::StringEntry::save(std::string str)
+void Configuration::StringEntry::save(std::string&& str)
 {
-    value = str;
+    value = std::move(str);
 }
 
-std::string Configuration::StringEntry::load() const
+const std::string& Configuration::StringEntry::load() const
 {
     return value;
 }
@@ -114,12 +115,12 @@ void Configuration::PointEntry::save(Point<std::int16_t> vec)
 
 Point<std::int16_t> Configuration::PointEntry::load() const
 {
-    std::string xstr = value.substr(1, value.find(",") - 1);
-    std::string ystr = value.substr(value.find(",") + 1,
-                                    value.find(")") - value.find(",") - 1);
+    auto comma_loc = value.find(',');
+    std::string x_str = value.substr(1, comma_loc - 1);
+    std::string y_str =
+        value.substr(comma_loc + 1, value.find(')') - comma_loc - 1);
 
-    auto x = string_conversion::or_zero<std::int16_t>(xstr);
-    auto y = string_conversion::or_zero<std::int16_t>(ystr);
-    return {x, y};
+    return {string_conversion::or_zero<std::int16_t>(x_str),
+            string_conversion::or_zero<std::int16_t>(y_str)};
 }
 } // namespace jrc

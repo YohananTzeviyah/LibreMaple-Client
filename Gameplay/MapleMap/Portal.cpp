@@ -21,16 +21,16 @@ namespace jrc
 {
 Portal::Portal(const Animation* a,
                Type t,
-               std::string nm,
+               std::string&& nm,
                bool intramap,
                Point<std::int16_t> p,
                std::int32_t tid,
-               std::string tnm)
+               std::string&& tnm)
     : animation(a),
       type(t),
       name(nm),
       position(p),
-      warpinfo(tid, intramap, tnm, nm)
+      warpinfo(tid, intramap, std::move(tnm), std::move(nm))
 {
     touched = false;
 }

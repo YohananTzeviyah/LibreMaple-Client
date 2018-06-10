@@ -32,7 +32,7 @@ EquipQuality::check_quality(std::int32_t item_id,
     for (auto iter : stats) {
         Equipstat::Id es = iter.first;
         std::uint16_t stat = iter.second;
-        std::uint16_t defstat = data.get_defstat(es);
+        std::uint16_t defstat = data.get_def_stat(es);
         delta += stat - defstat;
     }
 

@@ -25,62 +25,74 @@ namespace jrc
 {
 ItemTooltip::ItemTooltip()
 {
-    nl::node itemtt = nl::nx::ui["UIToolTip.img"]["Item"];
+    nl::node item_tt = nl::nx::ui["UIToolTip.img"]["Item"];
 
-    top = itemtt["Frame"]["top"];
-    mid = itemtt["Frame"]["line"];
-    line = itemtt["Frame"]["dotline"];
-    bot = itemtt["Frame"]["bottom"];
-    base = itemtt["ItemIcon"]["base"];
-    cover = itemtt["ItemIcon"]["cover"];
-    shade = itemtt["ItemIcon"]["shade"];
+    top = item_tt["Frame"]["top"];
+    mid = item_tt["Frame"]["line"];
+    line = item_tt["Frame"]["dotline"];
+    bot = item_tt["Frame"]["bottom"];
+    base = item_tt["ItemIcon"]["base"];
+    cover = item_tt["ItemIcon"]["cover"];
+    shade = item_tt["ItemIcon"]["shade"];
 
     itemid = 0;
 }
 
 bool ItemTooltip::set_item(std::int32_t iid)
 {
-    if (itemid == iid)
+    if (itemid == iid) {
         return false;
+    }
 
     itemid = iid;
 
-    if (itemid == 0)
+    if (itemid == 0) {
         return false;
+    }
 
     const ItemData& idata = ItemData::get(itemid);
 
     itemicon = idata.get_icon(false);
-    name = {Text::A12B, Text::CENTER, Text::WHITE, idata.get_name(), 240};
-    desc = {Text::A12M, Text::LEFT, Text::WHITE, idata.get_desc(), 150};
+    name = {Text::A12B,
+            Text::CENTER,
+            Text::WHITE,
+            std::string{idata.get_name()},
+            240};
+    desc = {Text::A12M,
+            Text::LEFT,
+            Text::WHITE,
+            std::string{idata.get_desc()},
+            150};
 
-    filllength = 81 + name.height();
+    fill_length = 81 + name.height();
     std::int16_t descdelta = desc.height() - 80;
-    if (descdelta > 0)
-        filllength += descdelta;
+    if (descdelta > 0) {
+        fill_length += descdelta;
+    }
 
     return true;
 }
 
 void ItemTooltip::draw(Point<std::int16_t> pos) const
 {
-    if (itemid == 0)
+    if (itemid == 0) {
         return;
+    }
 
     top.draw(pos);
-    mid.draw({pos + Point<std::int16_t>(0, 13),
-              Point<std::int16_t>(0, filllength)});
-    bot.draw(pos + Point<std::int16_t>(0, filllength + 13));
+    mid.draw({pos + Point<std::int16_t>{0, 13},
+              Point<std::int16_t>{0, fill_length}});
+    bot.draw(pos + Point<std::int16_t>{0, fill_length + 13});
 
-    name.draw(pos + Point<std::int16_t>(130, 3));
+    name.draw(pos + Point<std::int16_t>{130, 3});
 
     pos.shift_y(4 + name.height());
 
-    base.draw(pos + Point<std::int16_t>(10, 10));
-    shade.draw(pos + Point<std::int16_t>(10, 10));
-    itemicon.draw({pos + Point<std::int16_t>(20, 82), 2.0f, 2.0f});
-    cover.draw(pos + Point<std::int16_t>(10, 10));
+    base.draw(pos + Point<std::int16_t>{10, 10});
+    shade.draw(pos + Point<std::int16_t>{10, 10});
+    itemicon.draw({pos + Point<std::int16_t>{20, 82}, 2.0f, 2.0f});
+    cover.draw(pos + Point<std::int16_t>{10, 10});
 
-    desc.draw(pos + Point<std::int16_t>(100, 6));
+    desc.draw(pos + Point<std::int16_t>{100, 6});
 }
 } // namespace jrc

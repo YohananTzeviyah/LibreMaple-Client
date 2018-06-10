@@ -89,7 +89,7 @@ std::uint16_t Job::get_subjob(Level lv) const
     return 0;
 }
 
-const std::string& Job::get_name() const
+std::string_view Job::get_name() const
 {
     return name;
 }

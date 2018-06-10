@@ -42,20 +42,19 @@ SkillIcon::SkillIcon(std::int32_t i, std::int32_t lv) : id(i)
     mouseover = data.get_icon(SkillData::MOUSEOVER);
     disabled = data.get_icon(SkillData::DISABLED);
 
-    std::string namestr = data.get_name();
-    std::string levelstr = std::to_string(lv);
+    std::string name_str{data.get_name()};
 
-    name = {Text::A11L, Text::LEFT, Text::DARKGREY, namestr};
-    level = {Text::A11L, Text::LEFT, Text::DARKGREY, levelstr};
+    name = {Text::A11L, Text::LEFT, Text::DARKGREY, std::string{name_str}};
+    level = {Text::A11L, Text::LEFT, Text::DARKGREY, std::to_string(lv)};
     state = NORMAL;
 
     constexpr std::uint16_t MAX_NAME_WIDTH = 96;
     std::size_t overhang = 3;
     while (name.width() > MAX_NAME_WIDTH) {
-        namestr.replace(namestr.end() - overhang, namestr.end(), "...");
-        overhang++;
+        name_str.replace(name_str.end() - overhang, name_str.end(), "...", 3);
+        ++overhang;
 
-        name.change_text(namestr);
+        name.change_text(std::string{name_str});
     }
 }
 
@@ -224,7 +223,7 @@ Button::State UISkillbook::button_pressed(std::uint16_t id)
     }
 }
 
-void UISkillbook::doubleclick(Point<std::int16_t> cursorpos)
+void UISkillbook::double_click(Point<std::int16_t> cursorpos)
 {
     const SkillIcon* icon = icon_by_position(cursorpos - position);
     if (icon) {
@@ -352,7 +351,7 @@ void UISkillbook::change_tab(std::uint16_t new_tab)
     const JobData& data = JobData::get(subid);
 
     bookicon = data.get_icon();
-    booktext.change_text(data.get_name());
+    booktext.change_text(std::string{data.get_name()});
 
     for (std::int32_t skill_id : data.get_skills()) {
         std::int32_t level = skillbook.get_level(skill_id);
@@ -364,7 +363,7 @@ void UISkillbook::change_tab(std::uint16_t new_tab)
         }
 
         icons.emplace_back(skill_id, level);
-        skillcount++;
+        ++skillcount;
     }
 
     slider.setrows(ROWS, skillcount);
@@ -413,7 +412,7 @@ bool UISkillbook::can_raise(std::int32_t skill_id) const
     std::int32_t level = skillbook.get_level(skill_id);
     std::int32_t masterlevel = skillbook.get_masterlevel(skill_id);
     if (masterlevel == 0) {
-        masterlevel = SkillData::get(skill_id).get_masterlevel();
+        masterlevel = SkillData::get(skill_id).get_master_level();
     }
 
     if (level >= masterlevel) {

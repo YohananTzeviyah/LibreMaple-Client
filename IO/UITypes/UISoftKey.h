@@ -21,14 +21,15 @@
 #include "../UIElement.h"
 
 #include <functional>
+#include <string_view>
 
 namespace jrc
 {
-// Keyboard which is used via the mouse. The game uses this for pic/pin input.
+//! Keyboard which is used via the mouse. The game uses this for pic/pin input.
 class UISoftkey : public UIElement
 {
 public:
-    using Callback = std::function<void(const std::string&)>;
+    using Callback = std::function<void(std::string_view)>;
 
     static constexpr Type TYPE = SOFTKEYBOARD;
     static constexpr bool FOCUSED = true;

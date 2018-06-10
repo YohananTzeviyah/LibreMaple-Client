@@ -58,7 +58,7 @@ void Cursor::update()
         hide_counter = 0;
         break;
     default:
-        hide_counter++;
+        ++hide_counter;
         break;
     }
 }

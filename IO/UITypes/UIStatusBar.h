@@ -47,16 +47,16 @@ public:
     Cursor::State send_cursor(bool pressed,
                               Point<std::int16_t> cursorpos) override;
 
-    void send_chatline(const std::string& line, UIChatbar::LineType type);
+    void send_chatline(std::string&& line, UIChatbar::LineType type);
     void display_message(Messages::Type line, UIChatbar::LineType type);
 
 protected:
     Button::State button_pressed(std::uint16_t buttonid) override;
 
 private:
-    float getexppercent() const;
-    float gethppercent() const;
-    float getmppercent() const;
+    float get_exp_percent() const;
+    float get_hp_percent() const;
+    float get_mp_percent() const;
 
     enum Buttons : std::uint16_t {
         BT_WHISPER,

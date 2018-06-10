@@ -18,6 +18,7 @@
 #include "Weapon.h"
 
 #include "../../Console.h"
+#include "../../Util/Misc.h"
 
 namespace jrc
 {
@@ -25,8 +26,8 @@ Weapon::Type Weapon::by_value(std::int32_t value)
 {
     if (value < 130 || (value > 133 && value < 137) || value == 139 ||
         (value > 149 && value < 170) || value > 170) {
-        Console::get().print("Warning: Unhandled weapon type (" +
-                             std::to_string(value) + ").");
+        Console::get().print(str::concat(
+            "Warning: Unhandled weapon type (", std::to_string(value), ")."));
         return Weapon::NONE;
     }
 

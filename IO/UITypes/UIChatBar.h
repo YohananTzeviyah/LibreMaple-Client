@@ -47,18 +47,18 @@ public:
     void draw(float inter) const override;
     void update() override;
 
-    bool is_in_range(Point<std::int16_t> cursorpos) const override;
-    bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
+    bool is_in_range(Point<std::int16_t> cursor_pos) const override;
+    bool remove_cursor(bool clicked, Point<std::int16_t> cursor_pos) override;
     Cursor::State send_cursor(bool pressed,
                               Point<std::int16_t> cursorpos) override;
 
-    void send_line(const std::string& line, LineType type);
+    void send_line(std::string&& line, LineType type);
 
 protected:
     Button::State button_pressed(std::uint16_t buttonid) override;
 
 private:
-    std::int16_t getchattop() const;
+    std::int16_t get_chat_top() const;
 
     enum Buttons : std::uint16_t {
         BT_OPENCHAT,
@@ -68,12 +68,12 @@ private:
         BT_CHATTARGETS
     };
 
-    static constexpr std::int16_t CHATYOFFSET = 65;
-    static constexpr std::int16_t CHATROWHEIGHT = 16;
+    static constexpr std::int16_t CHAT_Y_OFFSET = 65;
+    static constexpr std::int16_t CHAT_ROW_HEIGHT = 16;
     static constexpr std::int16_t MAXCHATROWS = 16;
     static constexpr std::int16_t MINCHATROWS = 1;
 
-    Textfield chatfield;
+    Textfield chat_field;
     Texture chatspace[2];
     Texture chattargets[NUM_TARGETS];
     Texture chatenter;
@@ -84,15 +84,15 @@ private:
     bool chatopen;
     ChatTarget chattarget;
 
-    std::vector<std::string> lastentered;
+    std::vector<std::string> last_entered;
     std::size_t lastpos;
 
-    std::unordered_map<std::int16_t, Text> rowtexts;
-    ColorBox chatbox;
-    std::int16_t chatrows;
-    std::int16_t rowpos;
-    std::int16_t rowmax;
+    std::unordered_map<std::int16_t, Text> row_texts;
+    ColorBox chat_box;
+    std::int16_t chat_rows;
+    std::int16_t row_pos;
+    std::int16_t row_max;
     Slider slider;
-    bool dragchattop;
+    bool drag_chat_top;
 };
 } // namespace jrc

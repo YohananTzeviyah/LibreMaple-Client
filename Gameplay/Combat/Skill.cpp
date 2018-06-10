@@ -23,38 +23,41 @@
 #include "nlnx/node.hpp"
 #include "nlnx/nx.hpp"
 
+#include <cstring>
+
 namespace jrc
 {
 Skill::Skill(std::int32_t id) : skillid(id)
 {
     const SkillData& data = SkillData::get(skillid);
 
-    std::string strid;
-    if (skillid < 10000000) {
-        strid = string_format::extend_id(skillid, 7);
-    } else {
-        strid = std::to_string(skillid);
-    }
-    nl::node src = nl::nx::skill[strid.substr(0, 3) + ".img"]["skill"][strid];
+    std::string str_id = skillid < 10000000
+                             ? string_format::extend_id(skillid, 7)
+                             : std::to_string(skillid);
+    char img_str_buf[7];
+    std::memcpy(img_str_buf, str_id.data(), 3);
+    std::memcpy(img_str_buf + 3, ".img", 4);
+    nl::node src =
+        nl::nx::skill[std::string_view{img_str_buf, 7}]["skill"][str_id];
 
     projectile = true;
     overregular = false;
 
-    sound = std::make_unique<SingleSkillSound>(strid);
+    sound = std::make_unique<SingleSkillSound>(str_id);
 
-    bool byleveleffect = src["CharLevel"]["10"]["effect"].size() > 0;
-    bool multieffect = src["effect0"].size() > 0;
-    if (byleveleffect) {
+    bool by_level_effect = src["CharLevel"]["10"]["effect"].size() > 0;
+    bool multi_effect = src["effect0"].size() > 0;
+    if (by_level_effect) {
         useeffect = std::make_unique<ByLevelUseEffect>(src);
-    } else if (multieffect) {
+    } else if (multi_effect) {
         useeffect = std::make_unique<MultiUseEffect>(src);
     } else {
-        bool isanimation =
+        bool is_animation =
             src["effect"]["0"].data_type() == nl::node::type::bitmap;
-        bool haseffect1 = src["effect"]["1"].size() > 0;
-        if (isanimation) {
+        bool has_effect1 = src["effect"]["1"].size() > 0;
+        if (is_animation) {
             useeffect = std::make_unique<SingleUseEffect>(src);
-        } else if (haseffect1) {
+        } else if (has_effect1) {
             useeffect = std::make_unique<TwoHUseEffect>(src);
         } else {
             switch (skillid) {
@@ -135,7 +138,7 @@ void Skill::apply_stats(const Char& user, Attack& attack) const
 {
     attack.skill = skillid;
 
-    std::int32_t level = user.get_skilllevel(skillid);
+    std::int32_t level = user.get_skill_level(skillid);
     const SkillData::Stats stats = SkillData::get(skillid).get_stats(level);
 
     if (stats.fixdamage) {
@@ -227,7 +230,7 @@ SpecialMove::ForbidReason Skill::can_use(std::int32_t level,
                                          std::uint16_t mp,
                                          std::uint16_t bullets) const
 {
-    if (level <= 0 || level > SkillData::get(skillid).get_masterlevel())
+    if (level <= 0 || level > SkillData::get(skillid).get_master_level())
         return FBR_OTHER;
 
     if (!job.can_use(skillid))

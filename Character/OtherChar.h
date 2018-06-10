@@ -25,7 +25,7 @@
 
 namespace jrc
 {
-// Other client's players.
+//! Other client's players.
 class OtherChar : public Char
 {
 public:
@@ -33,28 +33,28 @@ public:
               const CharLook& look,
               std::uint8_t level,
               std::int16_t job,
-              const std::string& name,
+              std::string&& name,
               std::int8_t stance,
-              Point<std::int16_t> position);
+              Point<std::int16_t> position) noexcept;
 
-    // Update the character.
+    //! Update the character.
     std::int8_t update(const Physics& physics) override;
-    // Add the movements which this character will go through next.
+    //! Add the movements which this character will go through next.
     void send_movement(const std::vector<Movement>& movements);
 
-    // Update a skill level.
+    //! Update a skill level.
     void update_skill(std::int32_t skillid, std::uint8_t skilllevel);
-    // Update the attack speed.
+    //! Update the attack speed.
     void update_speed(std::uint8_t attackspeed);
-    // Update the character look.
+    //! Update the character look.
     void update_look(const LookEntry& look);
 
-    // Return the character's attacking speed.
-    std::int8_t get_integer_attackspeed() const override;
-    // Return the character's level.
+    //! Return the character's attacking speed.
+    std::int8_t get_integer_attack_speed() const override;
+    //! Return the character's level.
     std::uint16_t get_level() const override;
-    // Return the character's level of a skill.
-    std::int32_t get_skilllevel(std::int32_t skillid) const override;
+    //! Return the character's level of a skill.
+    std::int32_t get_skill_level(std::int32_t skillid) const override;
 
 private:
     std::uint16_t level;

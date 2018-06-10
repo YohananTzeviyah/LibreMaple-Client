@@ -18,25 +18,27 @@
 #pragma once
 #include "../OutPacket.h"
 
+#include <string_view>
+
 namespace jrc
 {
-// Reserve a name for the character to be created.
-// Opcode: NAME_CHAR(21)
+//! Reserve a name for the character to be created.
+//! Opcode: NAME_CHAR(21)
 class NameCharPacket : public OutPacket
 {
 public:
-    NameCharPacket(const std::string& name) : OutPacket(NAME_CHAR)
+    NameCharPacket(std::string_view name) : OutPacket(NAME_CHAR)
     {
         write_string(name);
     }
 };
 
-// Requests creation of a character with the specified stats.
-// Opcode: CREATE_CHAR(22)
+//! Requests creation of a character with the specified stats.
+//! Opcode: CREATE_CHAR(22)
 class CreateCharPacket : public OutPacket
 {
 public:
-    CreateCharPacket(const std::string& name,
+    CreateCharPacket(std::string_view name,
                      std::uint16_t job,
                      std::int32_t face,
                      std::int32_t hair,

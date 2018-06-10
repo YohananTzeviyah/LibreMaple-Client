@@ -99,12 +99,12 @@ public:
         return lt.straight() && rb.straight() && straight();
     }
 
-    constexpr const Point<T>& getlt() const
+    constexpr const Point<T>& get_lt() const
     {
         return lt;
     }
 
-    constexpr const Point<T>& getrb() const
+    constexpr const Point<T>& get_rb() const
     {
         return rb;
     }

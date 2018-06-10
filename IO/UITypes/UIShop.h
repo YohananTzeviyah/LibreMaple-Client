@@ -41,7 +41,7 @@ public:
     Cursor::State send_cursor(bool clicked,
                               Point<std::int16_t> position) override;
 
-    void reset(std::int32_t npcid);
+    void reset(std::int32_t npc_id);
     void add_item(std::int32_t id,
                   std::int32_t price,
                   std::int32_t pitch,
@@ -62,9 +62,9 @@ protected:
 private:
     void clear_tooltip();
     void show_item(std::int16_t slot, bool sale);
-    void changeselltab(InventoryType::Id tab);
+    void change_sell_tab(InventoryType::Id tab);
     std::int16_t slot_by_position(std::int16_t y);
-    std::uint16_t tabbyinventory(InventoryType::Id type);
+    std::uint16_t tab_by_inventory(InventoryType::Id type);
 
     enum Buttons : std::int16_t {
         BUY_ITEM = 0,
@@ -81,17 +81,17 @@ private:
         SELL4 = 17
     };
 
-    const CharLook& charlook;
+    const CharLook& char_look;
     const Inventory& inventory;
 
     Texture npc;
     Texture selection;
     Texture impossible;
     Texture meso;
-    Text mesolabel;
+    Text meso_label;
 
-    Slider buyslider;
-    Slider sellslider;
+    Slider buy_slider;
+    Slider sell_slider;
 
     class BuyItem
     {
@@ -116,10 +116,10 @@ private:
         std::int32_t price;
         std::int32_t pitch;
         std::int32_t time;
-        std::int16_t chargeprice;
+        std::int16_t charge_price;
         std::int16_t buyable;
-        Text namelabel;
-        Text pricelabel;
+        Text name_label;
+        Text price_label;
     };
 
     class SellItem
@@ -143,15 +143,15 @@ private:
         std::int32_t id;
         std::int16_t slot;
         std::int16_t sellable;
-        bool showcount;
-        Text namelabel;
-        Text pricelabel;
+        bool show_count;
+        Text name_label;
+        Text price_label;
     };
 
     struct BuyState {
         std::vector<BuyItem> items;
         std::int16_t offset;
-        std::int16_t lastslot;
+        std::int16_t last_slot;
         std::int16_t selection;
 
         void reset();
@@ -167,7 +167,7 @@ private:
         std::vector<SellItem> items;
         std::int16_t offset;
         InventoryType::Id tab;
-        std::int16_t lastslot;
+        std::int16_t last_slot;
         std::int16_t selection;
 
         void reset();

@@ -22,6 +22,7 @@
 #include "nlnx/node.hpp"
 #include "nlnx/nx.hpp"
 
+#include <string_view>
 #include <unordered_set>
 
 namespace jrc
@@ -30,7 +31,8 @@ SkillData::SkillData(std::int32_t id)
 {
     // Locate sources
     std::string strid = string_format::extend_id(id, 7);
-    nl::node src = nl::nx::skill[strid.substr(0, 3) + ".img"]["skill"][strid];
+    nl::node src = nl::nx::skill[str::concat(
+        std::string_view(strid).substr(0, 3), ".img")]["skill"][strid];
     nl::node strsrc = nl::nx::string["Skill.img"][strid];
 
     // Load icons
@@ -42,7 +44,7 @@ SkillData::SkillData(std::int32_t id)
 
     for (std::int32_t level = 1;
          nl::node sub = strsrc["h" + std::to_string(level)];
-         level++) {
+         ++level) {
         levels.emplace(level, sub);
     }
 
@@ -96,7 +98,7 @@ SkillData::SkillData(std::int32_t id)
     invisible = src["invisible"].get_bool();
 }
 
-std::int32_t SkillData::flags_of(std::int32_t id) const
+std::int32_t SkillData::flags_of(std::int32_t id) const noexcept
 {
     static const std::unordered_map<std::int32_t, std::int32_t> skill_flags = {
         // Beginner
@@ -149,38 +151,39 @@ std::int32_t SkillData::flags_of(std::int32_t id) const
         {SkillId::METEOR_SHOWER, ATTACK}};
 
     auto iter = skill_flags.find(id);
-    if (iter == skill_flags.end())
+    if (iter == skill_flags.end()) {
         return NONE;
+    }
 
     return iter->second;
 }
 
-bool SkillData::is_passive() const
+bool SkillData::is_passive() const noexcept
 {
     return passive;
 }
 
-bool SkillData::is_attack() const
+bool SkillData::is_attack() const noexcept
 {
     return !passive && (flags & ATTACK);
 }
 
-bool SkillData::is_invisible() const
+bool SkillData::is_invisible() const noexcept
 {
     return invisible;
 }
 
-std::int32_t SkillData::get_masterlevel() const
+std::int32_t SkillData::get_master_level() const noexcept
 {
     return masterlevel;
 }
 
-Weapon::Type SkillData::get_required_weapon() const
+Weapon::Type SkillData::get_required_weapon() const noexcept
 {
     return reqweapon;
 }
 
-const SkillData::Stats& SkillData::get_stats(std::int32_t level) const
+const SkillData::Stats& SkillData::get_stats(std::int32_t level) const noexcept
 {
     auto iter = stats.find(level);
     if (iter == stats.end()) {
@@ -191,28 +194,29 @@ const SkillData::Stats& SkillData::get_stats(std::int32_t level) const
     return iter->second;
 }
 
-const std::string& SkillData::get_name() const
+std::string_view SkillData::get_name() const noexcept
 {
     return name;
 }
 
-const std::string& SkillData::get_desc() const
+std::string_view SkillData::get_desc() const noexcept
 {
     return desc;
 }
 
-const std::string& SkillData::get_level_desc(std::int32_t level) const
+std::string_view SkillData::get_level_desc(std::int32_t level) const noexcept
 {
     auto iter = levels.find(level);
     if (iter == levels.end()) {
-        static const std::string null_level = "Missing level description.";
+        static constexpr std::string_view null_level =
+            "Missing level description.";
         return null_level;
     } else {
         return iter->second;
     }
 }
 
-const Texture& SkillData::get_icon(Icon icon) const
+const Texture& SkillData::get_icon(Icon icon) const noexcept
 {
     return icons[icon];
 }

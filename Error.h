@@ -19,7 +19,7 @@
 
 namespace jrc
 {
-// Error codes to be checked after initialisation.
+//! Error codes to be checked after initialisation.
 class Error
 {
 public:

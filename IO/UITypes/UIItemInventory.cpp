@@ -28,7 +28,7 @@
 namespace jrc
 {
 UIItemInventory::UIItemInventory(const Inventory& invent)
-    : UIDragElement<PosINV>(Point<std::int16_t>(172, 20)), inventory(invent)
+    : UIDragElement<PosINV>{Point<std::int16_t>{172, 20}}, inventory(invent)
 {
     nl::node src = nl::nx::ui["UIWindow2.img"]["Item"];
 
@@ -81,7 +81,7 @@ UIItemInventory::UIItemInventory(const Inventory& invent)
               6,
               1 + inventory.get_slotmax(tab) / 4,
               [&](bool upwards) {
-                  std::int16_t shift = upwards ? -4 : 4;
+                  auto shift = static_cast<std::int16_t>(upwards ? -4 : 4);
                   bool above = slotrange.first + shift > 0;
                   bool below = slotrange.second + shift <
                                inventory.get_slotmax(tab) + 1 + 4;
@@ -107,8 +107,8 @@ void UIItemInventory::draw(float alpha) const
         std::int16_t slot = icon.first;
         if (icon.second && slot >= slotrange.first &&
             slot <= slotrange.second) {
-            Point<std::int16_t> slotpos = get_slotpos(slot);
-            icon.second->draw(position + slotpos);
+            Point<std::int16_t> slot_pos = get_slotpos(slot);
+            icon.second->draw(position + slot_pos);
         }
     }
 
@@ -117,18 +117,18 @@ void UIItemInventory::draw(float alpha) const
         Point<std::int16_t> bulletslotpos = position + get_slotpos(bulletslot);
         projectile.draw({bulletslotpos});
     } else if (newtab == tab && is_visible(newslot)) {
-        Point<std::int16_t> newslotpos = position + get_slotpos(newslot);
-        newslotpos.shift_y(1);
-        newitemslot.draw({newslotpos}, alpha);
+        Point<std::int16_t> new_slot_pos = position + get_slotpos(newslot);
+        new_slot_pos.shift_y(1);
+        newitemslot.draw({new_slot_pos}, alpha);
     }
 
     if (newtab != tab && newtab != InventoryType::NONE) {
-        Point<std::int16_t> newtabpos = position + get_tabpos(newtab);
-        newitemtab.draw({newtabpos}, alpha);
+        Point<std::int16_t> new_tab_pos = position + get_tabpos(newtab);
+        newitemtab.draw({new_tab_pos}, alpha);
     }
 
-    Point<std::int16_t> mesopos = position + Point<std::int16_t>(124, 264);
-    mesolabel.draw(mesopos);
+    auto meso_pos = position + Point<std::int16_t>{124, 264};
+    mesolabel.draw(meso_pos);
 }
 
 void UIItemInventory::update()
@@ -139,9 +139,9 @@ void UIItemInventory::update()
     newitemslot.update(6);
 
     std::int64_t meso = inventory.get_meso();
-    std::string mesostr = std::to_string(meso);
-    string_format::split_number(mesostr);
-    mesolabel.change_text(mesostr);
+    std::string meso_str = std::to_string(meso);
+    string_format::split_number(meso_str);
+    mesolabel.change_text(std::move(meso_str));
 }
 
 void UIItemInventory::update_slot(std::int16_t slot)
@@ -215,7 +215,7 @@ Button::State UIItemInventory::button_pressed(std::uint16_t buttonid)
     return Button::PRESSED;
 }
 
-void UIItemInventory::doubleclick(Point<std::int16_t> cursorpos)
+void UIItemInventory::double_click(Point<std::int16_t> cursorpos)
 {
     std::int16_t slot = slot_by_position(cursorpos - position);
     if (icons.count(slot) && is_visible(slot)) {
@@ -401,40 +401,39 @@ bool UIItemInventory::is_not_visible(std::int16_t slot) const
 }
 
 std::int16_t
-UIItemInventory::slot_by_position(Point<std::int16_t> cursorpos) const
+UIItemInventory::slot_by_position(Point<std::int16_t> cursor_pos) const
 {
-    std::int16_t xoff = cursorpos.x() - 11;
-    std::int16_t yoff = cursorpos.y() - 51;
+    auto xoff = cursor_pos.x() - 11;
+    auto yoff = cursor_pos.y() - 51;
     if (xoff < 1 || xoff > 143 || yoff < 1) {
         return 0;
     }
 
-    std::int16_t slot = slotrange.first + (xoff / 36) + 4 * (yoff / 35);
+    auto slot = slotrange.first + (xoff / 36) + 4 * (yoff / 35);
     return is_visible(slot) ? slot : 0;
 }
 
 Point<std::int16_t> UIItemInventory::get_slotpos(std::int16_t slot) const
 {
-    std::int16_t absslot = slot - slotrange.first;
-    return Point<std::int16_t>(11 + (absslot % 4) * 36,
-                               51 + (absslot / 4) * 35);
+    std::int16_t abs_slot = slot - slotrange.first;
+    return {11 + (abs_slot % 4) * 36, 51 + (abs_slot / 4) * 35};
 }
 
 Point<std::int16_t> UIItemInventory::get_tabpos(InventoryType::Id tb) const
 {
     switch (tb) {
     case InventoryType::EQUIP:
-        return Point<std::int16_t>(10, 28);
+        return {10, 28};
     case InventoryType::USE:
-        return Point<std::int16_t>(42, 28);
+        return {42, 28};
     case InventoryType::SETUP:
-        return Point<std::int16_t>(74, 28);
+        return {74, 28};
     case InventoryType::ETC:
-        return Point<std::int16_t>(105, 28);
+        return {105, 28};
     case InventoryType::CASH:
-        return Point<std::int16_t>(138, 28);
+        return {138, 28};
     default:
-        return Point<std::int16_t>();
+        return {};
     }
 }
 

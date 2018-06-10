@@ -24,7 +24,7 @@ TilesObjs::TilesObjs(nl::node src)
     auto tileset = src["info"]["tS"] + ".img";
     for (auto tilenode : src["tile"]) {
         Tile tile{tilenode, tileset};
-        std::int8_t z = tile.getz();
+        std::int8_t z = tile.get_z();
         tiles.emplace(z, std::move(tile));
     }
 

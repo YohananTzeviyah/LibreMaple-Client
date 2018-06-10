@@ -83,7 +83,7 @@ void UIEquipInventory::draw(float alpha) const
     }
 
     if (show_pet_equips) {
-        auto position_pet = position + {184, 0};
+        auto position_pet = position + Point<std::int16_t>{184, 0};
         for (const auto& texture : textures_pet) {
             texture.draw(position_pet);
         }
@@ -209,7 +209,8 @@ UIEquipInventory::slot_by_position(Point<std::int16_t> cursor_pos) const
 {
     for (auto [slot, slot_pos] : icon_positions) {
         Rectangle<std::int16_t> icon_rect{position + slot_pos,
-                                          position + slot_pos + Point{32, 32}};
+                                          position + slot_pos +
+                                              Point<std::int16_t>{32, 32}};
         if (icon_rect.contains(cursor_pos)) {
             return slot;
         }

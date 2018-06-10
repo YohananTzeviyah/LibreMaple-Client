@@ -246,12 +246,13 @@ void PacketSwitch::forward(const std::int8_t* bytes, std::size_t length) const
         }
     } else {
         // Warn about a packet with opcode out of bounds.
-        warn(MSG_OUTOFBOUNDS, opcode);
+        warn(MSG_OUT_OF_BOUNDS, opcode);
     }
 }
 
-void PacketSwitch::warn(const std::string& message, std::size_t opcode) const
+void PacketSwitch::warn(std::string_view message, std::size_t opcode) const
 {
-    Console::get().print(message + ", Opcode: " + std::to_string(opcode));
+    Console::get().print(
+        str::concat(message, ", Opcode: ", std::to_string(opcode)));
 }
 } // namespace jrc

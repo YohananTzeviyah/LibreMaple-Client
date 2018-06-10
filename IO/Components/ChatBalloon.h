@@ -30,12 +30,12 @@ public:
     void draw(Point<std::int16_t> position) const;
     void update();
 
-    void change_text(const std::string& text);
+    void change_text(std::string&& text);
     void expire();
 
 private:
-    // How long a line stays on screen. 4 seconds.
-    static constexpr std::int16_t DURATION = 4000;
+    //! How long a line stays on screen. 4 seconds.
+    static constexpr std::int16_t DURATION = 4'000;
 
     MapleFrame frame;
     Text textlabel;

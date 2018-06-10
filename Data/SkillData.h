@@ -27,11 +27,11 @@
 
 namespace jrc
 {
-// Contains information about a skill.
+//! Contains information about a skill.
 class SkillData : public Cache<SkillData>
 {
 public:
-    // The stats of one level.
+    //! The stats of one level.
     struct Stats {
         float damage;
         std::int32_t matk;
@@ -63,7 +63,7 @@ public:
                         float critical,
                         float ignoredef,
                         float hrange,
-                        Rectangle<std::int16_t> range)
+                        Rectangle<std::int16_t> range) noexcept
             : damage(damage),
               matk(matk),
               fixdamage(fixdamage),
@@ -83,47 +83,51 @@ public:
         }
     };
 
-    // Skill flags, unfortunately these just have to be hardcoded
+    //! Skill flags, unfortunately these just have to be hardcoded
     enum Flags { NONE = 0x0000, ATTACK = 0x0001, RANGED = 0x0002 };
 
-    // Icon types
+    //! Icon types
     enum Icon { NORMAL, DISABLED, MOUSEOVER, NUM_ICONS };
 
-    // Return wether the skill is passive.
-    bool is_passive() const;
-    // Return wether the skill is an attack skill.
-    bool is_attack() const;
-    // Return wether this skill is invisible in the skill book ui.
-    bool is_invisible() const;
-    // Return the default masterlevel.
-    std::int32_t get_masterlevel() const;
-    // Return the required weapon.
-    Weapon::Type get_required_weapon() const;
-    // Return the stats of one level.
-    // If there are no stats for that level, a default object is returned.
-    const Stats& get_stats(std::int32_t level) const;
+    //! Return whether the skill is passive.
+    [[nodiscard]] bool is_passive() const noexcept;
+    //! Return whether the skill is an attack skill.
+    [[nodiscard]] bool is_attack() const noexcept;
+    //! Return whether this skill is invisible in the skill book ui.
+    [[nodiscard]] bool is_invisible() const noexcept;
+    //! Return the default masterlevel.
+    [[nodiscard]] std::int32_t get_master_level() const noexcept;
+    //! Return the required weapon.
+    [[nodiscard]] Weapon::Type get_required_weapon() const noexcept;
+    //! Return the stats of one level.
+    //!
+    //! If there are no stats for that level, a default object is returned.
+    [[nodiscard]] const Stats& get_stats(std::int32_t level) const noexcept;
 
-    // Return the name of the skill.
-    const std::string& get_name() const;
-    // Return the description of the skill.
-    const std::string& get_desc() const;
-    // Return the description of a level.
-    // If there is no description for this level, a warning message is
-    // returned.
-    const std::string& get_level_desc(std::int32_t level) const;
+    //! Return the name of the skill.
+    [[nodiscard]] std::string_view get_name() const noexcept;
+    //! Return the description of the skill.
+    [[nodiscard]] std::string_view get_desc() const noexcept;
+    //! Return the description of a level.
+    //!
+    //! If there is no description for this level, a warning message is
+    //! returned.
+    [[nodiscard]] std::string_view get_level_desc(std::int32_t level) const
+        noexcept;
 
-    // Return one of the skill icons.
-    // Cannot fail if type is a valid enum.
-    const Texture& get_icon(Icon icon) const;
+    //! Return one of the skill icons.
+    //!
+    //! Cannot fail if type is a valid enum.
+    [[nodiscard]] const Texture& get_icon(Icon icon) const noexcept;
 
 private:
-    // Allow the cache to use the constructor.
+    //! Allow the cache to use the constructor.
     friend Cache<SkillData>;
-    // Load a skill from the game files.
+    //! Load a skill from the game files.
     SkillData(std::int32_t id);
 
-    // Get some hardcoded information.
-    std::int32_t flags_of(std::int32_t id) const;
+    //! Get some hardcoded information.
+    [[nodiscard]] std::int32_t flags_of(std::int32_t id) const noexcept;
 
     std::unordered_map<std::int32_t, Stats> stats;
     std::string element;

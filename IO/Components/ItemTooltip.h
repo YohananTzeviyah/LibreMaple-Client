@@ -33,7 +33,7 @@ public:
 
 private:
     std::int32_t itemid;
-    std::int16_t filllength;
+    std::int16_t fill_length;
     Texture itemicon;
 
     Text name;

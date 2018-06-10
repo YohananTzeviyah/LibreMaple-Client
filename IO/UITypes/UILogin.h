@@ -46,20 +46,20 @@ private:
     enum Buttons {
         BT_LOGIN,
         BT_REGISTER,
-        BT_HOMEPAGE,
-        BT_PASSLOST,
-        BT_IDLOST,
-        BT_SAVEID,
+        BT_HOME_PAGE,
+        BT_PASS_LOST,
+        BT_ID_LOST,
+        BT_SAVE_ID,
         BT_QUIT,
         NUM_BUTTONS
     };
 
     Textfield account;
     Textfield password;
-    Texture accountbg;
-    Texture passwordbg;
+    Texture account_bg;
+    Texture password_bg;
     BoolPair<Texture> checkbox;
 
-    bool saveid;
+    bool save_id;
 };
 } // namespace jrc

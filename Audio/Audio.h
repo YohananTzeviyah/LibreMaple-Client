@@ -56,7 +56,7 @@ public:
 
     static Error init();
     static void close();
-    static bool set_sfxvolume(std::uint8_t volume);
+    static bool set_sfx_volume(std::uint8_t volume);
 
 private:
     std::size_t id;
@@ -67,18 +67,18 @@ private:
     static void add_sound(Sound::Name name, nl::node src);
 
     static std::unordered_map<std::size_t, std::uint64_t> samples;
-    static EnumMap<Name, std::size_t> soundids;
+    static EnumMap<Name, std::size_t> sound_ids;
 };
 
 class Music
 {
 public:
-    Music(const std::string& path);
+    Music(std::string&& path) noexcept;
 
     void play() const;
 
     static Error init();
-    static bool set_bgmvolume(std::uint8_t volume);
+    static bool set_bgm_volume(std::uint8_t volume);
 
 private:
     std::string path;

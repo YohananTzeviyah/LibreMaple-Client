@@ -78,7 +78,7 @@ private:
 };
 
 // An effect which displays an animation over the character's position.
-// The effect changes based on wether the character uses a twohanded weapon.
+// The effect changes based on wether the character uses a two_handed weapon.
 class TwoHUseEffect : public SkillUseEffect
 {
 public:

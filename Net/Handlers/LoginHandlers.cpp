@@ -34,7 +34,7 @@ void LoginResultHandler::handle(InPacket& recv) const
 {
     // Remove previous UIs.
     UI::get().remove(UIElement::LOGINNOTICE);
-    UI::get().remove(UIElement::LOGINWAIT);
+    UI::get().remove(UIElement::LOGIN_WAIT);
 
     // The packet should contain a 'reason' integer which can signify various
     // things.
@@ -63,14 +63,14 @@ void LoginResultHandler::handle(InPacket& recv) const
 
         UI::get().enable();
     } else {
-        printf("Login successful.\n");
+        Console::get().print("Login successful.");
         // Login successful. The packet contains information on the account, so
         // we initialise the account with it.
         Account account = LoginParser::parse_account(recv);
 
         // Save the Login ID if the box for it on the login panel is checked.
         if (Setting<SaveLogin>::get().load()) {
-            Setting<DefaultAccount>::get().save(account.name);
+            Setting<DefaultAccount>::get().save(std::move(account.name));
         }
 
         // Request the list of worlds and channels online.
@@ -87,7 +87,7 @@ void ServerlistHandler::handle(InPacket& recv) const
         World world = LoginParser::parse_world(recv);
         if (world.wid != -1) {
             worlds.emplace_back(std::move(world));
-            worldcount++;
+            ++worldcount;
         } else {
             // "End of serverlist" packet.
             return;

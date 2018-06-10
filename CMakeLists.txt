@@ -23,13 +23,13 @@ endif()
 
 # Set compiler flags
 if(UNIX AND NOT APPLE)
-    SET(REQUIRED_FLAGS "-std=c++17 -pipe -DASIO_STANDALONE -DGLEW_NO_GLU -lglut -lGL -ldl -lXinerama -lXext -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -pthread -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
+    SET(REQUIRED_FLAGS "-std=c++17 -pipe -DASIO_STANDALONE -DGLEW_NO_GLU -DBOOST_BIMAP_DISABLE_SERIALIZATION -lglut -lGL -ldl -lXinerama -lXext -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -pthread -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
 elseif(APPLE)
-    SET(REQUIRED_FLAGS "-std=c++17 -nostdinc++ -I/usr/local/Cellar/llvm/6.0.0/include/c++/v1 -L/usr/local/Cellar/llvm/6.0.0/lib -Wl,-rpath,/usr/local/Cellar/llvm/6.0.0/lib -pipe -DASIO_STANDALONE -DGLEW_NO_GLU -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -lglut -ldl -pthread -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
+    SET(REQUIRED_FLAGS "-std=c++17 -nostdinc++ -I/usr/local/Cellar/llvm/6.0.0/include/c++/v1 -L/usr/local/Cellar/llvm/6.0.0/lib -Wl,-rpath,/usr/local/Cellar/llvm/6.0.0/lib -pipe -DASIO_STANDALONE -DGLEW_NO_GLU -DBOOST_BIMAP_DISABLE_SERIALIZATION -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo -lglut -ldl -pthread -Wall -Wextra -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
 elseif(WIN32)
-    SET(REQUIRED_FLAGS "/std:c++17 /GX /D ASIO_STANDALONE /D GLEW_NO_GLU /W4 -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
+    SET(REQUIRED_FLAGS "/std:c++17 /GX /D ASIO_STANDALONE /D GLEW_NO_GLU /D BOOST_BIMAP_DISABLE_SERIALIZATION /W4 -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Werror-implicit-function-declaration -Wformat=2 -Wnull-dereference -Wstrict-overflow=5 -Wno-unused-private-field -Wno-unused-command-line-argument -Wno-narrowing -Wno-sign-compare -Wno-char-subscripts")
 else()
-    message(FATAL_ERROR "Unrecogized platform")
+    message(FATAL_ERROR "Unrecognized platform")
 endif()
 
 if(NOT WIN32)
@@ -43,12 +43,14 @@ if(NOT WIN32)
     elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
         SET(CMAKE_CXX_FLAGS "-O2 -ffast-math -flto=thin -g ${REQUIRED_FLAGS}")
     else()
-       SET(CMAKE_CXX_FLAGS "-O0 -g -ftrapv -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=undefined ${REQUIRED_FLAGS}")
-       SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined")
+        SET(CMAKE_CXX_FLAGS "-O0 -g -ftrapv -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=undefined ${REQUIRED_FLAGS}")
+        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined")
     endif()
 
     if(NATIVE_BUILD)
         SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=native")
+    else()
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=x86-64 -mtune=generic")
     endif()
 else()
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -169,7 +171,7 @@ SET(SOURCE_FILES ${Root_CPP}
                  ${Packets_H}
                  ${Helpers_H}
                  ${nlnx_H}
-                 "gsl/gsl-lite.hpp"
+                 "../boost/boost/bimap.hpp"
                  "../cpptoml/include/cpptoml.h")
 
 # Adding file globs created above as libraries
@@ -282,3 +284,4 @@ if(NOT WIN32)
 else()
     include_directories("../lz4/include")
 endif()
+include_directories("../boost")

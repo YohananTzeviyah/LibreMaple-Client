@@ -23,6 +23,8 @@
 #include "Inventory/Weapon.h"
 #include "Job.h"
 
+#include <string_view>
+
 namespace jrc
 {
 class CharStats
@@ -59,8 +61,8 @@ public:
     std::int32_t get_mapid() const;
     std::uint8_t get_portal() const;
     std::int64_t get_exp() const;
-    const std::string& get_name() const;
-    const std::string& get_jobname() const;
+    std::string_view get_name() const;
+    std::string_view get_job_name() const;
     Weapon::Type get_weapontype() const;
     float get_mastery() const;
     float get_critical() const;

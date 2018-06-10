@@ -22,40 +22,44 @@
 
 namespace jrc
 {
-ItemData::ItemData(std::int32_t id) : itemid(id)
+ItemData::ItemData(std::int32_t id) : item_id(id)
 {
     nl::node src;
     nl::node strsrc;
 
-    std::string strprefix = "0" + std::to_string(itemid / 10000);
-    std::string strid = "0" + std::to_string(itemid);
-    std::int32_t prefix = itemid / 1000000;
-    switch (prefix) {
+    std::string str_prefix = std::to_string(item_id / 10000);
+    str_prefix.insert(0, "0", 1);
+    str_prefix += ".img";
+
+    std::string str_id = std::to_string(item_id);
+    str_id.insert(0, "0", 1);
+
+    switch (item_id / 1000000) {
     case 1:
-        category = get_eqcategory(itemid);
-        src = nl::nx::character[category][strid + ".img"]["info"];
-        strsrc =
-            nl::nx::string["Eqp.img"]["Eqp"][category][std::to_string(itemid)];
+        category = get_equip_category_str(item_id);
+        src = nl::nx::character[category][str_id + ".img"]["info"];
+        strsrc = nl::nx::string["Eqp.img"]["Eqp"][category]
+                               [std::to_string(item_id)];
         break;
     case 2:
         category = "Consume";
-        src = nl::nx::item["Consume"][strprefix + ".img"][strid]["info"];
-        strsrc = nl::nx::string["Consume.img"][std::to_string(itemid)];
+        src = nl::nx::item["Consume"][str_prefix][str_id]["info"];
+        strsrc = nl::nx::string["Consume.img"][std::to_string(item_id)];
         break;
     case 3:
         category = "Install";
-        src = nl::nx::item["Install"][strprefix + ".img"][strid]["info"];
-        strsrc = nl::nx::string["Ins.img"][std::to_string(itemid)];
+        src = nl::nx::item["Install"][str_prefix][str_id]["info"];
+        strsrc = nl::nx::string["Ins.img"][std::to_string(item_id)];
         break;
     case 4:
         category = "Etc";
-        src = nl::nx::item["Etc"][strprefix + ".img"][strid]["info"];
-        strsrc = nl::nx::string["Etc.img"]["Etc"][std::to_string(itemid)];
+        src = nl::nx::item["Etc"][str_prefix][str_id]["info"];
+        strsrc = nl::nx::string["Etc.img"]["Etc"][std::to_string(item_id)];
         break;
     case 5:
         category = "Cash";
-        src = nl::nx::item["Cash"][strprefix + ".img"][strid]["info"];
-        strsrc = nl::nx::string["Cash.img"][std::to_string(itemid)];
+        src = nl::nx::item["Cash"][str_prefix][str_id]["info"];
+        strsrc = nl::nx::string["Cash.img"][std::to_string(item_id)];
         break;
     }
 
@@ -73,70 +77,70 @@ ItemData::ItemData(std::int32_t id) : itemid(id)
     }
 }
 
-std::string ItemData::get_eqcategory(std::int32_t id) const
+std::string_view ItemData::get_equip_category_str(std::int32_t id) noexcept
 {
-    constexpr char const* categorynames[15] = {"Cap",
-                                               "Accessory",
-                                               "Accessory",
-                                               "Accessory",
-                                               "Coat",
-                                               "Longcoat",
-                                               "Pants",
-                                               "Shoes",
-                                               "Glove",
-                                               "Shield",
-                                               "Cape",
-                                               "Ring",
-                                               "Accessory",
-                                               "Accessory",
-                                               "Accessory"};
+    static constexpr std::string_view category_names[15] = {"Cap",
+                                                            "Accessory",
+                                                            "Accessory",
+                                                            "Accessory",
+                                                            "Coat",
+                                                            "Longcoat",
+                                                            "Pants",
+                                                            "Shoes",
+                                                            "Glove",
+                                                            "Shield",
+                                                            "Cape",
+                                                            "Ring",
+                                                            "Accessory",
+                                                            "Accessory",
+                                                            "Accessory"};
 
-    std::size_t index = (id / 10000) - 100;
-    if (index < 15) {
-        return categorynames[index];
-    } else if (index >= 30 && index <= 70) {
+    std::size_t index = (static_cast<std::size_t>(id) / 10000ull) - 100ull;
+    if (index < 15ull) {
+        return category_names[index];
+    } else if (index >= 30ull && index <= 70ull) {
         return "Weapon";
     } else {
-        return "";
+        return {};
     }
 }
 
-bool ItemData::is_valid() const
+bool ItemData::is_valid() const noexcept
 {
     return valid;
 }
 
-ItemData::operator bool() const
+ItemData::operator bool() const noexcept
 {
     return is_valid();
 }
 
-std::int32_t ItemData::get_id() const
+std::int32_t ItemData::get_id() const noexcept
 {
-    return itemid;
+    return item_id;
 }
 
-std::int32_t ItemData::get_price() const
+std::int32_t ItemData::get_price() const noexcept
 {
     return price;
 }
 
-const std::string& ItemData::get_name() const
+std::string_view ItemData::get_name() const noexcept
 {
     return name;
 }
 
-const std::string& ItemData::get_desc() const
+std::string_view ItemData::get_desc() const noexcept
 {
     return desc;
 }
 
-const std::string& ItemData::get_category() const
+std::string_view ItemData::get_category() const noexcept
 {
     return category;
 }
 
-const Texture& ItemData::get_icon(bool raw) const
+const Texture& ItemData::get_icon(bool raw) const noexcept
 {
     return icons[raw];
 }

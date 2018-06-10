@@ -22,6 +22,7 @@
 #include "../Keyboard.h"
 
 #include <functional>
+#include <string_view>
 #include <unordered_map>
 
 namespace jrc
@@ -35,46 +36,49 @@ public:
               Text::Alignment alignment,
               Text::Color color,
               Rectangle<std::int16_t> bounds,
-              std::size_t limit);
+              std::size_t limit) noexcept;
     Textfield();
     ~Textfield();
 
     void draw(Point<std::int16_t> position) const;
-    void update(Point<std::int16_t> parentpos);
-    void send_key(KeyType::Id type, std::int32_t code, bool down);
-    void add_string(const std::string& str);
+    void update(Point<std::int16_t> parentpos) noexcept;
+    void send_key(KeyType::Id type, std::int32_t code, bool down) noexcept;
+    void add_string(std::string_view str) noexcept;
 
-    void set_state(State state);
-    void change_text(const std::string& text);
-    void set_cryptchar(std::int8_t character);
+    void set_state(State state) noexcept;
+    void change_text(std::string&& text) noexcept;
+    void set_crypt_char(char c) noexcept;
 
-    void set_enter_callback(std::function<void(std::string)> onreturn);
-    void set_key_callback(KeyAction::Id key, std::function<void(void)> action);
+    void set_enter_callback(
+        std::function<void(const std::string&)> on_ret) noexcept;
+    void set_key_callback(KeyAction::Id key,
+                          std::function<void(void)> action) noexcept;
 
-    Cursor::State send_cursor(Point<std::int16_t> cursorpos, bool clicked);
+    Cursor::State send_cursor(Point<std::int16_t> cursorpos,
+                              bool clicked) noexcept;
 
-    bool empty() const;
-    State get_state() const;
-    Rectangle<std::int16_t> get_bounds() const;
-    const std::string& get_text() const;
+    bool empty() const noexcept;
+    State get_state() const noexcept;
+    Rectangle<std::int16_t> get_bounds() const noexcept;
+    const std::string& get_text() const noexcept;
 
 private:
-    void modifytext(const std::string&);
-    bool belowlimit() const;
+    void modify_text(std::string&& t) noexcept;
+    bool below_limit() const noexcept;
 
-    Text textlabel;
+    Text text_label;
     std::string text;
     Text marker;
-    bool showmarker;
+    bool show_marker;
     std::uint16_t elapsed;
-    std::size_t markerpos;
+    std::size_t marker_pos;
     Rectangle<std::int16_t> bounds;
-    Point<std::int16_t> parentpos;
+    Point<std::int16_t> parent_pos;
     std::size_t limit;
-    std::int8_t crypt;
+    char crypt;
     State state;
 
     std::unordered_map<std::int32_t, std::function<void(void)>> callbacks;
-    std::function<void(std::string)> onreturn;
+    std::function<void(const std::string&)> on_return;
 };
 } // namespace jrc

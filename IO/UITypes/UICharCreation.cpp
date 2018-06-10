@@ -142,7 +142,7 @@ UICharcreation::UICharcreation()
     gendername = {Text::A11M, Text::CENTER, Text::BLACK};
 
     nl::node mkinfo = nl::nx::etc["MakeCharInfo.img"]["Info"];
-    for (std::int32_t i = 0; i < 2; i++) {
+    for (std::int32_t i = 0; i < 2; ++i) {
         bool f;
         nl::node mk_n;
         if (i == 0) {
@@ -165,7 +165,7 @@ UICharcreation::UICharcreation()
                     hairs[f].push_back(value);
                     break;
                 case 2:
-                    haircolors[f].push_back(static_cast<std::uint8_t>(value));
+                    hair_colors[f].push_back(static_cast<std::uint8_t>(value));
                     break;
                 case 3:
                     skins[f].push_back(static_cast<std::uint8_t>(value));
@@ -193,7 +193,7 @@ UICharcreation::UICharcreation()
     newchar.set_direction(true);
 
     position = {0, 0};
-    dimension = {Constants::VIEWWIDTH, Constants::VIEWHEIGHT};
+    dimension = {Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT};
     active = true;
     cloudfx = 200.0f;
 }
@@ -203,7 +203,7 @@ void UICharcreation::randomize_look()
     hair = randomizer.next_int(hairs[female].size());
     face = randomizer.next_int(faces[female].size());
     skin = randomizer.next_int(skins[female].size());
-    haircolor = randomizer.next_int(haircolors[female].size());
+    haircolor = randomizer.next_int(hair_colors[female].size());
     top = randomizer.next_int(tops[female].size());
     bot = randomizer.next_int(bots[female].size());
     shoe = randomizer.next_int(shoes[female].size());
@@ -211,21 +211,21 @@ void UICharcreation::randomize_look()
 
     newchar.set_body(skins[female][skin]);
     newchar.set_face(faces[female][face]);
-    newchar.set_hair(hairs[female][hair] + haircolors[female][haircolor]);
+    newchar.set_hair(hairs[female][hair] + hair_colors[female][haircolor]);
     newchar.add_equip(tops[female][top]);
     newchar.add_equip(bots[female][bot]);
     newchar.add_equip(shoes[female][shoe]);
     newchar.add_equip(weapons[female][weapon]);
 
-    bodyname.change_text(newchar.get_body()->get_name());
-    facename.change_text(newchar.get_face()->get_name());
-    hairname.change_text(newchar.get_hair()->get_name());
-    haircname.change_text(newchar.get_hair()->getcolor());
+    bodyname.change_text(std::string{newchar.get_body()->get_name()});
+    facename.change_text(std::string{newchar.get_face()->get_name()});
+    hairname.change_text(std::string{newchar.get_hair()->get_name()});
+    haircname.change_text(std::string{newchar.get_hair()->get_color()});
 
-    topname.change_text(get_equipname(Equipslot::TOP));
-    botname.change_text(get_equipname(Equipslot::PANTS));
-    shoename.change_text(get_equipname(Equipslot::SHOES));
-    wepname.change_text(get_equipname(Equipslot::WEAPON));
+    topname.change_text(std::string{get_equip_name(Equipslot::TOP)});
+    botname.change_text(std::string{get_equip_name(Equipslot::PANTS)});
+    shoename.change_text(std::string{get_equip_name(Equipslot::SHOES)});
+    wepname.change_text(std::string{get_equip_name(Equipslot::WEAPON)});
     gendername.change_text(female ? "Female" : "Male");
 }
 
@@ -238,7 +238,7 @@ Button::State UICharcreation::button_pressed(std::uint16_t id)
             std::uint16_t cjob = 1;
             std::int32_t cface = faces[female][face];
             std::int32_t chair = hairs[female][hair];
-            std::uint8_t chairc = haircolors[female][haircolor];
+            std::uint8_t chairc = hair_colors[female][haircolor];
             std::uint8_t cskin = skins[female][skin];
             std::int32_t ctop = tops[female][top];
             std::int32_t cbot = bots[female][bot];
@@ -263,7 +263,7 @@ Button::State UICharcreation::button_pressed(std::uint16_t id)
                 namechar.set_state(Textfield::NORMAL);
 
                 UI::get().disable();
-                UI::get().focus_textfield(nullptr);
+                UI::get().focus_text_field(nullptr);
                 NameCharPacket(name).dispatch();
                 return Button::PRESSED;
             } else {
@@ -310,89 +310,95 @@ Button::State UICharcreation::button_pressed(std::uint16_t id)
         case BT_CHARC_FACEL:
             face = (face > 0) ? face - 1 : faces[female].size() - 1;
             newchar.set_face(faces[female][face]);
-            facename.change_text(newchar.get_face()->get_name());
+            facename.change_text(std::string{newchar.get_face()->get_name()});
             break;
         case BT_CHARC_FACER:
             face = (face < faces[female].size() - 1) ? face + 1 : 0;
             newchar.set_face(faces[female][face]);
-            facename.change_text(newchar.get_face()->get_name());
+            facename.change_text(std::string{newchar.get_face()->get_name()});
             break;
         case BT_CHARC_HAIRL:
             hair = (hair > 0) ? hair - 1 : hairs[female].size() - 1;
             newchar.set_hair(hairs[female][hair] +
-                             haircolors[female][haircolor]);
-            hairname.change_text(newchar.get_hair()->get_name());
+                             hair_colors[female][haircolor]);
+            hairname.change_text(std::string{newchar.get_hair()->get_name()});
             break;
         case BT_CHARC_HAIRR:
             hair = (hair < hairs[female].size() - 1) ? hair + 1 : 0;
             newchar.set_hair(hairs[female][hair] +
-                             haircolors[female][haircolor]);
-            hairname.change_text(newchar.get_hair()->get_name());
+                             hair_colors[female][haircolor]);
+            hairname.change_text(std::string{newchar.get_hair()->get_name()});
             break;
         case BT_CHARC_HAIRCL:
             haircolor = (haircolor > 0) ? haircolor - 1
-                                        : haircolors[female].size() - 1;
+                                        : hair_colors[female].size() - 1;
             newchar.set_hair(hairs[female][hair] +
-                             haircolors[female][haircolor]);
-            haircname.change_text(newchar.get_hair()->getcolor());
+                             hair_colors[female][haircolor]);
+            haircname.change_text(
+                std::string{newchar.get_hair()->get_color()});
             break;
         case BT_CHARC_HAIRCR:
-            haircolor = (haircolor < haircolors[female].size() - 1)
+            haircolor = (haircolor < hair_colors[female].size() - 1)
                             ? haircolor + 1
                             : 0;
             newchar.set_hair(hairs[female][hair] +
-                             haircolors[female][haircolor]);
-            haircname.change_text(newchar.get_hair()->getcolor());
+                             hair_colors[female][haircolor]);
+            haircname.change_text(
+                std::string{newchar.get_hair()->get_color()});
             break;
         case BT_CHARC_SKINL:
             skin = (skin > 0) ? skin - 1 : skins[female].size() - 1;
             newchar.set_body(skins[female][skin]);
-            bodyname.change_text(newchar.get_body()->get_name());
+            bodyname.change_text(std::string{newchar.get_body()->get_name()});
             break;
         case BT_CHARC_SKINR:
             skin = (skin < skins[female].size() - 1) ? skin + 1 : 0;
             newchar.set_body(skins[female][skin]);
-            bodyname.change_text(newchar.get_body()->get_name());
+            bodyname.change_text(std::string{newchar.get_body()->get_name()});
             break;
         case BT_CHARC_TOPL:
             top = (top > 0) ? top - 1 : tops[female].size() - 1;
             newchar.add_equip(tops[female][top]);
-            topname.change_text(get_equipname(Equipslot::TOP));
+            topname.change_text(std::string{get_equip_name(Equipslot::TOP)});
             break;
         case BT_CHARC_TOPR:
             top = (top < tops[female].size() - 1) ? top + 1 : 0;
             newchar.add_equip(tops[female][top]);
-            topname.change_text(get_equipname(Equipslot::TOP));
+            topname.change_text(std::string{get_equip_name(Equipslot::TOP)});
             break;
         case BT_CHARC_BOTL:
             bot = (bot > 0) ? bot - 1 : bots[female].size() - 1;
             newchar.add_equip(bots[female][bot]);
-            botname.change_text(get_equipname(Equipslot::PANTS));
+            botname.change_text(std::string{get_equip_name(Equipslot::PANTS)});
             break;
         case BT_CHARC_BOTR:
             bot = (bot < bots[female].size() - 1) ? bot + 1 : 0;
             newchar.add_equip(bots[female][bot]);
-            botname.change_text(get_equipname(Equipslot::PANTS));
+            botname.change_text(std::string{get_equip_name(Equipslot::PANTS)});
             break;
         case BT_CHARC_SHOESL:
             shoe = (shoe > 0) ? shoe - 1 : shoes[female].size() - 1;
             newchar.add_equip(shoes[female][shoe]);
-            shoename.change_text(get_equipname(Equipslot::SHOES));
+            shoename.change_text(
+                std::string{get_equip_name(Equipslot::SHOES)});
             break;
         case BT_CHARC_SHOESR:
             shoe = (shoe < shoes[female].size() - 1) ? shoe + 1 : 0;
             newchar.add_equip(shoes[female][shoe]);
-            shoename.change_text(get_equipname(Equipslot::SHOES));
+            shoename.change_text(
+                std::string{get_equip_name(Equipslot::SHOES)});
             break;
         case BT_CHARC_WEPL:
             weapon = (weapon > 0) ? weapon - 1 : weapons[female].size() - 1;
             newchar.add_equip(weapons[female][weapon]);
-            wepname.change_text(get_equipname(Equipslot::WEAPON));
+            wepname.change_text(
+                std::string{get_equip_name(Equipslot::WEAPON)});
             break;
         case BT_CHARC_WEPR:
             weapon = (weapon < weapons[female].size() - 1) ? weapon + 1 : 0;
             newchar.add_equip(weapons[female][weapon]);
-            wepname.change_text(get_equipname(Equipslot::WEAPON));
+            wepname.change_text(
+                std::string{get_equip_name(Equipslot::WEAPON)});
             break;
         case BT_CHARC_GENDERL:
         case BT_CHARC_GEMDERR:
@@ -408,8 +414,9 @@ Button::State UICharcreation::button_pressed(std::uint16_t id)
 Cursor::State UICharcreation::send_cursor(bool clicked,
                                           Point<std::int16_t> cursorpos)
 {
-    if (Cursor::State new_state = namechar.send_cursor(cursorpos, clicked))
+    if (Cursor::State new_state = namechar.send_cursor(cursorpos, clicked)) {
         return new_state;
+    }
 
     return UIElement::send_cursor(clicked, cursorpos);
 }
@@ -421,9 +428,9 @@ void UICharcreation::send_naming_result(bool nameused)
             namechar.change_text("");
         } else {
             named = true;
-            buttons[BT_CHARC_OK]->set_position(Point<std::int16_t>(486, 445));
+            buttons[BT_CHARC_OK]->set_position(Point<std::int16_t>{486, 445});
             buttons[BT_CHARC_CANCEL]->set_position(
-                Point<std::int16_t>(560, 445));
+                Point<std::int16_t>{560, 445});
             buttons[BT_CHARC_FACEL]->set_active(true);
             buttons[BT_CHARC_FACER]->set_active(true);
             buttons[BT_CHARC_HAIRL]->set_active(true);
@@ -451,14 +458,14 @@ void UICharcreation::send_naming_result(bool nameused)
 void UICharcreation::draw(float alpha) const
 {
     for (std::int16_t i = 0; i < 2; ++i) {
-        for (std::int16_t k = 0; k < Constants::VIEWWIDTH; k += sky.width()) {
+        for (std::int16_t k = 0; k < Constants::VIEW_WIDTH; k += sky.width()) {
             sky.draw(Point<std::int16_t>(
                 k, static_cast<std::int16_t>((400 * i) - 100)));
         }
     }
 
     std::int16_t cloudx =
-        static_cast<std::int16_t>(cloudfx) % Constants::VIEWWIDTH;
+        static_cast<std::int16_t>(cloudfx) % Constants::VIEW_WIDTH;
     cloud.draw(Point<std::int16_t>(cloudx - cloud.width(), 300));
     cloud.draw(Point<std::int16_t>(cloudx, 300));
     cloud.draw(Point<std::int16_t>(cloudx + cloud.width(), 300));
@@ -505,12 +512,13 @@ void UICharcreation::update()
     cloudfx += 0.25f;
 }
 
-const std::string& UICharcreation::get_equipname(Equipslot::Id slot) const
+std::string_view UICharcreation::get_equip_name(Equipslot::Id slot) const
+    noexcept
 {
     if (std::int32_t item_id = newchar.get_equips().get_equip(slot)) {
         return ItemData::get(item_id).get_name();
     } else {
-        static const std::string& nullstr = "Missing name.";
+        static constexpr std::string_view nullstr = "Missing name.";
         return nullstr;
     }
 }

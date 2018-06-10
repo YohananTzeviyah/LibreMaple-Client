@@ -27,23 +27,23 @@
 namespace jrc
 {
 #    ifndef JOURNEY_USE_CRYPTO
-const std::size_t HANDSHAKE_LEN = 2;
+constexpr std::size_t HANDSHAKE_LEN = 2;
 #    else
-const std::size_t HANDSHAKE_LEN = 16;
+constexpr std::size_t HANDSHAKE_LEN = 16;
 #    endif
 
 using asio::error_code;
 using asio::io_service;
 using asio::ip::tcp;
 
-// Class that wraps an asio socket.
+//! Class that wraps an ASIO socket.
 class SocketAsio
 {
 public:
     SocketAsio();
     ~SocketAsio();
 
-    bool open(const char* adress, const char* port);
+    bool open(const char* address, const char* port);
     bool close();
     std::size_t receive(bool* connected);
     const std::int8_t* get_buffer() const;

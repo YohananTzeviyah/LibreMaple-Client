@@ -22,14 +22,14 @@
 
 namespace jrc
 {
-class UILoginwait : public UIElement
+class UILoginWait : public UIElement
 {
 public:
-    static constexpr Type TYPE = LOGINWAIT;
-    static constexpr bool FOCUSED = true;
-    static constexpr bool TOGGLED = false;
+    static constexpr const Type TYPE = LOGIN_WAIT;
+    static constexpr const bool FOCUSED = true;
+    static constexpr const bool TOGGLED = false;
 
-    UILoginwait();
+    UILoginWait();
 
     void draw(float alpha) const override;
     void update() override;

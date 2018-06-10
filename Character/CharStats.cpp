@@ -261,12 +261,12 @@ std::int64_t CharStats::get_exp() const
     return exp;
 }
 
-const std::string& CharStats::get_name() const
+std::string_view CharStats::get_name() const
 {
     return name;
 }
 
-const std::string& CharStats::get_jobname() const
+std::string_view CharStats::get_job_name() const
 {
     return job.get_name();
 }

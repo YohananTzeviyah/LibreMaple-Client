@@ -60,9 +60,9 @@ private:
 
     void settype(Type type);
 
-    static const std::int16_t WOFFSET = Constants::GAMEVIEWWIDTH / 2;
+    static const std::int16_t WOFFSET = Constants::GAME_VIEW_WIDTH / 2;
     static const std::int16_t HOFFSET =
-        Constants::GAMEVIEWHEIGHT / 2 - Constants::VIEWYOFFSET;
+        Constants::GAME_VIEW_HEIGHT / 2 - Constants::VIEW_Y_OFFSET;
 
     Animation animation;
     bool animated;

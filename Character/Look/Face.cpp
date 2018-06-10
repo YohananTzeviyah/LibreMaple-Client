@@ -26,8 +26,9 @@ namespace jrc
 Expression::Id Expression::byaction(std::size_t action)
 {
     action -= 98;
-    if (action < LENGTH)
+    if (action < LENGTH) {
         return static_cast<Id>(action);
+    }
 
     Console::get().print("Unhandled expression id: " + std::to_string(action));
     return DEFAULT;
@@ -39,29 +40,27 @@ const EnumMap<Expression::Id, std::string> Expression::names = {
     "chu",     "dam",        "despair", "glitter", "hot",      "hum",
     "love",    "oops",       "pain",    "shine",   "vomit",    "wink"};
 
-Face::Face(std::int32_t faceid)
+Face::Face(std::int32_t face_id)
 {
-    std::string strid = "000" + std::to_string(faceid);
-    nl::node facenode = nl::nx::character["Face"][strid + ".img"];
+    const std::string face_id_str = std::to_string(face_id);
+    nl::node face_node =
+        nl::nx::character["Face"][str::concat("000", face_id_str, ".img")];
 
     for (auto iter : Expression::names) {
         Expression::Id exp = iter.first;
         if (exp == Expression::DEFAULT) {
-            expressions[Expression::DEFAULT].emplace(0, facenode["default"]);
+            expressions[Expression::DEFAULT].emplace(0, face_node["default"]);
         } else {
-            const std::string& expname = iter.second;
-            nl::node expnode = facenode[expname];
-
-            for (std::uint8_t frame = 0; nl::node framenode = expnode[frame];
+            nl::node exp_node = face_node[iter.second];
+            for (std::uint8_t frame = 0; nl::node framenode = exp_node[frame];
                  ++frame) {
                 expressions[exp].emplace(frame, framenode);
             }
         }
     }
 
-    name = nl::nx::string["Eqp.img"]["Eqp"]["Face"][std::to_string(faceid)]
-                         ["name"]
-                             .get_string();
+    name = nl::nx::string["Eqp.img"]["Eqp"]["Face"][face_id_str]["name"]
+               .get_string();
 }
 
 void Face::draw(Expression::Id expression,
@@ -69,11 +68,12 @@ void Face::draw(Expression::Id expression,
                 const DrawArgument& args) const
 {
     auto frameit = expressions[expression].find(frame);
-    if (frameit != expressions[expression].end())
+    if (frameit != expressions[expression].end()) {
         frameit->second.texture.draw(args);
+    }
 }
 
-std::uint8_t Face::nextframe(Expression::Id exp, std::uint8_t frame) const
+std::uint8_t Face::next_frame(Expression::Id exp, std::uint8_t frame) const
 {
     return expressions[exp].count(frame + 1) ? frame + 1 : 0;
 }
@@ -84,7 +84,7 @@ std::int16_t Face::get_delay(Expression::Id exp, std::uint8_t frame) const
     return delayit != expressions[exp].end() ? delayit->second.delay : 100;
 }
 
-const std::string& Face::get_name() const
+std::string_view Face::get_name() const noexcept
 {
     return name;
 }

@@ -22,55 +22,56 @@
 #include "../Physics/PhysicsObject.h"
 #include "MapObject.h"
 
-#include <map>
+#include <string_view>
+#include <unordered_map>
 
 namespace jrc
 {
-// Represents a npc on the current map.
-// Implements the 'Mapobject' interface to be used in a 'Mapobjects' template.
+//! Represents an NPC on the current map.
+//! Implements the `Mapobject` interface to be used in a `Mapobjects` template.
 class Npc : public MapObject
 {
 public:
-    // Constructs an npc by combining data from game files with
-    // data sent by the server.
-    Npc(std::int32_t npcid,
+    //! Constructs an NPC by combining data from game files with
+    //! data sent by the server.
+    Npc(std::int32_t npc_id_,
         std::int32_t oid,
         bool mirrored,
         std::uint16_t fhid,
         bool control,
         Point<std::int16_t> position);
 
-    // Draws the current animation and name/function tags.
+    //! Draws the current animation and name/function tags.
     void draw(double viewx, double viewy, float alpha) const override;
-    // Updates the current animation and physics.
+    //! Updates the current animation and physics.
     std::int8_t update(const Physics& physics) override;
 
-    // Changes stance and resets animation.
-    void set_stance(const std::string& stance);
+    //! Changes stance and resets animation.
+    void set_stance(std::string_view stance) noexcept;
 
-    // Check wether this is a server-sided npc.
-    bool isscripted() const;
-    // Check if the npc is in range of the cursor.
-    bool inrange(Point<std::int16_t> cursorpos,
-                 Point<std::int16_t> viewpos) const;
+    //! Check whether this is a server-sided NPC.
+    [[nodiscard]] bool is_scripted() const noexcept;
+    //! Check if the NPC is in range of the cursor.
+    bool in_range(Point<std::int16_t> cursor_pos,
+                  Point<std::int16_t> view_pos) const noexcept;
 
 private:
-    std::map<std::string, Animation> animations;
-    std::map<std::string, std::vector<std::string>> lines;
+    std::unordered_map<std::string, Animation> animations;
+    std::unordered_map<std::string, std::vector<std::string>> lines;
     std::vector<std::string> states;
     std::string name;
     std::string func;
-    bool hidename;
+    bool hide_name;
     bool scripted;
-    bool mouseonly;
+    bool mouse_only;
 
-    std::int32_t npcid;
+    std::int32_t npc_id;
     bool flip;
     std::string stance;
     bool control;
 
     Randomizer random;
-    Text namelabel;
-    Text funclabel;
+    Text name_label;
+    Text func_label;
 };
 } // namespace jrc

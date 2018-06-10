@@ -22,19 +22,20 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 namespace jrc
 {
-// Represents a tile on a map.
+//! Represents a tile on a map.
 class Tile
 {
 public:
-    Tile(nl::node src, const std::string& tileset);
+    Tile(nl::node src, std::string_view tileset);
 
-    // Draw the tile.
+    //! Draw the tile.
     void draw(Point<std::int16_t> viewpos) const;
-    // Returns depth of the tile.
-    std::uint8_t getz() const;
+    //! Returns depth of the tile.
+    std::uint8_t get_z() const;
 
 private:
     Texture texture;

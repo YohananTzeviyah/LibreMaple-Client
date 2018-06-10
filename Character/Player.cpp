@@ -61,7 +61,8 @@ const PlayerState* get_state(Char::State state)
 }
 
 Player::Player(const CharEntry& entry)
-    : Char(entry.cid, entry.look, entry.stats.name), stats(entry.stats)
+    : Char(entry.cid, entry.look, std::string{entry.stats.name}),
+      stats(entry.stats)
 {
     attacking = false;
     underwater = false;
@@ -95,7 +96,7 @@ void Player::send_action(KeyAction::Id action, bool down)
 
 void Player::recalc_stats(bool equipchanged)
 {
-    Weapon::Type weapontype = get_weapontype();
+    Weapon::Type weapontype = get_weapon_type();
 
     stats.set_weapontype(weapontype);
     stats.init_totalstats();
@@ -174,7 +175,7 @@ std::int8_t Player::update(const Physics& physics)
         pst->update(*this);
         physics.move_object(phobj);
 
-        bool aniend = Char::update(physics, get_stancespeed());
+        bool aniend = Char::update(physics, get_stance_speed());
         if (aniend && attacking) {
             attacking = false;
             nullstate.update_state(*this);
@@ -194,7 +195,7 @@ std::int8_t Player::update(const Physics& physics)
     return get_layer();
 }
 
-std::int8_t Player::get_integer_attackspeed() const
+std::int8_t Player::get_integer_attack_speed() const
 {
     std::int32_t weapon_id = look.get_equips().get_weapon();
     if (weapon_id <= 0) {
@@ -253,7 +254,7 @@ SpecialMove::ForbidReason Player::can_use(const SpecialMove& move) const
     }
 
     std::int32_t level = skillbook.get_level(move.get_id());
-    Weapon::Type weapon = get_weapontype();
+    Weapon::Type weapon = get_weapon_type();
     const Job& job = stats.get_job();
     std::uint16_t hp = stats.get_stat(Maplestat::HP);
     std::uint16_t mp = stats.get_stat(Maplestat::MP);
@@ -270,7 +271,7 @@ Attack Player::prepare_attack(bool skill) const
         degenerate = true;
         attacktype = Attack::CLOSE;
     } else {
-        Weapon::Type weapontype = get_weapontype();
+        Weapon::Type weapontype = get_weapon_type();
         switch (weapontype) {
         case Weapon::BOW:
         case Weapon::CROSSBOW:
@@ -306,7 +307,7 @@ Attack Player::prepare_attack(bool skill) const
     attack.bullet = inventory.get_bulletid();
     attack.origin = get_position();
     attack.toleft = !flip;
-    attack.speed = static_cast<std::uint8_t>(get_integer_attackspeed());
+    attack.speed = static_cast<std::uint8_t>(get_integer_attack_speed());
 
     return attack;
 }
@@ -314,7 +315,7 @@ Attack Player::prepare_attack(bool skill) const
 void Player::rush(double targetx)
 {
     if (phobj.onground) {
-        std::uint16_t delay = get_attackdelay(1);
+        std::uint16_t delay = get_attack_delay(1);
         phobj.movexuntil(targetx, delay);
         phobj.set_flag(PhysicsObject::TURN_AT_EDGES);
     }
@@ -409,7 +410,7 @@ std::uint16_t Player::get_level() const
     return stats.get_stat(Maplestat::LEVEL);
 }
 
-std::int32_t Player::get_skilllevel(std::int32_t skillid) const
+std::int32_t Player::get_skill_level(std::int32_t skillid) const
 {
     return skillbook.get_level(skillid);
 }

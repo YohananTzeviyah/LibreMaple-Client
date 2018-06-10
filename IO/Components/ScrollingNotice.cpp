@@ -23,17 +23,17 @@ namespace jrc
 {
 ScrollingNotice::ScrollingNotice()
 {
-    background = ColorBox(Constants::GAMEVIEWWIDTH, 20, ColorBox::BLACK, 0.6f);
-    backposition = Point<std::int16_t>(0, -Constants::VIEWYOFFSET);
+    background = {Constants::GAME_VIEW_WIDTH, 20, ColorBox::BLACK, 0.6f};
+    backposition = {0, -Constants::VIEW_Y_OFFSET};
     notice = Text(Text::A12M, Text::LEFT, Text::YELLOW);
     xpos.set(0.0);
     active = false;
 }
 
-void ScrollingNotice::setnotice(std::string n)
+void ScrollingNotice::set_notice(std::string&& n) noexcept
 {
-    notice.change_text(n);
-    xpos.set(static_cast<double>(Constants::GAMEVIEWWIDTH));
+    notice.change_text(std::move(n));
+    xpos.set(static_cast<double>(Constants::GAME_VIEW_WIDTH));
     active = n.size() > 0;
 }
 
@@ -43,20 +43,20 @@ void ScrollingNotice::draw(float alpha) const
         std::int16_t interx =
             static_cast<std::int16_t>(std::round(xpos.get(alpha)));
         auto position =
-            Point<std::int16_t>(interx, -Constants::VIEWYOFFSET - 2);
+            Point<std::int16_t>(interx, -Constants::VIEW_Y_OFFSET - 2);
         background.draw(backposition);
         notice.draw(position);
     }
 }
 
-void ScrollingNotice::update()
+void ScrollingNotice::update() noexcept
 {
     if (active) {
         xpos -= 0.5;
 
         auto xmin = static_cast<double>(-notice.width());
         if (xpos.last() < xmin) {
-            xpos.set(static_cast<double>(Constants::GAMEVIEWWIDTH));
+            xpos.set(static_cast<double>(Constants::GAME_VIEW_WIDTH));
         }
     }
 }

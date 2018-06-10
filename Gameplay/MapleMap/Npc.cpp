@@ -23,20 +23,20 @@
 
 namespace jrc
 {
-Npc::Npc(std::int32_t id,
+Npc::Npc(std::int32_t npc_id_,
          std::int32_t o,
          bool fl,
          std::uint16_t f,
          bool cnt,
          Point<std::int16_t> position)
-    : MapObject(o)
+    : MapObject{o}
 {
-    std::string strid = std::to_string(id);
-    strid.insert(0, 7 - strid.size(), '0');
-    strid.append(".img");
+    std::string str_id = std::to_string(npc_id_);
+    str_id.insert(0, 7 - str_id.size(), '0');
+    str_id.append(".img");
 
-    nl::node src = nl::nx::npc[strid];
-    nl::node strsrc = nl::nx::string["Npc.img"][std::to_string(id)];
+    nl::node src = nl::nx::npc[str_id];
+    nl::node strsrc = nl::nx::string["Npc.img"][std::to_string(npc_id_)];
 
     std::string link = src["info"]["link"];
     if (link.size() > 0) {
@@ -46,18 +46,18 @@ Npc::Npc(std::int32_t id,
 
     nl::node info = src["info"];
 
-    hidename = info["hideName"].get_bool();
-    mouseonly = info["talkMouseOnly"].get_bool();
+    hide_name = info["hideName"].get_bool();
+    mouse_only = info["talkMouseOnly"].get_bool();
     scripted = info["script"].size() > 0 || info["shop"].get_bool();
 
-    for (const auto& npcnode : src) {
-        const std::string state = npcnode.name();
+    for (const auto& npc_node : src) {
+        const std::string state = npc_node.name();
         if (state != "info") {
-            animations[state] = npcnode;
+            animations[state] = npc_node;
             states.push_back(state);
         }
 
-        for (auto speaknode : npcnode["speak"]) {
+        for (auto speaknode : npc_node["speak"]) {
             lines[state].push_back(strsrc[speaknode.get_string()]);
         }
     }
@@ -65,10 +65,18 @@ Npc::Npc(std::int32_t id,
     name = strsrc["name"].get_string();
     func = strsrc["func"].get_string();
 
-    namelabel = {Text::A13B, Text::CENTER, Text::YELLOW, Text::NAMETAG, name};
-    funclabel = {Text::A13B, Text::CENTER, Text::YELLOW, Text::NAMETAG, func};
+    name_label = {Text::A13B,
+                  Text::CENTER,
+                  Text::YELLOW,
+                  Text::NAMETAG,
+                  std::string{name}};
+    func_label = {Text::A13B,
+                  Text::CENTER,
+                  Text::YELLOW,
+                  Text::NAMETAG,
+                  std::string{func}};
 
-    npcid = id;
+    npc_id = npc_id_;
     flip = !fl;
     control = cnt;
     stance = "stand";
@@ -84,9 +92,9 @@ void Npc::draw(double viewx, double viewy, float alpha) const
         animations.at(stance).draw(DrawArgument(absp, flip), alpha);
     }
 
-    if (!hidename) {
-        namelabel.draw(absp);
-        funclabel.draw(absp + Point<std::int16_t>(0, 18));
+    if (!hide_name) {
+        name_label.draw(absp);
+        func_label.draw(absp + Point<std::int16_t>(0, 18));
     }
 }
 
@@ -110,10 +118,10 @@ std::int8_t Npc::update(const Physics& physics)
     return phobj.fhlayer;
 }
 
-void Npc::set_stance(const std::string& st)
+void Npc::set_stance(std::string_view st) noexcept
 {
     if (stance != st) {
-        stance = st;
+        stance = std::string{st};
 
         auto iter = animations.find(stance);
         if (iter == animations.end()) {
@@ -124,19 +132,19 @@ void Npc::set_stance(const std::string& st)
     }
 }
 
-bool Npc::isscripted() const
+bool Npc::is_scripted() const noexcept
 {
     return scripted;
 }
 
-bool Npc::inrange(Point<std::int16_t> cursorpos,
-                  Point<std::int16_t> viewpos) const
+bool Npc::in_range(Point<std::int16_t> cursor_pos,
+                   Point<std::int16_t> view_pos) const noexcept
 {
     if (!active) {
         return false;
     }
 
-    Point<std::int16_t> absp = get_position() + viewpos;
+    Point<std::int16_t> absp = get_position() + view_pos;
     Point<std::int16_t> dim = animations.count(stance)
                                   ? animations.at(stance).get_dimensions()
                                   : Point<std::int16_t>();
@@ -145,6 +153,6 @@ bool Npc::inrange(Point<std::int16_t> cursorpos,
                                    absp.x() + dim.x() / 2,
                                    absp.y() - dim.y(),
                                    absp.y())
-        .contains(cursorpos);
+        .contains(cursor_pos);
 }
 } // namespace jrc

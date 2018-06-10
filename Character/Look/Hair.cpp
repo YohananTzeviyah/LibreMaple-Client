@@ -18,6 +18,7 @@
 #include "Hair.h"
 
 #include "../../Console.h"
+#include "../../Util/Misc.h"
 #include "nlnx/nx.hpp"
 
 namespace jrc
@@ -25,31 +26,33 @@ namespace jrc
 Hair::Hair(std::int32_t hairid, const BodyDrawinfo& drawinfo)
 {
     nl::node hairnode =
-        nl::nx::character["Hair"]["000" + std::to_string(hairid) + ".img"];
+        nl::nx::character["Hair"]
+                         [str::concat("000", std::to_string(hairid), ".img")];
 
-    for (auto stance_iter : Stance::names) {
-        Stance::Id stance = stance_iter.first;
-        const std::string& stancename = stance_iter.second;
+    for (const auto& s : Stance::names) {
+        auto stance = s.first;
+        auto stance_name = s.second;
 
-        nl::node stancenode = hairnode[stancename];
-        if (!stancenode)
+        nl::node stancenode = hairnode[stance_name];
+        if (!stancenode) {
             continue;
+        }
 
         for (std::uint8_t frame = 0; nl::node framenode = stancenode[frame];
              ++frame) {
             for (nl::node layernode : framenode) {
-                std::string layername = layernode.name();
-                auto layer_iter = layers_by_name.find(layername);
+                std::string layer_name = layernode.name();
+                auto layer_iter = layers_by_name.find(layer_name);
                 if (layer_iter == layers_by_name.end()) {
-                    Console::get().print("Warning: Unhandled hair layer (" +
-                                         layername + ")");
+                    Console::get().print(str::concat(
+                        "Warning: Unhandled hair layer (", layer_name, ')'));
                     continue;
                 }
                 Layer layer = layer_iter->second;
 
                 Point<std::int16_t> brow = layernode["map"]["brow"];
                 Point<std::int16_t> shift =
-                    drawinfo.gethairpos(stance, frame) - brow;
+                    drawinfo.get_hair_pos(stance, frame) - brow;
 
                 stances[stance][layer]
                     .emplace(frame, layernode)
@@ -71,8 +74,8 @@ Hair::Hair(std::int32_t hairid, const BodyDrawinfo& drawinfo)
                                                     "Blue",
                                                     "Violet",
                                                     "Brown"};
-    std::size_t index = hairid % 10;
-    color = (index < NUM_COLORS) ? haircolors[index] : "";
+    std::size_t index = static_cast<std::size_t>(hairid) % 10ull;
+    color = index < NUM_COLORS ? haircolors[index] : "";
 }
 
 void Hair::draw(Stance::Id stance,
@@ -81,18 +84,19 @@ void Hair::draw(Stance::Id stance,
                 const DrawArgument& args) const
 {
     auto frameit = stances[stance][layer].find(frame);
-    if (frameit == stances[stance][layer].end())
+    if (frameit == stances[stance][layer].end()) {
         return;
+    }
 
     frameit->second.draw(args);
 }
 
-const std::string& Hair::get_name() const
+std::string_view Hair::get_name() const noexcept
 {
     return name;
 }
 
-const std::string& Hair::getcolor() const
+std::string_view Hair::get_color() const noexcept
 {
     return color;
 }

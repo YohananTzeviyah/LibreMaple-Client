@@ -23,38 +23,38 @@
 
 namespace jrc
 {
-/// Class which contains the array of handler classes to use.
+//! Class which contains the array of handler classes to use.
 class PacketSwitch
 {
 public:
-    /// Register all handlers.
+    //! Register all handlers.
     PacketSwitch();
 
-    /// Forward a packet to the correct handler.
+    //! Forward a packet to the correct handler.
     void forward(const std::int8_t* bytes, std::size_t length) const;
 
 private:
-    /// Print a warning to the console about something strange or amiss in
-    /// the packet switcher.
-    void warn(const std::string& message, std::size_t opcode) const;
+    //! Print a warning to the console about something strange or amiss in
+    //! the packet switcher.
+    void warn(std::string_view message, std::size_t opcode) const;
 
-    /// Opcodes for which handlers can be registered.
+    //! Opcodes for which handlers can be registered.
     enum Opcode : std::uint16_t;
 
-    /// Message when an unhandled packet is received.
+    //! Message when an unhandled packet is received.
     static constexpr const char* MSG_UNHANDLED = "Unhandled packet detected";
-    /// Message when a packet with a larger opcode than the array size is
-    /// received.
-    static constexpr const char* MSG_OUTOFBOUNDS = "Large opcode detected";
-    /// Message when a handler is registered more than once.
+    //! Message when a packet with a larger opcode than the array size is
+    //! received.
+    static constexpr const char* MSG_OUT_OF_BOUNDS = "Large opcode detected";
+    //! Message when a handler is registered more than once.
     static constexpr const char* MSG_REREGISTER =
         "Handler was registered twice";
-    /// Maximum number of handlers needed.
+    //! Maximum number of handlers needed.
     static constexpr const std::size_t NUM_HANDLERS = 500;
 
     std::unique_ptr<PacketHandler> handlers[NUM_HANDLERS];
 
-    /// Register a handler for the specified opcode.
+    //! Register a handler for the specified opcode.
     template<std::size_t O, typename T, typename... Args>
     void emplace(Args&&... args)
     {

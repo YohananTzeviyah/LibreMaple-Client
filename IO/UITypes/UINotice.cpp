@@ -20,9 +20,11 @@
 #include "../Components/MapleButton.h"
 #include "nlnx/nx.hpp"
 
+#include <limits>
+
 namespace jrc
 {
-UINotice::UINotice(std::string q)
+UINotice::UINotice(std::string&& q)
 {
     nl::node src = nl::nx::ui["Basic.img"]["Notice6"];
 
@@ -34,13 +36,11 @@ UINotice::UINotice(std::string q)
     bottom = src["s"];
     bottombox = src["s_box"];
 
-    question = {Text::A11M, Text::CENTER, Text::DARKGREY, q, 200};
+    question = {Text::A11M, Text::CENTER, Text::DARKGREY, std::move(q), 200};
 
     height = question.height();
-    dimension = Point<std::int16_t>(top.width(),
-                                    top.height() + height + bottom.height());
-    position =
-        Point<std::int16_t>(400 - dimension.x() / 2, 240 - dimension.y() / 2);
+    dimension = {top.width(), top.height() + height + bottom.height()};
+    position = {400 - dimension.x() / 2, 240 - dimension.y() / 2};
 }
 
 void UINotice::draw_notice(bool textfield) const
@@ -72,12 +72,14 @@ void UINotice::draw_notice(bool textfield) const
 std::int16_t UINotice::box2offset() const
 {
     return top.height() + centerbox.height() +
-           box.height() * (1 + height / box.height());
+           box.height() *
+               (static_cast<std::int16_t>(1) + height / box.height());
 }
 
-UIYesNo::UIYesNo(std::string q, std::function<void(bool)> yh) : UINotice(q)
+UIYesNo::UIYesNo(std::string&& q, std::function<void(bool)> yh)
+    : UINotice(std::move(q))
 {
-    yesnohandler = yh;
+    yes_no_handler = yh;
 
     std::int16_t belowtext = UINotice::box2offset();
 
@@ -99,10 +101,10 @@ Button::State UIYesNo::button_pressed(std::uint16_t buttonid)
 {
     switch (buttonid) {
     case YES:
-        yesnohandler(true);
+        yes_no_handler(true);
         break;
     case NO:
-        yesnohandler(false);
+        yes_no_handler(false);
         break;
     }
 
@@ -111,14 +113,14 @@ Button::State UIYesNo::button_pressed(std::uint16_t buttonid)
     return Button::PRESSED;
 }
 
-UIEnterNumber::UIEnterNumber(std::string q,
+UIEnterNumber::UIEnterNumber(std::string&& q,
                              std::function<void(std::int32_t)> nh,
                              std::int32_t mi,
                              std::int32_t ma,
                              std::int32_t de)
-    : UINotice(q)
+    : UINotice(std::move(q))
 {
-    numhandler = nh;
+    num_handler = nh;
     min = mi;
     max = ma;
 
@@ -132,11 +134,11 @@ UIEnterNumber::UIEnterNumber(std::string q,
         std::make_unique<MapleButton>(src["BtCancel4"], 132, belowtext + 21);
 
     Rectangle<std::int16_t> area(26, 232, belowtext, belowtext + 20);
-    numfield = Textfield(Text::A11M, Text::LEFT, Text::LIGHTGREY, area, 9);
-    numfield.set_state(Textfield::FOCUSED);
-    numfield.change_text(std::to_string(de));
-    numfield.set_enter_callback(
-        [&](std::string numstr) { handlestring(numstr); });
+    num_field = Textfield(Text::A11M, Text::LEFT, Text::LIGHTGREY, area, 9);
+    num_field.set_state(Textfield::FOCUSED);
+    num_field.change_text(std::to_string(de));
+    num_field.set_enter_callback(
+        [this](const std::string& num_str) { handle_string(num_str); });
 }
 
 void UIEnterNumber::draw(float alpha) const
@@ -144,21 +146,21 @@ void UIEnterNumber::draw(float alpha) const
     UINotice::draw(true);
     UIElement::draw(alpha);
 
-    numfield.draw(position);
+    num_field.draw(position);
 }
 
 void UIEnterNumber::update()
 {
     UIElement::update();
 
-    numfield.update(position);
+    num_field.update(position);
 }
 
 Cursor::State UIEnterNumber::send_cursor(bool clicked,
                                          Point<std::int16_t> cursorpos)
 {
-    if (numfield.get_state() == Textfield::NORMAL) {
-        Cursor::State nstate = numfield.send_cursor(cursorpos, clicked);
+    if (num_field.get_state() == Textfield::NORMAL) {
+        Cursor::State nstate = num_field.send_cursor(cursorpos, clicked);
         if (nstate != Cursor::IDLE) {
             return nstate;
         }
@@ -170,7 +172,7 @@ Button::State UIEnterNumber::button_pressed(std::uint16_t buttonid)
 {
     switch (buttonid) {
     case OK:
-        handlestring(numfield.get_text());
+        handle_string(num_field.get_text());
         break;
     }
 
@@ -179,19 +181,19 @@ Button::State UIEnterNumber::button_pressed(std::uint16_t buttonid)
     return Button::PRESSED;
 }
 
-void UIEnterNumber::handlestring(const std::string& numstr)
+void UIEnterNumber::handle_string(const std::string& num_str)
 {
-    if (numstr.size() > 0) {
-        const auto num = [&]() -> std::int32_t {
+    if (!num_str.empty()) {
+        const auto num = [&num_str]() {
             try {
-                return std::stoi(numstr);
+                return std::stoi(num_str);
             } catch (const std::exception&) {
             }
-            return INT32_MIN;
+            return std::numeric_limits<std::int32_t>::lowest();
         }();
 
         if (num >= min && num <= max) {
-            numhandler(num);
+            num_handler(num);
             active = false;
         }
     }

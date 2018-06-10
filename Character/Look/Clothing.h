@@ -65,32 +65,33 @@ public:
         NUM_LAYERS
     };
 
-    // Construct a new equip.
+    //! Construct a new equip.
     Clothing(std::int32_t itemid, const BodyDrawinfo& drawinfo);
 
-    // Draw the equip.
+    //! Draw the equip.
     void draw(Stance::Id stance,
               Layer layer,
               std::uint8_t frame,
               const DrawArgument& args) const;
-    // Check if a part of the equip lies on the specified layer while in the
-    // specified stance.
-    bool contains_layer(Stance::Id stance, Layer layer) const;
+    //! Check if a part of the equip lies on the specified layer while in the
+    //! specified stance.
+    [[nodiscard]] bool contains_layer(Stance::Id stance, Layer layer) const
+        noexcept;
 
-    // Return wether the equip is invisble.
-    bool is_transparent() const;
-    // Return wether this equip uses twohanded stances.
-    bool is_twohanded() const;
-    // Return the item id.
-    std::int32_t get_id() const;
-    // Return the equip slot for this cloth.
-    Equipslot::Id get_eqslot() const;
-    // Return the standing stance to use while equipped.
-    Stance::Id get_stand() const;
-    // Return the walking stance to use while equipped.
-    Stance::Id get_walk() const;
-    // Return the vslot, used to distinguish some layering types.
-    const std::string& get_vslot() const;
+    //! Return wether the equip is invisble.
+    [[nodiscard]] bool is_transparent() const noexcept;
+    //! Return wether this equip uses two_handed stances.
+    [[nodiscard]] bool is_two_handed() const noexcept;
+    //! Return the item id.
+    [[nodiscard]] std::int32_t get_id() const noexcept;
+    //! Return the equip slot for this cloth.
+    [[nodiscard]] Equipslot::Id get_equip_slot() const noexcept;
+    //! Return the standing stance to use while equipped.
+    [[nodiscard]] Stance::Id get_stand() const noexcept;
+    //! Return the walking stance to use while equipped.
+    [[nodiscard]] Stance::Id get_walk() const noexcept;
+    //! Return the vslot, used to distinguish some layering types.
+    [[nodiscard]] std::string_view get_vslot() const noexcept;
 
 private:
     EnumMap<Stance::Id,
@@ -98,12 +99,12 @@ private:
                     std::unordered_multimap<std::uint8_t, Texture>,
                     NUM_LAYERS>>
         stances;
-    std::int32_t itemid;
-    Equipslot::Id eqslot;
+    std::int32_t item_id;
+    Equipslot::Id equip_slot;
     Stance::Id walk;
     Stance::Id stand;
     std::string vslot;
-    bool twohanded;
+    bool two_handed;
     bool transparent;
 
     static const std::unordered_map<std::string, Layer> sublayernames;

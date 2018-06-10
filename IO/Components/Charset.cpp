@@ -48,10 +48,11 @@ void Charset::draw(std::int8_t c, const DrawArgument& args) const
 std::int16_t Charset::getw(std::int8_t c) const
 {
     auto iter = chars.find(c);
-    return iter != chars.end() ? iter->second.width() : 0;
+    return static_cast<std::int16_t>(iter != chars.end() ? iter->second.width()
+                                                         : 0);
 }
 
-std::int16_t Charset::draw(const std::string& text,
+std::int16_t Charset::draw(std::string_view text,
                            const DrawArgument& args) const
 {
     std::int16_t shift = 0;
@@ -65,7 +66,7 @@ std::int16_t Charset::draw(const std::string& text,
         shift -= total / 2;
     case LEFT:
         for (char c : text) {
-            draw(c, args + Point<std::int16_t>(shift, 0));
+            draw(c, args + Point<std::int16_t>{shift, 0});
             shift += getw(c);
         }
         break;
@@ -73,23 +74,22 @@ std::int16_t Charset::draw(const std::string& text,
         for (auto iter = text.rbegin(); iter != text.rend(); ++iter) {
             char c = *iter;
             shift += getw(c);
-            draw(c, args - Point<std::int16_t>(shift, 0));
+            draw(c, args - Point<std::int16_t>{shift, 0});
         }
         break;
     }
     return shift;
 }
 
-std::int16_t Charset::draw(const std::string& text,
+std::int16_t Charset::draw(std::string_view text,
                            std::int16_t hspace,
                            const DrawArgument& args) const
 {
-    std::size_t length = text.size();
     std::int16_t shift = 0;
 
     switch (alignment) {
     case CENTER:
-        shift -= hspace * static_cast<std::int16_t>(length) / 2;
+        shift -= hspace * static_cast<std::int16_t>(text.length()) / 2;
     case LEFT:
         for (char c : text) {
             draw(c, args + Point<std::int16_t>(shift, 0));

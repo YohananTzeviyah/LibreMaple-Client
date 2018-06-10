@@ -86,8 +86,8 @@ public:
     nullable_ptr<Char> get_character(std::int32_t cid);
 
 private:
-    void load_map(std::int32_t mapid);
-    void respawn(std::int8_t portalid);
+    void load_map(std::int32_t map_id);
+    void respawn(std::int8_t portal_id);
     void check_portals();
     void check_seats();
     void check_ladders(bool up);

@@ -73,30 +73,32 @@ void Stage::clear()
     reactors.clear();
 }
 
-void Stage::load_map(std::int32_t mapid)
+void Stage::load_map(std::int32_t map_id)
 {
-    std::string strid = string_format::extend_id(mapid, 9);
-    std::string prefix = std::to_string(mapid / 100000000);
-    nl::node src = nl::nx::map["Map"]["Map" + prefix][strid + ".img"];
+    std::string str_id = string_format::extend_id(map_id, 9);
+    str_id += ".img";
+
+    nl::node src =
+        nl::nx::map["Map"]["Map" + std::to_string(map_id / 100000000)][str_id];
 
     tilesobjs = MapTilesObjs(src);
     backgrounds = MapBackgrounds(src["back"]);
     physics = Physics(src["foothold"]);
     mapinfo = MapInfo(
         src, physics.get_fht().get_walls(), physics.get_fht().get_borders());
-    portals = MapPortals(src["portal"], mapid);
+    portals = MapPortals(src["portal"], map_id);
 }
 
-void Stage::respawn(std::int8_t portalid)
+void Stage::respawn(std::int8_t portal_id)
 {
     Music(mapinfo.get_bgm()).play();
 
-    Point<std::int16_t> spawnpoint =
-        portals.get_portal_by_id(static_cast<std::uint8_t>(portalid));
-    Point<std::int16_t> startpos = physics.get_y_below(spawnpoint);
+    Point<std::int16_t> spawn_point =
+        portals.get_portal_by_id(static_cast<std::uint8_t>(portal_id));
+    Point<std::int16_t> start_pos = physics.get_y_below(spawn_point);
 
-    player.respawn(startpos, mapinfo.is_underwater());
-    camera.set_position(startpos);
+    player.respawn(start_pos, mapinfo.is_underwater());
+    camera.set_position(start_pos);
     camera.set_view(mapinfo.get_walls(), mapinfo.get_borders());
 }
 
@@ -175,7 +177,7 @@ void Stage::check_portals()
     Portal::WarpInfo warpinfo = portals.find_warp_at(playerpos);
     if (warpinfo.intramap) {
         Point<std::int16_t> spawnpoint =
-            portals.get_portal_by_name(warpinfo.toname);
+            portals.get_portal_by_name(warpinfo.to_name);
         Point<std::int16_t> startpos = physics.get_y_below(spawnpoint);
         player.respawn(startpos, mapinfo.is_underwater());
     } else if (warpinfo.valid) {

@@ -61,17 +61,17 @@ public:
 class Face
 {
 public:
-    Face(std::int32_t faceid);
+    Face(std::int32_t face_id);
 
     void draw(Expression::Id expression,
               std::uint8_t frame,
               const DrawArgument& args) const;
 
-    std::uint8_t nextframe(Expression::Id expression,
-                           std::uint8_t frame) const;
+    std::uint8_t next_frame(Expression::Id expression,
+                            std::uint8_t frame) const;
     std::int16_t get_delay(Expression::Id expression,
                            std::uint8_t frame) const;
-    const std::string& get_name() const;
+    [[nodiscard]] std::string_view get_name() const noexcept;
 
 private:
     struct Frame {
@@ -86,8 +86,9 @@ private:
             texture.shift(-shift);
 
             delay = src["delay"];
-            if (delay == 0)
+            if (delay == 0) {
                 delay = 2500;
+            }
         }
     };
 

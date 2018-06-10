@@ -20,27 +20,30 @@
 #include "../../Util/Misc.h"
 #include "nlnx/nx.hpp"
 
+#include <string_view>
+
 namespace jrc
 {
 Afterimage::Afterimage(std::int32_t skill_id,
-                       const std::string& name,
-                       const std::string& stance_name,
+                       std::string_view name,
+                       std::string_view stance_name,
                        std::int16_t level)
 {
     nl::node src;
     if (skill_id > 0) {
-        std::string strid = string_format::extend_id(skill_id, 7);
-        src = nl::nx::skill[strid.substr(0, 3) + ".img"]["skill"][strid]
-                           ["afterimage"][name][stance_name];
+        std::string str_id = string_format::extend_id(skill_id, 7);
+        src = nl::nx::skill[str::concat(std::string_view(str_id).substr(0, 3),
+                                        ".img")]["skill"][str_id]["afterimage"]
+                           [name][stance_name];
     }
 
     if (!src) {
-        src = nl::nx::character["Afterimage"][name + ".img"][level / 10]
-                               [stance_name];
+        src = nl::nx::character["Afterimage"][str::concat(name, ".img")]
+                               [level / 10][stance_name];
     }
 
     range = src;
-    firstframe = 0;
+    first_frame = 0;
     displayed = false;
 
     for (nl::node sub : src) {
@@ -48,14 +51,14 @@ Afterimage::Afterimage(std::int32_t skill_id,
             string_conversion::or_default<std::uint8_t>(sub.name(), 255);
         if (frame < 255) {
             animation = sub;
-            firstframe = frame;
+            first_frame = frame;
         }
     }
 }
 
-Afterimage::Afterimage()
+Afterimage::Afterimage() noexcept
 {
-    firstframe = 0;
+    first_frame = 0;
     displayed = true;
 }
 
@@ -63,21 +66,21 @@ void Afterimage::draw(std::uint8_t stframe,
                       const DrawArgument& args,
                       float alpha) const
 {
-    if (!displayed && stframe >= firstframe) {
+    if (!displayed && stframe >= first_frame) {
         animation.draw(args, alpha);
     }
 }
 
 void Afterimage::update(std::uint8_t stframe, std::uint16_t timestep)
 {
-    if (!displayed && stframe >= firstframe) {
+    if (!displayed && stframe >= first_frame) {
         displayed = animation.update(timestep);
     }
 }
 
 std::uint8_t Afterimage::get_first_frame() const
 {
-    return firstframe;
+    return first_frame;
 }
 
 Rectangle<std::int16_t> Afterimage::get_range() const

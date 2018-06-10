@@ -50,10 +50,14 @@ bool Session::init(const char* host, const char* port)
 
 Error Session::init()
 {
-    const std::string HOST = Setting<ServerIP>::get().load();
-    const std::string PORT = "8484";
+    const std::string& HOST = Setting<ServerIP>::get().load();
+    if (HOST.empty()) {
+        Console::get().print("No host IP was found in the settings file.");
+        return Error::CONNECTION;
+    }
+    static constexpr const char* const PORT = "8484";
 
-    if (!init(HOST.c_str(), PORT.c_str())) {
+    if (!init(HOST.data(), PORT)) {
         return Error::CONNECTION;
     }
 

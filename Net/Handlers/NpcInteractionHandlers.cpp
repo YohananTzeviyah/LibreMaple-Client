@@ -28,20 +28,27 @@ void NpcDialogueHandler::handle(InPacket& recv) const
     recv.skip(1);
 
     std::int32_t npcid = recv.read_int();
-    std::int8_t msgtype = recv.read_byte(); // 0 - textonly, 1 - yes/no, 4 -
-                                            // selection, 12 - accept/decline
+
+    // 0  : Text only.
+    // 1  : Yes/no.
+    // 4  : Selection.
+    // 12 : Accept/decline.
+    std::int8_t msgtype = recv.read_byte();
+
     std::int8_t speaker = recv.read_byte();
     std::string text = recv.read_string();
 
     std::int16_t style = 0;
-    if (msgtype == 0 && recv.length() > 0)
+    if (msgtype == 0 && recv.length() > 0) {
         style = recv.read_short();
+    }
 
     UI::get().emplace<UINpcTalk>();
     UI::get().enable();
 
-    if (auto npctalk = UI::get().get_element<UINpcTalk>())
-        npctalk->change_text(npcid, msgtype, style, speaker, text);
+    if (auto npctalk = UI::get().get_element<UINpcTalk>()) {
+        npctalk->change_text(npcid, msgtype, style, speaker, std::move(text));
+    }
 }
 
 void OpenNpcShopHandler::handle(InPacket& recv) const
@@ -57,7 +64,7 @@ void OpenNpcShopHandler::handle(InPacket& recv) const
     shop.reset(npcid);
 
     std::int16_t size = recv.read_short();
-    for (std::int16_t i = 0; i < size; i++) {
+    for (std::int16_t i = 0; i < size; ++i) {
         std::int32_t itemid = recv.read_int();
         std::int32_t price = recv.read_int();
         std::int32_t pitch = recv.read_int();

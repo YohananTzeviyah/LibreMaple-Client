@@ -202,9 +202,9 @@ void Combat::extract_effects(const Char& user,
                              const SpecialMove& move,
                              const AttackResult& result)
 {
-    AttackUser attackuser = {user.get_skilllevel(move.get_id()),
+    AttackUser attackuser = {user.get_skill_level(move.get_id()),
                              user.get_level(),
-                             user.is_twohanded(),
+                             user.is_two_handed(),
                              !result.toleft};
     if (result.bullet) {
         Bullet bullet{move.get_bullet(user, result.bullet),
@@ -226,11 +226,11 @@ void Combat::extract_effects(const Char& user,
                                         result.toleft,
                                         oid,
                                         move.get_id()};
-                    bulleteffects.emplace(user.get_attackdelay(i),
+                    bulleteffects.emplace(user.get_attack_delay(i),
                                           std::move(effect),
                                           bullet,
                                           head);
-                    i++;
+                    ++i;
                 }
             }
         }
@@ -239,9 +239,9 @@ void Combat::extract_effects(const Char& user,
             std::int16_t xshift = result.toleft ? -400 : 400;
             Point<std::int16_t> target =
                 user.get_position() + Point<std::int16_t>(xshift, -26);
-            for (std::uint8_t i = 0; i < result.hitcount; i++) {
+            for (std::uint8_t i = 0; i < result.hitcount; ++i) {
                 DamageEffect effect{attackuser, {}, 0, false, 0, 0};
-                bulleteffects.emplace(user.get_attackdelay(i),
+                bulleteffects.emplace(user.get_attack_delay(i),
                                       std::move(effect),
                                       bullet,
                                       target);
@@ -256,7 +256,7 @@ void Combat::extract_effects(const Char& user,
 
                 std::size_t i = 0;
                 for (auto& number : numbers) {
-                    damageeffects.emplace(user.get_attackdelay(i),
+                    damageeffects.emplace(user.get_attack_delay(i),
                                           attackuser,
                                           number,
                                           line.second[i].first,
@@ -264,7 +264,7 @@ void Combat::extract_effects(const Char& user,
                                           oid,
                                           move.get_id());
 
-                    i++;
+                    ++i;
                 }
             }
         }

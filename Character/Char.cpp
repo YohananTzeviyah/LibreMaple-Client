@@ -23,14 +23,19 @@
 #include "nlnx/node.hpp"
 #include "nlnx/nx.hpp"
 
-#include <math.h>
+#include <algorithm>
+#include <cmath>
 
 namespace jrc
 {
-Char::Char(std::int32_t o, const CharLook& lk, const std::string& name)
+Char::Char(std::int32_t o, const CharLook& lk, std::string&& name) noexcept
     : MapObject(o),
       look(lk),
-      namelabel({Text::A13M, Text::CENTER, Text::WHITE, Text::NAMETAG, name})
+      name_label({Text::A13M,
+                  Text::CENTER,
+                  Text::WHITE,
+                  Text::NAMETAG,
+                  std::move(name)})
 {
 }
 
@@ -42,8 +47,8 @@ void Char::draw(double viewx, double viewy, float alpha) const
 
     Color color;
     if (invincible) {
-        float phi = invincible.alpha() * 30;
-        float rgb = 0.9f - 0.5f * std::abs(sinf(phi));
+        float phi = invincible.alpha() * 30.0f;
+        float rgb = 0.9f - 0.5f * std::abs(std::sin(phi));
         color = {rgb, rgb, rgb, 1.0f};
     } else {
         color = Color::WHITE;
@@ -52,40 +57,42 @@ void Char::draw(double viewx, double viewy, float alpha) const
 
     afterimage.draw(look.get_frame(), {absp, flip}, alpha);
 
-    if (ironbody) {
-        float ibalpha = ironbody.alpha();
+    if (iron_body) {
+        float ibalpha = iron_body.alpha();
         float scale = 1.0f + ibalpha;
         float opacity = 1.0f - ibalpha;
         look.draw({absp, scale, scale, opacity}, alpha);
     }
 
     for (auto& pet : pets) {
-        if (pet.get_itemid()) {
+        if (pet.get_item_id()) {
             pet.draw(viewx, viewy, alpha);
         }
     }
 
-    namelabel.draw(absp);
-    chatballoon.draw(absp - Point<std::int16_t>(0, 85));
+    name_label.draw(absp);
+    chat_balloon.draw(absp - Point<std::int16_t>(0, 85));
 
     effects.drawabove(absp, alpha);
 
-    for (auto& number : damagenumbers) {
+    for (auto& number : damage_numbers) {
         number.draw(viewx, viewy, alpha);
     }
 }
 
 bool Char::update(const Physics& physics, float speed)
 {
-    damagenumbers.remove_if(
-        [](DamageNumber& number) { return number.update(); });
+    damage_numbers.erase(std::remove_if(damage_numbers.begin(),
+                                        damage_numbers.end(),
+                                        [](auto& dn) { return dn.update(); }),
+                         damage_numbers.end());
     effects.update();
-    chatballoon.update();
+    chat_balloon.update();
     invincible.update();
-    ironbody.update();
+    iron_body.update();
 
     for (auto& pet : pets) {
-        if (pet.get_itemid()) {
+        if (pet.get_item_id()) {
             switch (state) {
             case LADDER:
             case ROPE:
@@ -96,8 +103,9 @@ bool Char::update(const Physics& physics, float speed)
                 break;
             default:
                 if (pet.get_stance() == PetLook::HANG ||
-                    pet.get_stance() == PetLook::FLY)
+                    pet.get_stance() == PetLook::FLY) {
                     pet.set_stance(PetLook::STAND);
+                }
             }
             pet.update(physics, get_position());
         }
@@ -111,10 +119,10 @@ bool Char::update(const Physics& physics, float speed)
     return look.update(stancespeed);
 }
 
-float Char::get_stancespeed() const
+float Char::get_stance_speed() const
 {
     if (attacking)
-        return get_real_attackspeed();
+        return get_real_attack_speed();
 
     switch (state) {
     case WALK:
@@ -127,17 +135,17 @@ float Char::get_stancespeed() const
     }
 }
 
-float Char::get_real_attackspeed() const
+float Char::get_real_attack_speed() const
 {
-    std::int8_t speed = get_integer_attackspeed();
-    return 1.7f - static_cast<float>(speed) / 10;
+    std::int8_t speed = get_integer_attack_speed();
+    return 1.7f - static_cast<float>(speed) / 10.0f;
 }
 
-std::uint16_t Char::get_attackdelay(std::size_t no) const
+std::uint16_t Char::get_attack_delay(std::size_t no) const
 {
     std::uint8_t first_frame = afterimage.get_first_frame();
     std::uint16_t delay = look.get_attackdelay(no, first_frame);
-    float fspeed = get_real_attackspeed();
+    float fspeed = get_real_attack_speed();
     return static_cast<std::uint16_t>(delay / fspeed);
 }
 
@@ -149,38 +157,38 @@ std::int8_t Char::update(const Physics& physics)
 
 std::int8_t Char::get_layer() const
 {
-    return is_climbing() ? 7 : phobj.fhlayer;
+    return is_climbing() ? static_cast<std::int8_t>(7) : phobj.fhlayer;
 }
 
 void Char::show_attack_effect(Animation toshow, std::int8_t z)
 {
-    float attackspeed = get_real_attackspeed();
+    float attackspeed = get_real_attack_speed();
     effects.add(toshow, {flip}, z, attackspeed);
 }
 
 void Char::show_effect_id(CharEffect::Id toshow)
 {
-    effects.add(chareffects[toshow]);
+    effects.add(char_effects[toshow]);
 }
 
 void Char::show_iron_body()
 {
-    ironbody.set_for(500);
+    iron_body.set_for(500);
 }
 
 void Char::show_damage(std::int32_t damage)
 {
     std::int16_t start_y = phobj.get_y() - 60;
     std::int16_t x = phobj.get_x() - 10;
-    damagenumbers.emplace_back(DamageNumber::TOPLAYER, damage, start_y, x);
+    damage_numbers.emplace_back(DamageNumber::TOPLAYER, damage, start_y, x);
 
     look.set_alerted(5000);
     invincible.set_for(2000);
 }
 
-void Char::speak(const std::string& line)
+void Char::speak(std::string&& line)
 {
-    chatballoon.change_text(line);
+    chat_balloon.change_text(std::move(line));
 }
 
 void Char::change_look(Maplestat::Id stat, std::int32_t id)
@@ -213,9 +221,9 @@ void Char::set_state(std::uint8_t statebyte)
     set_state(newstate);
 }
 
-void Char::set_expression(std::int32_t expid)
+void Char::set_expression(std::int32_t exp_id)
 {
-    Expression::Id expression = Expression::byaction(expid);
+    Expression::Id expression = Expression::byaction(exp_id);
     look.set_expression(expression);
 }
 
@@ -253,8 +261,8 @@ void Char::set_afterimage(std::int32_t skill_id)
 
     std::string stance_name = Stance::names[look.get_stance()];
     std::int16_t weapon_level =
-        weapon.get_equipdata().get_reqstat(Maplestat::LEVEL);
-    const std::string& ai_name = weapon.get_afterimage();
+        weapon.get_equip_data().get_req_stat(Maplestat::LEVEL);
+    auto ai_name = weapon.get_afterimage();
     afterimage = {skill_id, ai_name, stance_name, weapon_level};
 }
 
@@ -279,25 +287,28 @@ void Char::set_state(State st)
 
 void Char::add_pet(std::uint8_t index,
                    std::int32_t iid,
-                   const std::string& name,
+                   std::string&& name,
                    std::int32_t uniqueid,
                    Point<std::int16_t> pos,
                    std::uint8_t stance,
                    std::int32_t fhid)
 {
-    if (index > 2)
+    if (index > 2) {
         return;
+    }
 
-    pets[index] = PetLook(iid, name, uniqueid, pos, stance, fhid);
+    pets[index] = PetLook(iid, std::move(name), uniqueid, pos, stance, fhid);
 }
 
 void Char::remove_pet(std::uint8_t index, bool hunger)
 {
-    if (index > 2)
+    if (index > 2) {
         return;
+    }
 
     pets[index] = PetLook();
     if (hunger) {
+        // TODO ?
     }
 }
 
@@ -316,28 +327,29 @@ bool Char::is_climbing() const
     return state == LADDER || state == ROPE;
 }
 
-bool Char::is_twohanded() const
+bool Char::is_two_handed() const
 {
-    return look.get_equips().is_twohanded();
+    return look.get_equips().is_two_handed();
 }
 
-Weapon::Type Char::get_weapontype() const
+Weapon::Type Char::get_weapon_type() const
 {
     std::int32_t weapon_id = look.get_equips().get_weapon();
-    if (weapon_id <= 0)
+    if (weapon_id <= 0) {
         return Weapon::NONE;
+    }
 
     return WeaponData::get(weapon_id).get_type();
 }
 
-bool Char::getflip() const
+bool Char::get_flip() const
 {
     return flip;
 }
 
-std::string Char::get_name() const
+std::string_view Char::get_name() const
 {
-    return namelabel.get_text();
+    return name_label.get_text();
 }
 
 CharLook& Char::get_look()
@@ -360,10 +372,10 @@ void Char::init()
     CharLook::init();
 
     nl::node src = nl::nx::effect["BasicEff.img"];
-    for (auto iter : CharEffect::PATHS) {
-        chareffects.emplace(iter.first, src.resolve(iter.second));
+    for (auto path : CharEffect::PATHS) {
+        char_effects.emplace(path.first, src.resolve(path.second));
     }
 }
 
-EnumMap<CharEffect::Id, Animation> Char::chareffects;
+EnumMap<CharEffect::Id, Animation> Char::char_effects;
 } // namespace jrc

@@ -39,14 +39,14 @@ public:
         NUM_LAYERS
     };
 
-    Body(std::int32_t skin, const BodyDrawinfo& drawinfo);
+    Body(std::int32_t skin, const BodyDrawinfo& draw_info);
 
     void draw(Stance::Id stance,
               Layer layer,
               std::uint8_t frame,
               const DrawArgument& args) const;
 
-    const std::string& get_name() const;
+    std::string_view get_name() const noexcept;
 
     static Layer layer_by_name(const std::string& name);
 

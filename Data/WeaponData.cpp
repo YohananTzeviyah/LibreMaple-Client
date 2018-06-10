@@ -23,63 +23,62 @@
 
 namespace jrc
 {
-WeaponData::WeaponData(std::int32_t equipid)
-    : equipdata(EquipData::get(equipid))
+WeaponData::WeaponData(std::int32_t equip_id)
+    : equip_data(EquipData::get(equip_id))
 {
-    std::int32_t prefix = equipid / 10000;
+    std::int32_t prefix = equip_id / 10000;
     type = Weapon::by_value(prefix);
-    twohanded = (prefix == Weapon::STAFF) ||
-                (prefix >= Weapon::SWORD_2H && prefix <= Weapon::POLEARM) ||
-                (prefix == Weapon::CROSSBOW);
+    two_handed = prefix == Weapon::STAFF ||
+                 (prefix >= Weapon::SWORD_2H && prefix <= Weapon::POLEARM) ||
+                 prefix == Weapon::CROSSBOW;
 
-    nl::node src = nl::nx::character["Weapon"]["0" + std::to_string(equipid) +
-                                               ".img"]["info"];
+    nl::node src = nl::nx::character["Weapon"][str::concat(
+        '0', std::to_string(equip_id), ".img")]["info"];
 
-    attackspeed = static_cast<std::uint8_t>(src["attackSpeed"]);
+    attack_speed = static_cast<std::uint8_t>(src["attackSpeed"]);
     attack = static_cast<std::uint8_t>(src["attack"]);
 
     nl::node soundsrc = nl::nx::sound["Weapon.img"][src["sfx"]];
 
-    bool twosounds = soundsrc["Attack2"].data_type() == nl::node::type::audio;
-    if (twosounds) {
-        usesounds[false] = soundsrc["Attack"];
-        usesounds[true] = soundsrc["Attack2"];
+    if (soundsrc["Attack2"].data_type() == nl::node::type::audio) {
+        use_sounds[false] = soundsrc["Attack"];
+        use_sounds[true] = soundsrc["Attack2"];
     } else {
-        usesounds[false] = soundsrc["Attack"];
-        usesounds[true] = soundsrc["Attack"];
+        use_sounds[false] = soundsrc["Attack"];
+        use_sounds[true] = soundsrc["Attack"];
     }
 
     afterimage = src["afterImage"].get_string();
 }
 
-bool WeaponData::is_valid() const
+bool WeaponData::is_valid() const noexcept
 {
-    return equipdata.is_valid();
+    return equip_data.is_valid();
 }
 
-WeaponData::operator bool() const
+WeaponData::operator bool() const noexcept
 {
     return is_valid();
 }
 
-bool WeaponData::is_twohanded() const
+bool WeaponData::is_two_handed() const noexcept
 {
-    return twohanded;
+    return two_handed;
 }
 
-std::uint8_t WeaponData::get_speed() const
+std::uint8_t WeaponData::get_speed() const noexcept
 {
-    return attackspeed;
+    return attack_speed;
 }
 
-std::uint8_t WeaponData::get_attack() const
+std::uint8_t WeaponData::get_attack() const noexcept
 {
     return attack;
 }
 
-std::string WeaponData::getspeedstring() const
+std::string_view WeaponData::get_speed_string() const noexcept
 {
-    switch (attackspeed) {
+    switch (attack_speed) {
     case 1:
         return "FAST (1)";
     case 2:
@@ -99,35 +98,36 @@ std::string WeaponData::getspeedstring() const
     case 9:
         return "SLOW (9)";
     default:
-        return "";
+        return {};
     }
 }
 
-std::uint8_t WeaponData::get_attackdelay() const
+std::uint8_t WeaponData::get_attack_delay() const noexcept
 {
-    if (type == Weapon::NONE)
+    if (type == Weapon::NONE) {
         return 0;
-    else
-        return 50 - 25 / attackspeed;
+    } else {
+        return 50 - 25 / attack_speed;
+    }
 }
 
-Weapon::Type WeaponData::get_type() const
+Weapon::Type WeaponData::get_type() const noexcept
 {
     return type;
 }
 
-Sound WeaponData::get_usesound(bool degenerate) const
+Sound WeaponData::get_use_sound(bool degenerate) const noexcept
 {
-    return usesounds[degenerate];
+    return use_sounds[degenerate];
 }
 
-const std::string& WeaponData::get_afterimage() const
+std::string_view WeaponData::get_afterimage() const noexcept
 {
     return afterimage;
 }
 
-const EquipData& WeaponData::get_equipdata() const
+const EquipData& WeaponData::get_equip_data() const noexcept
 {
-    return equipdata;
+    return equip_data;
 }
 } // namespace jrc

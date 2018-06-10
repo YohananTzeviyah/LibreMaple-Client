@@ -36,7 +36,7 @@ public:
     enum Type {
         NONE,
         LOGIN,
-        LOGINWAIT,
+        LOGIN_WAIT,
         LOGINNOTICE,
         WORLDSELECT,
         CHARSELECT,
@@ -52,8 +52,8 @@ public:
         ITEMINVENTORY,
         EQUIPINVENTORY,
         SKILLBOOK,
-        NUM_TYPES,
-        KEYCONFIG
+        KEYCONFIG,
+        NUM_TYPES
     };
 
     virtual ~UIElement() = default;

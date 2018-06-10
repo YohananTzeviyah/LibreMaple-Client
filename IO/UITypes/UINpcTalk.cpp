@@ -73,22 +73,24 @@ Button::State UINpcTalk::button_pressed(std::uint16_t buttonid)
     return Button::PRESSED;
 }
 
-void UINpcTalk::change_text(std::int32_t npcid,
-                            std::int8_t msgtype,
+void UINpcTalk::change_text(std::int32_t npc_id,
+                            std::int8_t msg_type,
                             std::int16_t,
-                            std::int8_t speakerbyte,
-                            const std::string& tx)
+                            std::int8_t speaker_byte,
+                            std::string&& tx)
 {
-    text = {Text::A12M, Text::LEFT, Text::DARKGREY, tx, 320};
+    text = {Text::A12M, Text::LEFT, Text::DARKGREY, std::move(tx), 320};
 
-    if (speakerbyte == 0) {
-        std::string strid = std::to_string(npcid);
-        strid.insert(0, 7 - strid.size(), '0');
-        strid.append(".img");
-        speaker = nl::nx::npc[strid]["stand"]["0"];
-        std::string namestr =
-            nl::nx::string["Npc.img"][std::to_string(npcid)]["name"];
-        name = {Text::A11M, Text::CENTER, Text::WHITE, namestr};
+    if (speaker_byte == 0) {
+        std::string str_id = std::to_string(npc_id);
+        name = {Text::A11M,
+                Text::CENTER,
+                Text::WHITE,
+                nl::nx::string["Npc.img"][str_id]["name"]};
+
+        str_id.insert(0, 7 - str_id.length(), '0');
+        str_id += ".img";
+        speaker = nl::nx::npc[str_id]["stand"]["0"];
     } else {
         speaker = {};
         name.change_text("");
@@ -103,13 +105,13 @@ void UINpcTalk::change_text(std::int32_t npcid,
     }
     buttons[END]->set_position({20, height + 48});
     buttons[END]->set_active(true);
-    switch (msgtype) {
+    switch (msg_type) {
     case 0:
         buttons[OK]->set_position({220, height + 48});
         buttons[OK]->set_active(true);
         break;
     }
-    type = msgtype;
+    type = msg_type;
 
     position = {400 - top.width() / 2, 240 - height / 2};
     dimension = {top.width(), height + 120};

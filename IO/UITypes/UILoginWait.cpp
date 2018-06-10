@@ -23,7 +23,7 @@
 
 namespace jrc
 {
-UILoginwait::UILoginwait()
+UILoginWait::UILoginWait()
 {
     nl::node src = nl::nx::ui["Login.img"]["Notice"]["Loading"];
 
@@ -35,13 +35,13 @@ UILoginwait::UILoginwait()
     active = true;
 }
 
-void UILoginwait::draw(float alpha) const
+void UILoginWait::draw(float alpha) const
 {
     background.draw({position});
     circle.draw(position, alpha);
 }
 
-void UILoginwait::update()
+void UILoginWait::update()
 {
     circle.update();
 }

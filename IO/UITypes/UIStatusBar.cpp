@@ -22,13 +22,15 @@
 #include "../UI.h"
 #include "nlnx/nx.hpp"
 
+#include <string_view>
+
 namespace jrc
 {
 constexpr Point<std::int16_t> UIStatusbar::POSITION;
 constexpr Point<std::int16_t> UIStatusbar::DIMENSION;
 
 UIStatusbar::UIStatusbar(const CharStats& st)
-    : UIElement(POSITION, DIMENSION), stats(st), chatbar(POSITION)
+    : UIElement{POSITION, DIMENSION}, stats{st}, chatbar{POSITION}
 {
     nl::node mainbar = nl::nx::ui["StatusBar2.img"]["mainBar"];
 
@@ -84,9 +86,9 @@ void UIStatusbar::draw(float alpha) const
 {
     UIElement::draw(alpha);
 
-    expbar.draw(position + Point<std::int16_t>(-261, -15));
-    hpbar.draw(position + Point<std::int16_t>(-261, -31));
-    mpbar.draw(position + Point<std::int16_t>(-90, -31));
+    expbar.draw(position + Point<std::int16_t>{-261, -15});
+    hpbar.draw(position + Point<std::int16_t>{-261, -31});
+    mpbar.draw(position + Point<std::int16_t>{-90, -31});
 
     std::int16_t level = stats.get_stat(Maplestat::LEVEL);
     std::int16_t hp = stats.get_stat(Maplestat::HP);
@@ -95,19 +97,25 @@ void UIStatusbar::draw(float alpha) const
     std::int32_t maxmp = stats.get_total(Equipstat::MP);
     std::int64_t exp = stats.get_exp();
 
-    std::string expstring = std::to_string(100 * getexppercent());
-    statset.draw(std::to_string(exp) + "[" +
-                     expstring.substr(0, expstring.find('.') + 3) + "%]",
-                 position + Point<std::int16_t>(47, -13));
-    statset.draw("[" + std::to_string(hp) + "/" + std::to_string(maxhp) + "]",
-                 position + Point<std::int16_t>(-124, -29));
-    statset.draw("[" + std::to_string(mp) + "/" + std::to_string(maxmp) + "]",
-                 position + Point<std::int16_t>(47, -29));
+    std::string exp_string = std::to_string(100 * get_exp_percent());
+    statset.draw(
+        str::concat(
+            std::to_string(exp),
+            '[',
+            std::string_view(exp_string).substr(0, exp_string.find('.') + 3),
+            "%]"),
+        position + Point<std::int16_t>{47, -13});
+    statset.draw(
+        str::concat('[', std::to_string(hp), '/', std::to_string(maxhp), ']'),
+        position + Point<std::int16_t>{-124, -29});
+    statset.draw(
+        str::concat('[', std::to_string(mp), '/', std::to_string(maxmp), ']'),
+        position + Point<std::int16_t>{47, -29});
     levelset.draw(std::to_string(level),
-                  position + Point<std::int16_t>(-480, -24));
+                  position + Point<std::int16_t>{-480, -24});
 
-    joblabel.draw(position + Point<std::int16_t>(-435, -21));
-    namelabel.draw(position + Point<std::int16_t>(-435, -36));
+    joblabel.draw(position + Point<std::int16_t>{-435, -21});
+    namelabel.draw(position + Point<std::int16_t>{-435, -36});
 
     chatbar.draw(alpha);
 }
@@ -118,12 +126,12 @@ void UIStatusbar::update()
 
     chatbar.update();
 
-    expbar.update(getexppercent());
-    hpbar.update(gethppercent());
-    mpbar.update(getmppercent());
+    expbar.update(get_exp_percent());
+    hpbar.update(get_hp_percent());
+    mpbar.update(get_mp_percent());
 
-    namelabel.change_text(stats.get_name());
-    joblabel.change_text(stats.get_jobname());
+    namelabel.change_text(std::string{stats.get_name()});
+    joblabel.change_text(std::string{stats.get_job_name()});
 
     for (auto iter : message_cooldowns) {
         iter.second -= Constants::TIMESTEP;
@@ -155,8 +163,8 @@ Button::State UIStatusbar::button_pressed(std::uint16_t id)
 
 bool UIStatusbar::is_in_range(Point<std::int16_t> cursorpos) const
 {
-    Rectangle<std::int16_t> bounds(position - Point<std::int16_t>(512, 84),
-                                   position - Point<std::int16_t>(512, 84) +
+    Rectangle<std::int16_t> bounds(position - Point<std::int16_t>{512, 84},
+                                   position - Point<std::int16_t>{512, 84} +
                                        dimension);
 
     return bounds.contains(cursorpos) || chatbar.is_in_range(cursorpos);
@@ -183,10 +191,9 @@ Cursor::State UIStatusbar::send_cursor(bool pressed,
     }
 }
 
-void UIStatusbar::send_chatline(const std::string& line,
-                                UIChatbar::LineType type)
+void UIStatusbar::send_chatline(std::string&& line, UIChatbar::LineType type)
 {
-    chatbar.send_line(line, type);
+    chatbar.send_line(std::move(line), type);
 }
 
 void UIStatusbar::display_message(Messages::Type line,
@@ -196,13 +203,12 @@ void UIStatusbar::display_message(Messages::Type line,
         return;
     }
 
-    std::string message{Messages::messages[line]};
-    chatbar.send_line(message, type);
+    chatbar.send_line(std::string{Messages::messages[line]}, type);
 
     message_cooldowns[line] = MESSAGE_COOLDOWN;
 }
 
-float UIStatusbar::getexppercent() const
+float UIStatusbar::get_exp_percent() const
 {
     std::int16_t level = stats.get_stat(Maplestat::LEVEL);
     if (level >= ExpTable::LEVELCAP) {
@@ -214,7 +220,7 @@ float UIStatusbar::getexppercent() const
            static_cast<float>(ExpTable::values[level]);
 }
 
-float UIStatusbar::gethppercent() const
+float UIStatusbar::get_hp_percent() const
 {
     std::int16_t hp = stats.get_stat(Maplestat::HP);
     std::int32_t maxhp = stats.get_total(Equipstat::HP);
@@ -222,7 +228,7 @@ float UIStatusbar::gethppercent() const
     return static_cast<float>(hp) / maxhp;
 }
 
-float UIStatusbar::getmppercent() const
+float UIStatusbar::get_mp_percent() const
 {
     std::int16_t mp = stats.get_stat(Maplestat::MP);
     std::int32_t maxmp = stats.get_total(Equipstat::MP);

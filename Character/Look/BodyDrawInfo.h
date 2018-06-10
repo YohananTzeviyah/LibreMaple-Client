@@ -33,19 +33,20 @@ class BodyAction
 public:
     BodyAction(nl::node src)
     {
-        stance = Stance::by_string(src["action"]);
+        stance = Stance::by_string(src["action"].get_string());
         frame = src["frame"];
         move = src["move"];
 
-        std::int16_t sgndelay = src["delay"];
-        if (sgndelay == 0)
-            sgndelay = 100;
-        if (sgndelay > 0) {
-            delay = sgndelay;
-            attackframe = true;
-        } else if (sgndelay < 0) {
-            delay = -sgndelay;
-            attackframe = false;
+        std::int16_t sgn_delay = src["delay"];
+        if (sgn_delay == 0) {
+            sgn_delay = 100;
+        }
+        if (sgn_delay > 0) {
+            delay = sgn_delay;
+            attack_frame = true;
+        } else if (sgn_delay < 0) {
+            delay = -sgn_delay;
+            attack_frame = false;
         }
     }
 
@@ -53,9 +54,9 @@ public:
     {
     }
 
-    bool isattackframe() const
+    bool is_attack_frame() const
     {
-        return attackframe;
+        return attack_frame;
     }
 
     std::uint8_t get_frame() const
@@ -83,7 +84,7 @@ private:
     std::uint8_t frame;
     std::uint16_t delay;
     Point<std::int16_t> move;
-    bool attackframe;
+    bool attack_frame;
 };
 
 class BodyDrawinfo
@@ -91,25 +92,27 @@ class BodyDrawinfo
 public:
     void init();
 
-    Point<std::int16_t> get_body_position(Stance::Id stance,
-                                          std::uint8_t frame) const;
-    Point<std::int16_t> get_arm_position(Stance::Id stance,
-                                         std::uint8_t frame) const;
-    Point<std::int16_t> get_hand_position(Stance::Id stance,
-                                          std::uint8_t frame) const;
-    Point<std::int16_t> get_head_position(Stance::Id stance,
-                                          std::uint8_t frame) const;
-    Point<std::int16_t> gethairpos(Stance::Id stance,
-                                   std::uint8_t frame) const;
-    Point<std::int16_t> getfacepos(Stance::Id stance,
-                                   std::uint8_t frame) const;
-    std::uint8_t nextframe(Stance::Id stance, std::uint8_t frame) const;
+    Point<std::int16_t> get_body_pos(Stance::Id stance,
+                                     std::uint8_t frame) const;
+    Point<std::int16_t> get_arm_pos(Stance::Id stance,
+                                    std::uint8_t frame) const;
+    Point<std::int16_t> get_hand_pos(Stance::Id stance,
+                                     std::uint8_t frame) const;
+    Point<std::int16_t> get_head_pos(Stance::Id stance,
+                                     std::uint8_t frame) const;
+    Point<std::int16_t> get_hair_pos(Stance::Id stance,
+                                     std::uint8_t frame) const;
+    Point<std::int16_t> get_face_pos(Stance::Id stance,
+                                     std::uint8_t frame) const;
+    std::uint8_t next_frame(Stance::Id stance, std::uint8_t frame) const;
     std::uint16_t get_delay(Stance::Id stance, std::uint8_t frame) const;
 
-    std::uint16_t get_attackdelay(std::string action, std::size_t no) const;
-    std::uint8_t next_actionframe(std::string action,
-                                  std::uint8_t frame) const;
-    const BodyAction* get_action(std::string action, std::uint8_t frame) const;
+    std::uint16_t get_attack_delay(const std::string& action,
+                                   std::size_t no) const;
+    std::uint8_t next_action_frame(const std::string& action,
+                                   std::uint8_t frame) const;
+    const BodyAction* get_action(const std::string& action,
+                                 std::uint8_t frame) const;
 
 private:
     std::unordered_map<std::uint8_t, Point<std::int16_t>>

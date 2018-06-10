@@ -33,31 +33,32 @@ public:
     ~Window() override;
 
     Error init();
-    Error initwindow();
+    Error init_window();
 
     bool not_closed() const;
     void update();
     void begin() const;
     void end() const;
-    void fadeout(float step, std::function<void()> fadeprocedure);
+    void fadeout(float step, std::function<void()> fade_proc);
     void check_events();
 
-    void setclipboard(const std::string& text) const;
-    std::string getclipboard() const;
+    void set_clipboard(const char* text) const;
+    void set_clipboard(const std::string& text) const;
+    std::string get_clipboard() const;
 
     void resize(bool in_game) noexcept;
     std::int16_t get_width() const noexcept;
     std::int16_t get_height() const noexcept;
 
 private:
-    void updateopc();
+    void update_opc();
 
     GLFWwindow* glwnd;
     GLFWwindow* context;
-    bool fullscreen;
+    bool full_screen;
     float opacity;
     float opcstep;
-    std::function<void()> fadeprocedure;
+    std::function<void()> fade_procedure;
 
     std::int16_t width;
     std::int16_t height;

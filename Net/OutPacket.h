@@ -24,43 +24,43 @@
 
 namespace jrc
 {
-// A packet to be sent to the server. Used as a base class to create specific
-// packets.
+//! A packet to be sent to the server. Used as a base class to create specific
+//! packets.
 class OutPacket
 {
 public:
     enum Opcode : std::uint16_t;
 
-    // Construct a packet by writing its opcode.
+    //! Construct a packet by writing its opcode.
     OutPacket(std::int16_t opcode);
 
     void dispatch();
 
 protected:
-    // Skip a number of bytes (filled with zeroes).
+    //! Skip a number of bytes (filled with zeroes).
     void skip(std::size_t count);
-    // Write a byte.
+    //! Write a byte.
     void write_byte(std::int8_t ch);
-    // Write a short.
+    //! Write a short.
     void write_short(std::int16_t sh);
-    // Write an int.
+    //! Write an int.
     void write_int(std::int32_t in);
-    // Write a long.
+    //! Write a long.
     void write_long(std::int64_t lg);
 
-    // Write a point, one short for x and one for y.
+    //! Write a point, one short for x and one for y.
     void write_point(Point<std::int16_t> point);
-    // Write a timestamp as an integer.
+    //! Write a timestamp as an integer.
     void write_time();
-    // Write a string. Writes the length as a short
-    // and then each individual character as a byte.
-    void write_string(const std::string& str);
+    //! Write a string. Writes the length as a short
+    //! and then each individual character as a byte.
+    void write_string(std::string_view str);
 
 private:
     std::vector<std::int8_t> bytes;
 };
 
-// Opcodes for OutPackets associated with version 83 of the game.
+//! Opcodes for OutPackets associated with version 83 of the game.
 enum OutPacket::Opcode : std::uint16_t {
     // Login
     LOGIN = 0x1,

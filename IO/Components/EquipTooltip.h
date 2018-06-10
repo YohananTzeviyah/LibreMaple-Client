@@ -52,7 +52,7 @@ private:
     Text wepspeed;
     Text slots;
     Text hammers;
-    EnumMap<Equipstat::Id, Text> statlabels;
+    EnumMap<Equipstat::Id, Text> stat_labels;
 
     Texture top;
     Texture mid;

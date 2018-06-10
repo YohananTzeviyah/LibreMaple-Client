@@ -18,10 +18,12 @@
 #pragma once
 #include "../OutPacket.h"
 
+#include <string_view>
+
 namespace jrc
 {
-// Accept the Terms of Service.
-// Opcode: ACCEPT_TOS(7)
+//! Accept the Terms of Service.
+//! Opcode: ACCEPT_TOS(7)
 class TOSPacket : public OutPacket
 {
 public:
@@ -31,21 +33,20 @@ public:
     }
 };
 
-// Request to be logged-in to an account.
-// Opcode: LOGIN(1) [LOGIN_PASSWORD(1) for OdinMS-based sources]
+//! Request to be logged-in to an account.
+//! Opcode: LOGIN(1) [LOGIN_PASSWORD(1) for OdinMS-based sources]
 class LoginPacket : public OutPacket
 {
 public:
-    LoginPacket(const std::string& acc, const std::string& pass)
-        : OutPacket(LOGIN)
+    LoginPacket(std::string_view acc, std::string_view pass) : OutPacket(LOGIN)
     {
         write_string(acc);
         write_string(pass);
     }
 };
 
-// Requests the list of worlds and channels.
-// Opcode: SERVERLIST_REQUEST(11)
+//! Requests the list of worlds and channels.
+//! Opcode: SERVERLIST_REQUEST(11)
 class ServerRequestPacket : public OutPacket
 {
 public:
@@ -54,8 +55,8 @@ public:
     }
 };
 
-// Requests the list of characters on a world.
-// Opcode: CHARLIST_REQUEST(5)
+//! Requests the list of characters on a world.
+//! Opcode: CHARLIST_REQUEST(5)
 class CharlistRequestPacket : public OutPacket
 {
 public:
@@ -68,8 +69,8 @@ public:
     }
 };
 
-// Requests being logged-in to a channel server with the specified character.
-// Opcode: PLAYER_LOGIN(20) [PLAYER_LOGGEDIN(20) for OdinMS-based sources]
+//! Requests being logged-in to a channel server with the specified character.
+//! Opcode: PLAYER_LOGIN(20) [PLAYER_LOGGEDIN(20) for OdinMS-based sources]
 class PlayerLoginPacket : public OutPacket
 {
 public:

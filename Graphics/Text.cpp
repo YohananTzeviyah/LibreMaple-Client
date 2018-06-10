@@ -25,26 +25,22 @@ Text::Text(Font f,
            Alignment a,
            Color c,
            Background b,
-           const std::string& t,
+           std::string&& t,
            std::uint16_t mw,
            bool fm)
     : font(f),
       alignment(a),
       color(c),
       background(b),
-      maxwidth(mw),
+      max_width(mw),
       formatted(fm)
 {
-    change_text(t);
+    change_text(std::move(t));
 }
 
-Text::Text(Font f,
-           Alignment a,
-           Color c,
-           const std::string& t,
-           std::uint16_t mw,
-           bool fm)
-    : Text(f, a, c, NONE, t, mw, fm)
+Text::Text(
+    Font f, Alignment a, Color c, std::string&& t, std::uint16_t mw, bool fm)
+    : Text(f, a, c, NONE, std::move(t), mw, fm)
 {
 }
 
@@ -52,23 +48,23 @@ Text::Text() : Text(A11M, LEFT, BLACK)
 {
 }
 
-void Text::reset_layout()
+void Text::reset_layout() noexcept
 {
     if (text.empty()) {
         return;
     }
 
-    layout = GraphicsGL::get().createlayout(
-        text, font, alignment, maxwidth, formatted);
+    layout = GraphicsGL::get().create_layout(
+        text, font, alignment, max_width, formatted);
 }
 
-void Text::change_text(const std::string& t)
+void Text::change_text(std::string&& t)
 {
     if (text == t) {
         return;
     }
 
-    text = t;
+    text = std::move(t);
 
     reset_layout();
 }
@@ -91,7 +87,7 @@ void Text::set_background(Background b)
 
 void Text::draw(const DrawArgument& args) const
 {
-    GraphicsGL::get().drawtext(args, text, layout, font, color, background);
+    GraphicsGL::get().draw_text(args, text, layout, font, color, background);
 }
 
 std::uint16_t Text::advance(std::size_t pos) const
@@ -129,7 +125,7 @@ Point<std::int16_t> Text::endoffset() const
     return layout.get_endoffset();
 }
 
-const std::string& Text::get_text() const
+std::string_view Text::get_text() const noexcept
 {
     return text;
 }

@@ -44,7 +44,7 @@ DamageNumber::DamageNumber(Type t,
         }
 
         std::int16_t total = getadvance(firstnum, true);
-        for (std::size_t i = 0; i < restnum.length(); i++) {
+        for (std::size_t i = 0; i < restnum.length(); ++i) {
             char c = restnum[i];
             std::int16_t advance;
             if (i < restnum.length() - 1) {
@@ -86,9 +86,9 @@ void DamageNumber::draw(double viewx, double viewy, float alpha) const
             std::int16_t first_advance = getadvance(firstnum, true);
             position.shift_x(first_advance);
 
-            for (std::size_t i = 0; i < restnum.length(); i++) {
+            for (std::size_t i = 0; i < restnum.length(); ++i) {
                 char c = restnum[i];
-                Point<std::int16_t> yshift = {0, (i % 2) ? -2 : 2};
+                Point<std::int16_t> yshift = {0, i % 2 ? -2 : 2};
                 charsets[type][true].draw(c, {position + yshift, interopc});
 
                 std::int16_t advance;
@@ -96,7 +96,7 @@ void DamageNumber::draw(double viewx, double viewy, float alpha) const
                     char n = restnum[i + 1];
                     std::int16_t c_advance = getadvance(c, false);
                     std::int16_t n_advance = getadvance(n, false);
-                    advance = (c_advance + n_advance) / 2;
+                    advance = (c_advance + n_advance) >> 1;
                 } else {
                     advance = getadvance(c, false);
                 }
@@ -113,7 +113,7 @@ std::int16_t DamageNumber::getadvance(char c, bool first) const
     constexpr std::int16_t advances[LENGTH] = {
         24, 20, 22, 22, 24, 23, 24, 22, 24, 24};
 
-    std::size_t index = c - 48;
+    std::size_t index = static_cast<unsigned char>(c) - 48u;
     if (index < LENGTH) {
         std::int16_t advance = advances[index];
         switch (type) {
@@ -144,7 +144,7 @@ bool DamageNumber::update()
 {
     moveobj.move();
 
-    constexpr float FADE_STEP = Constants::TIMESTEP * 1.0f / FADE_TIME;
+    static constexpr float FADE_STEP = Constants::TIMESTEP * 1.0f / FADE_TIME;
     opacity -= FADE_STEP;
     return opacity.last() <= 0.0f;
 }

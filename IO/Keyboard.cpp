@@ -39,7 +39,7 @@ std::int32_t Keyboard::shiftcode() const noexcept
     return GLFW_KEY_LEFT_SHIFT;
 }
 
-std::int32_t Keyboard::ctrlcode() const noexcept
+std::int32_t Keyboard::ctrl_code() const noexcept
 {
     return GLFW_KEY_LEFT_CONTROL;
 }
@@ -84,7 +84,12 @@ Keyboard::Mapping Keyboard::get_text_mapping(std::int32_t keycode,
         case GLFW_KEY_RIGHT:
         case GLFW_KEY_UP:
         case GLFW_KEY_DOWN:
-            return keymap[keycode];
+            if (auto keymap_iter = keymap.find(keycode);
+                keymap_iter != keymap.end()) {
+                return keymap.at(keycode);
+            } else {
+                return {};
+            }
         default:
             return {};
         }

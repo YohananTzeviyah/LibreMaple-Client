@@ -22,15 +22,15 @@
 
 namespace jrc
 {
-// The scrolling server notice at the top of the screen.
+//! The scrolling server notice at the top of the screen.
 class ScrollingNotice
 {
 public:
     ScrollingNotice();
 
-    void setnotice(std::string notice);
+    void set_notice(std::string&& notice) noexcept;
     void draw(float alpha) const;
-    void update();
+    void update() noexcept;
 
 private:
     ColorBox background;

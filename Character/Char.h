@@ -29,14 +29,16 @@
 #include "Look/CharLook.h"
 #include "Look/PetLook.h"
 
+#include <vector>
+
 namespace jrc
 {
-/// Base for characters, e.g. the player and other clients on the same map.
+//! Base for characters, e.g. the player and other clients on the same map.
 class Char : public MapObject
 {
 public:
-    /// Player states which determine animation and state.
-    /// Values are used in movement packets (add 1 if facing left).
+    //! Player states which determine animation and state.
+    //! Values are used in movement packets (add 1 if facing left).
     enum State : std::int8_t {
         WALK = 2,
         STAND = 4,
@@ -50,106 +52,106 @@ public:
         SIT = 20
     };
 
-    static State by_value(std::int8_t value)
+    static State by_value(std::int8_t value) noexcept
     {
         return static_cast<State>(value);
     }
 
-    /// Draw look, nametag, effects and chat bubble.
+    //! Draw look, nametag, effects and chat bubble.
     void draw(double viewx, double viewy, float alpha) const override;
-    /// Update look and movements.
+    //! Update look and movements.
     std::int8_t update(const Physics& physics) override;
-    /// Return the current map layer, or 7 if on a ladder or rope.
+    //! Return the current map layer, or 7 if on a ladder or rope.
     std::int8_t get_layer() const override;
 
-    /// Check wether the character is invincible.
+    //! Check wether the character is invincible.
     virtual bool is_invincible() const;
-    /// Return the character's level.
+    //! Return the character's level.
     virtual std::uint16_t get_level() const = 0;
-    /// Return the character's level.
-    virtual std::int32_t get_skilllevel(std::int32_t skillid) const = 0;
-    /// Return the character's base attacking speed.
-    virtual std::int8_t get_integer_attackspeed() const = 0;
+    //! Return the character's level.
+    virtual std::int32_t get_skill_level(std::int32_t skillid) const = 0;
+    //! Return the character's base attacking speed.
+    virtual std::int8_t get_integer_attack_speed() const = 0;
 
-    /// Return the attack speed as a multiplier.
-    float get_real_attackspeed() const;
-    /// Return the delay until applying an attack.
-    std::uint16_t get_attackdelay(std::size_t no) const;
+    //! Return the attack speed as a multiplier.
+    float get_real_attack_speed() const;
+    //! Return the delay until applying an attack.
+    std::uint16_t get_attack_delay(std::size_t no) const;
 
-    /// Set if the character sprite is mirrored (true = facing left)
+    //! Set if the character sprite is mirrored (true = facing left)
     virtual void set_direction(bool flipped);
-    /// Change the character's state.
+    //! Change the character's state.
     virtual void set_state(State newstate);
-    /// Change the character's stance to an attack action.
+    //! Change the character's stance to an attack action.
     void attack(const std::string& action);
-    /// Change the character's stance to an attack stance.
+    //! Change the character's stance to an attack stance.
     void attack(Stance::Id stance);
-    /// Change the character's stance to it's regular attack.
+    //! Change the character's stance to it's regular attack.
     void attack(bool degenerate);
-    /// Set the afterimage for an attack.
+    //! Set the afterimage for an attack.
     void set_afterimage(std::int32_t skill_id);
-    /// Return the current afterimage.
+    //! Return the current afterimage.
     const Afterimage& get_afterimage() const;
 
-    /// Display an animation as an effect with the character.
+    //! Display an animation as an effect with the character.
     void show_attack_effect(Animation animation, std::int8_t z);
-    /// Display an animation as an effect ontop of the character.
+    //! Display an animation as an effect ontop of the character.
     void show_effect_id(CharEffect::Id toshow);
-    /// Display the iron body skill animation.
+    //! Display the iron body skill animation.
     void show_iron_body();
-    /// Display damage over the characters head.
+    //! Display damage over the characters head.
     void show_damage(std::int32_t damage);
-    /// Display a chat bubble with the specified line in it.
-    void speak(const std::string& line);
-    /// Change a part of the character's look.
+    //! Display a chat bubble with the specified line in it.
+    void speak(std::string&& line);
+    //! Change a part of the character's look.
     void change_look(Maplestat::Id stat, std::int32_t id);
-    /// Change the character's state by id.
+    //! Change the character's state by id.
     void set_state(std::uint8_t statebyte);
-    /// Change the character's face expression by id.
-    void set_expression(std::int32_t expression);
+    //! Change the character's face expression by id.
+    void set_expression(std::int32_t exp_id);
 
-    /// Add a pet with the specified stats.
+    //! Add a pet with the specified stats.
     void add_pet(std::uint8_t index,
                  std::int32_t iid,
-                 const std::string& name,
+                 std::string&& name,
                  std::int32_t uniqueid,
                  Point<std::int16_t> pos,
                  std::uint8_t stance,
                  std::int32_t fhid);
-    /// Remove a pet with the specified index and reason.
+    //! Remove a pet with the specified index and reason.
     void remove_pet(std::uint8_t index, bool hunger);
 
-    /// Return if the character is facing left.
-    bool getflip() const;
-    /// Return the name of this character.
-    std::string get_name() const;
+    //! Return if the character is facing left.
+    bool get_flip() const;
+    //! Return the name of this character.
+    std::string_view get_name() const;
 
-    /// Return if the char is in the Char::SIT state.
+    //! Return if the char is in the Char::SIT state.
     bool is_sitting() const;
-    /// Return if the char is in the Char::LADDER or Char::ROPE state.
+    //! Return if the char is in the Char::LADDER or Char::ROPE state.
     bool is_climbing() const;
-    /// Return wether the character sprite uses stances for two-handed weapons.
-    bool is_twohanded() const;
-    /// Return the type of the currently equipped weapon.
-    Weapon::Type get_weapontype() const;
+    //! Return wether the character sprite uses stances for two-handed weapons.
+    bool is_two_handed() const;
+    //! Return the type of the currently equipped weapon.
+    Weapon::Type get_weapon_type() const;
 
-    /// Obtain a reference to this character's look.
+    //! Obtain a reference to this character's look.
     CharLook& get_look();
-    /// Obtain a const reference to this character's look.
+    //! Obtain a const reference to this character's look.
     const CharLook& get_look() const;
-    /// Return a reference to this characters's physics.
+    //! Return a reference to this characters's physics.
     PhysicsObject& get_phobj();
 
-    /// Initialize character effects.
+    //! Initialize character effects.
     static void init();
 
 protected:
-    Char(std::int32_t oid, const CharLook& look, const std::string& name);
+    Char(std::int32_t oid, const CharLook& look, std::string&& name) noexcept;
 
-    /// Update the character's animation with the given speed.
+    //! Update the character's animation with the given speed.
     bool update(const Physics& physics, float speed);
-    /// Get a speed modifier for the current stance.
-    float get_stancespeed() const;
+    //! Get a speed modifier for the current stance.
+    float get_stance_speed() const;
 
     CharLook look;
     PetLook pets[3];
@@ -159,14 +161,14 @@ protected:
     bool flip;
 
 private:
-    Text namelabel;
-    ChatBalloon chatballoon;
+    Text name_label;
+    ChatBalloon chat_balloon;
     EffectLayer effects;
     Afterimage afterimage;
     TimedBool invincible;
-    TimedBool ironbody;
-    std::list<DamageNumber> damagenumbers;
+    TimedBool iron_body;
+    std::vector<DamageNumber> damage_numbers;
 
-    static EnumMap<CharEffect::Id, Animation> chareffects;
+    static EnumMap<CharEffect::Id, Animation> char_effects;
 };
 } // namespace jrc

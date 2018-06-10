@@ -149,10 +149,10 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
             std::int16_t thumby = row * rowheight + buttonheight * 2;
             std::int16_t delta = relative.y() - thumby;
             if (delta > rowheight / 2 && row < rowmax) {
-                row++;
+                ++row;
                 onmoved(false);
             } else if (delta < -rowheight / 2 && row > 0) {
-                row--;
+                --row;
                 onmoved(true);
             }
             return Cursor::CLICKING;
@@ -184,7 +184,7 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
     if (prev.bounds(Point<std::int16_t>()).contains(cursor)) {
         if (pressed) {
             if (row > 0) {
-                row--;
+                --row;
                 onmoved(true);
             }
 
@@ -201,7 +201,7 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
     if (next.bounds(Point<std::int16_t>()).contains(cursor)) {
         if (pressed) {
             if (row < rowmax) {
-                row++;
+                ++row;
                 onmoved(false);
             }
 
@@ -225,11 +225,11 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
             cursorrow = rowmax;
         std::int16_t delta = row - cursorrow;
         while (delta > 0) {
-            delta--;
+            --delta;
             onmoved(true);
         }
         while (delta < 0) {
-            delta++;
+            ++delta;
             onmoved(false);
         }
         row = cursorrow;

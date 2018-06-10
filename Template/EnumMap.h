@@ -117,7 +117,7 @@ public:
 
         base_iterator& operator++() noexcept
         {
-            index++;
+            ++index;
             return *this;
         }
 

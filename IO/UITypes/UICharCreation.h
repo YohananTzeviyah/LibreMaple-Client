@@ -26,7 +26,7 @@
 
 namespace jrc
 {
-// Character creation screen.
+//! Character creation screen.
 class UICharcreation : public UIElement
 {
 public:
@@ -48,7 +48,8 @@ protected:
 
 private:
     void randomize_look();
-    const std::string& get_equipname(Equipslot::Id slot) const;
+    [[nodiscard]] std::string_view get_equip_name(Equipslot::Id slot) const
+        noexcept;
 
     enum Buttons {
         BT_CHARC_OK,
@@ -83,7 +84,7 @@ private:
     Randomizer randomizer;
 
     BoolPair<std::vector<std::uint8_t>> skins;
-    BoolPair<std::vector<std::uint8_t>> haircolors;
+    BoolPair<std::vector<std::uint8_t>> hair_colors;
     BoolPair<std::vector<std::int32_t>> faces;
     BoolPair<std::vector<std::int32_t>> hairs;
     BoolPair<std::vector<std::int32_t>> tops;

@@ -63,7 +63,7 @@ public:
 
     void draw(float alpha) const override;
 
-    void doubleclick(Point<std::int16_t> cursorpos) override;
+    void double_click(Point<std::int16_t> cursorpos) override;
     bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
     Cursor::State send_cursor(bool clicked,
                               Point<std::int16_t> cursorpos) override;

@@ -69,7 +69,7 @@ Cursor::State MapNpcs::send_cursor(bool pressed,
 {
     for (auto& mmo : npcs) {
         Npc* npc = static_cast<Npc*>(mmo.second.get());
-        if (npc && npc->is_active() && npc->inrange(position, viewpos)) {
+        if (npc && npc->is_active() && npc->in_range(position, viewpos)) {
             if (pressed) {
                 // TODO: try finding dialogue first
                 TalkToNPCPacket(npc->get_oid()).dispatch();

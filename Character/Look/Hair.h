@@ -42,8 +42,8 @@ public:
               std::uint8_t frame,
               const DrawArgument& args) const;
 
-    const std::string& get_name() const;
-    const std::string& getcolor() const;
+    [[nodiscard]] std::string_view get_name() const noexcept;
+    [[nodiscard]] std::string_view get_color() const noexcept;
 
 private:
     std::unordered_map<std::uint8_t, Texture> stances[Stance::LENGTH]

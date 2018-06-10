@@ -30,7 +30,7 @@ namespace jrc
 {
 UIWorldSelect::UIWorldSelect(std::vector<World> worlds,
                              std::uint8_t worldcount)
-    : UIElement({0, 0}, {Constants::VIEWWIDTH, Constants::VIEWHEIGHT})
+    : UIElement({0, 0}, {Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT})
 {
     worldid = Setting<DefaultWorld>::get().load();
     channelid = Setting<DefaultChannel>::get().load();
@@ -72,7 +72,7 @@ UIWorldSelect::UIWorldSelect(std::vector<World> worlds,
         buttons[BT_CHANNEL0 + i] =
             std::make_unique<TwoSpriteButton>(chnode["normal"]["0"],
                                               chnode["keyFocused"]["0"],
-                                              Point<std::int16_t>(200, 170));
+                                              Point<std::int16_t>{200, 170});
         if (i == channelid) {
             buttons[BT_CHANNEL0 + i]->set_state(Button::PRESSED);
         }

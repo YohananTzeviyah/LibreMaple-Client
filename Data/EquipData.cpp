@@ -24,9 +24,10 @@ namespace jrc
 {
 EquipData::EquipData(std::int32_t id) : itemdata(ItemData::get(id))
 {
-    std::string strid = "0" + std::to_string(id);
-    std::string category = itemdata.get_category();
-    nl::node src = nl::nx::character[category][strid + ".img"]["info"];
+    std::string str_id = std::to_string(id);
+    str_id.insert(0, "0", 1);
+    str_id += ".img";
+    nl::node src = nl::nx::character[itemdata.get_category()][str_id]["info"];
 
     cash = src["cash"].get_bool();
     tradeblock = src["tradeBlock"].get_bool();
@@ -53,27 +54,28 @@ EquipData::EquipData(std::int32_t id) : itemdata(ItemData::get(id))
     defstats[Equipstat::SPEED] = src["incSPEED"];
     defstats[Equipstat::JUMP] = src["incJUMP"];
 
-    constexpr std::size_t NON_WEAPON_TYPES = 15;
-    constexpr std::size_t WEAPON_OFFSET = NON_WEAPON_TYPES + 15;
-    constexpr std::size_t WEAPON_TYPES = 20;
-    std::size_t index = (id / 10000) - 100;
+    static constexpr std::size_t NON_WEAPON_TYPES = 15;
+    static constexpr std::size_t WEAPON_OFFSET = NON_WEAPON_TYPES + 15;
+    static constexpr std::size_t WEAPON_TYPES = 20;
+    auto index = static_cast<std::size_t>(id / 10000 - 100);
     if (index < NON_WEAPON_TYPES) {
-        constexpr char const* types[NON_WEAPON_TYPES] = {"HAT",
-                                                         "FACE ACCESSORY",
-                                                         "EYE ACCESSORY",
-                                                         "EARRINGS",
-                                                         "TOP",
-                                                         "OVERALL",
-                                                         "BOTTOM",
-                                                         "SHOES",
-                                                         "GLOVES",
-                                                         "SHIELD",
-                                                         "CAPE",
-                                                         "RING",
-                                                         "PENDANT",
-                                                         "BELT",
-                                                         "MEDAL"};
-        constexpr Equipslot::Id equipslots[NON_WEAPON_TYPES] = {
+        static constexpr const char* const types[NON_WEAPON_TYPES] = {
+            "HAT",
+            "FACE ACCESSORY",
+            "EYE ACCESSORY",
+            "EARRINGS",
+            "TOP",
+            "OVERALL",
+            "BOTTOM",
+            "SHOES",
+            "GLOVES",
+            "SHIELD",
+            "CAPE",
+            "RING",
+            "PENDANT",
+            "BELT",
+            "MEDAL"};
+        static constexpr Equipslot::Id equipslots[NON_WEAPON_TYPES] = {
             Equipslot::CAP,
             Equipslot::FACEACC,
             Equipslot::EYEACC,
@@ -94,26 +96,27 @@ EquipData::EquipData(std::int32_t id) : itemdata(ItemData::get(id))
         eqslot = equipslots[index];
     } else if (index >= WEAPON_OFFSET &&
                index < WEAPON_OFFSET + WEAPON_TYPES) {
-        constexpr char const* types[WEAPON_TYPES] = {"ONE-HANDED SWORD",
-                                                     "ONE-HANDED AXE",
-                                                     "ONE-HANDED MACE",
-                                                     "DAGGER",
-                                                     "",
-                                                     "",
-                                                     "",
-                                                     "WAND",
-                                                     "STAFF",
-                                                     "",
-                                                     "TWO-HANDED SWORD",
-                                                     "TWO-HANDED AXE",
-                                                     "TWO-HANDED MACE",
-                                                     "SPEAR",
-                                                     "POLEARM",
-                                                     "BOW",
-                                                     "CROSSBOW",
-                                                     "CLAW",
-                                                     "KNUCKLE",
-                                                     "GUN"};
+        static constexpr const char* const types[WEAPON_TYPES] = {
+            "ONE-HANDED SWORD",
+            "ONE-HANDED AXE",
+            "ONE-HANDED MACE",
+            "DAGGER",
+            "",
+            "",
+            "",
+            "WAND",
+            "STAFF",
+            "",
+            "TWO-HANDED SWORD",
+            "TWO-HANDED AXE",
+            "TWO-HANDED MACE",
+            "SPEAR",
+            "POLEARM",
+            "BOW",
+            "CROSSBOW",
+            "CLAW",
+            "KNUCKLE",
+            "GUN"};
 
         std::size_t weaponindex = index - WEAPON_OFFSET;
         type = types[weaponindex];
@@ -124,42 +127,42 @@ EquipData::EquipData(std::int32_t id) : itemdata(ItemData::get(id))
     }
 }
 
-bool EquipData::is_valid() const
+bool EquipData::is_valid() const noexcept
 {
     return itemdata.is_valid();
 }
 
-EquipData::operator bool() const
+EquipData::operator bool() const noexcept
 {
     return is_valid();
 }
 
-bool EquipData::is_weapon() const
+bool EquipData::is_weapon() const noexcept
 {
     return eqslot == Equipslot::WEAPON;
 }
 
-std::int16_t EquipData::get_reqstat(Maplestat::Id stat) const
+std::int16_t EquipData::get_req_stat(Maplestat::Id stat) const noexcept
 {
     return reqstats[stat];
 }
 
-std::int16_t EquipData::get_defstat(Equipstat::Id stat) const
+std::int16_t EquipData::get_def_stat(Equipstat::Id stat) const noexcept
 {
     return defstats[stat];
 }
 
-Equipslot::Id EquipData::get_eqslot() const
+Equipslot::Id EquipData::get_eq_slot() const noexcept
 {
     return eqslot;
 }
 
-const std::string& EquipData::get_type() const
+std::string_view EquipData::get_type() const noexcept
 {
     return type;
 }
 
-const ItemData& EquipData::get_itemdata() const
+const ItemData& EquipData::get_item_data() const noexcept
 {
     return itemdata;
 }

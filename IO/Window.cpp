@@ -21,7 +21,10 @@
 #include "../Console.h"
 #include "../Constants.h"
 #include "../Graphics/GraphicsGL.h"
+#include "../Util/Misc.h"
 #include "UI.h"
+
+#include <string_view>
 
 namespace jrc
 {
@@ -31,8 +34,8 @@ Window::Window()
     glwnd = nullptr;
     opacity = 1.0f;
     opcstep = 0.0f;
-    width = Constants::VIEWWIDTH;
-    height = Constants::VIEWHEIGHT;
+    width = Constants::VIEW_WIDTH;
+    height = Constants::VIEW_HEIGHT;
 }
 
 Window::~Window()
@@ -42,8 +45,11 @@ Window::~Window()
 
 void error_callback(int no, const char* description)
 {
-    Console::get().print("glfw error: " + std::string(description) + " (" +
-                         std::to_string(no) + ")");
+    Console::get().print(str::concat("GLFW error: ",
+                                     std::string_view{description},
+                                     " (",
+                                     std::to_string(no),
+                                     ')'));
 }
 
 void key_callback(GLFWwindow*, int key, int, int action, int)
@@ -82,15 +88,13 @@ void mousekey_callback(GLFWwindow*, int button, int action, int)
 
 void cursor_callback(GLFWwindow*, double xpos, double ypos)
 {
-    auto x = static_cast<std::int16_t>(xpos);
-    auto y = static_cast<std::int16_t>(ypos);
-    Point<std::int16_t> pos = Point<std::int16_t>(x, y);
-    UI::get().send_cursor(pos);
+    UI::get().send_cursor(
+        {static_cast<std::int16_t>(xpos), static_cast<std::int16_t>(ypos)});
 }
 
 Error Window::init()
 {
-    fullscreen = Setting<Fullscreen>::get().load();
+    full_screen = Setting<Fullscreen>::get().load();
 
     if (!glfwInit()) {
         return Error::GLFW;
@@ -107,19 +111,19 @@ Error Window::init()
         return error;
     }
 
-    return initwindow();
+    return init_window();
 }
 
-Error Window::initwindow()
+Error Window::init_window()
 {
     if (glwnd) {
         glfwDestroyWindow(glwnd);
     }
 
-    glwnd = glfwCreateWindow(Constants::VIEWWIDTH,
-                             Constants::VIEWHEIGHT,
+    glwnd = glfwCreateWindow(Constants::VIEW_WIDTH,
+                             Constants::VIEW_HEIGHT,
                              "LibreMaple",
-                             fullscreen ? glfwGetPrimaryMonitor() : nullptr,
+                             full_screen ? glfwGetPrimaryMonitor() : nullptr,
                              context);
 
     if (!glwnd) {
@@ -131,7 +135,7 @@ Error Window::initwindow()
     const bool vsync = Setting<VSync>::get().load();
     glfwSwapInterval(vsync ? 1 : 0);
 
-    glViewport(0, 0, Constants::VIEWWIDTH, Constants::VIEWHEIGHT);
+    glViewport(0, 0, Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
@@ -153,10 +157,10 @@ bool Window::not_closed() const
 
 void Window::update()
 {
-    updateopc();
+    update_opc();
 }
 
-void Window::updateopc()
+void Window::update_opc()
 {
     if (opcstep != 0.0f) {
         opacity += opcstep;
@@ -168,7 +172,7 @@ void Window::updateopc()
             opacity = 0.0f;
             opcstep = -opcstep;
 
-            fadeprocedure();
+            fade_procedure();
         }
     }
 }
@@ -177,8 +181,8 @@ void Window::check_events()
 {
     std::int32_t tabstate = glfwGetKey(glwnd, GLFW_KEY_F11);
     if (tabstate == GLFW_PRESS) {
-        fullscreen = !fullscreen;
-        initwindow();
+        full_screen = !full_screen;
+        init_window();
     }
     glfwPollEvents();
 }
@@ -194,18 +198,22 @@ void Window::end() const
     glfwSwapBuffers(glwnd);
 }
 
-void Window::fadeout(float step, std::function<void()> fadeproc)
+void Window::fadeout(float step, std::function<void()> fade_proc)
 {
     opcstep = -step;
-    fadeprocedure = std::move(fadeproc);
+    fade_procedure = std::move(fade_proc);
 }
 
-void Window::setclipboard(const std::string& text) const
+void Window::set_clipboard(const char* text) const
+{
+    glfwSetClipboardString(glwnd, text);
+}
+void Window::set_clipboard(const std::string& text) const
 {
     glfwSetClipboardString(glwnd, text.c_str());
 }
 
-std::string Window::getclipboard() const
+std::string Window::get_clipboard() const
 {
     const char* text = glfwGetClipboardString(glwnd);
     return text ? text : "";
@@ -214,17 +222,19 @@ std::string Window::getclipboard() const
 void Window::resize(bool in_game) noexcept
 {
     if (in_game) {
-        width = Constants::GAMEVIEWWIDTH;
-        height = Constants::GAMEVIEWHEIGHT;
+        width = Constants::GAME_VIEW_WIDTH;
+        height = Constants::GAME_VIEW_HEIGHT;
     } else {
-        width = Constants::VIEWWIDTH;
-        height = Constants::VIEWHEIGHT;
+        width = Constants::VIEW_WIDTH;
+        height = Constants::VIEW_HEIGHT;
     }
 
     glfwSetWindowSize(glwnd, width, height);
     glViewport(0, 0, width, height);
-    GraphicsGL::set_screen(
-        0, width, -Constants::VIEWYOFFSET, -Constants::VIEWYOFFSET + height);
+    GraphicsGL::set_screen(0,
+                           width,
+                           -Constants::VIEW_Y_OFFSET,
+                           -Constants::VIEW_Y_OFFSET + height);
 
     GraphicsGL::get().reinit();
 }

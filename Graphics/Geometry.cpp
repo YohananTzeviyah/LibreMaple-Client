@@ -40,7 +40,7 @@ void Geometry::draw(std::int16_t x,
     };
     const float* color = colors[cid];
 
-    GraphicsGL::get().drawrectangle(
+    GraphicsGL::get().draw_rectangle(
         x, y, w, h, color[0], color[1], color[2], opacity);
 }
 

@@ -36,282 +36,166 @@ UIKeyConfig::UIKeyConfig() noexcept : UIDragElement<PosKEYCONFIG>({622, 20})
     sprites.emplace_back(source["backgrnd2"]);
     sprites.emplace_back(source["backgrnd3"]);
 
-    buttons[Buttons::BT_CANCEL] =
-        std::make_unique<MapleButton>(source["BtCancel"]);
-    buttons[Buttons::BT_DEFAULT] =
-        std::make_unique<MapleButton>(source["BtDefault"]);
-    buttons[Buttons::BT_DELETE] =
-        std::make_unique<MapleButton>(source["BtDelete"]);
-    buttons[Buttons::BT_OK] = std::make_unique<MapleButton>(source["BtOK"]);
-    buttons[Buttons::BT_QUICKSLOT] =
+    buttons[BT_CANCEL] = std::make_unique<MapleButton>(source["BtCancel"]);
+    buttons[BT_DEFAULT] = std::make_unique<MapleButton>(source["BtDefault"]);
+    buttons[BT_DELETE] = std::make_unique<MapleButton>(source["BtDelete"]);
+    buttons[BT_OK] = std::make_unique<MapleButton>(source["BtOK"]);
+    buttons[BT_QUICKSLOT] =
         std::make_unique<MapleButton>(source["BtQuickSlot"]);
 
     const auto icon_data = source["icon"];
-    icons = {
-        {KeyAction::Id::EQUIPMENT_TAB,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::EQUIPMENT_TAB),
-             icon_data[0],
-             -1)},
-        {KeyAction::Id::INVENTORY,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::INVENTORY),
-             icon_data[1],
-             -1)},
-        {KeyAction::Id::CHAR_STATS,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::CHAR_STATS),
-             icon_data[2],
-             -1)},
-        {KeyAction::Id::SKILL_TAB,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::SKILL_TAB),
-             icon_data[3],
-             -1)},
-        {KeyAction::Id::BUDDY_TAB,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::BUDDY_TAB),
-             icon_data[4],
-             -1)},
-        {KeyAction::Id::WORLD_MAP,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::WORLD_MAP),
-             icon_data[5],
-             -1)},
-        {KeyAction::Id::MESSENGER,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::MESSENGER),
-             icon_data[6],
-             -1)},
-        {KeyAction::Id::MINI_MAP,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::MINI_MAP),
-             icon_data[7],
-             -1)},
-        {KeyAction::Id::QUEST_LOG,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::QUEST_LOG),
-             icon_data[8],
-             -1)},
-        {KeyAction::Id::KEY_CONFIG,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::KEY_CONFIG),
-             icon_data[9],
-             -1)},
-        {KeyAction::Id::TO_ALL,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TO_ALL),
-             icon_data[10],
-             -1)},
-        {KeyAction::Id::WHISPER,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::WHISPER),
-             icon_data[11],
-             -1)},
-        {KeyAction::Id::TO_PARTY,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TO_PARTY),
-             icon_data[12],
-             -1)},
-        {KeyAction::Id::TO_FRIEND,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TO_FRIEND),
-             icon_data[13],
-             -1)},
-        {KeyAction::Id::MAIN_MENU,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::MAIN_MENU),
-             icon_data[14],
-             -1)},
-        {KeyAction::Id::TOGGLE_QUICK_SLOT,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TOGGLE_QUICK_SLOT),
-             icon_data[15],
-             -1)},
-        {KeyAction::Id::CHAT_WINDOW,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::CHAT_WINDOW),
-             icon_data[16],
-             -1)},
-        {KeyAction::Id::GUILD_TAB,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::GUILD_TAB),
-             icon_data[17],
-             -1)},
-        {KeyAction::Id::TO_GUILD,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TO_GUILD),
-             icon_data[18],
-             -1)},
-        {KeyAction::Id::PARTY_TAB,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::PARTY_TAB),
-             icon_data[19],
-             -1)},
-        {KeyAction::Id::HELPER,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::HELPER),
-             icon_data[20],
-             -1)},
-        {KeyAction::Id::MONSTER_BOOK,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::MONSTER_BOOK),
-             icon_data[21],
-             -1)},
-        {KeyAction::Id::CASH_SHOP,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::CASH_SHOP),
-             icon_data[22],
-             -1)},
-        {KeyAction::Id::TO_ALLIANCE,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TO_ALLIANCE),
-             icon_data[23],
-             -1)},
-        {KeyAction::Id::PARTY_SEARCH,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::PARTY_SEARCH),
-             icon_data[24],
-             -1)},
-        {KeyAction::Id::TO_TALK,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TO_TALK),
-             icon_data[25],
-             -1)},
-        {KeyAction::Id::MEDALS,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::MEDALS),
-             icon_data[26],
-             -1)},
-        {KeyAction::Id::BOSS,
-         std::make_unique<Icon>(std::make_unique<KeyIcon>(KeyAction::Id::BOSS),
-                                icon_data[27],
-                                -1)},
-        {KeyAction::Id::TO_EXPED,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TO_EXPED),
-             icon_data[28],
-             -1)},
-        {KeyAction::Id::PROFESSION,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::PROFESSION),
-             icon_data[29],
-             -1)},
-        {KeyAction::Id::ITEM_POT,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::ITEM_POT),
-             icon_data[30],
-             -1)},
-        {KeyAction::Id::EVENT,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::EVENT),
-             icon_data[31],
-             -1)},
-        {KeyAction::Id::LEVEL_UP_GUIDE,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::LEVEL_UP_GUIDE),
-             icon_data[32],
-             -1)},
-        {KeyAction::Id::SILENT_CRUSADE,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::SILENT_CRUSADE),
-             icon_data[33],
-             -1)},
-        {KeyAction::Id::BITS,
-         std::make_unique<Icon>(std::make_unique<KeyIcon>(KeyAction::Id::BITS),
-                                icon_data[34],
-                                -1)},
-        {KeyAction::Id::CHECK_NEW_TALK,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::CHECK_NEW_TALK),
-             icon_data[35],
-             -1)},
-        {KeyAction::Id::TOTS_KNOWHOW,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TOTS_KNOWHOW),
-             icon_data[36],
-             -1)},
-        {KeyAction::Id::EPISODE,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::EPISODE),
-             icon_data[37],
-             -1)},
-        //{KeyAction::Id::HELPER_2,
-        //std::make_unique<Icon>(std::make_unique<KeyIcon>(38),
-        //icon_data["38_"], -1)},
-        {KeyAction::Id::GUIDE,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::GUIDE),
-             icon_data[39],
-             -1)},
-        {KeyAction::Id::TO_SPOUSE,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::TO_SPOUSE),
-             icon_data[40],
-             -1)},
-        {KeyAction::Id::EQUIP_ENHANCE,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::EQUIP_ENHANCE),
-             icon_data[41],
-             -1)},
-        {KeyAction::Id::PICK_UP,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::PICK_UP),
-             icon_data[50],
-             -1)},
-        {KeyAction::Id::SIT,
-         std::make_unique<Icon>(std::make_unique<KeyIcon>(KeyAction::Id::SIT),
-                                icon_data[51],
-                                -1)},
-        {KeyAction::Id::ATTACK,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::ATTACK),
-             icon_data[52],
-             -1)},
-        {KeyAction::Id::JUMP,
-         std::make_unique<Icon>(std::make_unique<KeyIcon>(KeyAction::Id::JUMP),
-                                icon_data[53],
-                                -1)},
-        {KeyAction::Id::NPC_CHAT,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::NPC_CHAT),
-             icon_data[54],
-             -1)},
-        {KeyAction::Id::FACE_1,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::FACE_1),
-             icon_data[100],
-             -1)},
-        {KeyAction::Id::FACE_2,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::FACE_2),
-             icon_data[101],
-             -1)},
-        {KeyAction::Id::FACE_3,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::FACE_3),
-             icon_data[102],
-             -1)},
-        {KeyAction::Id::FACE_4,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::FACE_4),
-             icon_data[103],
-             -1)},
-        {KeyAction::Id::FACE_5,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::FACE_5),
-             icon_data[104],
-             -1)},
-        {KeyAction::Id::FACE_6,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::FACE_6),
-             icon_data[105],
-             -1)},
-        {KeyAction::Id::FACE_7,
-         std::make_unique<Icon>(
-             std::make_unique<KeyIcon>(KeyAction::Id::FACE_7),
-             icon_data[106],
-             -1)}};
+
+    icons[KeyAction::Id::EQUIPMENT_TAB] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::EQUIPMENT_TAB),
+        icon_data[0],
+        -1);
+    icons[KeyAction::Id::INVENTORY] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::INVENTORY), icon_data[1], -1);
+    icons[KeyAction::Id::CHAR_STATS] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::CHAR_STATS),
+        icon_data[2],
+        -1);
+    icons[KeyAction::Id::SKILL_TAB] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::SKILL_TAB), icon_data[3], -1);
+    icons[KeyAction::Id::BUDDY_TAB] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::BUDDY_TAB), icon_data[4], -1);
+    icons[KeyAction::Id::WORLD_MAP] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::WORLD_MAP), icon_data[5], -1);
+    icons[KeyAction::Id::MESSENGER] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::MESSENGER), icon_data[6], -1);
+    icons[KeyAction::Id::MINI_MAP] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::MINI_MAP), icon_data[7], -1);
+    icons[KeyAction::Id::QUEST_LOG] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::QUEST_LOG), icon_data[8], -1);
+    icons[KeyAction::Id::KEY_CONFIG] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::KEY_CONFIG),
+        icon_data[9],
+        -1);
+    icons[KeyAction::Id::TO_ALL] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TO_ALL), icon_data[10], -1);
+    icons[KeyAction::Id::WHISPER] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::WHISPER), icon_data[11], -1);
+    icons[KeyAction::Id::TO_PARTY] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TO_PARTY), icon_data[12], -1);
+    icons[KeyAction::Id::TO_FRIEND] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TO_FRIEND),
+        icon_data[13],
+        -1);
+    icons[KeyAction::Id::MAIN_MENU] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::MAIN_MENU),
+        icon_data[14],
+        -1);
+    icons[KeyAction::Id::TOGGLE_QUICK_SLOT] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TOGGLE_QUICK_SLOT),
+        icon_data[15],
+        -1);
+    icons[KeyAction::Id::CHAT_WINDOW] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::CHAT_WINDOW),
+        icon_data[16],
+        -1);
+    icons[KeyAction::Id::GUILD_TAB] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::GUILD_TAB),
+        icon_data[17],
+        -1);
+    icons[KeyAction::Id::TO_GUILD] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TO_GUILD), icon_data[18], -1);
+    icons[KeyAction::Id::PARTY_TAB] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::PARTY_TAB),
+        icon_data[19],
+        -1);
+    icons[KeyAction::Id::HELPER] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::HELPER), icon_data[20], -1);
+    icons[KeyAction::Id::MONSTER_BOOK] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::MONSTER_BOOK),
+        icon_data[21],
+        -1);
+    icons[KeyAction::Id::CASH_SHOP] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::CASH_SHOP),
+        icon_data[22],
+        -1);
+    icons[KeyAction::Id::TO_ALLIANCE] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TO_ALLIANCE),
+        icon_data[23],
+        -1);
+    icons[KeyAction::Id::PARTY_SEARCH] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::PARTY_SEARCH),
+        icon_data[24],
+        -1);
+    icons[KeyAction::Id::TO_TALK] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TO_TALK), icon_data[25], -1);
+    icons[KeyAction::Id::MEDALS] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::MEDALS), icon_data[26], -1);
+    icons[KeyAction::Id::BOSS] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::BOSS), icon_data[27], -1);
+    icons[KeyAction::Id::TO_EXPED] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TO_EXPED), icon_data[28], -1);
+    icons[KeyAction::Id::PROFESSION] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::PROFESSION),
+        icon_data[29],
+        -1);
+    icons[KeyAction::Id::ITEM_POT] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::ITEM_POT), icon_data[30], -1);
+    icons[KeyAction::Id::EVENT] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::EVENT), icon_data[31], -1);
+    icons[KeyAction::Id::LEVEL_UP_GUIDE] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::LEVEL_UP_GUIDE),
+        icon_data[32],
+        -1);
+    icons[KeyAction::Id::SILENT_CRUSADE] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::SILENT_CRUSADE),
+        icon_data[33],
+        -1);
+    icons[KeyAction::Id::BITS] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::BITS), icon_data[34], -1);
+    icons[KeyAction::Id::CHECK_NEW_TALK] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::CHECK_NEW_TALK),
+        icon_data[35],
+        -1);
+    icons[KeyAction::Id::TOTS_KNOWHOW] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TOTS_KNOWHOW),
+        icon_data[36],
+        -1);
+    icons[KeyAction::Id::EPISODE] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::EPISODE), icon_data[37], -1);
+    // icons[KeyAction::Id::HELPER_2] =
+    //     std::make_unique<Icon>(
+    //         std::make_unique<KeyIcon>(KeyAction::Id::HELPER_2),
+    //         icon_data["38_"],
+    //         -1);
+    icons[KeyAction::Id::GUIDE] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::GUIDE), icon_data[39], -1);
+    icons[KeyAction::Id::TO_SPOUSE] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::TO_SPOUSE),
+        icon_data[40],
+        -1);
+    icons[KeyAction::Id::EQUIP_ENHANCE] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::EQUIP_ENHANCE),
+        icon_data[41],
+        -1);
+    icons[KeyAction::Id::PICK_UP] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::PICK_UP), icon_data[50], -1);
+    icons[KeyAction::Id::SIT] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::SIT), icon_data[51], -1);
+    icons[KeyAction::Id::ATTACK] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::ATTACK), icon_data[52], -1);
+    icons[KeyAction::Id::JUMP] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::JUMP), icon_data[53], -1);
+    icons[KeyAction::Id::NPC_CHAT] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::NPC_CHAT), icon_data[54], -1);
+    icons[KeyAction::Id::FACE_1] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::FACE_1), icon_data[100], -1);
+    icons[KeyAction::Id::FACE_2] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::FACE_2), icon_data[101], -1);
+    icons[KeyAction::Id::FACE_3] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::FACE_3), icon_data[102], -1);
+    icons[KeyAction::Id::FACE_4] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::FACE_4), icon_data[103], -1);
+    icons[KeyAction::Id::FACE_5] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::FACE_5), icon_data[104], -1);
+    icons[KeyAction::Id::FACE_6] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::FACE_6), icon_data[105], -1);
+    icons[KeyAction::Id::FACE_7] = std::make_unique<Icon>(
+        std::make_unique<KeyIcon>(KeyAction::Id::FACE_7), icon_data[106], -1);
 
     dimension = {622, 374};
     reload_mappings();
@@ -322,10 +206,10 @@ void UIKeyConfig::draw(float alpha) const
 {
     UIElement::draw(alpha);
 
-    for (const auto [action_id, icon] : icons) {
-        if (const auto slot_iter = action_mappings.find(action_id);
-            slot_iter != action_mappings.end()) {
-            icon->draw(position + SLOT_POSITIONS[slot_iter->second]);
+    for (const auto& [action_id, icon] : icons) {
+        if (auto iter = slot_mappings.right.find(action_id);
+            iter != slot_mappings.right.end()) {
+            icon->draw(position + SLOT_POSITIONS[iter->second]);
         }
     }
 }
@@ -341,25 +225,16 @@ Button::State UIKeyConfig::button_pressed(std::uint16_t id)
 
 void UIKeyConfig::reload_mappings() noexcept
 {
+    slot_mappings.left.clear();
     for (auto [slot_id, mapping] : UI::get().get_keyboard().get_maplekeys()) {
-        action_mappings[mapping.action] = slot_id;
+        update_key_slot(slot_id, mapping.action);
     }
 }
 
 void UIKeyConfig::update_key_slot(std::uint8_t key_slot,
                                   KeyAction::Id action_id) noexcept
 {
-    if (auto slot_iter = action_mappings.find(action_id);
-        slot_iter != action_mappings.end()) {
-        slot_mappings[slot_iter->second] = KeyAction::NO_ACTION;
-    }
-    if (auto action_iter = slot_mappings.find(key_slot);
-        action_iter != slot_mappings.end()) {
-        action_mappings[action_iter->second] = 0;
-    }
-
-    slot_mappings[key_slot] = action_id;
-    action_mappings[action_id] = key_slot;
+    bimap::assign(slot_mappings, key_slot, action_id);
 }
 
 Cursor::State UIKeyConfig::send_cursor(bool pressed,
@@ -370,18 +245,18 @@ Cursor::State UIKeyConfig::send_cursor(bool pressed,
         return dstate;
     }
 
-    const std::uint8_t slot = slot_by_position(cursor_pos);
+    std::uint8_t slot = slot_by_position(cursor_pos);
     if (!slot) {
         return Cursor::IDLE;
     }
-    if (const auto action_iter = slot_mappings.find(slot);
-        action_iter != slot_mappings.end()) {
-        if (const auto icon_iter = icons.find(slot);
+    if (auto action_iter = slot_mappings.left.find(slot);
+        action_iter != slot_mappings.left.end()) {
+        if (auto icon_iter = icons.find(action_iter->second);
             icon_iter != icons.end() && icon_iter->second) {
-            auto icon = icon_iter->second;
             if (pressed) {
-                icon->start_drag(cursor_pos - position - SLOT_POSITIONS[slot]);
-                UI::get().drag_icon(icon);
+                icon_iter->second->start_drag(cursor_pos - position -
+                                              SLOT_POSITIONS[slot]);
+                UI::get().drag_icon(icon_iter->second.get());
 
                 return Cursor::GRABBING;
             } else {
@@ -415,7 +290,8 @@ UIKeyConfig::slot_by_position(Point<std::int16_t> cursor_pos) const noexcept
     std::uint8_t slot_ix = 0;
     for (auto slot_pos : SLOT_POSITIONS) {
         Rectangle<std::int16_t> slot_rect{position + slot_pos,
-                                          position + slot_pos + Point{32, 32}};
+                                          position + slot_pos +
+                                              Point<std::int16_t>{32, 32}};
         if (slot_rect.contains(cursor_pos)) {
             return slot_ix;
         }

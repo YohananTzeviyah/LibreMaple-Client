@@ -152,7 +152,7 @@ bool PlayerWalkState::haswalkinput(const Player& player) const
 void PlayerWalkState::update(Player& player) const
 {
     if (!player.is_attacking() && haswalkinput(player)) {
-        player.get_phobj().hforce += player.getflip()
+        player.get_phobj().hforce += player.get_flip()
                                          ? player.get_walkforce()
                                          : -player.get_walkforce();
     }

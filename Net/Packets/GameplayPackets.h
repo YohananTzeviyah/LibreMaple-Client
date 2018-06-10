@@ -19,18 +19,19 @@
 #include "../../IO/Keyboard.h"
 #include "MovementPacket.h"
 
+#include <string_view>
 #include <unordered_map>
 
 namespace jrc
 {
-/// Requests the server to warp the player to a different map.
-/// Opcode: CHANGE_MAP(38)
+//! Requests the server to warp the player to a different map.
+//! Opcode: CHANGE_MAP(38)
 class ChangeMapPacket : public OutPacket
 {
 public:
     ChangeMapPacket(bool died,
                     std::int32_t targetid,
-                    const std::string& targetp,
+                    std::string_view targetp,
                     bool usewheel)
         : OutPacket(CHANGEMAP)
     {
@@ -42,8 +43,8 @@ public:
     }
 };
 
-/// Updates the player's position with the server.
-/// Opcode: MOVE_PLAYER(41)
+//! Updates the player's position with the server.
+//! Opcode: MOVE_PLAYER(41)
 class MovePlayerPacket : public MovementPacket
 {
 public:
@@ -55,8 +56,8 @@ public:
     }
 };
 
-/// Requests one or more new keybindings to be registered.
-/// Opcode: CHANGE_KEYMAP(0x87)
+//! Requests one or more new keybindings to be registered.
+//! Opcode: CHANGE_KEYMAP(0x87)
 class ChangeKeymapPacket : public OutPacket
 {
 public:
@@ -64,10 +65,10 @@ public:
         const std::unordered_map<std::int32_t, Keyboard::Mapping>& maplekeys)
         : OutPacket(CHANGE_KEYMAP)
     {
-        // mode
+        // Mode
         write_int(0);
 
-        // number of changes
+        // Number of changes
         write_int(static_cast<std::int32_t>(maplekeys.size()));
 
         for (const auto& [key, mapping] : maplekeys) {
@@ -80,8 +81,8 @@ public:
     }
 };
 
-/// Requests various party-related things.
-/// Opcode: PARTY_OPERATION(124)
+//! Requests various party-related things.
+//! Opcode: PARTY_OPERATION(124)
 class PartyOperationPacket : public OutPacket
 {
 public:
@@ -101,8 +102,8 @@ protected:
     }
 };
 
-/// Creates a new party.
-/// Operation: CREATE(1)
+//! Creates a new party.
+//! Operation: CREATE(1)
 class CreatePartyPacket : public PartyOperationPacket
 {
 public:
@@ -111,8 +112,8 @@ public:
     }
 };
 
-/// Leaves a party
-/// Operation: LEAVE(2)
+//! Leaves a party.
+//! Operation: LEAVE(2)
 class LeavePartyPacket : public PartyOperationPacket
 {
 public:
@@ -121,8 +122,8 @@ public:
     }
 };
 
-/// Joins a party.
-/// Operation: JOIN(3)
+//! Joins a party.
+//! Operation: JOIN(3)
 class JoinPartyPacket : public PartyOperationPacket
 {
 public:
@@ -132,19 +133,19 @@ public:
     }
 };
 
-/// Invites a player to a party.
-/// Operation: INVITE(4)
+//! Invites a player to a party.
+//! Operation: INVITE(4)
 class InviteToPartyPacket : public PartyOperationPacket
 {
 public:
-    InviteToPartyPacket(const std::string& name) : PartyOperationPacket(INVITE)
+    InviteToPartyPacket(std::string_view name) : PartyOperationPacket(INVITE)
     {
         write_string(name);
     }
 };
 
-/// Expels someone from a party.
-/// Operation: EXPEL(5)
+//! Expels someone from a party.
+//! Operation: EXPEL(5)
 class ExpelFromPartyPacket : public PartyOperationPacket
 {
 public:
@@ -154,8 +155,8 @@ public:
     }
 };
 
-/// Passes party leadership to another character.
-/// Operation: PASS_LEADER(6)
+//! Passes party leadership to another character.
+//! Operation: PASS_LEADER(6)
 class ChangePartyLeaderPacket : public PartyOperationPacket
 {
 public:
@@ -166,8 +167,8 @@ public:
     }
 };
 
-/// Updates a mob's position with the server.
-/// Opcode: MOVE_MONSTER(188)
+//! Updates a mob's position with the server.
+//! Opcode: MOVE_MONSTER(188)
 class MoveMobPacket : public MovementPacket
 {
 public:
@@ -201,8 +202,8 @@ public:
     }
 };
 
-/// Requests picking up an item.
-/// Opcode: PICKUP_ITEM(202)
+//! Requests picking up an item.
+//! Opcode: PICKUP_ITEM(202)
 class PickupItemPacket : public OutPacket
 {
 public:
@@ -216,9 +217,9 @@ public:
     }
 };
 
-/// Tells the server that we're no longer transitioning between maps,
-/// including initial login.
-/// Opcode: PLAYER_UPDATE(0xDF)
+//! Tells the server that we're no longer transitioning between maps,
+//! including initial login.
+//! Opcode: PLAYER_UPDATE(0xDF)
 class PlayerUpdatePacket : public OutPacket
 {
 public:

@@ -43,34 +43,34 @@ public:
         LENGTH
     };
 
-    static Stance stancebyvalue(std::uint8_t value)
+    static Stance stance_by_value(std::uint8_t value)
     {
-        std::uint8_t valueh = value / 2;
-        return valueh >= LENGTH ? STAND : static_cast<Stance>(valueh);
+        std::uint8_t value_h = value >> 1;
+        return value_h >= LENGTH ? STAND : static_cast<Stance>(value_h);
     }
 
     PetLook(std::int32_t iid,
-            std::string name,
+            std::string&& name,
             std::int32_t uniqueid,
             Point<std::int16_t> pos,
             std::uint8_t stance,
             std::int32_t fhid);
-    PetLook();
+    PetLook() noexcept;
 
     void draw(double viewx, double viewy, float alpha) const;
-    void update(const Physics& physics, Point<std::int16_t> charpos);
+    void update(const Physics& physics, Point<std::int16_t> char_pos) noexcept;
 
-    void set_position(std::int16_t xpos, std::int16_t ypos);
-    void set_stance(Stance stance);
-    void set_stance(std::uint8_t stancebyte);
+    void set_position(std::int16_t xpos, std::int16_t ypos) noexcept;
+    void set_stance(Stance stance) noexcept;
+    void set_stance(std::uint8_t stancebyte) noexcept;
 
-    std::int32_t get_itemid() const;
-    Stance get_stance() const;
+    std::int32_t get_item_id() const noexcept;
+    Stance get_stance() const noexcept;
 
 private:
-    std::int32_t itemid;
+    std::int32_t item_id;
     std::string name;
-    std::int32_t uniqueid;
+    std::int32_t unique_id;
     Stance stance;
     bool flip;
 

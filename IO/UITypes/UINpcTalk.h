@@ -37,7 +37,7 @@ public:
                      std::int8_t msgtype,
                      std::int16_t style,
                      std::int8_t speaker,
-                     const std::string& text);
+                     std::string&& text);
 
 protected:
     Button::State button_pressed(std::uint16_t buttonid) override;

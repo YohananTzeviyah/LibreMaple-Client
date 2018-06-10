@@ -52,15 +52,18 @@ public:
 
     struct WarpInfo {
         std::int32_t mapid;
-        std::string toname;
+        std::string to_name;
         std::string name;
         bool intramap;
         bool valid;
 
-        WarpInfo(std::int32_t m, bool i, std::string tn, std::string n)
-            : mapid(m), toname(tn), name(n), intramap(i)
+        WarpInfo(std::int32_t m, bool i, std::string&& tn, std::string&& n)
+            : mapid(m),
+              to_name(std::move(tn)),
+              name(std::move(n)),
+              intramap(i),
+              valid(mapid < 999999999)
         {
-            valid = mapid < 999999999;
         }
 
         WarpInfo() : WarpInfo(999999999, false, {}, {})
@@ -70,11 +73,11 @@ public:
 
     Portal(const Animation* animation,
            Type type,
-           std::string name,
+           std::string&& name,
            bool intramap,
            Point<std::int16_t> position,
            std::int32_t tomap,
-           std::string toname);
+           std::string&& toname);
     Portal();
 
     void update(Point<std::int16_t> playerpos);

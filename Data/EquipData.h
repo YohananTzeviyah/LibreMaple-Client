@@ -22,34 +22,36 @@
 #include "../Template/EnumMap.h"
 #include "ItemData.h"
 
+#include <string_view>
+
 namespace jrc
 {
-// Contains information about an equip.
+//! Contains information about an equip.
 class EquipData : public Cache<EquipData>
 {
 public:
-    // Returns wether the equip was loaded correctly.
-    bool is_valid() const;
-    // Returns wether the equip was loaded correctly.
-    explicit operator bool() const;
+    //! Returns wether the equip was loaded correctly.
+    bool is_valid() const noexcept;
+    //! Returns wether the equip was loaded correctly.
+    explicit operator bool() const noexcept;
 
-    // Returns wether this equip has equipslot WEAPON.
-    bool is_weapon() const;
-    // Returns a required base stat.
-    std::int16_t get_reqstat(Maplestat::Id stat) const;
-    // Returns a default stat.
-    std::int16_t get_defstat(Equipstat::Id stat) const;
-    // Returns the equip slot.
-    Equipslot::Id get_eqslot() const;
-    // Returns the category name.
-    const std::string& get_type() const;
-    // Returns the general item data (name, price, etc.).
-    const ItemData& get_itemdata() const;
+    //! Returns wether this equip has equipslot WEAPON.
+    bool is_weapon() const noexcept;
+    //! Returns a required base stat.
+    std::int16_t get_req_stat(Maplestat::Id stat) const noexcept;
+    //! Returns a default stat.
+    std::int16_t get_def_stat(Equipstat::Id stat) const noexcept;
+    //! Returns the equip slot.
+    Equipslot::Id get_eq_slot() const noexcept;
+    //! Returns the category name.
+    std::string_view get_type() const noexcept;
+    //! Returns the general item data (name, price, etc.).
+    const ItemData& get_item_data() const noexcept;
 
 private:
-    // Allow the cache to use the constructor.
+    //! Allow the cache to use the constructor.
     friend Cache<EquipData>;
-    // Load an equip from the game files.
+    //! Load an equip from the game files.
     EquipData(std::int32_t id);
 
     const ItemData& itemdata;

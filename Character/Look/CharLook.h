@@ -52,7 +52,7 @@ public:
     void attack(Stance::Id stance);
     void set_stance(Stance::Id stance);
     void set_expression(Expression::Id expression);
-    void set_action(const std::string& action);
+    void set_action(const std::string& ac_str);
     void set_direction(bool mirrored);
     void set_alerted(std::int64_t millis);
 
@@ -67,7 +67,7 @@ public:
     const Face* get_face() const;
     const CharEquips& get_equips() const;
 
-    // Initialize drawinfo.
+    // Initialize draw_info.
     static void init();
 
 private:
@@ -82,18 +82,18 @@ private:
     Stance::Id getattackstance(std::uint8_t attack, bool degenerate) const;
 
     Nominal<Stance::Id> stance;
-    Nominal<std::uint8_t> stframe;
-    std::uint16_t stelapsed;
+    Nominal<std::uint8_t> st_frame;
+    std::uint16_t st_elapsed;
 
     Nominal<Expression::Id> expression;
-    Nominal<std::uint8_t> expframe;
-    std::uint16_t expelapsed;
+    Nominal<std::uint8_t> exp_frame;
+    std::uint16_t exp_elapsed;
 
     bool flip;
 
     const BodyAction* action;
-    std::string actionstr;
-    std::uint8_t actframe;
+    std::string action_str;
+    std::uint8_t act_frame;
 
     const Body* body;
     const Hair* hair;
@@ -103,7 +103,7 @@ private:
     Randomizer randomizer;
     TimedBool alerted;
 
-    static BodyDrawinfo drawinfo;
+    static BodyDrawinfo draw_info;
     static std::unordered_map<std::int32_t, Hair> hairstyles;
     static std::unordered_map<std::int32_t, Face> facetypes;
     static std::unordered_map<std::int32_t, Body> bodytypes;

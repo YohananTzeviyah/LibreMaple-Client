@@ -21,12 +21,12 @@
 
 namespace jrc
 {
-SingleSkillSound::SingleSkillSound(std::string strid)
+SingleSkillSound::SingleSkillSound(std::string_view str_id)
 {
-    nl::node soundsrc = nl::nx::sound["Skill.img"][strid];
+    nl::node sound_src = nl::nx::sound["Skill.img"][str_id];
 
-    usesound = soundsrc["Use"];
-    hitsound = soundsrc["Hit"];
+    usesound = sound_src["Use"];
+    hitsound = sound_src["Hit"];
 }
 
 void SingleSkillSound::play_use() const

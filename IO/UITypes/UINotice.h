@@ -32,7 +32,7 @@ public:
     static constexpr bool TOGGLED = false;
 
 protected:
-    UINotice(std::string question);
+    UINotice(std::string&& question);
 
     void draw_notice(bool textfield) const;
 
@@ -53,7 +53,8 @@ private:
 class UIYesNo : public UINotice
 {
 public:
-    UIYesNo(std::string question, std::function<void(bool yes)> yesnohandler);
+    UIYesNo(std::string&& question,
+            std::function<void(bool yes)> yes_no_handler);
 
     void draw(float alpha) const override;
 
@@ -63,13 +64,13 @@ protected:
 private:
     enum Buttons : std::int16_t { YES, NO };
 
-    std::function<void(bool yes)> yesnohandler;
+    std::function<void(bool yes)> yes_no_handler;
 };
 
 class UIEnterNumber : public UINotice
 {
 public:
-    UIEnterNumber(std::string question,
+    UIEnterNumber(std::string&& question,
                   std::function<void(std::int32_t number)> numhandler,
                   std::int32_t min,
                   std::int32_t max,
@@ -85,12 +86,12 @@ protected:
     Button::State button_pressed(std::uint16_t buttonid) override;
 
 private:
-    void handlestring(const std::string& numstr);
+    void handle_string(const std::string& num_str);
 
     enum Buttons : std::int16_t { OK, CANCEL };
 
-    std::function<void(std::int32_t number)> numhandler;
-    Textfield numfield;
+    std::function<void(std::int32_t number)> num_handler;
+    Textfield num_field;
     std::int32_t min;
     std::int32_t max;
 };

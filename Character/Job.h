@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <string>
+#include <string_view>
 
 namespace jrc
 {
@@ -52,7 +53,7 @@ public:
     std::uint16_t get_id() const;
     std::uint16_t get_subjob(Level level) const;
     Level get_level() const;
-    const std::string& get_name() const;
+    std::string_view get_name() const;
     Equipstat::Id get_primary(Weapon::Type weapontype) const;
     Equipstat::Id get_secondary(Weapon::Type weapontype) const;
 

@@ -23,7 +23,7 @@
 
 namespace jrc
 {
-MapPortals::MapPortals(nl::node src, std::int32_t mapid)
+MapPortals::MapPortals(nl::node src, std::int32_t map_id)
 {
     for (const auto& sub : src) {
         auto portal_id =
@@ -39,26 +39,26 @@ MapPortals::MapPortals(nl::node src, std::int32_t mapid)
         Point<std::int16_t> position = {sub["x"], sub["y"]};
 
         const Animation* animation = &animations[type];
-        bool intramap = target_id == mapid;
+        bool intramap = target_id == map_id;
 
+        portal_ids_by_name.emplace(std::string{name}, portal_id);
         portals_by_id.emplace(std::piecewise_construct,
                               std::forward_as_tuple(portal_id),
                               std::forward_as_tuple(animation,
                                                     type,
-                                                    name,
+                                                    std::move(name),
                                                     intramap,
                                                     position,
                                                     target_id,
-                                                    target_name));
-        portal_ids_by_name.emplace(name, portal_id);
+                                                    std::move(target_name)));
     }
 
-    cooldown = WARPCD;
+    cooldown = WARP_CD;
 }
 
 MapPortals::MapPortals()
 {
-    cooldown = WARPCD;
+    cooldown = WARP_CD;
 }
 
 void MapPortals::update(Point<std::int16_t> playerpos)
@@ -79,7 +79,7 @@ void MapPortals::update(Point<std::int16_t> playerpos)
     }
 
     if (cooldown > 0) {
-        cooldown--;
+        --cooldown;
     }
 }
 
@@ -115,7 +115,7 @@ MapPortals::get_portal_by_name(const std::string& portal_name) const
 Portal::WarpInfo MapPortals::find_warp_at(Point<std::int16_t> playerpos)
 {
     if (cooldown == 0) {
-        cooldown = WARPCD;
+        cooldown = WARP_CD;
 
         for (const auto& iter : portals_by_id) {
             const Portal& portal = iter.second;

@@ -30,29 +30,29 @@ Camera::Camera()
 void Camera::update(Point<std::int16_t> position)
 {
     double next_x = x.get();
-    double hdelta = Constants::GAMEVIEWWIDTH / 2 - position.x() - next_x;
+    double hdelta = Constants::GAME_VIEW_WIDTH / 2 - position.x() - next_x;
     if (std::abs(hdelta) >= 5.0) {
-        next_x += hdelta * (12.0 / Constants::GAMEVIEWWIDTH);
+        next_x += hdelta * (12.0 / Constants::GAME_VIEW_WIDTH);
     }
 
     double next_y = y.get();
-    double vdelta = Constants::GAMEVIEWHEIGHT / 2 - position.y() - next_y;
+    double vdelta = Constants::GAME_VIEW_HEIGHT / 2 - position.y() - next_y;
     if (std::abs(vdelta) >= 5.0) {
-        next_y += vdelta * (12.0 / Constants::GAMEVIEWHEIGHT);
+        next_y += vdelta * (12.0 / Constants::GAME_VIEW_HEIGHT);
     }
 
     if (next_x > hbounds.first() ||
-        hbounds.length() < Constants::GAMEVIEWWIDTH) {
+        hbounds.length() < Constants::GAME_VIEW_WIDTH) {
         next_x = hbounds.first();
-    } else if (next_x < hbounds.second() + Constants::GAMEVIEWWIDTH) {
-        next_x = hbounds.second() + Constants::GAMEVIEWWIDTH;
+    } else if (next_x < hbounds.second() + Constants::GAME_VIEW_WIDTH) {
+        next_x = hbounds.second() + Constants::GAME_VIEW_WIDTH;
     }
 
     if (next_y > vbounds.first() ||
-        vbounds.length() < Constants::GAMEVIEWHEIGHT) {
+        vbounds.length() < Constants::GAME_VIEW_HEIGHT) {
         next_y = vbounds.first();
-    } else if (next_y < vbounds.second() + Constants::GAMEVIEWHEIGHT) {
-        next_y = vbounds.second() + Constants::GAMEVIEWHEIGHT;
+    } else if (next_y < vbounds.second() + Constants::GAME_VIEW_HEIGHT) {
+        next_y = vbounds.second() + Constants::GAME_VIEW_HEIGHT;
     }
 
     x = next_x;
@@ -61,8 +61,8 @@ void Camera::update(Point<std::int16_t> position)
 
 void Camera::set_position(Point<std::int16_t> position)
 {
-    x.set(Constants::GAMEVIEWWIDTH / 2 - position.x());
-    y.set(Constants::GAMEVIEWHEIGHT / 2 - position.y());
+    x.set(Constants::GAME_VIEW_WIDTH / 2 - position.x());
+    y.set(Constants::GAME_VIEW_HEIGHT / 2 - position.y());
 }
 
 void Camera::set_view(Range<std::int16_t> mapwalls,

@@ -84,7 +84,7 @@ void OutPacket::write_point(Point<std::int16_t> position)
     write_short(position.y());
 }
 
-void OutPacket::write_string(const std::string& str)
+void OutPacket::write_string(std::string_view str)
 {
     std::int16_t length = static_cast<std::int16_t>(str.length());
     write_short(length);

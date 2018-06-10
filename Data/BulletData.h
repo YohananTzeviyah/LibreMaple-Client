@@ -21,29 +21,29 @@
 
 namespace jrc
 {
-// Information about a bullet type item.
+//! Information about a bullet type item.
 class BulletData : public Cache<BulletData>
 {
 public:
-    // Returns wether the bullet was loaded correctly.
-    bool is_valid() const;
-    // Returns wether the bullet was loaded correctly.
+    //! Returns wether the bullet was loaded correctly.
+    [[nodiscard]] bool is_valid() const;
+    //! Returns wether the bullet was loaded correctly.
     explicit operator bool() const;
 
-    // Returns the watk increase when using this bullet.
-    std::int16_t get_watk() const;
-    // Returns the bullet animation.
-    const Animation& get_animation() const;
-    // Returns the general item data.
-    const ItemData& get_itemdata() const;
+    //! Returns the watk increase when using this bullet.
+    [[nodiscard]] std::int16_t get_watk() const;
+    //! Returns the bullet animation.
+    [[nodiscard]] const Animation& get_animation() const;
+    //! Returns the general item data.
+    [[nodiscard]] const ItemData& get_item_data() const;
 
 private:
-    // Allow the cache to use the constructor.
+    //! Allow the cache to use the constructor.
     friend Cache<BulletData>;
-    // Load a bullet from the game files.
-    BulletData(std::int32_t id);
+    //! Load a bullet from the game files.
+    BulletData(std::int32_t item_id);
 
-    const ItemData& itemdata;
+    const ItemData& item_data;
 
     Animation bullet;
     std::int16_t watk;

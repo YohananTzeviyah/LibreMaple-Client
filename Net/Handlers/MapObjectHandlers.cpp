@@ -65,7 +65,7 @@ void SpawnCharHandler::handle(InPacket& recv) const
 
     recv.skip(3);
 
-    for (std::size_t i = 0; i < 3; i++) {
+    for (std::size_t i = 0; i < 3; ++i) {
         std::int8_t available = recv.read_byte();
         if (available == 1) {
             recv.read_byte();   // 'byte2'
@@ -110,18 +110,19 @@ void SpawnPetHandler::handle(InPacket& recv) const
 {
     std::int32_t cid = recv.read_int();
     nullable_ptr<Char> character = Stage::get().get_character(cid);
-    if (!character)
+    if (!character) {
         return;
+    }
 
-    std::uint8_t petindex = recv.read_byte();
+    std::uint8_t pet_index = recv.read_byte();
     std::int8_t mode = recv.read_byte();
 
     if (mode == 1) {
         recv.skip(1);
 
-        std::int32_t itemid = recv.read_int();
+        std::int32_t item_id = recv.read_int();
         std::string name = recv.read_string();
-        std::int32_t uniqueid = recv.read_int();
+        std::int32_t unique_id = recv.read_int();
 
         recv.skip(4);
 
@@ -130,11 +131,11 @@ void SpawnPetHandler::handle(InPacket& recv) const
         std::int32_t fhid = recv.read_int();
 
         character->add_pet(
-            petindex, itemid, name, uniqueid, pos, stance, fhid);
+            pet_index, item_id, std::move(name), unique_id, pos, stance, fhid);
     } else if (mode == 0) {
         bool hunger = recv.read_bool();
 
-        character->remove_pet(petindex, hunger);
+        character->remove_pet(pet_index, hunger);
     }
 }
 

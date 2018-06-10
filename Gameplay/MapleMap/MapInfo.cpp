@@ -18,6 +18,9 @@
 #include "MapInfo.h"
 
 #include "../../Constants.h"
+#include "../../Util/Misc.h"
+
+#include <string_view>
 
 namespace jrc
 {
@@ -29,16 +32,19 @@ MapInfo::MapInfo(nl::node src,
     if (info["VRLeft"].data_type() == nl::node::type::integer) {
         mapwalls = {info["VRLeft"], info["VRRight"]};
         mapborders = {info["VRTop"], info["VRBottom"]};
-        mapborders = {mapborders.first() + Constants::VIEWYOFFSET,
-                      mapborders.second() - Constants::VIEWYOFFSET};
+        mapborders = {mapborders.first() + Constants::VIEW_Y_OFFSET,
+                      mapborders.second() - Constants::VIEW_Y_OFFSET};
     } else {
         mapwalls = walls;
         mapborders = borders;
     }
 
-    std::string bgmpath = info["bgm"];
-    std::size_t split = bgmpath.find('/');
-    bgm = bgmpath.substr(0, split) + ".img/" + bgmpath.substr(split + 1);
+    std::string bgm_path = info["bgm"];
+    std::size_t split = bgm_path.find('/');
+    std::string_view bgm_path_view = bgm_path;
+    bgm = str::concat(bgm_path_view.substr(0, split),
+                      ".img/",
+                      bgm_path_view.substr(split + 1));
 
     cloud = info["cloud"].get_bool();
     fieldlimit = info["fieldLimit"];
@@ -47,11 +53,11 @@ MapInfo::MapInfo(nl::node src,
     swim = info["swim"].get_bool();
     town = info["town"].get_bool();
 
-    for (auto seat : src["seat"]) {
+    for (auto&& seat : src["seat"]) {
         seats.push_back(seat);
     }
 
-    for (auto ladder : src["ladderRope"]) {
+    for (auto&& ladder : src["ladderRope"]) {
         ladders.push_back(ladder);
     }
 }
@@ -83,8 +89,9 @@ Range<std::int16_t> MapInfo::get_borders() const
 nullable_ptr<const Seat> MapInfo::findseat(Point<std::int16_t> position) const
 {
     for (auto& seat : seats) {
-        if (seat.inrange(position))
+        if (seat.inrange(position)) {
             return seat;
+        }
     }
     return nullptr;
 }
@@ -93,8 +100,9 @@ nullable_ptr<const Ladder> MapInfo::findladder(Point<std::int16_t> position,
                                                bool upwards) const
 {
     for (auto& ladder : ladders) {
-        if (ladder.inrange(position, upwards))
+        if (ladder.inrange(position, upwards)) {
             return ladder;
+        }
     }
     return nullptr;
 }

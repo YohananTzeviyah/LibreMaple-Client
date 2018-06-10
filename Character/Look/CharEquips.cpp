@@ -52,7 +52,7 @@ void CharEquips::add_equip(std::int32_t itemid, const BodyDrawinfo& drawinfo)
     }
     const Clothing& cloth = iter->second;
 
-    Equipslot::Id slot = cloth.get_eqslot();
+    Equipslot::Id slot = cloth.get_equip_slot();
     clothes[slot] = &cloth;
 }
 
@@ -91,10 +91,10 @@ bool CharEquips::has_weapon() const
     return get_weapon() != 0;
 }
 
-bool CharEquips::is_twohanded() const
+bool CharEquips::is_two_handed() const
 {
     if (const Clothing* weapon = clothes[Equipslot::WEAPON]) {
-        return weapon->is_twohanded();
+        return weapon->is_two_handed();
     } else {
         return false;
     }
@@ -103,18 +103,17 @@ bool CharEquips::is_twohanded() const
 CharEquips::CapType CharEquips::getcaptype() const
 {
     if (const Clothing* cap = clothes[Equipslot::CAP]) {
-        const std::string& vslot = cap->get_vslot();
-        if (vslot == "CpH1H5")
+        const auto vslot = cap->get_vslot();
+        if (vslot == "CpH1H5") {
             return HALFCOVER;
-        else if (vslot == "CpH1H5AyAs")
+        } else if (vslot == "CpH1H5AyAs") {
             return FULLCOVER;
-        else if (vslot == "CpH5")
+        } else if (vslot == "CpH5") {
             return HEADBAND;
-        else
-            return NONE;
-    } else {
-        return NONE;
+        }
     }
+
+    return NONE;
 }
 
 Stance::Id CharEquips::adjust_stance(Stance::Id stance) const

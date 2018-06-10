@@ -28,7 +28,7 @@ namespace jrc
 {
 constexpr const char* Error::messages[];
 
-Sound::Sound(Name name) : id(soundids[name])
+Sound::Sound(Name name) : id(sound_ids[name])
 {
 }
 
@@ -70,7 +70,7 @@ Error Sound::init()
 
     std::uint8_t volume = Setting<SFXVolume>::get().load();
 
-    if (!set_sfxvolume(volume)) {
+    if (!set_sfx_volume(volume)) {
         return Error::AUDIO;
     }
 
@@ -82,7 +82,7 @@ void Sound::close()
     BASS_Free();
 }
 
-bool Sound::set_sfxvolume(std::uint8_t vol)
+bool Sound::set_sfx_volume(std::uint8_t vol)
 {
     return BASS_SetConfig(BASS_CONFIG_GVOL_STREAM, vol * 100u) == TRUE;
 }
@@ -125,14 +125,14 @@ void Sound::add_sound(Name name, nl::node src)
     std::size_t id = add_sound(src);
 
     if (id) {
-        soundids[name] = id;
+        sound_ids[name] = id;
     }
 }
 
 std::unordered_map<std::size_t, std::uint64_t> Sound::samples;
-EnumMap<Sound::Name, std::size_t> Sound::soundids;
+EnumMap<Sound::Name, std::size_t> Sound::sound_ids;
 
-Music::Music(const std::string& p) : path(p)
+Music::Music(std::string&& p) noexcept : path(std::move(p))
 {
 }
 
@@ -166,14 +166,14 @@ Error Music::init()
 {
     std::uint8_t volume = Setting<BGMVolume>::get().load();
 
-    if (!set_bgmvolume(volume)) {
+    if (!set_bgm_volume(volume)) {
         return Error::AUDIO;
     }
 
     return Error::NONE;
 }
 
-bool Music::set_bgmvolume(std::uint8_t vol)
+bool Music::set_bgm_volume(std::uint8_t vol)
 {
     return BASS_SetConfig(BASS_CONFIG_GVOL_SAMPLE, vol * 100u) == TRUE;
 }

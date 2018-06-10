@@ -93,20 +93,20 @@ public:
          Alignment alignment,
          Color color,
          Background background,
-         const std::string& text = "",
+         std::string&& text = "",
          std::uint16_t maxwidth = 0,
          bool formatted = true);
     Text(Font font,
          Alignment alignment,
          Color color,
-         const std::string& text = "",
+         std::string&& text = "",
          std::uint16_t maxwidth = 0,
          bool formatted = true);
     Text();
 
     void draw(const DrawArgument& args) const;
 
-    void change_text(const std::string& text);
+    void change_text(std::string&& text);
     void change_color(Color color);
     void set_background(Background background);
 
@@ -117,17 +117,17 @@ public:
     std::uint16_t advance(std::size_t pos) const;
     Point<std::int16_t> dimensions() const;
     Point<std::int16_t> endoffset() const;
-    const std::string& get_text() const;
+    std::string_view get_text() const noexcept;
 
 private:
-    void reset_layout();
+    void reset_layout() noexcept;
 
     Font font;
     Alignment alignment;
     Color color;
     Background background;
     Layout layout;
-    std::uint16_t maxwidth;
+    std::uint16_t max_width;
     bool formatted;
     std::string text;
 };

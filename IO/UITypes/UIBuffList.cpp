@@ -22,10 +22,12 @@
 #include "nlnx/node.hpp"
 #include "nlnx/nx.hpp"
 
+#include <cstring>
+
 namespace jrc
 {
 BuffIcon::BuffIcon(std::int32_t buff, std::int32_t dur)
-    : cover(IconCover::BUFF, dur - FLASH_TIME)
+    : cover{IconCover::BUFF, dur - FLASH_TIME}
 {
     buffid = buff;
     duration = dur;
@@ -33,9 +35,12 @@ BuffIcon::BuffIcon(std::int32_t buff, std::int32_t dur)
     opcstep = -0.05f;
 
     if (buffid >= 0) {
-        std::string strid = string_format::extend_id(buffid, 7);
+        std::string str_id = string_format::extend_id(buffid, 7);
+        char str_id_buf[7];
+        std::memcpy(str_id_buf, str_id.data(), 3);
+        std::memcpy(str_id_buf + 3, ".img", 4);
         nl::node src =
-            nl::nx::skill[strid.substr(0, 3) + ".img"]["skill"][strid];
+            nl::nx::skill[std::string_view{str_id_buf, 7}]["skill"][str_id];
         icon = src["icon"];
     } else {
         icon = ItemData::get(-buffid).get_icon(true);
@@ -88,7 +93,7 @@ void UIBuffList::update()
         if (expired) {
             iter = icons.erase(iter);
         } else {
-            iter++;
+            ++iter;
         }
     }
 }

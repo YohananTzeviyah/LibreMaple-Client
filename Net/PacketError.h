@@ -16,25 +16,28 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "../Util/Str.h"
+
 #include <stdexcept>
 #include <string>
+#include <string_view>
 
 namespace jrc
 {
-// Error which is thrown by packet handling functions.
+//! Error which is thrown by packet handling functions.
 class PacketError : public std::runtime_error
 {
 public:
-    explicit PacketError(const std::string& msg) noexcept
-        : std::runtime_error(PREFIX + msg)
+    explicit PacketError(std::string_view msg) noexcept
+        : std::runtime_error(str::concat(PREFIX, msg))
     {
     }
 
-    /// Explicit copy constructor so that we can assure the compiler that
-    /// it does not throw (because doing so results in UB).
+    //! Explicit copy constructor so that we can assure the compiler that
+    //! it does not throw (because doing so results in UB).
     PacketError(const PacketError& other) noexcept = default;
 
 private:
-    static constexpr const char* PREFIX = "Packet Error: ";
+    static constexpr const std::string_view PREFIX = "[Packet error] ";
 };
 } // namespace jrc

@@ -31,7 +31,7 @@
 namespace jrc
 {
 UIShop::UIShop(const CharLook& in_charlook, const Inventory& in_inventory)
-    : charlook(in_charlook), inventory(in_inventory)
+    : char_look(in_charlook), inventory(in_inventory)
 {
     nl::node src = nl::nx::ui["UIWindow2.img"]["Shop"];
     nl::node src2 = nl::nx::ui["UIWindow2.img"]["Shop2"];
@@ -47,7 +47,7 @@ UIShop::UIShop(const CharLook& in_charlook, const Inventory& in_inventory)
     nl::node sellen = src2["TabSell"]["enabled"];
     nl::node selldis = src2["TabSell"]["disabled"];
 
-    constexpr Point<std::int16_t> stshift(-43, -9);
+    constexpr Point<std::int16_t> stshift{-43, -9};
     for (std::uint16_t i = EQUIP; i <= CASH; ++i) {
         std::string tabnum = std::to_string(i - EQUIP);
         buttons[i] = std::make_unique<TwoSpriteButton>(
@@ -69,26 +69,26 @@ UIShop::UIShop(const CharLook& in_charlook, const Inventory& in_inventory)
     impossible = src["ShopSpecial"]["impossible"];
     meso = src["meso"];
 
-    mesolabel = {Text::A11M, Text::RIGHT, Text::LIGHTGREY};
+    meso_label = {Text::A11M, Text::RIGHT, Text::LIGHTGREY};
 
-    buyslider = {11, {115, 308}, 214, 5, 1, [&](bool upwards) {
-                     std::int16_t shift = upwards ? -1 : 1;
-                     bool above = buystate.offset + shift >= 0;
-                     bool below =
-                         buystate.offset + shift <= buystate.lastslot - 5;
-                     if (above && below) {
-                         buystate.offset += shift;
-                     }
-                 }};
-    sellslider = {11, {115, 308}, 445, 5, 1, [&](bool upwards) {
+    buy_slider = {11, {115, 308}, 214, 5, 1, [&](bool upwards) {
                       std::int16_t shift = upwards ? -1 : 1;
-                      bool above = sellstate.offset + shift >= 0;
+                      bool above = buystate.offset + shift >= 0;
                       bool below =
-                          sellstate.offset + shift <= sellstate.lastslot - 5;
+                          buystate.offset + shift <= buystate.last_slot - 5;
                       if (above && below) {
-                          sellstate.offset += shift;
+                          buystate.offset += shift;
                       }
                   }};
+    sell_slider = {11, {115, 308}, 445, 5, 1, [&](bool upwards) {
+                       std::int16_t shift = upwards ? -1 : 1;
+                       bool above = sellstate.offset + shift >= 0;
+                       bool below =
+                           sellstate.offset + shift <= sellstate.last_slot - 5;
+                       if (above && below) {
+                           sellstate.offset += shift;
+                       }
+                   }};
 
     active = false;
     dimension = Texture(src["backgrnd"]).get_dimensions();
@@ -99,35 +99,34 @@ void UIShop::draw(float alpha) const
 {
     UIElement::draw(alpha);
 
-    npc.draw({position + Point<std::int16_t>(64, 76), true});
-    charlook.draw(position + Point<std::int16_t>(294, 76),
-                  false,
-                  Stance::STAND1,
-                  Expression::DEFAULT);
+    npc.draw({position + Point<std::int16_t>{64, 76}, true});
+    char_look.draw(position + Point<std::int16_t>{294, 76},
+                   false,
+                   Stance::STAND1,
+                   Expression::DEFAULT);
 
-    mesolabel.draw(position + Point<std::int16_t>(450, 62));
+    meso_label.draw(position + Point<std::int16_t>{450, 62});
 
     buystate.draw(position, selection);
     sellstate.draw(position, selection);
 
-    buyslider.draw(position);
-    sellslider.draw(position);
+    buy_slider.draw(position);
+    sell_slider.draw(position);
 }
 
 void UIShop::update()
 {
-    std::int64_t num_mesos = inventory.get_meso();
-    std::string mesostr = std::to_string(num_mesos);
-    string_format::split_number(mesostr);
-    mesolabel.change_text(mesostr);
+    std::string meso_str = std::to_string(inventory.get_meso());
+    string_format::split_number(meso_str);
+    meso_label.change_text(std::move(meso_str));
 }
 
 Button::State UIShop::button_pressed(std::uint16_t buttonid)
 {
     clear_tooltip();
 
-    constexpr Range<std::uint16_t> buy(BUY0, BUY4);
-    constexpr Range<std::uint16_t> sell(SELL0, SELL4);
+    constexpr Range<std::uint16_t> buy{BUY0, BUY4};
+    constexpr Range<std::uint16_t> sell{SELL0, SELL4};
     if (buy.contains(buttonid)) {
         std::int16_t selected = buttonid - BUY0;
         buystate.select(selected);
@@ -151,19 +150,19 @@ Button::State UIShop::button_pressed(std::uint16_t buttonid)
             NpcShopActionPacket().dispatch();
             return Button::PRESSED;
         case EQUIP:
-            changeselltab(InventoryType::EQUIP);
+            change_sell_tab(InventoryType::EQUIP);
             return Button::IDENTITY;
         case USE:
-            changeselltab(InventoryType::USE);
+            change_sell_tab(InventoryType::USE);
             return Button::IDENTITY;
         case ETC:
-            changeselltab(InventoryType::ETC);
+            change_sell_tab(InventoryType::ETC);
             return Button::IDENTITY;
         case SETUP:
-            changeselltab(InventoryType::SETUP);
+            change_sell_tab(InventoryType::SETUP);
             return Button::IDENTITY;
         case CASH:
-            changeselltab(InventoryType::CASH);
+            change_sell_tab(InventoryType::CASH);
             return Button::IDENTITY;
         default:
             break;
@@ -174,11 +173,11 @@ Button::State UIShop::button_pressed(std::uint16_t buttonid)
 
 bool UIShop::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
 {
-    if (buyslider.remove_cursor(clicked)) {
+    if (buy_slider.remove_cursor(clicked)) {
         return true;
     }
 
-    if (sellslider.remove_cursor(clicked)) {
+    if (sell_slider.remove_cursor(clicked)) {
         return true;
     }
 
@@ -188,16 +187,16 @@ bool UIShop::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
 Cursor::State UIShop::send_cursor(bool clicked, Point<std::int16_t> cursorpos)
 {
     Point<std::int16_t> cursoroffset = cursorpos - position;
-    if (buyslider.isenabled()) {
-        Cursor::State bstate = buyslider.send_cursor(cursoroffset, clicked);
+    if (buy_slider.isenabled()) {
+        Cursor::State bstate = buy_slider.send_cursor(cursoroffset, clicked);
         if (bstate != Cursor::IDLE) {
             clear_tooltip();
             return bstate;
         }
     }
 
-    if (sellslider.isenabled()) {
-        Cursor::State sstate = sellslider.send_cursor(cursoroffset, clicked);
+    if (sell_slider.isenabled()) {
+        Cursor::State sstate = sell_slider.send_cursor(cursoroffset, clicked);
         if (sstate != Cursor::IDLE) {
             clear_tooltip();
             return sstate;
@@ -235,37 +234,38 @@ void UIShop::show_item(std::int16_t slot, bool buy)
     }
 }
 
-void UIShop::changeselltab(InventoryType::Id type)
+void UIShop::change_sell_tab(InventoryType::Id type)
 {
-    std::uint16_t oldtab = tabbyinventory(sellstate.tab);
+    std::uint16_t oldtab = tab_by_inventory(sellstate.tab);
     if (oldtab > 0) {
         buttons[oldtab]->set_state(Button::NORMAL);
     }
 
-    std::uint16_t newtab = tabbyinventory(type);
+    std::uint16_t newtab = tab_by_inventory(type);
     if (newtab > 0) {
         buttons[newtab]->set_state(Button::PRESSED);
     }
 
     sellstate.change_tab(inventory, type, meso);
 
-    sellslider.setrows(5, sellstate.lastslot);
+    sell_slider.setrows(5, sellstate.last_slot);
 }
 
-void UIShop::reset(std::int32_t npcid)
+void UIShop::reset(std::int32_t npc_id)
 {
-    std::string strid = string_format::extend_id(npcid, 7);
-    npc = nl::nx::npc[strid + ".img"]["stand"]["0"];
+    std::string str_id = string_format::extend_id(npc_id, 7);
+    str_id += ".img";
+    npc = nl::nx::npc[str_id]["stand"]["0"];
 
-    for (auto& button : buttons) {
-        button.second->set_state(Button::NORMAL);
+    for (auto& [_, button] : buttons) {
+        button->set_state(Button::NORMAL);
     }
     buttons[EQUIP]->set_state(Button::PRESSED);
 
     buystate.reset();
     sellstate.reset();
 
-    changeselltab(InventoryType::EQUIP);
+    change_sell_tab(InventoryType::EQUIP);
 
     active = true;
 }
@@ -273,7 +273,7 @@ void UIShop::reset(std::int32_t npcid)
 void UIShop::modify(InventoryType::Id type)
 {
     if (type == sellstate.tab) {
-        changeselltab(type);
+        change_sell_tab(type);
     }
 }
 
@@ -296,7 +296,7 @@ void UIShop::add_rechargable(std::int32_t id,
     auto buyitem = BuyItem(meso, id, price, pitch, time, chargeprice, buyable);
     buystate.add(buyitem);
 
-    buyslider.setrows(5, buystate.lastslot);
+    buy_slider.setrows(5, buystate.last_slot);
 }
 
 std::int16_t UIShop::slot_by_position(std::int16_t y)
@@ -317,7 +317,7 @@ std::int16_t UIShop::slot_by_position(std::int16_t y)
     }
 }
 
-std::uint16_t UIShop::tabbyinventory(InventoryType::Id type)
+std::uint16_t UIShop::tab_by_inventory(InventoryType::Id type)
 {
     switch (type) {
     case InventoryType::EQUIP:
@@ -347,29 +347,30 @@ UIShop::BuyItem::BuyItem(Texture cur,
       price(p),
       pitch(pt),
       time(t),
-      chargeprice(cp),
+      charge_price(cp),
       buyable(b)
 {
-    namelabel = {Text::A11M, Text::LEFT, Text::DARKGREY};
-    pricelabel = {Text::A11M, Text::LEFT, Text::DARKGREY};
+    name_label = {Text::A11M, Text::LEFT, Text::DARKGREY};
+    price_label = {Text::A11M, Text::LEFT, Text::DARKGREY};
 
     const ItemData& item = ItemData::get(id);
     if (item.is_valid()) {
         icon = item.get_icon(false);
-        namelabel.change_text(item.get_name());
+        name_label.change_text(std::string{item.get_name()});
     }
 
-    std::string mesostr = std::to_string(price);
-    string_format::split_number(mesostr);
-    pricelabel.change_text(mesostr + " Mesos");
+    std::string meso_str = std::to_string(price);
+    string_format::split_number(meso_str);
+    meso_str += " Mesos";
+    price_label.change_text(std::move(meso_str));
 }
 
 void UIShop::BuyItem::draw(Point<std::int16_t> pos) const
 {
-    icon.draw(pos + Point<std::int16_t>(0, 32));
-    namelabel.draw(pos + Point<std::int16_t>(40, -1));
-    currency.draw(pos + Point<std::int16_t>(38, 20));
-    pricelabel.draw(pos + Point<std::int16_t>(53, 17));
+    icon.draw(pos + Point<std::int16_t>{0, 32});
+    name_label.draw(pos + Point<std::int16_t>{40, -1});
+    currency.draw(pos + Point<std::int16_t>{38, 20});
+    price_label.draw(pos + Point<std::int16_t>{53, 17});
 }
 
 std::int32_t UIShop::BuyItem::get_id() const
@@ -394,33 +395,32 @@ UIShop::SellItem::SellItem(std::int32_t item_id,
     id = item_id;
     sellable = count;
     slot = s;
-    showcount = sc;
+    show_count = sc;
     currency = cur;
 
-    namelabel = {Text::A11M, Text::LEFT, Text::DARKGREY};
-    pricelabel = {Text::A11M, Text::LEFT, Text::DARKGREY};
+    name_label = {Text::A11M, Text::LEFT, Text::DARKGREY};
+    price_label = {Text::A11M, Text::LEFT, Text::DARKGREY};
 
-    std::string name = idata.get_name();
-    namelabel.change_text(name);
+    name_label.change_text(std::string{idata.get_name()});
 
-    std::int32_t price = idata.get_price();
-    std::string mesostr = std::to_string(price);
-    string_format::split_number(mesostr);
-    pricelabel.change_text(mesostr + " Mesos");
+    std::string meso_str = std::to_string(idata.get_price());
+    string_format::split_number(meso_str);
+    meso_str += " Mesos";
+    price_label.change_text(std::move(meso_str));
 }
 
 void UIShop::SellItem::draw(Point<std::int16_t> pos) const
 {
-    icon.draw(pos + Point<std::int16_t>(0, 32));
-    if (showcount) {
+    icon.draw(pos + Point<std::int16_t>{0, 32});
+    if (show_count) {
         static const Charset countset = {nl::nx::ui["Basic.img"]["ItemNo"],
                                          Charset::LEFT};
         countset.draw(std::to_string(sellable),
-                      pos + Point<std::int16_t>(0, 20));
+                      pos + Point<std::int16_t>{0, 20});
     }
-    namelabel.draw(pos + Point<std::int16_t>(40, -1));
-    currency.draw(pos + Point<std::int16_t>(38, 20));
-    pricelabel.draw(pos + Point<std::int16_t>(53, 17));
+    name_label.draw(pos + Point<std::int16_t>{40, -1});
+    currency.draw(pos + Point<std::int16_t>{38, 20});
+    price_label.draw(pos + Point<std::int16_t>{53, 17});
 }
 
 std::int32_t UIShop::SellItem::get_id() const
@@ -443,7 +443,7 @@ void UIShop::BuyState::reset()
     items.clear();
 
     offset = 0;
-    lastslot = 0;
+    last_slot = 0;
     selection = -1;
 }
 
@@ -452,13 +452,13 @@ void UIShop::BuyState::draw(Point<std::int16_t> parentpos,
 {
     for (std::int16_t i = 0; i < 5; ++i) {
         std::int16_t slot = i + offset;
-        if (slot >= lastslot) {
+        if (slot >= last_slot) {
             break;
         }
 
-        auto itempos = Point<std::int16_t>(12, 116 + 42 * i);
+        auto itempos = Point<std::int16_t>{12, 116 + 42 * i};
         if (slot == selection) {
-            selected.draw(parentpos + itempos + Point<std::int16_t>(35, -1));
+            selected.draw(parentpos + itempos + Point<std::int16_t>{35, -1});
         }
         items[slot].draw(parentpos + itempos);
     }
@@ -467,7 +467,7 @@ void UIShop::BuyState::draw(Point<std::int16_t> parentpos,
 void UIShop::BuyState::show_item(std::int16_t slot)
 {
     std::int16_t absslot = slot + offset;
-    if (absslot < 0 || absslot >= lastslot) {
+    if (absslot < 0 || absslot >= last_slot) {
         return;
     }
 
@@ -479,35 +479,35 @@ void UIShop::BuyState::add(BuyItem item)
 {
     items.push_back(item);
 
-    lastslot++;
+    ++last_slot;
 }
 
 void UIShop::BuyState::buy() const
 {
-    if (selection < 0 || selection >= lastslot) {
+    if (selection < 0 || selection >= last_slot) {
         return;
     }
 
     const BuyItem& item = items[selection];
     std::int16_t buyable = item.get_buyable();
     std::int16_t slot = selection;
-    std::int32_t itemid = item.get_id();
+    std::int32_t item_id = item.get_id();
     if (buyable > 1) {
         constexpr auto question = "How many would you like to buy?";
-        auto onenter = [slot, itemid](std::int32_t qty) {
-            auto shortqty = static_cast<std::int16_t>(qty);
+        auto on_enter = [slot, item_id](std::int32_t qty) {
+            auto short_qty = static_cast<std::int16_t>(qty);
 
-            NpcShopActionPacket(slot, itemid, shortqty, true).dispatch();
+            NpcShopActionPacket(slot, item_id, short_qty, true).dispatch();
         };
-        UI::get().emplace<UIEnterNumber>(question, onenter, 1, buyable, 1);
+        UI::get().emplace<UIEnterNumber>(question, on_enter, 1, buyable, 1);
     } else if (buyable > 0) {
         constexpr auto question = "Would you like to buy the item?";
-        auto ondecide = [slot, itemid](bool yes) {
+        auto on_decide = [slot, item_id](bool yes) {
             if (yes) {
-                NpcShopActionPacket(slot, itemid, 1, true).dispatch();
+                NpcShopActionPacket(slot, item_id, 1, true).dispatch();
             }
         };
-        UI::get().emplace<UIYesNo>(question, ondecide);
+        UI::get().emplace<UIYesNo>(question, on_decide);
     }
 }
 
@@ -526,7 +526,7 @@ void UIShop::SellState::reset()
     items.clear();
 
     offset = 0;
-    lastslot = 0;
+    last_slot = 0;
     selection = -1;
     tab = InventoryType::NONE;
 }
@@ -551,7 +551,7 @@ void UIShop::SellState::change_tab(const Inventory& inv,
         }
     }
 
-    lastslot = static_cast<std::int16_t>(items.size());
+    last_slot = static_cast<std::int16_t>(items.size());
 }
 
 void UIShop::SellState::draw(Point<std::int16_t> parentpos,
@@ -559,13 +559,13 @@ void UIShop::SellState::draw(Point<std::int16_t> parentpos,
 {
     for (std::int16_t i = 0; i < 5; ++i) {
         std::int16_t slot = i + offset;
-        if (slot >= lastslot) {
+        if (slot >= last_slot) {
             break;
         }
 
         Point<std::int16_t> itempos(243, 116 + 42 * i);
         if (slot == selection) {
-            selected.draw(parentpos + itempos + Point<std::int16_t>(35, -1));
+            selected.draw(parentpos + itempos + Point<std::int16_t>{35, -1});
         }
         items[slot].draw(parentpos + itempos);
     }
@@ -574,7 +574,7 @@ void UIShop::SellState::draw(Point<std::int16_t> parentpos,
 void UIShop::SellState::show_item(std::int16_t slot)
 {
     std::int16_t absslot = slot + offset;
-    if (absslot < 0 || absslot >= lastslot) {
+    if (absslot < 0 || absslot >= last_slot) {
         return;
     }
 
@@ -589,30 +589,30 @@ void UIShop::SellState::show_item(std::int16_t slot)
 
 void UIShop::SellState::sell() const
 {
-    if (selection < 0 || selection >= lastslot) {
+    if (selection < 0 || selection >= last_slot) {
         return;
     }
 
     const SellItem& item = items[selection];
-    std::int32_t itemid = item.get_id();
+    std::int32_t item_id = item.get_id();
     std::int16_t sellable = item.get_sellable();
     std::int16_t slot = item.get_slot();
     if (sellable > 1) {
         constexpr auto question = "How many would you like to sell?";
-        auto onenter = [itemid, slot](std::int32_t qty) {
-            auto shortqty = static_cast<std::int16_t>(qty);
+        auto on_enter = [item_id, slot](std::int32_t qty) {
+            auto short_qty = static_cast<std::int16_t>(qty);
 
-            NpcShopActionPacket(slot, itemid, shortqty, false).dispatch();
+            NpcShopActionPacket(slot, item_id, short_qty, false).dispatch();
         };
-        UI::get().emplace<UIEnterNumber>(question, onenter, 1, sellable, 1);
+        UI::get().emplace<UIEnterNumber>(question, on_enter, 1, sellable, 1);
     } else if (sellable > 0) {
         constexpr auto question = "Would you like to sell the item?";
-        auto ondecide = [itemid, slot](bool yes) {
+        auto on_decide = [item_id, slot](bool yes) {
             if (yes) {
-                NpcShopActionPacket(slot, itemid, 1, false).dispatch();
+                NpcShopActionPacket(slot, item_id, 1, false).dispatch();
             }
         };
-        UI::get().emplace<UIYesNo>(question, ondecide);
+        UI::get().emplace<UIYesNo>(question, on_decide);
     }
 }
 

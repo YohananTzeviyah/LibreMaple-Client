@@ -53,7 +53,7 @@ void MapObjects::update(const Physics& physics)
         if (remove_mob) {
             iter = objects.erase(iter);
         } else {
-            iter++;
+            ++iter;
         }
     }
 }

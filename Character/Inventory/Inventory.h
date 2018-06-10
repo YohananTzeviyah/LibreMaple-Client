@@ -109,7 +109,7 @@ public:
     std::int16_t get_bulletslot() const;
     // Return the count of the currently active projectile.
     std::uint16_t get_bulletcount() const;
-    // Return the itemid of the currently active projectile.
+    // Return the item_id of the currently active projectile.
     std::int32_t get_bulletid() const;
     // Return the number of slots for the specified inventory.
     std::uint8_t get_slotmax(InventoryType::Id type) const;

@@ -22,6 +22,8 @@
 #include "../UI.h"
 #include "nlnx/nx.hpp"
 
+#include <cstdlib>
+
 namespace jrc
 {
 UIStatsinfo::UIStatsinfo(const CharStats& st)
@@ -128,24 +130,27 @@ void UIStatsinfo::update_all_stats()
         update_ap();
     }
 
-    statlabels[NAME].change_text(stats.get_name());
+    statlabels[NAME].change_text(std::string{stats.get_name()});
     statlabels[GUILD].change_text("");
 
-    statlabels[HP].change_text(std::to_string(stats.get_stat(Maplestat::HP)) +
-                               " / " +
-                               std::to_string(stats.get_total(Equipstat::HP)));
-    statlabels[MP].change_text(std::to_string(stats.get_stat(Maplestat::MP)) +
-                               " / " +
-                               std::to_string(stats.get_total(Equipstat::MP)));
+    statlabels[HP].change_text(
+        str::concat(std::to_string(stats.get_stat(Maplestat::HP)),
+                    " / ",
+                    std::to_string(stats.get_total(Equipstat::HP))));
+    statlabels[MP].change_text(
+        str::concat(std::to_string(stats.get_stat(Maplestat::MP)),
+                    " / ",
+                    std::to_string(stats.get_total(Equipstat::MP))));
 
     update_basevstotal(STR, Maplestat::STR, Equipstat::STR);
     update_basevstotal(DEX, Maplestat::DEX, Equipstat::DEX);
     update_basevstotal(INT, Maplestat::INT, Equipstat::INT);
     update_basevstotal(LUK, Maplestat::LUK, Equipstat::LUK);
 
-    statlabels[DAMAGE].change_text(std::to_string(stats.get_mindamage()) +
-                                   " ~ " +
-                                   std::to_string(stats.get_maxdamage()));
+    statlabels[DAMAGE].change_text(
+        str::concat(std::to_string(stats.get_mindamage()),
+                    " ~ ",
+                    std::to_string(stats.get_maxdamage())));
     if (stats.is_damage_buffed()) {
         statlabels[DAMAGE].change_color(Text::RED);
     } else {
@@ -158,31 +163,32 @@ void UIStatsinfo::update_all_stats()
     update_buffed(ACCURACY, Equipstat::ACC);
     update_buffed(AVOID, Equipstat::AVOID);
 
-    statlabels[CRIT].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_critical() * 100)) +
-        "%");
-    statlabels[MINCRIT].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_mincrit() * 100)) +
-        "%");
-    statlabels[MAXCRIT].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_maxcrit() * 100)) +
-        "%");
-    statlabels[BDM].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_bossdmg() * 100)) +
-        "%");
-    statlabels[IGNOREDEF].change_text(std::to_string(static_cast<std::int32_t>(
-                                          stats.get_ignoredef() * 100)) +
-                                      "%");
-    statlabels[RESIST].change_text(std::to_string(static_cast<std::int32_t>(
-                                       stats.get_resistance() * 100)) +
-                                   "%");
-    statlabels[STANCE].change_text(
-        std::to_string(static_cast<std::int32_t>(stats.get_stance() * 100)) +
-        "%");
+    statlabels[CRIT].change_text(str::concat(
+        std::to_string(static_cast<std::int32_t>(stats.get_critical() * 100)),
+        '%'));
+    statlabels[MINCRIT].change_text(str::concat(
+        std::to_string(static_cast<std::int32_t>(stats.get_mincrit() * 100)),
+        '%'));
+    statlabels[MAXCRIT].change_text(str::concat(
+        std::to_string(static_cast<std::int32_t>(stats.get_maxcrit() * 100)),
+        '%'));
+    statlabels[BDM].change_text(str::concat(
+        std::to_string(static_cast<std::int32_t>(stats.get_bossdmg() * 100)),
+        '%'));
+    statlabels[IGNOREDEF].change_text(str::concat(
+        std::to_string(static_cast<std::int32_t>(stats.get_ignoredef() * 100)),
+        '%'));
+    statlabels[RESIST].change_text(
+        str::concat(std::to_string(static_cast<std::int32_t>(
+                        stats.get_resistance() * 100)),
+                    '%'));
+    statlabels[STANCE].change_text(str::concat(
+        std::to_string(static_cast<std::int32_t>(stats.get_stance() * 100)),
+        '%'));
     statlabels[SPEED].change_text(
-        std::to_string(stats.get_total(Equipstat::SPEED)) + "%");
+        str::concat(std::to_string(stats.get_total(Equipstat::SPEED)), '%'));
     statlabels[JUMP].change_text(
-        std::to_string(stats.get_total(Equipstat::JUMP)) + "%");
+        str::concat(std::to_string(stats.get_total(Equipstat::JUMP)), '%'));
     statlabels[HONOR].change_text(std::to_string(stats.get_honor()));
 }
 
@@ -190,7 +196,7 @@ void UIStatsinfo::update_stat(Maplestat::Id stat)
 {
     switch (stat) {
     case Maplestat::JOB:
-        statlabels[JOB].change_text(stats.get_jobname());
+        statlabels[JOB].change_text(std::string{stats.get_job_name()});
         break;
     case Maplestat::FAME:
         update_simple(FAME, Maplestat::FAME);
@@ -289,17 +295,14 @@ void UIStatsinfo::update_basevstotal(StatLabel label,
     std::int32_t total = stats.get_total(tstat);
     std::int32_t delta = total - base;
 
-    std::string stattext = std::to_string(total);
-    if (delta) {
-        stattext += " (" + std::to_string(base);
-        if (delta > 0) {
-            stattext += " + " + std::to_string(delta);
-        } else if (delta < 0) {
-            stattext += " - " + std::to_string(-delta);
-        }
-        stattext += ")";
-    }
-    statlabels[label].change_text(stattext);
+    statlabels[label].change_text(
+        delta ? str::concat(std::to_string(total),
+                            " (",
+                            std::to_string(base),
+                            delta > 0 ? " + " : " - ",
+                            std::to_string(std::abs(delta)),
+                            ')')
+              : std::to_string(total));
 }
 
 void UIStatsinfo::update_buffed(StatLabel label, Equipstat::Id stat)
@@ -307,20 +310,19 @@ void UIStatsinfo::update_buffed(StatLabel label, Equipstat::Id stat)
     std::int32_t total = stats.get_total(stat);
     std::int32_t delta = stats.get_buffdelta(stat);
 
-    std::string stattext = std::to_string(total);
-    if (delta) {
-        stattext += " (" + std::to_string(total - delta);
-        if (delta > 0) {
-            stattext += " + " + std::to_string(delta);
+    statlabels[label].change_text(
+        delta ? str::concat(std::to_string(total),
+                            " (",
+                            std::to_string(total - delta),
+                            delta > 0 ? " + " : " - ",
+                            std::to_string(std::abs(delta)),
+                            ')')
+              : std::to_string(total));
 
-            statlabels[label].change_color(Text::RED);
-        } else if (delta < 0) {
-            stattext += " - " + std::to_string(-delta);
-
-            statlabels[label].change_color(Text::BLUE);
-        }
-        stattext += ")";
+    if (delta > 0) {
+        statlabels[label].change_color(Text::RED);
+    } else if (delta < 0) {
+        statlabels[label].change_color(Text::BLUE);
     }
-    statlabels[label].change_text(stattext);
 }
 } // namespace jrc

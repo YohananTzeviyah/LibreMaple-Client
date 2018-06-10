@@ -21,11 +21,17 @@
 
 namespace jrc
 {
-BulletData::BulletData(std::int32_t itemid) : itemdata(ItemData::get(itemid))
+BulletData::BulletData(std::int32_t item_id)
+    : item_data(ItemData::get(item_id))
 {
-    std::string prefix = "0" + std::to_string(itemid / 10000);
-    std::string strid = "0" + std::to_string(itemid);
-    nl::node src = nl::nx::item["Consume"][prefix + ".img"][strid];
+    std::string prefix = std::to_string(item_id / 10000);
+    prefix.insert(0, "0", 1);
+    prefix += ".img";
+
+    std::string str_id = std::to_string(item_id);
+    str_id.insert(0, "0", 1);
+
+    nl::node src = nl::nx::item["Consume"][prefix][str_id];
 
     bullet = src["bullet"];
     watk = src["info"]["incPAD"];
@@ -33,7 +39,7 @@ BulletData::BulletData(std::int32_t itemid) : itemdata(ItemData::get(itemid))
 
 bool BulletData::is_valid() const
 {
-    return itemdata.is_valid();
+    return item_data.is_valid();
 }
 
 BulletData::operator bool() const
@@ -51,8 +57,8 @@ const Animation& BulletData::get_animation() const
     return bullet;
 }
 
-const ItemData& BulletData::get_itemdata() const
+const ItemData& BulletData::get_item_data() const
 {
-    return itemdata;
+    return item_data;
 }
 } // namespace jrc

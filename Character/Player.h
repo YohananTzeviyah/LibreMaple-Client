@@ -110,9 +110,9 @@ public:
     /// Return the character's level.
     std::uint16_t get_level() const override;
     /// Return the character's level of a skill.
-    std::int32_t get_skilllevel(std::int32_t skillid) const override;
+    std::int32_t get_skill_level(std::int32_t skillid) const override;
     /// Return the character's attacking speed.
-    std::int8_t get_integer_attackspeed() const override;
+    std::int8_t get_integer_attack_speed() const override;
 
     /// Returns the current walking force, calculated from the total ES_SPEED
     /// stat.

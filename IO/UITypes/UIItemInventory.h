@@ -37,7 +37,7 @@ public:
     void draw(float inter) const override;
     void update() override;
 
-    void doubleclick(Point<std::int16_t> position) override;
+    void double_click(Point<std::int16_t> position) override;
     void send_icon(const Icon& icon, Point<std::int16_t> position) override;
     void toggle_active() override;
     bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
@@ -61,7 +61,7 @@ private:
     void update_slot(std::int16_t slot);
     bool is_visible(std::int16_t slot) const;
     bool is_not_visible(std::int16_t slot) const;
-    std::int16_t slot_by_position(Point<std::int16_t> position) const;
+    std::int16_t slot_by_position(Point<std::int16_t> cursor_pos) const;
     std::uint16_t button_by_tab(InventoryType::Id tab) const;
     Point<std::int16_t> get_slotpos(std::int16_t slot) const;
     Point<std::int16_t> get_tabpos(InventoryType::Id tab) const;

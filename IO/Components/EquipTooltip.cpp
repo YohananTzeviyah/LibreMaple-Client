@@ -23,6 +23,8 @@
 #include "nlnx/node.hpp"
 #include "nlnx/nx.hpp"
 
+#include <cstdlib>
+
 namespace jrc
 {
 EquipTooltip::EquipTooltip()
@@ -126,7 +128,7 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
     std::int32_t item_id = equip.get_item_id();
 
     const EquipData& equipdata = EquipData::get(item_id);
-    const ItemData& itemdata = equipdata.get_itemdata();
+    const ItemData& itemdata = equipdata.get_item_data();
     const CharStats& stats = player.get_stats();
 
     height = 500;
@@ -134,14 +136,14 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
     itemicon = itemdata.get_icon(true);
 
     for (auto& ms : requirements) {
-        canequip[ms] = stats.get_stat(ms) >= equipdata.get_reqstat(ms);
-        std::string reqstr = std::to_string(equipdata.get_reqstat(ms));
+        canequip[ms] = stats.get_stat(ms) >= equipdata.get_req_stat(ms);
+        std::string reqstr = std::to_string(equipdata.get_req_stat(ms));
         reqstr.insert(0, 3 - reqstr.size(), '0');
         reqstatstrings[ms] = reqstr;
     }
 
     okjobs.clear();
-    switch (equipdata.get_reqstat(Maplestat::JOB)) {
+    switch (equipdata.get_req_stat(Maplestat::JOB)) {
     case 0:
         okjobs.push_back(0);
         okjobs.push_back(1);
@@ -224,25 +226,26 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
         namecolor = Text::WHITE;
     }
 
-    std::string namestr = itemdata.get_name();
+    std::string name_str{itemdata.get_name()};
     if (equip.get_level() > 0) {
-        namestr.append(" (+");
-        namestr.append(std::to_string(equip.get_level()));
-        namestr.append(")");
+        name_str.append(" (+");
+        name_str.append(std::to_string(equip.get_level()));
+        name_str.push_back(')');
     }
-    name = {Text::A12B, Text::CENTER, namecolor, namestr, 400};
+    name = {Text::A12B, Text::CENTER, namecolor, std::move(name_str), 400};
 
-    std::string desctext = itemdata.get_desc();
-    hasdesc = desctext.size() > 0;
+    std::string_view desc_text = itemdata.get_desc();
+    hasdesc = desc_text.size() > 0;
     if (hasdesc) {
-        desc = {Text::A12M, Text::LEFT, Text::WHITE, desctext, 250};
+        desc = {
+            Text::A12M, Text::LEFT, Text::WHITE, std::string{desc_text}, 250};
         height += desc.height() + 10;
     }
 
     category = {Text::A11L,
                 Text::LEFT,
                 Text::WHITE,
-                "CATEGORY: " + equipdata.get_type()};
+                str::concat("CATEGORY: ", equipdata.get_type())};
 
     is_weapon = equipdata.is_weapon();
     if (is_weapon) {
@@ -250,12 +253,12 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
         wepspeed = {Text::A11L,
                     Text::LEFT,
                     Text::WHITE,
-                    "ATTACK SPEED: " + weapon.getspeedstring()};
+                    str::concat("ATTACK SPEED: ", weapon.get_speed_string())};
     } else {
         height -= 18;
     }
 
-    hasslots = (equip.get_slots() > 0) || (equip.get_level() > 0);
+    hasslots = equip.get_slots() > 0 || equip.get_level() > 0;
     if (hasslots) {
         slots = {Text::A11L,
                  Text::LEFT,
@@ -263,8 +266,9 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
                  "UPGRADES AVAILABLE: " + std::to_string(equip.get_slots())};
 
         std::string vicious = std::to_string(equip.get_vicious());
-        if (equip.get_vicious() > 1)
+        if (equip.get_vicious() > 1) {
             vicious.append(" (MAX) ");
+        }
         hammers = {Text::A11L,
                    Text::LEFT,
                    Text::WHITE,
@@ -273,23 +277,24 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
         height -= 36;
     }
 
-    statlabels.clear();
+    stat_labels.clear();
     for (Equipstat::Id es = Equipstat::STR; es <= Equipstat::JUMP;
          es = static_cast<Equipstat::Id>(es + 1)) {
         if (equip.get_stat(es) > 0) {
             std::int16_t delta =
-                equip.get_stat(es) - equipdata.get_defstat(es);
-            std::string statstr = std::to_string(equip.get_stat(es));
+                equip.get_stat(es) - equipdata.get_def_stat(es);
+            std::string stat_str = std::to_string(equip.get_stat(es));
             if (delta != 0) {
-                statstr.append(" (");
-                statstr.append((delta < 0) ? "-" : "+");
-                statstr.append(std::to_string(abs(delta)) + ")");
+                stat_str.append(" (");
+                stat_str.push_back(delta < 0 ? '-' : '+');
+                stat_str.append(std::to_string(std::abs(delta)));
+                stat_str.push_back(')');
             }
-            statlabels[es] = {Text::A11L,
-                              Text::LEFT,
-                              Text::WHITE,
-                              Equipstat::names[es] + std::string(": ") +
-                                  statstr};
+            stat_labels[es] = {Text::A11L,
+                               Text::LEFT,
+                               Text::WHITE,
+                               Equipstat::names[es] + std::string(": ") +
+                                   stat_str};
         } else {
             height -= 18;
         }
@@ -298,28 +303,29 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
 
 void EquipTooltip::draw(Point<std::int16_t> pos) const
 {
-    if (invpos == 0)
+    if (invpos == 0) {
         return;
+    }
 
     top.draw({pos});
     mid.draw(
-        {pos + Point<std::int16_t>(0, 13), Point<std::int16_t>(0, height)});
-    bot.draw({pos + Point<std::int16_t>(0, height + 13)});
+        {pos + Point<std::int16_t>{0, 13}, Point<std::int16_t>{0, height}});
+    bot.draw({pos + Point<std::int16_t>{0, height + 13}});
 
-    name.draw(pos + Point<std::int16_t>(130, 3));
+    name.draw(pos + Point<std::int16_t>{130, 3});
     if (prank != Equip::POT_NONE) {
-        potflag.draw(pos + Point<std::int16_t>(130, 20));
+        potflag.draw(pos + Point<std::int16_t>{130, 20});
         pos.shift_y(16);
     }
     pos.shift_y(26);
 
     line.draw({pos});
 
-    base.draw(pos + Point<std::int16_t>(10, 10));
-    shade.draw(pos + Point<std::int16_t>(10, 10));
-    itemicon.draw({pos + Point<std::int16_t>(20, 82), 2.0f, 2.0f});
-    potential[prank].draw(pos + Point<std::int16_t>(10, 10));
-    cover.draw(pos + Point<std::int16_t>(10, 10));
+    base.draw(pos + Point<std::int16_t>{10, 10});
+    shade.draw(pos + Point<std::int16_t>{10, 10});
+    itemicon.draw({pos + Point<std::int16_t>{20, 82}, 2.0f, 2.0f});
+    potential[prank].draw(pos + Point<std::int16_t>{10, 10});
+    cover.draw(pos + Point<std::int16_t>{10, 10});
 
     pos.shift_y(12);
 
@@ -329,48 +335,49 @@ void EquipTooltip::draw(Point<std::int16_t> pos) const
         reqstattextures[ms][reqok].draw({pos + reqpos});
         reqset[reqok].draw(reqstatstrings[ms],
                            6,
-                           {pos + reqpos + Point<std::int16_t>(54, 0)});
+                           {pos + reqpos + Point<std::int16_t>{54, 0}});
     }
 
     pos.shift_y(88);
 
-    Point<std::int16_t> job_position(pos + Point<std::int16_t>(8, 0));
+    Point<std::int16_t> job_position(pos + Point<std::int16_t>{8, 0});
     jobsback.draw(job_position);
     for (auto& jbit : okjobs) {
         jobs[canequip[Maplestat::JOB]].at(jbit).draw(job_position);
     }
 
-    line.draw({pos + Point<std::int16_t>(0, 30)});
+    line.draw({pos + Point<std::int16_t>{0, 30}});
 
     pos.shift_y(32);
 
-    category.draw(pos + Point<std::int16_t>(10, 0));
+    category.draw(pos + Point<std::int16_t>{10, 0});
 
     pos.shift_y(18);
 
     if (is_weapon) {
-        wepspeed.draw(pos + Point<std::int16_t>(10, 0));
+        wepspeed.draw(pos + Point<std::int16_t>{10, 0});
         pos.shift_y(18);
     }
 
-    for (const Text& label : statlabels.values()) {
-        if (label.empty())
+    for (const Text& label : stat_labels.values()) {
+        if (label.empty()) {
             continue;
+        }
 
-        label.draw(pos + Point<std::int16_t>(10, 0));
+        label.draw(pos + Point<std::int16_t>{10, 0});
         pos.shift_y(18);
     }
 
     if (hasslots) {
-        slots.draw(pos + Point<std::int16_t>(10, 0));
+        slots.draw(pos + Point<std::int16_t>{10, 0});
         pos.shift_y(18);
-        hammers.draw(pos + Point<std::int16_t>(10, 0));
+        hammers.draw(pos + Point<std::int16_t>{10, 0});
         pos.shift_y(18);
     }
 
     if (hasdesc) {
-        line.draw({pos + Point<std::int16_t>(0, 5)});
-        desc.draw({pos + Point<std::int16_t>(10, 6)});
+        line.draw({pos + Point<std::int16_t>{0, 5}});
+        desc.draw({pos + Point<std::int16_t>{10, 6}});
     }
 }
 } // namespace jrc

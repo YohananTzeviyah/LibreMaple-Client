@@ -28,6 +28,7 @@
 #include "nlnx/bitmap.hpp"
 #include FT_FREETYPE_H
 
+#include <string_view>
 #include <unordered_map>
 #include <vector>
 
@@ -48,7 +49,7 @@ public:
     void clear();
 
     //! Add a bitmap to the available resources.
-    void addbitmap(const nl::bitmap& bmp);
+    void add_bitmap(const nl::bitmap& bmp);
     //! Draw the bitmap with the given parameters.
     void draw(const nl::bitmap& bmp,
               const Rectangle<std::int16_t>& rect,
@@ -56,30 +57,30 @@ public:
               float angle);
 
     //! Create a layout for the text with the parameters specified.
-    Text::Layout createlayout(const std::string& text,
-                              Text::Font font,
-                              Text::Alignment alignment,
-                              std::int16_t maxwidth,
-                              bool formatted);
+    Text::Layout create_layout(std::string_view text,
+                               Text::Font font,
+                               Text::Alignment alignment,
+                               std::int16_t max_width,
+                               bool formatted);
     //! Draw a text with the given parameters.
-    void drawtext(const DrawArgument& args,
-                  const std::string& text,
-                  const Text::Layout& layout,
-                  Text::Font font,
-                  Text::Color color,
-                  Text::Background back);
+    void draw_text(const DrawArgument& args,
+                   std::string_view text,
+                   const Text::Layout& layout,
+                   Text::Font font,
+                   Text::Color color,
+                   Text::Background back);
 
     //! Draw a rectangle filled with the specified color.
-    void drawrectangle(std::int16_t x,
-                       std::int16_t y,
-                       std::int16_t w,
-                       std::int16_t h,
-                       float r,
-                       float g,
-                       float b,
-                       float a);
+    void draw_rectangle(std::int16_t x,
+                        std::int16_t y,
+                        std::int16_t w,
+                        std::int16_t h,
+                        float r,
+                        float g,
+                        float b,
+                        float a);
     //! Fill the screen with the specified color.
-    void drawscreenfill(float r, float g, float b, float a);
+    void draw_screen_fill(float r, float g, float b, float a);
 
     //! Lock the current scene.
     void lock();
@@ -99,7 +100,7 @@ public:
                            std::int16_t b) noexcept;
 
 private:
-    void clearinternal();
+    void clear_internal();
     bool
     addfont(const char* name, Text::Font id, FT_UInt width, FT_UInt height);
 
@@ -125,8 +126,8 @@ private:
             b = 0;
         }
     };
-    // Add a bitmap to the available resources.
-    const Offset& getoffset(const nl::bitmap& bmp);
+    //! Add a bitmap to the available resources.
+    const Offset& get_offset(const nl::bitmap& bmp);
 
     struct Leftover {
         GLshort l;
@@ -193,7 +194,7 @@ private:
                 GLshort cx = (l + r) / 2;
                 GLshort cy = (t + b) / 2;
 
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 4; ++i) {
                     GLshort vx = vertices[i].x - cx;
                     GLshort vy = vertices[i].y - cy;
                     GLfloat rx = std::roundf(vx * cos - vy * sin);
@@ -232,7 +233,7 @@ private:
             height = 0;
         }
 
-        std::int16_t linespace() const
+        std::int16_t line_space() const
         {
             return static_cast<std::int16_t>(height * 1.35 + 1);
         }
@@ -246,10 +247,10 @@ private:
                       std::int16_t maxwidth,
                       bool formatted);
 
-        std::size_t add(const char* text,
-                        std::size_t prev,
-                        std::size_t first,
-                        std::size_t last);
+        std::string_view::size_type add(std::string_view text,
+                                        std::string_view::size_type prev,
+                                        std::string_view::size_type first,
+                                        std::string_view::size_type last);
         Text::Layout finish(std::size_t first, std::size_t last);
 
     private:
@@ -262,9 +263,9 @@ private:
         const Font& font;
 
         Text::Alignment alignment;
-        Text::Font fontid;
+        Text::Font font_id;
         Text::Color color;
-        std::int16_t maxwidth;
+        std::int16_t max_width;
         bool formatted;
 
         std::int16_t ax;
@@ -293,24 +294,24 @@ private:
     GLint attribute_coord;
     GLint attribute_color;
     GLint uniform_texture;
-    GLint uniform_atlassize;
-    GLint uniform_screensize;
-    GLint uniform_yoffset;
-    GLint uniform_fontregion;
+    GLint uniform_atlas_size;
+    GLint uniform_screen_size;
+    GLint uniform_y_offset;
+    GLint uniform_font_region;
 
     std::unordered_map<std::size_t, Offset> offsets;
-    Offset nulloffset;
+    Offset null_offset;
 
     QuadTree<std::size_t, Leftover> leftovers;
     std::size_t rlid;
     std::size_t wasted;
     Point<GLshort> border;
-    Range<GLshort> yrange;
+    Range<GLshort> y_range;
 
-    FT_Library ftlibrary;
+    FT_Library ft_library;
     Font fonts[Text::NUM_FONTS];
-    Point<GLshort> fontborder;
-    GLshort fontymax;
+    Point<GLshort> font_border;
+    GLshort font_y_max;
 };
 
 // constexpr Rectangle<std::int16_t> GraphicsGL::screen;

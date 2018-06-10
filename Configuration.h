@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <functional>
 #include <string>
+#include <string_view>
 #include <type_traits>
 
 namespace jrc
@@ -48,7 +49,7 @@ public:
     class Entry
     {
     protected:
-        Entry(const char* n, const char* v) : name(n), value(v)
+        Entry(std::string_view n, std::string_view v) : name(n), value(v)
         {
         }
 
@@ -58,9 +59,9 @@ public:
     private:
         friend class Configuration;
 
-        std::string to_string() const
+        std::string to_string() const noexcept
         {
-            return name + " = " + value;
+            return str::concat(name, " = ", value);
         }
     };
 
@@ -79,8 +80,8 @@ public:
     class StringEntry : public Entry
     {
     public:
-        void save(std::string str);
-        std::string load() const;
+        void save(std::string&& str);
+        const std::string& load() const;
 
     protected:
         using Entry::Entry;
@@ -148,25 +149,25 @@ private:
     template<typename T>
     friend struct Setting;
 
-    const char* FILENAME = "Settings";
+    static constexpr char const* const FILENAME = "Settings";
     TypeMap<Entry> settings;
 };
 
-//! IP Adress which the client will connect to.
+//! IP address which the client will connect to.
 struct ServerIP : public Configuration::StringEntry {
     ServerIP() : StringEntry("ServerIP", "127.0.0.1")
     {
     }
 };
 
-//! Wether to start in fullscreen mode.
+//! Whether to start in fullscreen mode.
 struct Fullscreen : public Configuration::BoolEntry {
     Fullscreen() : BoolEntry("Fullscreen", "false")
     {
     }
 };
 
-//! Wether to use vsync.
+//! Whether to use vsync.
 struct VSync : public Configuration::BoolEntry {
     VSync() : BoolEntry("VSync", "true")
     {
@@ -175,33 +176,35 @@ struct VSync : public Configuration::BoolEntry {
 
 //! The normal font which will be used.
 struct FontPathNormal : public Configuration::StringEntry {
-    FontPathNormal() : StringEntry("FontPathNormal", "Noto Serif Regular")
+    FontPathNormal()
+        : StringEntry("FontPathNormal", "../fonts/Roboto/Roboto-Regular.ttf")
     {
     }
 };
 
 //! The bold font which will be used.
 struct FontPathBold : public Configuration::StringEntry {
-    FontPathBold() : StringEntry("FontPathBold", "Noto Serif Bold")
+    FontPathBold()
+        : StringEntry("FontPathBold", "../fonts/Roboto/Roboto-Bold.ttf")
     {
     }
 };
 
-//! Music Volume, a number from 0 to 100.
+//! Music volume, an integer in the interval [0, 100].
 struct BGMVolume : public Configuration::ByteEntry {
     BGMVolume() : ByteEntry("BGMVolume", "50")
     {
     }
 };
 
-//! Sound Volume, a number from 0 to 100.
+//! Sound volume, an integer in the interval [0, 100].
 struct SFXVolume : public Configuration::ByteEntry {
     SFXVolume() : ByteEntry("SFXVolume", "50")
     {
     }
 };
 
-//! Wether to save the last used account name.
+//! Whether to save the last used account name.
 struct SaveLogin : public Configuration::BoolEntry {
     SaveLogin() : BoolEntry("SaveLogin", "false")
     {
@@ -274,7 +277,7 @@ struct PosKEYCONFIG : public Configuration::PointEntry {
 //! Can be used to access settings.
 template<typename T>
 struct Setting {
-    // Access a setting.
+    //! Access a setting.
     static T& get()
     {
         static_assert(std::is_base_of<Configuration::Entry, T>::value,
@@ -286,8 +289,8 @@ struct Setting {
         if (entry) {
             return *entry;
         } else {
-            static T defaultentry;
-            return defaultentry;
+            static T default_entry;
+            return default_entry;
         }
     }
 };

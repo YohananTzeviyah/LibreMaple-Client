@@ -112,7 +112,7 @@ void Cryptography::mapleencrypt(std::int8_t* bytes, std::size_t length) const
             remember = cur;
             cur = rollright(cur, static_cast<std::int32_t>(datalen) & 0xFF);
             bytes[i] = static_cast<std::int8_t>((~cur) & 0xFF) + 0x48;
-            datalen--;
+            --datalen;
         }
 
         remember = 0;
@@ -122,7 +122,7 @@ void Cryptography::mapleencrypt(std::int8_t* bytes, std::size_t length) const
             std::int8_t cur = (rollleft(bytes[i], 4) + datalen) ^ remember;
             remember = cur;
             bytes[i] = rollright(cur ^ 0x13, 3);
-            datalen--;
+            --datalen;
         }
     }
 }
@@ -137,7 +137,7 @@ void Cryptography::mapledecrypt(std::int8_t* bytes, std::size_t length) const
             std::uint8_t cur = rollleft(bytes[j], 3) ^ 0x13;
             bytes[j] = rollright((cur ^ remember) - datalen, 4);
             remember = cur;
-            datalen--;
+            --datalen;
         }
 
         remember = 0;
@@ -148,7 +148,7 @@ void Cryptography::mapledecrypt(std::int8_t* bytes, std::size_t length) const
             cur = rollleft(cur, static_cast<std::int32_t>(datalen) & 0xFF);
             bytes[j] = rollright((cur ^ remember) - datalen, 3);
             remember = cur;
-            datalen--;
+            --datalen;
         }
     }
 }
@@ -306,7 +306,7 @@ void Cryptography::addroundkey(std::uint8_t* bytes, std::uint8_t round) const
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00};
 
-    std::uint8_t offset = round * 16;
+    std::uint8_t offset = round * static_cast<uint8_t>(16u);
     for (std::uint8_t i = 0; i < 16; ++i) {
         bytes[i] ^= maplekey[i + offset];
     }
@@ -369,7 +369,8 @@ void Cryptography::shiftrows(std::uint8_t* bytes) const
 
 std::uint8_t Cryptography::gmul(std::uint8_t x) const
 {
-    return (x << 1) ^ (0x1B & (std::uint8_t)((std::int8_t)x >> 7));
+    return (x << 1) ^ (static_cast<std::uint8_t>(0x1Bu) &
+                       (std::uint8_t)((std::int8_t)x >> 7));
 }
 
 void Cryptography::mixcolumns(std::uint8_t* bytes) const

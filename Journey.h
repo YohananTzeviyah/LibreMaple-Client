@@ -18,14 +18,14 @@
 
 // Define things here.
 
-// JOURNEY_USE_ASIO : Use asio for networking, if not defined use Winsock.
+//! JOURNEY_USE_ASIO : Use asio for networking, if not defined use Winsock.
 #define JOURNEY_USE_ASIO
 
-// JOURNEY_USE_XXHASH : Use xxhash for file check (additional dependency)
+//! JOURNEY_USE_XXHASH : Use xxhash for file check (additional dependency)
 //#define JOURNEY_USE_XXHASH
 
-// JOURNEY_USE_CRYPTO : Use cryptography for communication with the server.
+//! JOURNEY_USE_CRYPTO : Use cryptography for communication with the server.
 #define JOURNEY_USE_CRYPTO
 
-// JOURNEY_PRINT_WARNINGS : Print warnings and minor errors to the console.
+//! JOURNEY_PRINT_WARNINGS : Print warnings and minor errors to the console.
 #define JOURNEY_PRINT_WARNINGS

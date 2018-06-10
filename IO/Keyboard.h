@@ -19,8 +19,8 @@
 #include "../Template/Enumeration.h"
 #include "KeyAction.h"
 #include "KeyType.h"
+#include "Window.h"
 
-#include <GLFW/glfw3.h>
 #include <cstdint>
 #include <tuple>
 #include <unordered_map>
@@ -69,7 +69,7 @@ public:
     assign(std::uint8_t key, std::uint8_t type, KeyAction::Id action) noexcept;
 
     std::int32_t shiftcode() const noexcept;
-    std::int32_t ctrlcode() const noexcept;
+    std::int32_t ctrl_code() const noexcept;
     KeyAction::Id get_ctrl_action(std::int32_t keycode) const noexcept;
     Mapping get_mapping(std::int32_t keycode) const noexcept;
     Mapping get_maple_mapping(std::uint8_t key_slot) const noexcept;

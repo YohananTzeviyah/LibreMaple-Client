@@ -32,9 +32,9 @@ SocketAsio::~SocketAsio()
     }
 }
 
-bool SocketAsio::open(const char* adress, const char* port)
+bool SocketAsio::open(const char* address, const char* port)
 {
-    tcp::resolver::query query(adress, port);
+    tcp::resolver::query query(address, port);
     tcp::resolver::iterator endpointiter = resolver.resolve(query);
     error_code error;
     asio::connect(socket, endpointiter, error);

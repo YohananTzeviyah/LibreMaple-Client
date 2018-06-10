@@ -57,8 +57,9 @@ void ByLevelHitEffect::apply(const AttackUser& user, Mob& target) const
     auto iter = effects.begin();
     for (; iter != effects.end() && user.level > iter->first; ++iter) {
     }
-    if (iter != effects.begin())
-        iter--;
+    if (iter != effects.begin()) {
+        --iter;
+    }
 
     iter->second.apply(target, user.flip);
 }
@@ -82,8 +83,9 @@ void ByLevelTwoHHitEffect::apply(const AttackUser& user, Mob& target) const
     auto iter = effects.begin();
     for (; iter != effects.end() && user.level > iter->first; ++iter) {
     }
-    if (iter != effects.begin())
-        iter--;
+    if (iter != effects.begin()) {
+        --iter;
+    }
 
     iter->second[user.secondweapon].apply(target, user.flip);
 }

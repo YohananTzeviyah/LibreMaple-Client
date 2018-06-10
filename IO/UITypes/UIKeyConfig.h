@@ -18,6 +18,7 @@
 #pragma once
 #include "../../Character/Inventory/Inventory.h"
 #include "../../Template/EnumMap.h"
+#include "../../Util/Misc.h"
 #include "../Components/EquipTooltip.h"
 #include "../Components/Icon.h"
 #include "../Keyboard.h"
@@ -63,17 +64,17 @@ private:
         void drop_on_equips(Equipslot::Id) const override
         {
         }
-        void drop_on_items(InventoryType::Id tab,
-                           Equipslot::Id eqslot,
-                           std::int16_t slot,
-                           bool equip) const override{};
+        void drop_on_items(InventoryType::Id,
+                           Equipslot::Id,
+                           std::int16_t,
+                           bool) const override{};
         KeyAction::Id get_action_id() const noexcept override;
 
     private:
         KeyAction::Id action_id;
     };
 
-    enum class Buttons : std::uint16_t {
+    enum Buttons : std::uint16_t {
         BT_CANCEL,
         BT_DEFAULT,
         BT_DELETE,
@@ -81,24 +82,24 @@ private:
         BT_QUICKSLOT
     };
 
-    constexpr std::array<Point<std::int16_t>, 90> SLOT_POSITIONS{
-        {{0, 0},    {0, 0},    {32, 32},  {64, 32},  {96, 32},  {128, 32},
-         {160, 32}, {192, 32}, {224, 32}, {256, 32}, {288, 32}, {320, 32},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
-         {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0}}};
-    std::unordered_map<KeyAction::Id, std::uint8_t> action_mappings;
-    std::unordered_map<std::uint8_t, KeyAction::Id> slot_mappings;
-    std::unordered_map<KeyAction::Id, std::unique_ptr<Icon>> icons;
+    bimap::unordered_bimap<std::uint8_t, KeyAction::Id> slot_mappings;
+    std::unordered_map<KeyAction::Id, std::unique_ptr<Icon>> icons{70};
 };
+
+constexpr std::array<Point<std::int16_t>, 90> SLOT_POSITIONS{
+    {{0, 0},    {0, 0},    {351, 65}, {45, 65},  {79, 65},  {113, 65},
+     {147, 65}, {181, 65}, {215, 65}, {249, 65}, {283, 65}, {317, 65},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},
+     {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0},    {0, 0}}};
 } // namespace jrc

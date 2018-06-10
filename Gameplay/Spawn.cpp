@@ -168,6 +168,6 @@ std::int32_t CharSpawn::get_cid() const
 std::unique_ptr<MapObject> CharSpawn::instantiate() const
 {
     return std::make_unique<OtherChar>(
-        cid, look, level, job, name, stance, position);
+        cid, look, level, job, std::string{name}, stance, position);
 }
 } // namespace jrc

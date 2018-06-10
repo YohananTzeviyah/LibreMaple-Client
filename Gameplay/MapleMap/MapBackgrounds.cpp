@@ -57,17 +57,17 @@ void Background::settype(Type type)
     switch (type) {
     case HTILED:
     case HMOVEA:
-        htile = Constants::GAMEVIEWWIDTH / cx + 3;
+        htile = Constants::GAME_VIEW_WIDTH / cx + 3;
         break;
     case VTILED:
     case VMOVEA:
-        vtile = Constants::GAMEVIEWHEIGHT / cy + 3;
+        vtile = Constants::GAME_VIEW_HEIGHT / cy + 3;
         break;
     case TILED:
     case HMOVEB:
     case VMOVEB:
-        htile = Constants::GAMEVIEWWIDTH / cx + 3;
-        vtile = Constants::GAMEVIEWHEIGHT / cy + 3;
+        htile = Constants::GAME_VIEW_WIDTH / cx + 3;
+        vtile = Constants::GAME_VIEW_HEIGHT / cy + 3;
         break;
     default:
         break;
@@ -155,7 +155,7 @@ MapBackgrounds::MapBackgrounds(nl::node src)
             backgrounds.push_back(back);
         }
 
-        no++;
+        ++no;
         back = src[std::to_string(no)];
     }
 
@@ -169,7 +169,7 @@ void MapBackgrounds::drawbackgrounds(double viewx,
                                      float alpha) const
 {
     if (black) {
-        GraphicsGL::get().drawscreenfill(0.0f, 0.0f, 0.0f, 1.0f);
+        GraphicsGL::get().draw_screen_fill(0.0f, 0.0f, 0.0f, 1.0f);
     }
 
     for (auto& background : backgrounds) {

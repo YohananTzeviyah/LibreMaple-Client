@@ -23,31 +23,34 @@ namespace jrc
 {
 Stance::Id Stance::by_state(std::int8_t state)
 {
-    std::int8_t index = (state / 2) - 1;
-    if (index < 0 || index > 10)
+    std::int8_t index = state / 2 - 1;
+    if (index < 0 || index > 10) {
         return WALK1;
+    }
 
-    constexpr Id statevalues[10] = {
+    static constexpr Id state_values[10] = {
         WALK1, STAND1, JUMP, ALERT, PRONE, FLY, LADDER, ROPE, DEAD, SIT};
-    return statevalues[index];
+    return state_values[index];
 }
 
 Stance::Id Stance::by_id(std::uint8_t id)
 {
-    if (id <= NONE || id >= LENGTH)
+    if (id <= NONE || id >= LENGTH) {
         return NONE;
+    }
 
     return static_cast<Stance::Id>(id);
 }
 
-Stance::Id Stance::by_string(const std::string& name)
+Stance::Id Stance::by_string(std::string_view name)
 {
-    for (auto iter : names) {
-        if (iter.second == name)
+    for (const auto& iter : names) {
+        if (iter.second == name) {
             return iter.first;
+        }
     }
 
-    Console::get().print("Unhandled stance: " + name);
+    Console::get().print(str::concat("Unhandled stance: ", name));
     return NONE;
 }
 
@@ -56,7 +59,7 @@ bool Stance::is_climbing(Id value)
     return value == LADDER || value == ROPE;
 }
 
-Stance::Id Stance::baseof(Id value)
+Stance::Id Stance::base_of(Id value)
 {
     switch (value) {
     case STAND2:
@@ -68,7 +71,7 @@ Stance::Id Stance::baseof(Id value)
     }
 }
 
-Stance::Id Stance::secondof(Id value)
+Stance::Id Stance::second_of(Id value)
 {
     switch (value) {
     case STAND1:

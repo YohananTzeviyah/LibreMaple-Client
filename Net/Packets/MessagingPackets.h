@@ -20,12 +20,12 @@
 
 namespace jrc
 {
-// Packet which sends a message to general chat.
-// Opcode: GENERAL_CHAT(49)
+//! Packet which sends a message to general chat.
+//! Opcode: GENERAL_CHAT(49)
 class GeneralChatPacket : public OutPacket
 {
 public:
-    GeneralChatPacket(const std::string& message, bool show)
+    GeneralChatPacket(std::string_view message, bool show)
         : OutPacket(GENERAL_CHAT)
     {
         write_string(message);
