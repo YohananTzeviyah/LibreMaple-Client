@@ -20,62 +20,64 @@
 #include "../Combat/SpecialMove.h"
 #include "../Spawn.h"
 #include "MapObjects.h"
+#include "boost/container/flat_map.hpp"
 
 #include <queue>
 
 namespace jrc
 {
-// A collection of mobs on a map.
+//! A collection of mobs on a map.
 class MapMobs
 {
 public:
-    // Draw all mobs on a layer.
+    //! Draw all mobs on a layer.
     void draw(Layer::Id layer, double viewx, double viewy, float alpha) const;
-    // Update all mobs.
+    //! Update all mobs.
     void update(const Physics& physics);
 
-    // Spawn a new mob.
+    //! Spawn a new mob.
     void spawn(MobSpawn&& spawn);
-    // Kill a mob.
+    //! Kill a mob.
     void remove(std::int32_t oid, std::int8_t effect);
-    // Remove all mobs.
+    //! Remove all mobs.
     void clear();
 
-    // Update who a mob is controlled by.
+    //! Update who a mob is controlled by.
     void set_control(std::int32_t oid, bool control);
-    // Update a mob's hp display.
+    //! Update a mob's hp display.
     void send_mobhp(std::int32_t oid,
                     std::int8_t percent,
                     std::uint16_t playerlevel);
-    // Update a mob's movements.
+    //! Update a mob's movements.
     void send_movement(std::int32_t oid,
                        Point<std::int16_t> start,
                        std::vector<Movement>&& movements);
 
-    // Calculate the results of an attack.
+    //! Calculate the results of an attack.
     AttackResult send_attack(const Attack& attack);
-    // Applies damage to a mob.
+    //! Applies damage to a mob.
     void apply_damage(std::int32_t oid,
                       std::int32_t damage,
-                      bool toleft,
+                      bool to_left,
                       const AttackUser& user,
                       const SpecialMove& move);
 
-    // Check if the mob with the specified oid exists.
+    //! Check if the mob with the specified oid exists.
     bool contains(std::int32_t oid) const;
-    // Return the id of the first mob who collides with the object.
+    //! Return the id of the first mob who collides with the object.
     std::int32_t find_colliding(const MovingObject& moveobj) const;
-    // Create an attack by the specified mob.
+    //! Create an attack by the specified mob.
     MobAttack create_attack(std::int32_t oid) const;
-    // Return the position of a mob.
+    //! Return the position of a mob.
     Point<std::int16_t> get_mob_position(std::int32_t oid) const;
-    // Return the head position of a mob.
+    //! Return the head position of a mob.
     Point<std::int16_t> get_mob_head_position(std::int32_t oid) const;
 
 private:
-    std::vector<std::int32_t> find_closest(Rectangle<std::int16_t> range,
-                                           Point<std::int16_t> origin,
-                                           std::uint8_t mobcount) const;
+    [[nodiscard]] boost::container::flat_map<std::uint16_t, std::int32_t>
+    find_closest(Rectangle<std::int16_t> range,
+                 Point<std::int16_t> origin,
+                 std::uint8_t mob_count) const noexcept;
 
     MapObjects mobs;
 

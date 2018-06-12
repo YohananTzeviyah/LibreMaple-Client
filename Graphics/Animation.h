@@ -24,12 +24,12 @@
 
 namespace jrc
 {
-// A single frame within an animation.
+//! A single frame within an animation.
 class Frame
 {
 public:
     Frame(nl::node src);
-    Frame();
+    Frame() noexcept;
 
     void draw(const DrawArgument& args) const;
 
@@ -40,8 +40,8 @@ public:
     Point<std::int16_t> get_dimensions() const;
     Point<std::int16_t> get_head() const;
     Rectangle<std::int16_t> get_bounds() const;
-    float opcstep(std::uint16_t timestep) const;
-    float scalestep(std::uint16_t timestep) const;
+    float opc_step(std::uint16_t timestep) const;
+    float scale_step(std::uint16_t timestep) const;
 
 private:
     Texture texture;
@@ -52,12 +52,12 @@ private:
     Point<std::int16_t> head;
 };
 
-// Class which consists of multiple textures to make an Animation.
+//! Class which consists of multiple textures to make an Animation.
 class Animation
 {
 public:
     Animation(nl::node source);
-    Animation();
+    Animation() noexcept;
 
     bool update();
     bool update(std::uint16_t timestep);
@@ -66,7 +66,7 @@ public:
     void draw(const DrawArgument& arguments, float inter) const;
 
     std::uint16_t get_delay(std::int16_t frame) const;
-    std::uint16_t getdelayuntil(std::int16_t frame) const;
+    std::uint16_t get_delay_until(std::int16_t frame) const;
     Point<std::int16_t> get_origin() const;
     Point<std::int16_t> get_dimensions() const;
     Point<std::int16_t> get_head() const;
@@ -81,10 +81,10 @@ private:
 
     Nominal<std::int16_t> frame;
     Linear<float> opacity;
-    Linear<float> xyscale;
+    Linear<float> xy_scale;
 
     std::uint16_t delay;
-    std::int16_t framestep;
+    std::int16_t frame_step;
     float opcstep;
 };
 } // namespace jrc

@@ -79,10 +79,10 @@ UIBuffList::UIBuffList()
 
 void UIBuffList::draw(float alpha) const
 {
-    Point<std::int16_t> icpos = position;
-    for (auto& icon : icons) {
-        icon.second.draw(icpos, alpha);
-        icpos.shift_x(-32);
+    Point<std::int16_t> ic_pos = position;
+    for (auto& [_, icon] : icons) {
+        icon.draw(ic_pos, alpha);
+        ic_pos.shift_x(-32);
     }
 }
 
@@ -99,15 +99,15 @@ void UIBuffList::update()
 }
 
 Cursor::State UIBuffList::send_cursor(bool pressed,
-                                      Point<std::int16_t> cursorposition)
+                                      Point<std::int16_t> cursor_position)
 {
-    return UIElement::send_cursor(pressed, cursorposition);
+    return UIElement::send_cursor(pressed, cursor_position);
 }
 
-void UIBuffList::add_buff(std::int32_t buffid, std::int32_t duration)
+void UIBuffList::add_buff(std::int32_t buff_id, std::int32_t duration)
 {
     icons.emplace(std::piecewise_construct,
-                  std::forward_as_tuple(buffid),
-                  std::forward_as_tuple(buffid, duration));
+                  std::forward_as_tuple(buff_id),
+                  std::forward_as_tuple(buff_id, duration));
 }
 } // namespace jrc

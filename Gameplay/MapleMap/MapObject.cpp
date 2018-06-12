@@ -27,14 +27,14 @@ MapObject::MapObject(std::int32_t o, Point<std::int16_t> p) : oid(o)
 
 std::int8_t MapObject::update(const Physics& physics)
 {
-    physics.move_object(phobj);
-    return phobj.fhlayer;
+    physics.move_object(ph_obj);
+    return ph_obj.fh_layer;
 }
 
 void MapObject::set_position(std::int16_t x, std::int16_t y)
 {
-    phobj.set_x(x);
-    phobj.set_y(y);
+    ph_obj.set_x(x);
+    ph_obj.set_y(y);
 }
 
 void MapObject::set_position(Point<std::int16_t> position)
@@ -44,7 +44,7 @@ void MapObject::set_position(Point<std::int16_t> position)
     set_position(x, y);
 }
 
-void MapObject::makeactive()
+void MapObject::activate()
 {
     active = true;
 }
@@ -61,7 +61,7 @@ bool MapObject::is_active() const
 
 std::int8_t MapObject::get_layer() const
 {
-    return phobj.fhlayer;
+    return ph_obj.fh_layer;
 }
 
 std::int32_t MapObject::get_oid() const
@@ -71,6 +71,6 @@ std::int32_t MapObject::get_oid() const
 
 Point<std::int16_t> MapObject::get_position() const
 {
-    return phobj.get_position();
+    return ph_obj.get_position();
 }
 } // namespace jrc

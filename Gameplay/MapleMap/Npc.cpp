@@ -81,13 +81,13 @@ Npc::Npc(std::int32_t npc_id_,
     control = cnt;
     stance = "stand";
 
-    phobj.fhid = f;
+    ph_obj.fh_id = f;
     set_position(position);
 }
 
 void Npc::draw(double viewx, double viewy, float alpha) const
 {
-    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> absp = ph_obj.get_absolute(viewx, viewy, alpha);
     if (animations.count(stance)) {
         animations.at(stance).draw(DrawArgument(absp, flip), alpha);
     }
@@ -101,10 +101,10 @@ void Npc::draw(double viewx, double viewy, float alpha) const
 std::int8_t Npc::update(const Physics& physics)
 {
     if (!active) {
-        return phobj.fhlayer;
+        return ph_obj.fh_layer;
     }
 
-    physics.move_object(phobj);
+    physics.move_object(ph_obj);
 
     if (animations.count(stance)) {
         bool aniend = animations.at(stance).update();
@@ -115,7 +115,7 @@ std::int8_t Npc::update(const Physics& physics)
         }
     }
 
-    return phobj.fhlayer;
+    return ph_obj.fh_layer;
 }
 
 void Npc::set_stance(std::string_view st) noexcept

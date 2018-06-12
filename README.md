@@ -106,6 +106,14 @@ $ rm bass2*
 
 $ git clone https://github.com/lz4/lz4.git
 
+# Again, the following command can be replaced by just going to
+# https://www.boost.org/users/download/
+# and downloading the latest version of Boost.
+$ wget https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.gz
+$ tar xf boost*
+$ rm boost*.tar.gz
+$ mv boost*/ boost/
+
 $ export CC='/usr/bin/clang'
 $ export CXX='/usr/bin/clang++'
 
@@ -198,6 +206,14 @@ $ unzip bass2* -d bass/
 $ rm bass2*
 
 $ git clone https://github.com/lz4/lz4.git
+
+# Again, the following command can be replaced by just going to
+# https://www.boost.org/users/download/
+# and downloading the latest version of Boost.
+$ wget https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.gz
+$ tar xf boost*
+$ rm boost*.tar.gz
+$ mv boost*/ boost/
 
 $ export CC='clang'
 $ export CXX='clang++'
@@ -315,6 +331,14 @@ as of this writing).
 Use 7-Zip to extract the contents of the LZ4 ZIP file into a directory called
 `lz4`.
 
+Navigate to
+[https://www.boost.org/users/download/](https://www.boost.org/users/download/)
+and download the latest version of Boost for Windows (called `boost_1_67_0.7z`
+as of this writing).
+
+Use 7-Zip to extract the contents of the Boost 7z file into a directory called
+`boost`.
+
 Notice here that we assume the installation directory of LLVM is the default
 one. If you don't use the default installation directory, you will have to
 tweak `CMakeLists.txt` yourself:
@@ -403,15 +427,18 @@ LibreMaple uses crypto (`JOURNEY_USE_CRYPTO`), and also uses ASIO
 
 ## Dependencies
 
-* Nx library:
-    [NoLifeNX](https://github.com/NoLifeDev/NoLifeNx) (depends on
-    [LZ4](https://github.com/lz4/lz4))
-* Graphics:
-    [GLFW3](http://www.glfw.org/download.html),
-    [GLEW](http://glew.sourceforge.net/), [FreeType](http://www.freetype.org/)
-* Audio:
-    [Bass](http://www.un4seen.com/)
-* Utility:
-    [xxHash](https://github.com/Cyan4973/xxHash) (optional)
-* Networking:
-    [Asio](http://think-async.com/)
+| **Category**      | **Dependency**                                             | **License**         | **Depends on** | **Header only?** | **Optional?** |
+|-------------------|------------------------------------------------------------|---------------------|----------------|------------------|---------------|
+| (De)compression   | [LZ4](https://github.com/lz4/lz4)                          | BSD 2-Clause/GPL v2 | -              | No               | No            |
+| Error checking    | [xxHash](https://github.com/Cyan4973/xxHash)               | BSD 2-Clause        | -              | No               | Yes           |
+| NX library        | [NoLifeNX](https://github.com/NoLifeDev/NoLifeNx)          | ???\*               | LZ4            | No               | No            |
+| Graphics          | [GLFW3](http://www.glfw.org/download.html)                 | zlib/libpng         | OpenGL support | No               | No            |
+| Graphics          | [GLEW](http://glew.sourceforge.net/)                       | Modified BSD/MIT    | OpenGL support | No               | No            |
+| Graphics          | [FreeType](http://www.freetype.org/)                       | FreeType            | -              | No               | No            |
+| Audio             | [Bass](http://www.un4seen.com/)                            | Proprietary(!)      | -              | No               | No            |
+| Networking        | [Asio](http://think-async.com/) (standalone; no Boost)     | Boost               | -              | Yes              | No            |
+| General           | [Boost](https://www.boost.org/) (Bimap, Container)         | Boost               | -              | Yes              | No            |
+
+\*NoLifeNx does not provide a license, but it is used for NoLifeStory (AGPL
+v3), so it must be compatible with the AGPL v3 (likely BSD 3-Clause like nx-rs,
+or even AGPL v3 itself).

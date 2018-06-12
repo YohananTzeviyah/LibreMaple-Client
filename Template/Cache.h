@@ -22,18 +22,18 @@
 namespace jrc
 {
 template<typename T>
-// Template for a cache of game objects
-// which can be constructed from an identifier.
-// The 'get' factory method is static.
+//! Template for a cache of game objects which can be constructed from an
+//! identifier.
+//!
+//! The `get()` factory method is `static`.
 class Cache
 {
 public:
-    virtual ~Cache()
-    {
-    }
+    virtual ~Cache() = default;
 
-    // Return a ref to the game object with the specified id.
-    // If the object is not in cache, it is created.
+    //! Return a reference to the game object with the specified ID.
+    //!
+    //! If the object is not in cache, it is created.
     static const T& get(std::int32_t id)
     {
         auto iter = cache.find(id);

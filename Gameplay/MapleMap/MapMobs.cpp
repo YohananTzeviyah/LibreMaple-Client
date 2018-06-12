@@ -21,7 +21,7 @@
 
 #include <algorithm>
 #include <iostream>
-#include <map>
+#include <limits>
 
 namespace jrc
 {
@@ -43,7 +43,7 @@ void MapMobs::update(const Physics& physics)
             if (mode > 0) {
                 mob->set_control(mode);
             }
-            mob->makeactive();
+            mob->activate();
         } else {
             mobs.add(spawn.instantiate());
         }
@@ -99,75 +99,104 @@ AttackResult MapMobs::send_attack(const Attack& attack)
 {
     Point<std::int16_t> origin = attack.origin;
     Rectangle<std::int16_t> range = attack.range;
-    std::int16_t hrange = static_cast<std::int16_t>(range.l() * attack.hrange);
-    if (attack.toleft) {
-        range = {origin.x() + hrange,
+    std::int16_t h_range =
+        static_cast<std::int16_t>(range.l() * attack.h_range);
+    if (attack.to_left) {
+        range = {origin.x() + h_range,
                  origin.x() + range.r(),
                  origin.y() + range.t(),
                  origin.y() + range.b()};
     } else {
         range = {origin.x() - range.r(),
-                 origin.x() - hrange,
+                 origin.x() - h_range,
                  origin.y() + range.t(),
                  origin.y() + range.b()};
     }
 
-    std::uint8_t mobcount = attack.mobcount;
+    std::uint8_t mob_count = attack.mob_count;
     AttackResult result = attack;
-    std::vector<std::int32_t> targets = find_closest(range, origin, mobcount);
-    for (const auto& target : targets) {
+    for (auto [_, target] : find_closest(range, origin, mob_count)) {
         if (nullable_ptr<Mob> mob = mobs.get(target)) {
-            result.damagelines[target] = mob->calculate_damage(attack);
-            ++result.mobcount;
+            result.damage_lines[target] = mob->calculate_damage(attack);
+            ++result.mob_count;
 
-            if (result.mobcount == 1) {
+            if (result.mob_count == 1) {
                 result.first_oid = target;
             }
-            if (result.mobcount == mobcount) {
+            if (result.mob_count == mob_count) {
                 result.last_oid = target;
             }
         }
     }
+
     return result;
 }
 
 void MapMobs::apply_damage(std::int32_t oid,
                            std::int32_t damage,
-                           bool toleft,
+                           bool to_left,
                            const AttackUser& user,
                            const SpecialMove& move)
 {
     if (nullable_ptr<Mob> mob = mobs.get(oid)) {
-        mob->apply_damage(damage, toleft);
+        mob->apply_damage(damage, to_left);
 
         // Maybe move this into the method above too?
-        move.apply_hiteffects(user, *mob);
+        move.apply_hit_effects(user, *mob);
     }
 }
 
-std::vector<std::int32_t> MapMobs::find_closest(Rectangle<std::int16_t> range,
-                                                Point<std::int16_t> origin,
-                                                std::uint8_t mobcount) const
+boost::container::flat_map<std::uint16_t, std::int32_t>
+MapMobs::find_closest(Rectangle<std::int16_t> range,
+                      Point<std::int16_t> origin,
+                      std::uint8_t mob_count) const noexcept
 {
-    std::multimap<std::uint16_t, std::int32_t> distances;
+    if (mob_count == 0) {
+        return {};
+    }
+    if (mob_count == 1) {
+        auto closest_oid = std::numeric_limits<std::int32_t>::lowest();
+        auto closest_distance = std::numeric_limits<std::uint16_t>::max();
+        for (const auto& mmo : mobs) {
+            auto mob = static_cast<const Mob*>(mmo.second.get());
+            if (mob && mob->is_alive() && mob->is_in_range(range)) {
+                std::int32_t oid = mob->get_oid();
+                auto distance = static_cast<std::uint16_t>(
+                    mob->get_position().disp(origin));
+
+                if (distance < closest_distance) {
+                    closest_distance = distance;
+                    closest_oid = oid;
+                }
+            }
+        }
+
+        if (closest_oid == std::numeric_limits<std::int32_t>::lowest()) {
+            return {};
+        } else {
+            return {{{closest_distance, closest_oid}}};
+        }
+    }
+
+    boost::container::flat_map<std::uint16_t, std::int32_t> targets;
+    targets.reserve(mob_count + 1);
+
     for (const auto& mmo : mobs) {
-        const Mob* mob = static_cast<const Mob*>(mmo.second.get());
+        auto mob = static_cast<const Mob*>(mmo.second.get());
         if (mob && mob->is_alive() && mob->is_in_range(range)) {
             std::int32_t oid = mob->get_oid();
             auto distance =
                 static_cast<std::uint16_t>(mob->get_position().disp(origin));
-            distances.emplace(distance, oid);
+            targets.emplace(distance, oid);
+
+            if (targets.size() > mob_count) {
+                auto furthest = targets.end();
+                --furthest;
+                targets.erase(furthest);
+            }
         }
     }
 
-    std::vector<std::int32_t> targets;
-    for (auto& iter : distances) {
-        if (targets.size() >= mobcount) {
-            break;
-        }
-
-        targets.push_back(iter.second);
-    }
     return targets;
 }
 
@@ -187,7 +216,7 @@ std::int32_t MapMobs::find_colliding(const MovingObject& moveobj) const
                                         vertical.greater()};
 
     auto iter =
-        std::find_if(mobs.begin(), mobs.end(), [&player_rect](auto& mmo) {
+        std::find_if(mobs.begin(), mobs.end(), [player_rect](auto& mmo) {
             nullable_ptr<Mob> mob = mmo.second.get();
             return mob && mob->is_alive() && mob->is_in_range(player_rect);
         });

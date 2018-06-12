@@ -29,14 +29,14 @@ public:
     enum Alignment { LEFT, CENTER, RIGHT };
 
     Charset(nl::node source, Alignment alignment);
-    Charset();
+    Charset() noexcept;
 
     void draw(std::int8_t character, const DrawArgument& args) const;
     std::int16_t draw(std::string_view text, const DrawArgument& args) const;
     std::int16_t draw(std::string_view text,
                       std::int16_t hspace,
                       const DrawArgument& args) const;
-    std::int16_t getw(std::int8_t character) const;
+    std::int16_t get_w(std::int8_t character) const;
 
 private:
     std::unordered_map<std::int8_t, Texture> chars;

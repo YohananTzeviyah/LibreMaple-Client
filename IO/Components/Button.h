@@ -30,9 +30,7 @@ class Button
 public:
     enum State { NORMAL, DISABLED, MOUSEOVER, PRESSED, IDENTITY, NUM_STATES };
 
-    virtual ~Button()
-    {
-    }
+    virtual ~Button() = default;
 
     virtual void draw(Point<std::int16_t> parentpos) const = 0;
     virtual Rectangle<std::int16_t>

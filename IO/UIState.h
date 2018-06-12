@@ -33,14 +33,12 @@ public:
                              std::unique_ptr<UIElement>,
                              UIElement::NUM_TYPES>::iterator;
 
-    virtual ~UIState()
-    {
-    }
+    virtual ~UIState() = default;
 
     virtual void draw(float inter, Point<std::int16_t> cursor) const = 0;
     virtual void update() = 0;
 
-    virtual void doubleclick(Point<std::int16_t> pos) = 0;
+    virtual void double_click(Point<std::int16_t> pos) = 0;
     virtual void
     send_key(KeyType::Id type, std::int32_t action, bool pressed) = 0;
     virtual Cursor::State send_cursor(Cursor::State mst,
@@ -71,7 +69,7 @@ class UIStateNull : public UIState
     void update() override
     {
     }
-    void doubleclick(Point<std::int16_t>) override
+    void double_click(Point<std::int16_t>) override
     {
     }
     void send_key(KeyType::Id, std::int32_t, bool) override

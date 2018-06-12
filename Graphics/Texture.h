@@ -22,7 +22,7 @@
 
 namespace jrc
 {
-// Represents a single image loaded from a of game data.
+//! Represents a single image loaded from a of game data.
 class Texture
 {
 public:

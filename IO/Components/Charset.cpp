@@ -23,8 +23,9 @@ Charset::Charset(nl::node src, Alignment alignment) : alignment(alignment)
 {
     for (auto sub : src) {
         std::string name = sub.name();
-        if (sub.data_type() != nl::node::type::bitmap || name.empty())
+        if (sub.data_type() != nl::node::type::bitmap || name.empty()) {
             continue;
+        }
 
         char c = *name.begin();
         if (c == '\\') {
@@ -34,18 +35,19 @@ Charset::Charset(nl::node src, Alignment alignment) : alignment(alignment)
     }
 }
 
-Charset::Charset() : alignment(LEFT)
+Charset::Charset() noexcept : alignment(LEFT)
 {
 }
 
 void Charset::draw(std::int8_t c, const DrawArgument& args) const
 {
     auto iter = chars.find(c);
-    if (iter != chars.end())
+    if (iter != chars.end()) {
         iter->second.draw(args);
+    }
 }
 
-std::int16_t Charset::getw(std::int8_t c) const
+std::int16_t Charset::get_w(std::int8_t c) const
 {
     auto iter = chars.find(c);
     return static_cast<std::int16_t>(iter != chars.end() ? iter->second.width()
@@ -61,19 +63,19 @@ std::int16_t Charset::draw(std::string_view text,
     switch (alignment) {
     case CENTER:
         for (char c : text) {
-            total += getw(c);
+            total += get_w(c);
         }
         shift -= total / 2;
     case LEFT:
         for (char c : text) {
             draw(c, args + Point<std::int16_t>{shift, 0});
-            shift += getw(c);
+            shift += get_w(c);
         }
         break;
     case RIGHT:
         for (auto iter = text.rbegin(); iter != text.rend(); ++iter) {
             char c = *iter;
-            shift += getw(c);
+            shift += get_w(c);
             draw(c, args - Point<std::int16_t>{shift, 0});
         }
         break;

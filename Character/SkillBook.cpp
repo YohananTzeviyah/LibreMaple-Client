@@ -23,50 +23,60 @@ namespace jrc
 {
 void Skillbook::set_skill(std::int32_t id,
                           std::int32_t level,
-                          std::int32_t mlevel,
-                          std::int64_t expire)
+                          std::int32_t master_level,
+                          std::int64_t expire) noexcept
 {
-    skillentries[id] = {level, mlevel, expire};
+    skill_entries[id] = {level, master_level, expire};
 }
 
-bool Skillbook::has_skill(std::int32_t id) const
+bool Skillbook::has_skill(std::int32_t id) const noexcept
 {
-    return skillentries.count(id) > 0;
+    return skill_entries.count(id) > 0;
 }
 
-std::int32_t Skillbook::get_level(std::int32_t id) const
+std::int32_t Skillbook::get_level(std::int32_t id) const noexcept
 {
-    auto iter = skillentries.find(id);
-    if (iter == skillentries.end())
+    auto iter = skill_entries.find(id);
+    if (iter == skill_entries.end()) {
         return 0;
+    }
 
     return iter->second.level;
 }
 
-std::int32_t Skillbook::get_masterlevel(std::int32_t id) const
+std::int32_t Skillbook::get_master_level(std::int32_t id) const noexcept
 {
-    auto iter = skillentries.find(id);
-    if (iter == skillentries.end())
+    auto iter = skill_entries.find(id);
+    if (iter == skill_entries.end()) {
         return 0;
+    }
 
-    return iter->second.masterlevel;
+    return iter->second.master_level;
 }
 
-std::int64_t Skillbook::get_expiration(std::int32_t id) const
+std::int64_t Skillbook::get_expiration(std::int32_t id) const noexcept
 {
-    auto iter = skillentries.find(id);
-    if (iter == skillentries.end())
+    auto iter = skill_entries.find(id);
+    if (iter == skill_entries.end()) {
         return 0;
+    }
 
     return iter->second.expiration;
 }
 
-std::map<std::int32_t, std::int32_t> Skillbook::collect_passives() const
+const std::unordered_map<int32_t, Skillbook::SkillEntry>&
+Skillbook::get_entries() const noexcept
 {
-    std::map<std::int32_t, std::int32_t> passives;
-    for (auto& iter : skillentries) {
-        if (SkillData::get(iter.first).is_passive()) {
-            passives.emplace(iter.first, iter.second.level);
+    return skill_entries;
+}
+
+boost::container::flat_map<std::int32_t, std::int32_t>
+Skillbook::collect_passives() const noexcept
+{
+    boost::container::flat_map<std::int32_t, std::int32_t> passives;
+    for (auto [id, entry] : skill_entries) {
+        if (SkillData::get(id).is_passive()) {
+            passives.emplace(id, entry.level);
         }
     }
     return passives;

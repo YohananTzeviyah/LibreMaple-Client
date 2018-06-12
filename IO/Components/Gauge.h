@@ -27,16 +27,16 @@ public:
           Texture mid,
           Texture end,
           std::int16_t maximum,
-          float percentage);
+          float percentage) noexcept;
     Gauge();
 
     void draw(const DrawArgument& args) const;
     void update(float target);
 
 private:
-    Texture barfront;
-    Texture barmid;
-    Texture barend;
+    Texture bar_front;
+    Texture bar_mid;
+    Texture bar_end;
     std::int16_t maximum;
 
     float percentage;

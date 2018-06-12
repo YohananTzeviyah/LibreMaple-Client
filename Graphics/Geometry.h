@@ -38,9 +38,7 @@ public:
         HPBAR_DARKGREEN
     };
 
-    virtual ~Geometry()
-    {
-    }
+    virtual ~Geometry() = default;
 
 protected:
     void draw(std::int16_t x,

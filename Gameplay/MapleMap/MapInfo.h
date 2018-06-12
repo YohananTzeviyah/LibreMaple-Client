@@ -30,8 +30,8 @@ class Seat
 public:
     Seat(nl::node source);
 
-    bool inrange(Point<std::int16_t> position) const;
-    Point<std::int16_t> getpos() const;
+    bool in_range(Point<std::int16_t> position) const;
+    Point<std::int16_t> get_pos() const;
 
 private:
     Point<std::int16_t> pos;
@@ -43,8 +43,8 @@ public:
     Ladder(nl::node source);
 
     bool is_ladder() const;
-    bool inrange(Point<std::int16_t> position, bool upwards) const;
-    bool felloff(std::int16_t y, bool downwards) const;
+    bool in_range(Point<std::int16_t> position, bool upwards) const;
+    bool fell_off(std::int16_t y, bool downwards) const;
     std::int16_t get_x() const;
 
 private:
@@ -67,26 +67,26 @@ public:
     Range<std::int16_t> get_walls() const;
     Range<std::int16_t> get_borders() const;
 
-    // Find a setat the player's position.
-    nullable_ptr<const Seat> findseat(Point<std::int16_t> position) const;
-    // Find a ladder at the player's position. upwards = false implies
-    // downwards.
-    nullable_ptr<const Ladder> findladder(Point<std::int16_t> position,
-                                          bool upwards) const;
+    //! Find a seat at the player's position.
+    nullable_ptr<const Seat> find_seat(Point<std::int16_t> position) const;
+    //! Find a ladder at the player's position. `upwards == false` implies
+    //! downwards.
+    nullable_ptr<const Ladder> find_ladder(Point<std::int16_t> position,
+                                           bool upwards) const;
 
 private:
     std::int32_t fieldlimit;
     bool cloud;
     std::string bgm;
-    std::string mapdesc;
-    std::string mapname;
-    std::string streetname;
-    std::string mapmark;
+    std::string map_desc;
+    std::string map_name;
+    std::string street_name;
+    std::string map_mark;
     bool swim;
     bool town;
-    bool hideminimap;
-    Range<std::int16_t> mapwalls;
-    Range<std::int16_t> mapborders;
+    bool hide_minimap;
+    Range<std::int16_t> map_walls;
+    Range<std::int16_t> map_borders;
     std::vector<Seat> seats;
     std::vector<Ladder> ladders;
 };

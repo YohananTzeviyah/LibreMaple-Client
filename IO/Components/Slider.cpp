@@ -24,13 +24,13 @@ namespace jrc
 Slider::Slider(std::int32_t type,
                Range<std::int16_t> ver,
                std::int16_t xp,
-               std::int16_t ur,
-               std::int16_t rm,
-               std::function<void(bool)> om)
+               std::int16_t unit_rows,
+               std::int16_t row_max,
+               std::function<void(bool)> on_moved)
 {
     vertical = ver;
     x = xp;
-    onmoved = om;
+    on_moved = on_moved;
 
     start = {x, vertical.first()};
     end = {x, vertical.second()};
@@ -39,9 +39,9 @@ Slider::Slider(std::int32_t type,
 
     nl::node dsrc = src["disabled"];
 
-    dbase = dsrc["base"];
-    dnext = dsrc["next"];
-    dprev = dsrc["prev"];
+    d_base = dsrc["base"];
+    d_next = dsrc["next"];
+    d_prev = dsrc["prev"];
 
     nl::node esrc = src["enabled"];
 
@@ -51,9 +51,9 @@ Slider::Slider(std::int32_t type,
     next = {esrc["next0"], esrc["next1"], end};
     thumb = {esrc["thumb0"], esrc["thumb1"]};
 
-    buttonheight = dnext.get_dimensions().y();
+    button_height = d_next.get_dimensions().y();
 
-    setrows(ur, rm);
+    set_rows(unit_rows, row_max);
 
     enabled = true;
     scrolling = false;
@@ -63,68 +63,71 @@ Slider::Slider() : Slider(0, {}, 0, 0, 0, {})
 {
 }
 
-bool Slider::isenabled() const
+bool Slider::is_enabled() const
 {
     return enabled;
 }
 
-void Slider::setenabled(bool en)
+void Slider::set_enabled(bool en)
 {
     enabled = en;
 }
 
-void Slider::setrows(std::int16_t nr, std::int16_t ur, std::int16_t rm)
+void Slider::set_rows(std::int16_t new_row,
+                      std::int16_t unit_rows,
+                      std::int16_t row_max_)
 {
-    rowmax = rm - ur;
-    if (rowmax > 0) {
-        rowheight = (vertical.length() - buttonheight * 2) / rowmax;
+    row_max = row_max_ - unit_rows;
+    if (row_max > 0) {
+        row_height = (vertical.length() - button_height * 2) / row_max;
     } else {
-        rowheight = 0;
+        row_height = 0;
     }
-    row = nr;
+    row = new_row;
 }
 
-void Slider::setrows(std::int16_t ur, std::int16_t rm)
+void Slider::set_rows(std::int16_t unit_rows, std::int16_t row_max_)
 {
-    setrows(0, ur, rm);
+    set_rows(0, unit_rows, row_max_);
 }
 
-void Slider::setvertical(Range<std::int16_t> ver)
+void Slider::set_vertical(Range<std::int16_t> ver)
 {
     vertical = ver;
     start = {x, vertical.first()};
     end = {x, vertical.second()};
     prev.set_position(start);
     next.set_position(end);
-    if (rowmax > 0) {
-        rowheight = (vertical.length() - buttonheight * 2) / rowmax;
+    if (row_max > 0) {
+        row_height = (vertical.length() - button_height * 2) / row_max;
     } else {
-        rowheight = 0;
+        row_height = 0;
     }
 }
 
 void Slider::draw(Point<std::int16_t> position) const
 {
-    Point<std::int16_t> fill(0, vertical.length() + buttonheight);
+    Point<std::int16_t> fill(0, vertical.length() + button_height);
 
     if (enabled) {
         base.draw({position + start, fill});
-        if (rowheight > 0) {
-            thumb.draw({position + getthumbpos()});
+        if (row_height > 0) {
+            thumb.draw({position + get_thumb_pos()});
         }
         prev.draw({position});
         next.draw({position});
     } else {
-        dbase.draw({position + start, fill});
-        dprev.draw({position});
-        dnext.draw({position});
+        d_base.draw({position + start, fill});
+        d_prev.draw({position});
+        d_next.draw({position});
     }
 }
 
 bool Slider::remove_cursor(bool clicked)
 {
     if (scrolling) {
-        return scrolling = clicked;
+        scrolling = clicked;
+        return clicked;
     } else {
         thumb.set_state(Button::NORMAL);
         next.set_state(Button::NORMAL);
@@ -133,11 +136,11 @@ bool Slider::remove_cursor(bool clicked)
     }
 }
 
-Point<std::int16_t> Slider::getthumbpos() const
+Point<std::int16_t> Slider::get_thumb_pos() const
 {
-    std::int16_t y = row < rowmax
-                         ? vertical.first() + row * rowheight + buttonheight
-                         : vertical.second() - buttonheight * 2 - 2;
+    std::int16_t y = row < row_max
+                         ? vertical.first() + row * row_height + button_height
+                         : vertical.second() - button_height * 2 - 2;
     return {x, y};
 }
 
@@ -146,14 +149,14 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
     Point<std::int16_t> relative = cursor - start;
     if (scrolling) {
         if (pressed) {
-            std::int16_t thumby = row * rowheight + buttonheight * 2;
+            std::int16_t thumby = row * row_height + button_height * 2;
             std::int16_t delta = relative.y() - thumby;
-            if (delta > rowheight / 2 && row < rowmax) {
+            if (delta > row_height / 2 && row < row_max) {
                 ++row;
-                onmoved(false);
-            } else if (delta < -rowheight / 2 && row > 0) {
+                on_moved(false);
+            } else if (delta < -row_height / 2 && row > 0) {
                 --row;
-                onmoved(true);
+                on_moved(true);
             }
             return Cursor::CLICKING;
         } else {
@@ -167,7 +170,7 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
         return Cursor::IDLE;
     }
 
-    Point<std::int16_t> thumbpos = getthumbpos();
+    Point<std::int16_t> thumbpos = get_thumb_pos();
     if (thumb.bounds(thumbpos).contains(cursor)) {
         if (pressed) {
             scrolling = true;
@@ -185,7 +188,7 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
         if (pressed) {
             if (row > 0) {
                 --row;
-                onmoved(true);
+                on_moved(true);
             }
 
             prev.set_state(Button::PRESSED);
@@ -200,9 +203,9 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
 
     if (next.bounds(Point<std::int16_t>()).contains(cursor)) {
         if (pressed) {
-            if (row < rowmax) {
+            if (row < row_max) {
                 ++row;
-                onmoved(false);
+                on_moved(false);
             }
 
             next.set_state(Button::PRESSED);
@@ -216,21 +219,21 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
     }
 
     if (pressed) {
-        auto yoffset = static_cast<double>(relative.y() - buttonheight * 2);
+        auto yoffset = static_cast<double>(relative.y() - button_height * 2);
         auto cursorrow =
-            static_cast<std::int16_t>(std::round(yoffset / rowheight));
+            static_cast<std::int16_t>(std::round(yoffset / row_height));
         if (cursorrow < 0)
             cursorrow = 0;
-        else if (cursorrow > rowmax)
-            cursorrow = rowmax;
+        else if (cursorrow > row_max)
+            cursorrow = row_max;
         std::int16_t delta = row - cursorrow;
         while (delta > 0) {
             --delta;
-            onmoved(true);
+            on_moved(true);
         }
         while (delta < 0) {
             ++delta;
-            onmoved(false);
+            on_moved(false);
         }
         row = cursorrow;
     }

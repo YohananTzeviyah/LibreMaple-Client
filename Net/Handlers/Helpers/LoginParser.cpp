@@ -24,10 +24,10 @@ Account LoginParser::parse_account(InPacket& recv)
     Account account;
 
     recv.skip(2);
-    account.accid = recv.read_int();
+    account.acc_id = recv.read_int();
     account.female = recv.read_bool();
     recv.read_bool(); // is admin
-    account.gmlevel = recv.read_byte();
+    account.gm_level = recv.read_byte();
     recv.skip(1);
     account.name = recv.read_string();
     recv.skip(1);
@@ -86,7 +86,7 @@ CharEntry LoginParser::parse_charentry(InPacket& recv)
             (jobrankmv > 0) ? '+' : (jobrankmv < 0) ? '-' : '=';
 
         stats.rank = std::make_pair(currank, rankmc);
-        stats.jobrank = std::make_pair(curjobrank, jobrankmc);
+        stats.job_rank = std::make_pair(curjobrank, jobrankmc);
     }
 
     return {stats, look, cid};
@@ -104,7 +104,7 @@ StatsEntry LoginParser::parse_stats(InPacket& recv)
     recv.read_int();  // hair
 
     for (std::size_t i = 0; i < 3; ++i) {
-        statsentry.petids.push_back(recv.read_long());
+        statsentry.pet_ids.push_back(recv.read_long());
     }
 
     statsentry.stats[Maplestat::LEVEL] = recv.read_byte();
@@ -123,7 +123,7 @@ StatsEntry LoginParser::parse_stats(InPacket& recv)
     statsentry.stats[Maplestat::FAME] = recv.read_short();
 
     recv.skip(4); // gachaexp
-    statsentry.mapid = recv.read_int();
+    statsentry.map_id = recv.read_int();
     statsentry.portal = recv.read_byte();
     recv.skip(4); // timestamp
 
@@ -136,9 +136,9 @@ LookEntry LoginParser::parse_look(InPacket& recv)
 
     look.female = recv.read_bool();
     look.skin = recv.read_byte();
-    look.faceid = recv.read_int();
+    look.face_id = recv.read_int();
     recv.read_bool(); // megaphone
-    look.hairid = recv.read_int();
+    look.hair_id = recv.read_int();
 
     std::uint8_t eqslot = recv.read_byte();
 
@@ -150,14 +150,14 @@ LookEntry LoginParser::parse_look(InPacket& recv)
     std::uint8_t mskeqslot = recv.read_byte();
 
     while (mskeqslot != 0xFF) {
-        look.maskedequips[mskeqslot] = recv.read_int();
+        look.masked_equips[mskeqslot] = recv.read_int();
         mskeqslot = recv.read_byte();
     }
 
-    look.maskedequips[-111] = recv.read_int();
+    look.masked_equips[-111] = recv.read_int();
 
     for (std::uint8_t i = 0; i < 3; ++i) {
-        look.petids.push_back(recv.read_int());
+        look.pet_ids.push_back(recv.read_int());
     }
 
     return look;

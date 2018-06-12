@@ -30,9 +30,7 @@ public:
     class Type
     {
     public:
-        virtual ~Type()
-        {
-        }
+        virtual ~Type() = default;
 
         virtual void drop_on_stage() const = 0;
         virtual void drop_on_equips(Equipslot::Id eqslot) const = 0;

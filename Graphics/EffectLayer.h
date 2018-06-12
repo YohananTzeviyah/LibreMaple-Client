@@ -18,22 +18,22 @@
 #pragma once
 #include "../Constants.h"
 #include "Sprite.h"
+#include "boost/container/flat_map.hpp"
 
-#include <list>
-#include <map>
+#include <vector>
 
 namespace jrc
 {
-/// A list of animations. Animations will be removed after all frames were
-/// displayed.
+//! A list of animations. Animations will be removed after all frames were
+//! displayed.
 class EffectLayer
 {
 public:
-    /// Draws all effects with a z-value strictly less than 0.
-    void drawbelow(Point<std::int16_t> position, float alpha) const;
-    /// Draws all effects with a z-value greater than or equal to 0.
-    void drawabove(Point<std::int16_t> position, float alpha) const;
-    /// Remove effects whose animations are done, i.e. they have expired.
+    //! Draws all effects with a z-value strictly less than 0.
+    void draw_below(Point<std::int16_t> position, float alpha) const;
+    //! Draws all effects with a z-value greater than or equal to 0.
+    void draw_above(Point<std::int16_t> position, float alpha) const;
+    //! Remove effects whose animations are done, i.e. they have expired.
     void update();
     void add(const Animation& effect,
              const DrawArgument& args,
@@ -68,8 +68,8 @@ private:
         float speed;
     };
 
-    /// Sorted (red-black) tree that associates z-indices (can be negative
-    /// or non-negative) with the effects at that z-index.
-    std::map<std::int8_t, std::list<Effect>> effects;
+    //! Sorted map that associates z-indices (can be negative or non-negative)
+    //! with the effects at that z-index.
+    boost::container::flat_map<std::int8_t, std::vector<Effect>> effects;
 };
 } // namespace jrc

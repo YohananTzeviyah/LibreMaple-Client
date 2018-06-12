@@ -117,7 +117,7 @@ void SetfieldHandler::set_field(InPacket& recv) const
     player.recalc_stats(true);
 
     std::uint8_t portalid = player.get_stats().get_portal();
-    std::int32_t mapid = player.get_stats().get_mapid();
+    std::int32_t mapid = player.get_stats().get_map_id();
 
     transition(mapid, portalid);
 
@@ -208,7 +208,6 @@ void SetfieldHandler::parse_questlog(InPacket& recv, Questlog& quests) const
         }
     }
 
-    std::map<std::int16_t, std::int64_t> completed = {};
     size = recv.read_short();
     for (std::int16_t i = 0; i < size; ++i) {
         std::int16_t qid = recv.read_short();
@@ -304,11 +303,11 @@ void SetfieldHandler::parse_nyinfo(InPacket& recv) const
 
 void SetfieldHandler::parse_areainfo(InPacket& recv) const
 {
-    std::map<std::int16_t, std::string> areainfo = {};
-    std::int16_t arsize = recv.read_short();
-    for (std::int16_t i = 0; i < arsize; ++i) {
-        std::int16_t area = recv.read_short();
-        areainfo[area] = recv.read_string();
+    // std::unordered_map<std::int16_t, std::string> area_info;
+    std::int16_t ar_size = recv.read_short();
+    for (std::int16_t i = 0; i < ar_size; ++i) {
+        [[maybe_unused]] std::int16_t area = recv.read_short();
+        recv.read_string(); // area_info[area] = recv.read_string();
     }
 }
 } // namespace jrc

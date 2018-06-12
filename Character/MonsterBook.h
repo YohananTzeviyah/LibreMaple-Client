@@ -17,22 +17,22 @@
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
 #include <cstdint>
-#include <map>
+#include <unordered_map>
 
 namespace jrc
 {
-// Class that represents the monster card collection of an individual
-// character.
+//! Class that represents the monster card collection of an individual
+//! character.
 class Monsterbook
 {
 public:
-    Monsterbook();
+    Monsterbook() noexcept;
 
-    void set_cover(std::int32_t);
-    void add_card(std::int16_t, std::int8_t);
+    void set_cover(std::int32_t) noexcept;
+    void add_card(std::int16_t, std::int8_t) noexcept;
 
 private:
     std::int32_t cover;
-    std::map<std::int16_t, std::int8_t> cards;
+    std::unordered_map<std::int16_t, std::int8_t> cards;
 };
 } // namespace jrc

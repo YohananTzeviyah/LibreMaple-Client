@@ -19,19 +19,18 @@
 #include "../../Character/Char.h"
 #include "../../Graphics/Animation.h"
 #include "../../Template/BoolPair.h"
+#include "boost/container/flat_map.hpp"
 
 #include <unordered_map>
 #include <vector>
 
 namespace jrc
 {
-// Interface for skill effects.
+//! Interface for skill effects.
 class SkillUseEffect
 {
 public:
-    virtual ~SkillUseEffect()
-    {
-    }
+    virtual ~SkillUseEffect() = default;
 
     virtual void apply(Char& target) const = 0;
 
@@ -56,7 +55,7 @@ protected:
     };
 };
 
-// No animation.
+//! No animation.
 class NoUseEffect : public SkillUseEffect
 {
 public:
@@ -65,7 +64,7 @@ public:
     }
 };
 
-// An effect which displays an animation over the character's position.
+//! An effect which displays an animation over the character's position.
 class SingleUseEffect : public SkillUseEffect
 {
 public:
@@ -77,8 +76,8 @@ private:
     Effect effect;
 };
 
-// An effect which displays an animation over the character's position.
-// The effect changes based on wether the character uses a two_handed weapon.
+//! An effect which displays an animation over the character's position.
+//! The effect changes based on whether the character uses a two-handed weapon.
 class TwoHUseEffect : public SkillUseEffect
 {
 public:
@@ -90,7 +89,7 @@ private:
     BoolPair<Effect> effects;
 };
 
-// An effect which displays multiple animations over the character's position.
+//! An effect which displays multiple animations over the character's position.
 class MultiUseEffect : public SkillUseEffect
 {
 public:
@@ -102,7 +101,7 @@ private:
     std::vector<Effect> effects;
 };
 
-// The animation changes with the character level.
+//! The animation changes with the character level.
 class ByLevelUseEffect : public SkillUseEffect
 {
 public:
@@ -111,10 +110,10 @@ public:
     void apply(Char& target) const override;
 
 private:
-    std::map<std::uint16_t, Effect> effects;
+    boost::container::flat_map<std::uint16_t, Effect> effects;
 };
 
-// Use effect for Iron Body.
+//! Use effect for Iron Body.
 class IronBodyUseEffect : public SkillUseEffect
 {
 public:

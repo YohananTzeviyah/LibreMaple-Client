@@ -148,9 +148,9 @@ void UIStatsinfo::update_all_stats()
     update_basevstotal(LUK, Maplestat::LUK, Equipstat::LUK);
 
     statlabels[DAMAGE].change_text(
-        str::concat(std::to_string(stats.get_mindamage()),
+        str::concat(std::to_string(stats.get_min_damage()),
                     " ~ ",
-                    std::to_string(stats.get_maxdamage())));
+                    std::to_string(stats.get_max_damage())));
     if (stats.is_damage_buffed()) {
         statlabels[DAMAGE].change_color(Text::RED);
     } else {
@@ -167,17 +167,18 @@ void UIStatsinfo::update_all_stats()
         std::to_string(static_cast<std::int32_t>(stats.get_critical() * 100)),
         '%'));
     statlabels[MINCRIT].change_text(str::concat(
-        std::to_string(static_cast<std::int32_t>(stats.get_mincrit() * 100)),
+        std::to_string(static_cast<std::int32_t>(stats.get_min_crit() * 100)),
         '%'));
     statlabels[MAXCRIT].change_text(str::concat(
-        std::to_string(static_cast<std::int32_t>(stats.get_maxcrit() * 100)),
+        std::to_string(static_cast<std::int32_t>(stats.get_max_crit() * 100)),
         '%'));
     statlabels[BDM].change_text(str::concat(
-        std::to_string(static_cast<std::int32_t>(stats.get_bossdmg() * 100)),
+        std::to_string(static_cast<std::int32_t>(stats.get_boss_dmg() * 100)),
         '%'));
-    statlabels[IGNOREDEF].change_text(str::concat(
-        std::to_string(static_cast<std::int32_t>(stats.get_ignoredef() * 100)),
-        '%'));
+    statlabels[IGNOREDEF].change_text(
+        str::concat(std::to_string(static_cast<std::int32_t>(
+                        stats.get_ignore_def() * 100)),
+                    '%'));
     statlabels[RESIST].change_text(
         str::concat(std::to_string(static_cast<std::int32_t>(
                         stats.get_resistance() * 100)),
@@ -308,7 +309,7 @@ void UIStatsinfo::update_basevstotal(StatLabel label,
 void UIStatsinfo::update_buffed(StatLabel label, Equipstat::Id stat)
 {
     std::int32_t total = stats.get_total(stat);
-    std::int32_t delta = stats.get_buffdelta(stat);
+    std::int32_t delta = stats.get_buff_delta(stat);
 
     statlabels[label].change_text(
         delta ? str::concat(std::to_string(total),

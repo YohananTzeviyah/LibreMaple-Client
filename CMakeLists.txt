@@ -34,16 +34,16 @@ endif()
 
 if(NOT WIN32)
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        SET(CMAKE_CXX_FLAGS "-O0 -g -ftrapv -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=undefined ${REQUIRED_FLAGS}")
+        SET(CMAKE_CXX_FLAGS "-O0 -g -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=undefined ${REQUIRED_FLAGS}")
         SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined")
     elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
         SET(CMAKE_CXX_FLAGS "-O3 -flto=full -ffast-math -DNDEBUG ${REQUIRED_FLAGS}")
     elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
         SET(CMAKE_CXX_FLAGS "-Oz -ffast-math -DNDEBUG ${REQUIRED_FLAGS}") # LTO doesn't work with "-Os" nor "-Oz" on clang :(
     elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-        SET(CMAKE_CXX_FLAGS "-O2 -ffast-math -flto=thin -g ${REQUIRED_FLAGS}")
+        SET(CMAKE_CXX_FLAGS "-O2 -g -ffast-math -fno-omit-frame-pointer -fno-optimize-sibling-calls ${REQUIRED_FLAGS}")
     else()
-        SET(CMAKE_CXX_FLAGS "-O0 -g -ftrapv -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=undefined ${REQUIRED_FLAGS}")
+        SET(CMAKE_CXX_FLAGS "-O0 -g -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=undefined ${REQUIRED_FLAGS}")
         SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined")
     endif()
 
@@ -172,6 +172,9 @@ SET(SOURCE_FILES ${Root_CPP}
                  ${Helpers_H}
                  ${nlnx_H}
                  "../boost/boost/bimap.hpp"
+                 "../boost/boost/container/flat_map.hpp"
+                 "../boost/boost/container/flat_set.hpp"
+                 "../boost/boost/container/static_vector.hpp"
                  "../cpptoml/include/cpptoml.h")
 
 # Adding file globs created above as libraries

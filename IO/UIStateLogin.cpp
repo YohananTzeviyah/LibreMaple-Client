@@ -46,7 +46,7 @@ void UIStateLogin::update()
     }
 }
 
-void UIStateLogin::doubleclick(Point<std::int16_t>)
+void UIStateLogin::double_click(Point<std::int16_t>)
 {
 }
 

@@ -20,35 +20,36 @@
 #include "Layer.h"
 #include "Obj.h"
 #include "Tile.h"
+#include "boost/container/flat_map.hpp"
 
-#include <map>
 #include <vector>
 
 namespace jrc
 {
-// A tile and obj layer.
+//! A tile and obj layer.
 class TilesObjs
 {
 public:
     TilesObjs(nl::node src);
     TilesObjs();
 
-    void draw(Point<std::int16_t> viewpos, float alpha) const;
+    void draw(Point<std::int16_t> view_pos, float alpha) const;
     void update();
 
 private:
-    std::multimap<std::uint8_t, Tile> tiles;
-    std::multimap<std::uint8_t, Obj> objs;
+    boost::container::flat_multimap<std::uint8_t, Tile> tiles;
+    boost::container::flat_multimap<std::uint8_t, Obj> objs;
 };
 
-// The collection of tile and obj layers on a map.
+//! The collection of tile and obj layers on a map.
 class MapTilesObjs
 {
 public:
     MapTilesObjs(nl::node src);
     MapTilesObjs();
 
-    void draw(Layer::Id layer, Point<std::int16_t> viewpos, float alpha) const;
+    void
+    draw(Layer::Id layer, Point<std::int16_t> view_pos, float alpha) const;
     void update();
 
 private:

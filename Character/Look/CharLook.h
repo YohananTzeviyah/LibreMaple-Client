@@ -45,7 +45,7 @@ public:
     void set_hair(std::int32_t hairid);
     void set_body(std::int32_t skinid);
     void set_face(std::int32_t faceid);
-    void add_equip(std::int32_t equipid);
+    void add_equip(std::int32_t item_id);
     void remove_equip(Equipslot::Id slot);
 
     void attack(bool degenerate);
@@ -71,7 +71,7 @@ public:
     static void init();
 
 private:
-    void updatetwohanded();
+    void update_two_handed();
     void draw(const DrawArgument& args,
               Stance::Id interstance,
               Expression::Id interexp,

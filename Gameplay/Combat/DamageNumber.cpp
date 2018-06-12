@@ -26,7 +26,7 @@ namespace jrc
 DamageNumber::DamageNumber(Type t,
                            std::int32_t damage,
                            std::int16_t starty,
-                           std::int16_t x)
+                           std::int16_t x) noexcept
 {
     type = t;
 
@@ -34,71 +34,69 @@ DamageNumber::DamageNumber(Type t,
         miss = false;
 
         std::string number = std::to_string(damage);
-        firstnum = number[0];
-        if (number.size() > 1) {
-            restnum = number.substr(1);
+        first_num = number[0];
+        if (number.length() > 1) {
+            rest_num = number.substr(1);
             multiple = true;
         } else {
-            restnum = "";
+            rest_num = "";
             multiple = false;
         }
 
-        std::int16_t total = getadvance(firstnum, true);
-        for (std::size_t i = 0; i < restnum.length(); ++i) {
-            char c = restnum[i];
+        std::int16_t total = get_advance(first_num, true);
+        for (std::size_t i = 0; i < rest_num.length(); ++i) {
+            char c = rest_num[i];
             std::int16_t advance;
-            if (i < restnum.length() - 1) {
-                char n = restnum[i + 1];
-                advance = (getadvance(c, false) + getadvance(n, false)) / 2;
+            if (i < rest_num.length() - 1) {
+                char n = rest_num[i + 1];
+                advance = (get_advance(c, false) + get_advance(n, false)) / 2;
             } else {
-                advance = getadvance(c, false);
+                advance = get_advance(c, false);
             }
             total += advance;
         }
         shift = total / 2;
     } else {
-        shift = charsets[type][true].getw('M') / 2;
+        shift = charsets[type][true].get_w('M') / static_cast<std::int16_t>(2);
         miss = true;
     }
 
-    moveobj.set_x(x);
-    moveobj.set_y(starty);
-    moveobj.vspeed = -0.25;
+    move_obj.set_x(x);
+    move_obj.set_y(starty);
+    move_obj.vspeed = -0.25;
     opacity.set(1.5f);
 }
 
-DamageNumber::DamageNumber()
-{
-}
+DamageNumber::DamageNumber() noexcept = default;
 
 void DamageNumber::draw(double viewx, double viewy, float alpha) const
 {
-    Point<std::int16_t> absolute = moveobj.get_absolute(viewx, viewy, alpha);
-    Point<std::int16_t> position = absolute - Point<std::int16_t>(0, shift);
+    Point<std::int16_t> absolute = move_obj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> position = absolute - Point<std::int16_t>{0, shift};
     float interopc = opacity.get(alpha);
 
     if (miss) {
         charsets[type][true].draw('M', {position, interopc});
     } else {
-        charsets[type][false].draw(firstnum, {position, interopc});
+        charsets[type][false].draw(first_num, {position, interopc});
 
         if (multiple) {
-            std::int16_t first_advance = getadvance(firstnum, true);
+            std::int16_t first_advance = get_advance(first_num, true);
             position.shift_x(first_advance);
 
-            for (std::size_t i = 0; i < restnum.length(); ++i) {
-                char c = restnum[i];
+            for (std::size_t i = 0; i < rest_num.length(); ++i) {
+                char c = rest_num[i];
                 Point<std::int16_t> yshift = {0, i % 2 ? -2 : 2};
                 charsets[type][true].draw(c, {position + yshift, interopc});
 
                 std::int16_t advance;
-                if (i < restnum.length() - 1) {
-                    char n = restnum[i + 1];
-                    std::int16_t c_advance = getadvance(c, false);
-                    std::int16_t n_advance = getadvance(n, false);
+                if (i < rest_num.length() - 1) {
+                    char n = rest_num[i + 1];
+                    std::int16_t c_advance = get_advance(c, false);
+                    std::int16_t n_advance = get_advance(n, false);
                     advance = (c_advance + n_advance) >> 1;
                 } else {
-                    advance = getadvance(c, false);
+                    advance = get_advance(c, false);
                 }
 
                 position.shift_x(advance);
@@ -107,13 +105,13 @@ void DamageNumber::draw(double viewx, double viewy, float alpha) const
     }
 }
 
-std::int16_t DamageNumber::getadvance(char c, bool first) const
+std::int16_t DamageNumber::get_advance(char c, bool first) const
 {
-    constexpr std::size_t LENGTH = 10;
-    constexpr std::int16_t advances[LENGTH] = {
+    static constexpr const std::size_t LENGTH = 10;
+    static constexpr const std::array<std::int16_t, LENGTH> advances{
         24, 20, 22, 22, 24, 23, 24, 22, 24, 24};
 
-    std::size_t index = static_cast<unsigned char>(c) - 48u;
+    std::size_t index = static_cast<unsigned char>(c) - 48ull;
     if (index < LENGTH) {
         std::int16_t advance = advances[index];
         switch (type) {
@@ -135,21 +133,22 @@ std::int16_t DamageNumber::getadvance(char c, bool first) const
     }
 }
 
-void DamageNumber::set_x(std::int16_t headx)
+void DamageNumber::set_x(std::int16_t head_x)
 {
-    moveobj.set_x(headx);
+    move_obj.set_x(head_x);
 }
 
 bool DamageNumber::update()
 {
-    moveobj.move();
+    move_obj.move();
 
-    static constexpr float FADE_STEP = Constants::TIMESTEP * 1.0f / FADE_TIME;
+    static constexpr const float FADE_STEP =
+        Constants::TIMESTEP * 1.0f / FADE_TIME;
     opacity -= FADE_STEP;
     return opacity.last() <= 0.0f;
 }
 
-std::int16_t DamageNumber::rowheight(bool critical)
+std::int16_t DamageNumber::row_height(bool critical)
 {
     return critical ? 36 : 30;
 }
@@ -164,11 +163,11 @@ void DamageNumber::init()
         false, nl::nx::effect["BasicEff.img"]["NoCri1"], Charset::LEFT);
     charsets[CRITICAL].set(
         true, nl::nx::effect["BasicEff.img"]["NoCri0"], Charset::LEFT);
-    charsets[TOPLAYER].set(
+    charsets[TO_PLAYER].set(
         false, nl::nx::effect["BasicEff.img"]["NoViolet1"], Charset::LEFT);
-    charsets[TOPLAYER].set(
+    charsets[TO_PLAYER].set(
         true, nl::nx::effect["BasicEff.img"]["NoViolet0"], Charset::LEFT);
 }
 
-BoolPair<Charset> DamageNumber::charsets[NUM_TYPES];
+std::array<BoolPair<Charset>, DamageNumber::NUM_TYPES> DamageNumber::charsets;
 } // namespace jrc

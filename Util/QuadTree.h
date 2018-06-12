@@ -16,7 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../Template/stack_vec.h"
+
+#include "boost/container/static_vector.hpp"
 
 #include <cstdint>
 #include <functional>
@@ -74,7 +75,7 @@ public:
 
         Node& to_erase = nodes[key];
 
-        stack_vec<K, 4> leaves;
+        boost::container::static_vector<K, 4> leaves;
         for (std::size_t i = LEFT; i <= DOWN; ++i) {
             if (K leaf_key = to_erase[i]; leaf_key) {
                 leaves.push_back(std::move(leaf_key));

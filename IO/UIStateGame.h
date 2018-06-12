@@ -23,8 +23,8 @@
 #include "Components/SkillTooltip.h"
 #include "UIState.h"
 
-#include <list>
 #include <memory>
+#include <vector>
 
 namespace jrc
 {
@@ -36,13 +36,13 @@ public:
     void draw(float inter, Point<std::int16_t> cursor) const override;
     void update() override;
 
-    void doubleclick(Point<std::int16_t> pos) override;
+    void double_click(Point<std::int16_t> pos) override;
     void
     send_key(KeyType::Id type, std::int32_t action, bool pressed) override;
     Cursor::State send_cursor(Cursor::State mst,
                               Point<std::int16_t> pos) override;
 
-    void drag_icon(Icon* icon) override;
+    void drag_icon(Icon* drg_ic) override;
     void clear_tooltip(Tooltip::Parent parent) override;
     void show_equip(Tooltip::Parent parent, std::int16_t slot) override;
     void show_item(Tooltip::Parent parent, std::int32_t itemid) override;
@@ -64,15 +64,15 @@ private:
     void emplace(Args&&... args);
 
     EnumMap<UIElement::Type, UIElement::UPtr, UIElement::NUM_TYPES> elements;
-    std::list<UIElement::Type> elementorder;
+    std::vector<UIElement::Type> element_order;
     UIElement::Type focused;
 
-    EquipTooltip eqtooltip;
-    ItemTooltip ittooltip;
+    EquipTooltip eq_tooltip;
+    ItemTooltip it_tooltip;
     SkillTooltip sktooltip;
     nullable_ptr<Tooltip> tooltip;
-    Tooltip::Parent tooltipparent;
+    Tooltip::Parent tooltip_parent;
 
-    nullable_ptr<Icon> draggedicon;
+    nullable_ptr<Icon> dragged_icon;
 };
 } // namespace jrc

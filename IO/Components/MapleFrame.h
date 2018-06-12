@@ -41,7 +41,7 @@ private:
     Texture southwest;
     Texture south;
     Texture southeast;
-    std::int16_t xtile;
-    std::int16_t ytile;
+    std::int16_t x_tile;
+    std::int16_t y_tile;
 };
 } // namespace jrc

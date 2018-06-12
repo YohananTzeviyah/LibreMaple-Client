@@ -19,10 +19,12 @@
 #include "../../Character/Player.h"
 #include "../PacketHandler.h"
 
+#include <unordered_map>
+
 namespace jrc
 {
-// Handler for a packet which contains all character information on first login
-// or warps the player to a different map.
+//! Handler for a packet which contains all character information on first
+//! login or warps the player to a different map.
 class SetfieldHandler : public PacketHandler
 {
 public:

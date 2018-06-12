@@ -20,7 +20,7 @@
 
 namespace jrc
 {
-/// Interface for classes that handle `InPacket`s.
+//! Interface for classes that handle `InPacket`s.
 class PacketHandler
 {
 public:

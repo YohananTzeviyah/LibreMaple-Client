@@ -85,8 +85,8 @@ void MapPortals::update(Point<std::int16_t> playerpos)
 
 void MapPortals::draw(Point<std::int16_t> viewpos, float inter) const
 {
-    for (auto& ptit : portals_by_id) {
-        ptit.second.draw(viewpos, inter);
+    for (auto& pt_it : portals_by_id) {
+        pt_it.second.draw(viewpos, inter);
     }
 }
 

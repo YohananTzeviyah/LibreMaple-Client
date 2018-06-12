@@ -22,27 +22,29 @@
 #include "../Components/Slider.h"
 #include "../UIDragElement.h"
 
+#include <unordered_map>
+
 namespace jrc
 {
-// The Item inventory.
+//! The Item inventory.
 class UIItemInventory : public UIDragElement<PosINV>
 {
 public:
-    static constexpr Type TYPE = ITEMINVENTORY;
-    static constexpr bool FOCUSED = false;
-    static constexpr bool TOGGLED = true;
+    static constexpr const Type TYPE = ITEM_INVENTORY;
+    static constexpr const bool FOCUSED = false;
+    static constexpr const bool TOGGLED = true;
 
     UIItemInventory(const Inventory& inventory);
 
     void draw(float inter) const override;
     void update() override;
 
-    void double_click(Point<std::int16_t> position) override;
-    void send_icon(const Icon& icon, Point<std::int16_t> position) override;
+    void double_click(Point<std::int16_t> cursor_pos) override;
+    void send_icon(const Icon& icon, Point<std::int16_t> cursor_pos) override;
     void toggle_active() override;
-    bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override;
+    bool remove_cursor(bool clicked, Point<std::int16_t> cursor_pos) override;
     Cursor::State send_cursor(bool pressed,
-                              Point<std::int16_t> position) override;
+                              Point<std::int16_t> cursor_pos) override;
 
     void modify(InventoryType::Id type,
                 std::int16_t pos,
@@ -63,8 +65,8 @@ private:
     bool is_not_visible(std::int16_t slot) const;
     std::int16_t slot_by_position(Point<std::int16_t> cursor_pos) const;
     std::uint16_t button_by_tab(InventoryType::Id tab) const;
-    Point<std::int16_t> get_slotpos(std::int16_t slot) const;
-    Point<std::int16_t> get_tabpos(InventoryType::Id tab) const;
+    Point<std::int16_t> get_slot_pos(std::int16_t slot) const;
+    Point<std::int16_t> get_tab_pos(InventoryType::Id tab) const;
     Icon* get_icon(std::int16_t slot);
 
     class ItemIcon : public Icon::Type
@@ -75,15 +77,15 @@ private:
                  std::int16_t source);
 
         void drop_on_stage() const override;
-        void drop_on_equips(Equipslot::Id eqslot) const override;
+        void drop_on_equips(Equipslot::Id eq_slot) const override;
         void drop_on_items(InventoryType::Id tab,
                            Equipslot::Id,
                            std::int16_t slot,
                            bool) const override;
 
     private:
-        InventoryType::Id sourcetab;
-        Equipslot::Id eqsource;
+        InventoryType::Id source_tab;
+        Equipslot::Id eq_source;
         std::int16_t source;
     };
 
@@ -106,17 +108,17 @@ private:
 
     const Inventory& inventory;
 
-    Animation newitemslot;
-    Animation newitemtab;
+    Animation new_item_slot;
+    Animation new_item_tab;
     Texture projectile;
-    Text mesolabel;
+    Text meso_label;
     Slider slider;
 
-    std::map<std::int16_t, std::unique_ptr<Icon>> icons;
+    std::unordered_map<std::int16_t, std::unique_ptr<Icon>> icons;
 
     InventoryType::Id tab;
-    std::pair<std::int16_t, std::int16_t> slotrange;
-    InventoryType::Id newtab;
-    std::int16_t newslot;
+    std::pair<std::int16_t, std::int16_t> slot_range;
+    InventoryType::Id new_tab;
+    std::int16_t new_slot;
 };
 } // namespace jrc

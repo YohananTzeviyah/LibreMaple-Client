@@ -53,7 +53,7 @@ SkillData::SkillData(std::int32_t id)
     for (auto sub : levelsrc) {
         float damage = (float)sub["damage"] / 100;
         std::int32_t matk = sub["mad"];
-        std::int32_t fixdamage = sub["fixdamage"];
+        std::int32_t fixdamage = sub["fix_damage"];
         std::int32_t mastery = sub["mastery"];
         std::uint8_t attackcount =
             (std::uint8_t)sub["attackCount"].get_integer(1);

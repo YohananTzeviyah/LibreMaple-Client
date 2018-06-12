@@ -30,13 +30,13 @@ MapInfo::MapInfo(nl::node src,
 {
     nl::node info = src["info"];
     if (info["VRLeft"].data_type() == nl::node::type::integer) {
-        mapwalls = {info["VRLeft"], info["VRRight"]};
-        mapborders = {info["VRTop"], info["VRBottom"]};
-        mapborders = {mapborders.first() + Constants::VIEW_Y_OFFSET,
-                      mapborders.second() - Constants::VIEW_Y_OFFSET};
+        map_walls = {info["VRLeft"], info["VRRight"]};
+        map_borders = {info["VRTop"], info["VRBottom"]};
+        map_borders = {map_borders.first() + Constants::VIEW_Y_OFFSET,
+                       map_borders.second() - Constants::VIEW_Y_OFFSET};
     } else {
-        mapwalls = walls;
-        mapborders = borders;
+        map_walls = walls;
+        map_borders = borders;
     }
 
     std::string bgm_path = info["bgm"];
@@ -48,8 +48,8 @@ MapInfo::MapInfo(nl::node src,
 
     cloud = info["cloud"].get_bool();
     fieldlimit = info["fieldLimit"];
-    hideminimap = info["hideMinimap"].get_bool();
-    mapmark = info["mapMark"].get_string();
+    hide_minimap = info["hideMinimap"].get_bool();
+    map_mark = info["mapMark"].get_string();
     swim = info["swim"].get_bool();
     town = info["town"].get_bool();
 
@@ -62,9 +62,7 @@ MapInfo::MapInfo(nl::node src,
     }
 }
 
-MapInfo::MapInfo()
-{
-}
+MapInfo::MapInfo() = default;
 
 bool MapInfo::is_underwater() const
 {
@@ -78,29 +76,29 @@ std::string MapInfo::get_bgm() const
 
 Range<std::int16_t> MapInfo::get_walls() const
 {
-    return mapwalls;
+    return map_walls;
 }
 
 Range<std::int16_t> MapInfo::get_borders() const
 {
-    return mapborders;
+    return map_borders;
 }
 
-nullable_ptr<const Seat> MapInfo::findseat(Point<std::int16_t> position) const
+nullable_ptr<const Seat> MapInfo::find_seat(Point<std::int16_t> position) const
 {
     for (auto& seat : seats) {
-        if (seat.inrange(position)) {
+        if (seat.in_range(position)) {
             return seat;
         }
     }
     return nullptr;
 }
 
-nullable_ptr<const Ladder> MapInfo::findladder(Point<std::int16_t> position,
-                                               bool upwards) const
+nullable_ptr<const Ladder> MapInfo::find_ladder(Point<std::int16_t> position,
+                                                bool upwards) const
 {
     for (auto& ladder : ladders) {
-        if (ladder.inrange(position, upwards)) {
+        if (ladder.in_range(position, upwards)) {
             return ladder;
         }
     }
@@ -112,14 +110,14 @@ Seat::Seat(nl::node src)
     pos = src;
 }
 
-bool Seat::inrange(Point<std::int16_t> position) const
+bool Seat::in_range(Point<std::int16_t> position) const
 {
     auto hor = Range<std::int16_t>::symmetric(position.x(), 10);
     auto ver = Range<std::int16_t>::symmetric(position.y(), 10);
     return hor.contains(pos.x()) && ver.contains(pos.y());
 }
 
-Point<std::int16_t> Seat::getpos() const
+Point<std::int16_t> Seat::get_pos() const
 {
     return pos;
 }
@@ -137,7 +135,7 @@ bool Ladder::is_ladder() const
     return ladder;
 }
 
-bool Ladder::inrange(Point<std::int16_t> position, bool upwards) const
+bool Ladder::in_range(Point<std::int16_t> position, bool upwards) const
 {
     auto hor = Range<std::int16_t>::symmetric(position.x(), 10);
     auto ver = Range<std::int16_t>(y1, y2);
@@ -145,7 +143,7 @@ bool Ladder::inrange(Point<std::int16_t> position, bool upwards) const
     return hor.contains(x) && ver.contains(y);
 }
 
-bool Ladder::felloff(std::int16_t y, bool downwards) const
+bool Ladder::fell_off(std::int16_t y, bool downwards) const
 {
     std::int16_t dy = downwards ? y + 5 : y - 5;
     return dy > y2 || y + 5 < y1;

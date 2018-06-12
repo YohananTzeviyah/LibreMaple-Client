@@ -91,44 +91,44 @@ Footholdtree::Footholdtree() = default;
 
 void Footholdtree::limit_movement(PhysicsObject& phobj) const
 {
-    if (phobj.hmobile()) {
+    if (phobj.h_mobile()) {
         double crnt_x = phobj.crnt_x();
         double next_x = phobj.next_x();
 
         bool left = phobj.hspeed < 0.0f;
-        double wall = get_wall(phobj.fhid, left, phobj.next_y());
+        double wall = get_wall(phobj.fh_id, left, phobj.next_y());
         bool collision = left ? crnt_x >= wall && next_x <= wall
                               : crnt_x <= wall && next_x >= wall;
 
         if (!collision && phobj.is_flag_set(PhysicsObject::TURN_AT_EDGES)) {
-            wall = get_edge(phobj.fhid, left);
+            wall = get_edge(phobj.fh_id, left);
             collision = left ? crnt_x >= wall && next_x <= wall
                              : crnt_x <= wall && next_x >= wall;
         }
 
         if (collision) {
-            phobj.limitx(wall);
+            phobj.limit_x(wall);
             phobj.clear_flag(PhysicsObject::TURN_AT_EDGES);
         }
     }
 
-    if (phobj.vmobile()) {
+    if (phobj.v_mobile()) {
         double crnt_y = phobj.crnt_y();
         double next_y = phobj.next_y();
 
         auto ground =
-            Range<double>(get_fh(phobj.fhid).ground_below(phobj.crnt_x()),
-                          get_fh(phobj.fhid).ground_below(phobj.next_x()));
+            Range<double>(get_fh(phobj.fh_id).ground_below(phobj.crnt_x()),
+                          get_fh(phobj.fh_id).ground_below(phobj.next_x()));
         bool collision = crnt_y <= ground.first() && next_y >= ground.second();
         if (collision) {
-            phobj.limity(ground.second());
+            phobj.limit_y(ground.second());
 
             limit_movement(phobj);
         } else {
             if (next_y < borders.first()) {
-                phobj.limity(borders.first());
+                phobj.limit_y(borders.first());
             } else if (next_y > borders.second()) {
-                phobj.limity(borders.second());
+                phobj.limit_y(borders.second());
             }
         }
     }
@@ -136,40 +136,40 @@ void Footholdtree::limit_movement(PhysicsObject& phobj) const
 
 void Footholdtree::update_fh(PhysicsObject& phobj) const
 {
-    if (phobj.type == PhysicsObject::FIXATED && phobj.fhid > 0) {
+    if (phobj.type == PhysicsObject::FIXATED && phobj.fh_id > 0) {
         return;
     }
 
-    const Foothold& curfh = get_fh(phobj.fhid);
+    const Foothold& curfh = get_fh(phobj.fh_id);
     bool checkslope = false;
 
     double x = phobj.crnt_x();
     double y = phobj.crnt_y();
-    if (phobj.onground) {
+    if (phobj.on_ground) {
         if (std::floor(x) > curfh.r()) {
-            phobj.fhid = curfh.next();
+            phobj.fh_id = curfh.next();
         } else if (std::ceil(x) < curfh.l()) {
-            phobj.fhid = curfh.prev();
+            phobj.fh_id = curfh.prev();
         }
 
-        if (phobj.fhid == 0) {
-            phobj.fhid = get_fhid_below(x, y);
+        if (phobj.fh_id == 0) {
+            phobj.fh_id = get_fhid_below(x, y);
         } else {
             checkslope = true;
         }
     } else {
-        phobj.fhid = get_fhid_below(x, y);
+        phobj.fh_id = get_fhid_below(x, y);
     }
 
-    const Foothold& nextfh = get_fh(phobj.fhid);
-    phobj.fhslope = nextfh.slope();
+    const Foothold& nextfh = get_fh(phobj.fh_id);
+    phobj.fh_slope = nextfh.slope();
 
     double ground = nextfh.ground_below(x);
     if (phobj.vspeed == 0.0 && checkslope) {
-        double vdelta = std::abs(phobj.fhslope);
-        if (phobj.fhslope < 0.0) {
+        double vdelta = std::abs(phobj.fh_slope);
+        if (phobj.fh_slope < 0.0) {
             vdelta *= (ground - y);
-        } else if (phobj.fhslope > 0.0) {
+        } else if (phobj.fh_slope > 0.0) {
             vdelta *= (y - ground);
         }
 
@@ -182,29 +182,29 @@ void Footholdtree::update_fh(PhysicsObject& phobj) const
         }
     }
 
-    phobj.onground = phobj.y == ground;
+    phobj.on_ground = phobj.y == ground;
 
-    if (phobj.enablejd || phobj.is_flag_set(PhysicsObject::CHECK_BELOW)) {
+    if (phobj.enable_jd || phobj.is_flag_set(PhysicsObject::CHECK_BELOW)) {
         std::uint16_t belowid =
             get_fhid_below(x, nextfh.ground_below(x) + 1.0);
         if (belowid > 0) {
             double nextground = get_fh(belowid).ground_below(x);
-            phobj.enablejd = (nextground - ground) < 600.0;
-            phobj.groundbelow = ground + 1.0;
+            phobj.enable_jd = (nextground - ground) < 600.0;
+            phobj.ground_below = ground + 1.0;
         } else {
-            phobj.enablejd = false;
+            phobj.enable_jd = false;
         }
 
         phobj.clear_flag(PhysicsObject::CHECK_BELOW);
     }
 
-    if (phobj.fhlayer == 0 || phobj.onground) {
-        phobj.fhlayer = nextfh.layer();
+    if (phobj.fh_layer == 0 || phobj.on_ground) {
+        phobj.fh_layer = nextfh.layer();
     }
 
-    if (phobj.fhid == 0) {
-        phobj.fhid = curfh.id();
-        phobj.limitx(curfh.x1());
+    if (phobj.fh_id == 0) {
+        phobj.fh_id = curfh.id();
+        phobj.limit_x(curfh.x1());
     }
 }
 

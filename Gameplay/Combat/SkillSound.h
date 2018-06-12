@@ -25,9 +25,7 @@ namespace jrc
 class SkillSound
 {
 public:
-    virtual ~SkillSound()
-    {
-    }
+    virtual ~SkillSound() = default;
 
     virtual void play_use() const = 0;
     virtual void play_hit() const = 0;

@@ -26,7 +26,7 @@ namespace jrc
 {
 Inventory::Inventory()
 {
-    bulletslot = 0;
+    bullet_slot = 0;
     meso = 0;
     running_uid = 0;
     slotmaxima[InventoryType::EQUIPPED] = Equipslot::LENGTH;
@@ -34,12 +34,12 @@ Inventory::Inventory()
 
 void Inventory::recalc_stats(Weapon::Type type)
 {
-    totalstats.clear();
+    total_stats.clear();
     for (const auto& iter : inventories[InventoryType::EQUIPPED]) {
         auto equip_iter = equips.find(iter.second.unique_id);
         if (equip_iter != equips.end()) {
             const Equip& equip = equip_iter->second;
-            for (auto stat_iter : totalstats) {
+            for (auto stat_iter : total_stats) {
                 stat_iter.second += equip.get_stat(stat_iter.first);
             }
         }
@@ -60,19 +60,19 @@ void Inventory::recalc_stats(Weapon::Type type)
         }
     }(type);
 
-    bulletslot = 0;
+    bullet_slot = 0;
     if (prefix) {
         for (const auto& iter : inventories[InventoryType::USE]) {
             const Slot& slot = iter.second;
             if (slot.count && slot.item_id / 1000 == prefix) {
-                bulletslot = iter.first;
+                bullet_slot = iter.first;
                 break;
             }
         }
     }
 
-    if (const auto bulletid = get_bulletid()) {
-        totalstats[Equipstat::WATK] += BulletData::get(bulletid).get_watk();
+    if (const auto bulletid = get_bullet_id()) {
+        total_stats[Equipstat::WATK] += BulletData::get(bulletid).get_watk();
     }
 }
 
@@ -172,21 +172,21 @@ void Inventory::remove(InventoryType::Id type, std::int16_t slot)
     }
 }
 
-void Inventory::swap(InventoryType::Id firsttype,
-                     std::int16_t firstslot,
-                     InventoryType::Id secondtype,
-                     std::int16_t secondslot)
+void Inventory::swap(InventoryType::Id first_type,
+                     std::int16_t first_slot,
+                     InventoryType::Id second_type,
+                     std::int16_t second_slot)
 {
-    Slot first = std::move(inventories[firsttype][firstslot]);
-    inventories[firsttype][firstslot] =
-        std::move(inventories[secondtype][secondslot]);
-    inventories[secondtype][secondslot] = std::move(first);
+    Slot first = std::move(inventories[first_type][first_slot]);
+    inventories[first_type][first_slot] =
+        std::move(inventories[second_type][second_slot]);
+    inventories[second_type][second_slot] = std::move(first);
 
-    if (!inventories[firsttype][firstslot].item_id) {
-        remove(firsttype, firstslot);
+    if (!inventories[first_type][first_slot].item_id) {
+        remove(first_type, first_slot);
     }
-    if (!inventories[secondtype][secondslot].item_id) {
-        remove(secondtype, secondslot);
+    if (!inventories[second_type][second_slot].item_id) {
+        remove(second_type, second_slot);
     }
 }
 
@@ -221,10 +221,10 @@ void Inventory::modify(InventoryType::Id type,
         slot = -slot;
         type = InventoryType::EQUIPPED;
     }
-    arg = (arg < 0) ? -arg : arg;
+    arg = arg < 0 ? -arg : arg;
 
     switch (mode) {
-    case CHANGECOUNT:
+    case CHANGE_COUNT:
         change_count(type, slot, arg);
         break;
     case SWAP:
@@ -258,7 +258,7 @@ std::uint8_t Inventory::get_slotmax(InventoryType::Id type) const
 
 std::uint16_t Inventory::get_stat(Equipstat::Id type) const
 {
-    return totalstats[type];
+    return total_stats[type];
 }
 
 std::int64_t Inventory::get_meso() const
@@ -268,7 +268,7 @@ std::int64_t Inventory::get_meso() const
 
 bool Inventory::has_projectile() const
 {
-    return bulletslot > 0;
+    return bullet_slot > 0;
 }
 
 bool Inventory::has_equipped(Equipslot::Id slot) const
@@ -276,22 +276,23 @@ bool Inventory::has_equipped(Equipslot::Id slot) const
     return inventories[InventoryType::EQUIPPED].count(slot) > 0;
 }
 
-std::int16_t Inventory::get_bulletslot() const
+std::int16_t Inventory::get_bullet_slot() const
 {
-    return bulletslot;
+    return bullet_slot;
 }
 
-std::uint16_t Inventory::get_bulletcount() const
+std::uint16_t Inventory::get_bullet_count() const
 {
-    return get_item_count(InventoryType::USE, bulletslot);
+    return static_cast<std::uint16_t>(
+        get_item_count(InventoryType::USE, bullet_slot));
 }
 
-std::int32_t Inventory::get_bulletid() const
+std::int32_t Inventory::get_bullet_id() const
 {
-    return get_item_id(InventoryType::USE, bulletslot);
+    return get_item_id(InventoryType::USE, bullet_slot);
 }
 
-Equipslot::Id Inventory::find_equipslot(std::int32_t itemid) const
+Equipslot::Id Inventory::find_equip_slot(std::int32_t itemid) const
 {
     const EquipData& cloth = EquipData::get(itemid);
     if (!cloth.is_valid()) {
@@ -328,7 +329,7 @@ std::int16_t Inventory::find_free_slot(InventoryType::Id type) const
 
         ++counter;
     }
-    return counter < slotmaxima[type] ? counter : 0;
+    return counter < slotmaxima[type] ? counter : static_cast<std::int16_t>(0);
 }
 
 std::int16_t Inventory::find_item(InventoryType::Id type,
@@ -384,7 +385,7 @@ nullable_ptr<const Equip> Inventory::get_equip(InventoryType::Id type,
     return equip_iter->second;
 }
 
-Inventory::Movement Inventory::movementbyvalue(std::int8_t value)
+Inventory::Movement Inventory::movement_by_value(std::int8_t value)
 {
     if (value >= MOVE_INTERNAL && value <= MOVE_EQUIP) {
         return static_cast<Movement>(value);

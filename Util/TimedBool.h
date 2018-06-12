@@ -80,7 +80,7 @@ public:
 
     float alpha() const
     {
-        return 1.0f - static_cast<float>(static_cast<float>(delay) / last);
+        return 1.0f - static_cast<float>(delay) / static_cast<float>(last);
     }
 
 private:

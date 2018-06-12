@@ -47,7 +47,7 @@ void StanceBuff::apply_to(CharStats& stats, std::int16_t value) const
 
 void BoosterBuff::apply_to(CharStats& stats, std::int16_t value) const
 {
-    stats.set_attackspeed(static_cast<std::int8_t>(value));
+    stats.set_attack_speed(static_cast<std::int8_t>(value));
 }
 
 ActiveBuffs::ActiveBuffs()

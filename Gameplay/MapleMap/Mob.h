@@ -31,12 +31,14 @@
 #include "../Movement.h"
 #include "MapObject.h"
 
+#include <unordered_map>
+
 namespace jrc
 {
 class Mob : public MapObject
 {
 public:
-    static const std::size_t NUM_STANCES = 6;
+    static constexpr const std::size_t NUM_STANCES = 6;
     enum Stance : std::uint8_t {
         MOVE = 2,
         STAND = 4,
@@ -45,110 +47,116 @@ public:
         DIE = 10
     };
 
-    static std::string nameof(Stance stance)
+    static std::string_view name_of(Stance stance) noexcept
     {
-        static const std::string stancenames[NUM_STANCES] = {
+        static constexpr const std::string_view stance_names[NUM_STANCES] = {
             "move", "stand", "jump", "hit1", "die1", "fly"};
-        std::size_t index = (stance - 1) / 2;
-        return stancenames[index];
+
+        return stance_names[(stance - 1) / 2];
     }
 
-    static std::uint8_t value_of(Stance stance, bool flip)
+    static std::uint8_t value_of(Stance stance, bool flip) noexcept
     {
         return flip ? stance : stance + 1;
     }
 
-    /// Construct a mob by combining data from game files with
-    /// data sent by the server.
+    //! Construct a mob by combining data from game files with
+    //! data sent by the server.
     Mob(std::int32_t oid,
-        std::int32_t mobid,
+        std::int32_t mob_id,
         std::int8_t mode,
         std::uint8_t stance,
         std::uint16_t fhid,
-        bool newspawn,
+        bool new_spawn,
         std::int8_t team,
         Point<std::int16_t> position);
 
-    /// Draw the mob.
+    //! Draw the mob.
     void draw(double viewx, double viewy, float alpha) const override;
-    /// Update movement and animations.
+    //! Update movement and animations.
     std::int8_t update(const Physics& physics) override;
 
-    /// Change this mob's control mode:
-    /// 0 - no control, 1 - control, 2 - aggro
+    //! Change this mob's control mode:
+    //!
+    //! * 0 : No control
+    //! * 1 : Control
+    //! * 2 : Aggro
     void set_control(std::int8_t mode);
-    /// Send movement to the mob.
+    //! Send movement to the mob.
     void send_movement(Point<std::int16_t> start,
                        std::vector<Movement>&& movements);
-    /// Kill the mob with the appropriate type:
-    /// 0 - make inactive 1 - death animation 2 - fade out
-    void kill(std::int8_t killtype);
-    /// Display the hp percentage above the mob.
-    /// Use the playerlevel to determine color of nametag.
-    void show_hp(std::int8_t percentage, std::uint16_t playerlevel);
-    /// Show an effect at the mob's position.
+    //! Kill the mob with the appropriate type:
+    //!
+    //! * 0 : Make inactive
+    //! * 1 : Death animation
+    //! * 2 : Fade out
+    void kill(std::int8_t kill_type);
+    //! Display the HP percentage above the mob.
+    //! Use the player's level to determine color of nametag.
+    void show_hp(std::int8_t percentage, std::uint16_t player_level);
+    //! Show an effect at the mob's position.
     void show_effect(const Animation& animation,
                      std::int8_t pos,
                      std::int8_t z,
                      bool flip);
 
-    /// Calculate the damage to this mob with the spcecified attack.
+    //! Calculate the damage to this mob with the spcecified attack.
     std::vector<std::pair<std::int32_t, bool>>
     calculate_damage(const Attack& attack);
-    /// Apply damage to the mob.
-    void apply_damage(std::int32_t damage, bool toleft);
+    //! Apply damage to the mob.
+    void apply_damage(std::int32_t damage, bool to_left);
 
-    /// Create a touch damage attack to the player.
+    //! Create a touch damage attack to the player.
     MobAttack create_touch_attack() const;
 
-    /// Check if this mob collides with the specified rectangle.
+    //! Check if this mob collides with the specified rectangle.
     bool is_in_range(const Rectangle<std::int16_t>& range) const;
-    /// Check if this mob is still alive.
+    //! Check if this mob is still alive.
     bool is_alive() const;
-    /// Return the head position.
+    //! Return the head position.
     Point<std::int16_t> get_head_position() const;
 
 private:
     enum FlyDirection { STRAIGHT, UPWARDS, DOWNWARDS, NUM_DIRECTIONS };
 
-    /// Set the stance by byte value.
+    //! Set the stance by byte value.
     void set_stance(std::uint8_t stancebyte);
-    /// Set the stance by enum value.
+    //! Set the stance by enum value.
     void set_stance(Stance newstance);
-    /// Start the death animation.
+    //! Start the death animation.
     void apply_death();
-    /// Decide on the next state.
+    //! Decide on the next state.
     void next_move();
-    /// Send the current position and state to the server.
+    //! Send the current position and state to the server.
     void update_movement();
 
-    /// Calculate the hit chance.
-    float calculate_hitchance(std::int16_t leveldelta,
-                              std::int32_t accuracy) const;
-    /// Calculate the minimum damage.
-    double calculate_mindamage(std::int16_t leveldelta,
-                               double mindamage,
-                               bool magic) const;
-    /// Calculate the maximum damage.
-    double calculate_maxdamage(std::int16_t leveldelta,
-                               double maxdamage,
-                               bool magic) const;
-    /// Calculate a random damage line based on the specified values.
-    std::pair<std::int32_t, bool> next_damage(double mindamage,
-                                              double maxdamage,
-                                              float hitchance,
+    //! Calculate the hit chance.
+    float calculate_hit_chance(std::int16_t level_delta,
+                               std::int32_t accuracy) const;
+    //! Calculate the minimum damage.
+    double calculate_min_damage(std::int16_t level_delta,
+                                double min_damage,
+                                bool magic) const;
+    //! Calculate the maximum damage.
+    double calculate_max_damage(std::int16_t level_delta,
+                                double max_damage,
+                                bool magic) const;
+    //! Calculate a random damage line based on the specified values.
+    std::pair<std::int32_t, bool> next_damage(double min_damage,
+                                              double max_damage,
+                                              float hit_chance,
                                               float critical) const;
 
-    /// Return the current 'head' position.
+    //! Return the current 'head' position.
     Point<std::int16_t> get_head_position(Point<std::int16_t> position) const;
 
-    std::map<Stance, Animation> animations;
+    std::unordered_map<Stance, Animation> animations;
     std::string name;
-    Sound hitsound;
-    Sound diesound;
+    Sound hit_sound;
+    Sound die_sound;
     std::uint16_t level;
     float speed;
-    float flyspeed;
+    float fly_speed;
     std::uint16_t watk;
     std::uint16_t matk;
     std::uint16_t wdef;
@@ -157,19 +165,19 @@ private:
     std::uint16_t avoid;
     std::uint16_t knockback;
     bool undead;
-    bool touchdamage;
-    bool noflip;
-    bool notattack;
-    bool canmove;
-    bool canjump;
-    bool canfly;
+    bool touch_damage;
+    bool no_flip;
+    bool not_attack;
+    bool can_move;
+    bool can_jump;
+    bool can_fly;
 
     EffectLayer effects;
-    Text namelabel;
-    MobHpBar hpbar;
+    Text name_label;
+    MobHpBar hp_bar;
     Randomizer randomizer;
 
-    TimedBool showhp;
+    TimedBool do_show_hp;
 
     std::vector<Movement> movements;
     std::uint16_t counter;
@@ -179,16 +187,16 @@ private:
     std::int8_t team;
     bool dying;
     bool dead;
-    bool awaitdeath;
+    bool await_death;
     bool control;
     bool aggro;
     Stance stance;
     bool flip;
-    FlyDirection flydirection;
-    float walkforce;
-    std::int8_t hppercent;
+    FlyDirection fly_direction;
+    float walk_force;
+    std::int8_t hp_percent;
     bool fading;
-    bool fadein;
+    bool fade_in;
     Linear<float> opacity;
 };
 } // namespace jrc

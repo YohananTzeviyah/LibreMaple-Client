@@ -31,33 +31,33 @@ class Combat
 public:
     Combat(Player& player, MapChars& chars, MapMobs& mobs);
 
-    // Draw bullets, damage numbers etc.
+    //! Draw bullets, damage numbers etc.
     void draw(double viewx, double viewy, float alpha) const;
-    // Poll attacks, damage effects, etc.
+    //! Poll attacks, damage effects, etc.
     void update();
 
-    // Make the player use a special move.
+    //! Make the player use a special move.
     void use_move(std::int32_t move_id);
 
-    // Add an attack to the attack queue.
+    //! Add an attack to the attack queue.
     void push_attack(const AttackResult& attack);
-    // Show a buff effect.
-    void show_buff(std::int32_t cid, std::int32_t skillid, std::int8_t level);
-    // Show a buff effect.
-    void show_player_buff(std::int32_t skillid);
+    //! Show a buff effect.
+    void show_buff(std::int32_t cid, std::int32_t skill_id, std::int8_t level);
+    //! Show a buff effect.
+    void show_player_buff(std::int32_t skill_id);
 
 private:
     struct DamageEffect {
         AttackUser user;
         DamageNumber number;
         std::int32_t damage;
-        bool toleft;
+        bool to_left;
         std::int32_t target_oid;
         std::int32_t move_id;
     };
 
     struct BulletEffect {
-        DamageEffect damageeffect;
+        DamageEffect damage_effect;
         Bullet bullet;
         Point<std::int16_t> target;
     };
@@ -75,7 +75,7 @@ private:
                          const AttackResult& result);
     std::vector<DamageNumber> place_numbers(
         std::int32_t oid,
-        const std::vector<std::pair<std::int32_t, bool>>& damagelines);
+        const std::vector<std::pair<std::int32_t, bool>>& damage_lines);
     const SpecialMove& get_move(std::int32_t move_id);
 
     Player& player;
@@ -83,13 +83,13 @@ private:
     MapMobs& mobs;
 
     std::unordered_map<std::int32_t, Skill> skills;
-    RegularAttack regularattack;
+    RegularAttack regular_attack;
 
-    TimedQueue<AttackResult> attackresults;
-    TimedQueue<BulletEffect> bulleteffects;
-    TimedQueue<DamageEffect> damageeffects;
+    TimedQueue<AttackResult> attack_results;
+    TimedQueue<BulletEffect> bullet_effects;
+    TimedQueue<DamageEffect> damage_effects;
 
-    std::list<BulletEffect> bullets;
-    std::list<DamageNumber> damagenumbers;
+    std::vector<BulletEffect> bullets;
+    std::vector<DamageNumber> damage_numbers;
 };
 } // namespace jrc

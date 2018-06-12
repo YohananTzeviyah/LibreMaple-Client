@@ -89,15 +89,15 @@ void PetLook::update(const Physics& physics,
             set_position(char_pos.x(), char_pos.y());
         } else {
             if (char_pos.x() - cur_pos.x() > 50) {
-                phobj.hforce = PET_WALK_FORCE;
+                phobj.h_force = PET_WALK_FORCE;
                 flip = true;
                 set_stance(MOVE);
             } else if (char_pos.x() - cur_pos.x() < -50) {
-                phobj.hforce = -PET_WALK_FORCE;
+                phobj.h_force = -PET_WALK_FORCE;
                 flip = false;
                 set_stance(MOVE);
             } else {
-                phobj.hforce = 0.0;
+                phobj.h_force = 0.0;
                 set_stance(STAND);
             }
         }
@@ -113,21 +113,21 @@ void PetLook::update(const Physics& physics,
             set_position(char_pos.x(), char_pos.y());
         } else {
             if (char_pos.x() - cur_pos.x() > 50) {
-                phobj.hforce = PET_FLY_FORCE;
+                phobj.h_force = PET_FLY_FORCE;
                 flip = true;
             } else if (char_pos.x() - cur_pos.x() < -50) {
-                phobj.hforce = -PET_FLY_FORCE;
+                phobj.h_force = -PET_FLY_FORCE;
                 flip = false;
             } else {
-                phobj.hforce = 0.0f;
+                phobj.h_force = 0.0f;
             }
 
             if (char_pos.y() - cur_pos.y() > 50.0f) {
-                phobj.vforce = PET_FLY_FORCE;
+                phobj.v_force = PET_FLY_FORCE;
             } else if (char_pos.y() - cur_pos.y() < -50.0f) {
-                phobj.vforce = -PET_FLY_FORCE;
+                phobj.v_force = -PET_FLY_FORCE;
             } else {
-                phobj.vforce = 0.0f;
+                phobj.v_force = 0.0f;
             }
         }
         phobj.type = PhysicsObject::FLYING;

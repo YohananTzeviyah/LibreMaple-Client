@@ -47,7 +47,7 @@ bool f_is_applicable(CharStats& stats, nl::node level)
 template<Weapon::Type W1>
 bool f_is_applicable(CharStats& stats, nl::node)
 {
-    return stats.get_weapontype() == W1;
+    return stats.get_weapon_type() == W1;
 }
 
 template<Weapon::Type... W>
@@ -68,7 +68,7 @@ void WeaponMasteryBuff<W...>::apply_to(CharStats& stats, nl::node level) const
 void AchillesBuff::apply_to(CharStats& stats, nl::node level) const
 {
     float reducedamage = static_cast<float>(level["x"]) / 1000;
-    stats.set_reducedamage(reducedamage);
+    stats.set_reduce_damage(reducedamage);
 }
 
 bool BerserkBuff::is_applicable(CharStats& stats, nl::node level) const
@@ -83,7 +83,7 @@ bool BerserkBuff::is_applicable(CharStats& stats, nl::node level) const
 void BerserkBuff::apply_to(CharStats& stats, nl::node level) const
 {
     float damagepercent = static_cast<float>(level["damage"]) / 100;
-    stats.set_damagepercent(damagepercent);
+    stats.set_damage_percent(damagepercent);
 }
 
 PassiveBuffs::PassiveBuffs()
@@ -131,20 +131,20 @@ void PassiveBuffs::apply_buff(CharStats& stats,
                               std::int32_t skill_level) const
 {
     auto iter = buffs.find(skill_id);
-    if (iter == buffs.end())
+    if (iter == buffs.end()) {
         return;
+    }
 
     bool wrong_job = !stats.get_job().can_use(skill_id);
-    if (wrong_job)
+    if (wrong_job) {
         return;
-
-    std::string strid;
-    if (skill_id < 10000000) {
-        strid = string_format::extend_id(skill_id, 7);
-    } else {
-        strid = std::to_string(skill_id);
     }
-    nl::node src = nl::nx::skill[strid.substr(0, 3) + ".img"]["skill"][strid]
+
+    std::string str_id = skill_id < 10'000'000
+                             ? string_format::extend_id(skill_id, 7)
+                             : std::to_string(skill_id);
+    nl::node src = nl::nx::skill[str::concat(
+        std::string_view(str_id).substr(0, 3), ".img")]["skill"][str_id]
                                 ["level"][skill_level];
 
     const PassiveBuff* buff = iter->second.get();

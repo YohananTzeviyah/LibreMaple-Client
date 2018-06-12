@@ -31,7 +31,7 @@ void PlayerState::play_jumpsound() const
 void PlayerNullState::update_state(Player& player) const
 {
     Char::State state;
-    if (player.get_phobj().onground) {
+    if (player.get_phobj().on_ground) {
         if (player.is_key_down(KeyAction::LEFT)) {
             state = Char::WALK;
             player.set_direction(false);
@@ -83,7 +83,7 @@ void PlayerStandState::send_action(Player& player,
             break;
         case KeyAction::JUMP:
             play_jumpsound();
-            player.get_phobj().vforce = -player.get_jumpforce();
+            player.get_phobj().v_force = -player.get_jump_force();
             break;
         case KeyAction::DOWN:
             player.set_state(Char::PRONE);
@@ -96,14 +96,14 @@ void PlayerStandState::send_action(Player& player,
 
 void PlayerStandState::update(Player& player) const
 {
-    if (!player.get_phobj().enablejd) {
+    if (!player.get_phobj().enable_jd) {
         player.get_phobj().set_flag(PhysicsObject::CHECK_BELOW);
     }
 }
 
 void PlayerStandState::update_state(Player& player) const
 {
-    if (!player.get_phobj().onground) {
+    if (!player.get_phobj().on_ground) {
         player.set_state(Char::FALL);
     }
 }
@@ -132,7 +132,7 @@ void PlayerWalkState::send_action(Player& player,
             break;
         case KeyAction::JUMP:
             play_jumpsound();
-            player.get_phobj().vforce = -player.get_jumpforce();
+            player.get_phobj().v_force = -player.get_jump_force();
             break;
         case KeyAction::DOWN:
             player.set_state(Char::PRONE);
@@ -152,19 +152,19 @@ bool PlayerWalkState::haswalkinput(const Player& player) const
 void PlayerWalkState::update(Player& player) const
 {
     if (!player.is_attacking() && haswalkinput(player)) {
-        player.get_phobj().hforce += player.get_flip()
-                                         ? player.get_walkforce()
-                                         : -player.get_walkforce();
+        player.get_phobj().h_force += player.get_flip()
+                                          ? player.get_walk_force()
+                                          : -player.get_walk_force();
     }
 
-    if (!player.get_phobj().enablejd) {
+    if (!player.get_phobj().enable_jd) {
         player.get_phobj().set_flag(PhysicsObject::CHECK_BELOW);
     }
 }
 
 void PlayerWalkState::update_state(Player& player) const
 {
-    if (player.get_phobj().onground) {
+    if (player.get_phobj().on_ground) {
         if (!haswalkinput(player) || player.get_phobj().hspeed == 0.0f) {
             player.set_state(Char::STAND);
         }
@@ -215,7 +215,7 @@ void PlayerFallState::update(Player& player) const
 
 void PlayerFallState::update_state(Player& player) const
 {
-    if (player.get_phobj().onground) {
+    if (player.get_phobj().on_ground) {
         if (player.is_key_down(KeyAction::LEFT)) {
             player.set_direction(false);
             player.set_state(Char::WALK);
@@ -238,10 +238,10 @@ void PlayerProneState::send_action(Player& player,
     if (down) {
         switch (ka) {
         case KeyAction::JUMP:
-            if (player.get_phobj().enablejd &&
+            if (player.get_phobj().enable_jd &&
                 player.is_key_down(KeyAction::DOWN)) {
                 play_jumpsound();
-                player.get_phobj().y = player.get_phobj().groundbelow;
+                player.get_phobj().y = player.get_phobj().ground_below;
                 player.set_state(Char::FALL);
             } else {
                 player.set_state(Char::STAND);
@@ -264,7 +264,7 @@ void PlayerProneState::send_action(Player& player,
 
 void PlayerProneState::update(Player& player) const
 {
-    if (!player.get_phobj().enablejd) {
+    if (!player.get_phobj().enable_jd) {
         player.get_phobj().set_flag(PhysicsObject::CHECK_BELOW);
     }
 }
@@ -329,21 +329,21 @@ void PlayerFlyState::update(Player& player) const
     }
 
     if (player.is_key_down(KeyAction::LEFT)) {
-        player.get_phobj().hforce = -player.get_flyforce();
+        player.get_phobj().h_force = -player.get_fly_force();
     } else if (player.is_key_down(KeyAction::RIGHT)) {
-        player.get_phobj().hforce = player.get_flyforce();
+        player.get_phobj().h_force = player.get_fly_force();
     }
 
     if (player.is_key_down(KeyAction::UP)) {
-        player.get_phobj().vforce = -player.get_flyforce();
+        player.get_phobj().v_force = -player.get_fly_force();
     } else if (player.is_key_down(KeyAction::DOWN)) {
-        player.get_phobj().vforce = player.get_flyforce();
+        player.get_phobj().v_force = player.get_fly_force();
     }
 }
 
 void PlayerFlyState::update_state(Player& player) const
 {
-    if (player.get_phobj().onground && player.is_underwater()) {
+    if (player.get_phobj().on_ground && player.is_underwater()) {
         Char::State state;
         if (player.is_key_down(KeyAction::LEFT)) {
             state = Char::WALK;
@@ -376,14 +376,14 @@ void PlayerClimbState::send_action(Player& player,
             if (player.is_key_down(KeyAction::LEFT)) {
                 play_jumpsound();
                 player.set_direction(false);
-                player.get_phobj().hspeed = -player.get_walkforce() * 8.0;
-                player.get_phobj().vspeed = -player.get_jumpforce() / 1.5;
+                player.get_phobj().hspeed = -player.get_walk_force() * 8.0;
+                player.get_phobj().vspeed = -player.get_jump_force() / 1.5;
                 cancel_ladder(player);
             } else if (player.is_key_down(KeyAction::RIGHT)) {
                 play_jumpsound();
                 player.set_direction(true);
-                player.get_phobj().hspeed = player.get_walkforce() * 8.0;
-                player.get_phobj().vspeed = -player.get_jumpforce() / 1.5;
+                player.get_phobj().hspeed = player.get_walk_force() * 8.0;
+                player.get_phobj().vspeed = -player.get_jump_force() / 1.5;
                 cancel_ladder(player);
             }
             break;
@@ -396,9 +396,9 @@ void PlayerClimbState::send_action(Player& player,
 void PlayerClimbState::update(Player& player) const
 {
     if (player.is_key_down(KeyAction::UP)) {
-        player.get_phobj().vspeed = -player.get_climbforce();
+        player.get_phobj().vspeed = -player.get_climb_force();
     } else if (player.is_key_down(KeyAction::DOWN)) {
-        player.get_phobj().vspeed = player.get_climbforce();
+        player.get_phobj().vspeed = player.get_climb_force();
     } else {
         player.get_phobj().vspeed = 0.0;
     }
@@ -409,7 +409,7 @@ void PlayerClimbState::update_state(Player& player) const
     std::int16_t y = player.get_phobj().get_y();
     bool downwards = player.is_key_down(KeyAction::DOWN);
     auto ladder = player.get_ladder();
-    if (ladder && ladder->felloff(y, downwards)) {
+    if (ladder && ladder->fell_off(y, downwards)) {
         cancel_ladder(player);
     }
 }

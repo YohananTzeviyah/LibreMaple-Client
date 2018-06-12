@@ -24,10 +24,8 @@
 
 namespace jrc
 {
-UI::UI()
+UI::UI() : state{std::make_unique<UIStateNull>()}, enabled{true}
 {
-    state = std::make_unique<UIStateNull>();
-    enabled = true;
 }
 
 void UI::init()
@@ -121,7 +119,7 @@ void UI::send_cursor(Point<std::int16_t> pos)
 void UI::doubleclick()
 {
     Point<std::int16_t> pos = cursor.get_position();
-    state->doubleclick(pos);
+    state->double_click(pos);
 }
 
 void UI::send_key(std::int32_t keycode, bool pressed)

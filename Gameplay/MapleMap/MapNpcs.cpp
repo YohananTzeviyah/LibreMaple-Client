@@ -38,7 +38,7 @@ void MapNpcs::update(const Physics& physics)
         std::int32_t oid = spawn.get_oid();
         nullable_ptr<MapObject> npc = npcs.get(oid);
         if (npc) {
-            npc->makeactive();
+            npc->activate();
         } else {
             npcs.add(spawn.instantiate(physics));
         }

@@ -37,7 +37,7 @@ TwoHHitEffect::TwoHHitEffect(nl::node src)
 
 void TwoHHitEffect::apply(const AttackUser& user, Mob& target) const
 {
-    effects[user.secondweapon].apply(target, user.flip);
+    effects[user.second_weapon].apply(target, user.flip);
 }
 
 ByLevelHitEffect::ByLevelHitEffect(nl::node src)
@@ -51,12 +51,11 @@ ByLevelHitEffect::ByLevelHitEffect(nl::node src)
 
 void ByLevelHitEffect::apply(const AttackUser& user, Mob& target) const
 {
-    if (effects.empty())
+    if (effects.empty()) {
         return;
-
-    auto iter = effects.begin();
-    for (; iter != effects.end() && user.level > iter->first; ++iter) {
     }
+
+    auto iter = effects.upper_bound(user.level);
     if (iter != effects.begin()) {
         --iter;
     }
@@ -77,17 +76,16 @@ ByLevelTwoHHitEffect::ByLevelTwoHHitEffect(nl::node src)
 
 void ByLevelTwoHHitEffect::apply(const AttackUser& user, Mob& target) const
 {
-    if (effects.empty())
+    if (effects.empty()) {
         return;
-
-    auto iter = effects.begin();
-    for (; iter != effects.end() && user.level > iter->first; ++iter) {
     }
+
+    auto iter = effects.upper_bound(user.level);
     if (iter != effects.begin()) {
         --iter;
     }
 
-    iter->second[user.secondweapon].apply(target, user.flip);
+    iter->second[user.second_weapon].apply(target, user.flip);
 }
 
 BySkillLevelHitEffect::BySkillLevelHitEffect(nl::node src)
@@ -100,7 +98,7 @@ BySkillLevelHitEffect::BySkillLevelHitEffect(nl::node src)
 
 void BySkillLevelHitEffect::apply(const AttackUser& user, Mob& target) const
 {
-    auto iter = effects.find(user.skilllevel);
+    auto iter = effects.find(user.skill_level);
     if (iter != effects.end()) {
         iter->second.apply(target, user.flip);
     }

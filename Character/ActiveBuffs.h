@@ -23,44 +23,42 @@
 
 namespace jrc
 {
-// Interface for active buffs which are applied to character stats.
+//! Interface for active buffs which are applied to character stats.
 class ActiveBuff
 {
 public:
-    virtual ~ActiveBuff()
-    {
-    }
+    virtual ~ActiveBuff() = default;
 
     virtual void apply_to(CharStats& stats, std::int16_t value) const = 0;
 };
 
 template<Equipstat::Id STAT>
-// Template for buffs which just add their value to a stat.
+//! Template for buffs which just add their value to a stat.
 class SimpleStatBuff : public ActiveBuff
 {
     void apply_to(CharStats& stats, std::int16_t value) const override;
 };
 
 template<Equipstat::Id STAT>
-// Template for buffs which apply an increase by percentage.
+//! Template for buffs which apply an increase by percentage.
 class PercentageStatBuff : public ActiveBuff
 {
     void apply_to(CharStats& stats, std::int16_t value) const override;
 };
 
-// Buff for MAPLEWARRIOR
+//! Buff for MAPLEWARRIOR
 class MapleWarriorBuff : public ActiveBuff
 {
     void apply_to(CharStats& stats, std::int16_t value) const override;
 };
 
-// Buff for STANCE
+//! Buff for STANCE
 class StanceBuff : public ActiveBuff
 {
     void apply_to(CharStats& stats, std::int16_t value) const override;
 };
 
-// Buff for BOOSTER
+//! Buff for BOOSTER
 class BoosterBuff : public ActiveBuff
 {
     void apply_to(CharStats& stats, std::int16_t value) const override;
@@ -69,10 +67,10 @@ class BoosterBuff : public ActiveBuff
 class ActiveBuffs
 {
 public:
-    // Register all buffs effects.
+    //! Register all buffs effects.
     ActiveBuffs();
 
-    // Return the buff effect associated with the buff stat.
+    //! Return the buff effect associated with the buff stat.
     void
     apply_buff(CharStats& stats, Buffstat::Id stat, std::int16_t value) const;
 

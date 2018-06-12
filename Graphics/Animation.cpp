@@ -19,8 +19,7 @@
 
 #include "../Constants.h"
 #include "../Util/Misc.h"
-
-#include <set>
+#include "boost/container/flat_set.hpp"
 
 namespace jrc
 {
@@ -61,11 +60,8 @@ Frame::Frame(nl::node src)
     }
 }
 
-Frame::Frame()
+Frame::Frame() noexcept : delay(0), opacities{0, 0}, scales{0, 0}
 {
-    delay = 0;
-    opacities = {0, 0};
-    scales = {0, 0};
 }
 
 void Frame::draw(const DrawArgument& args) const
@@ -80,7 +76,7 @@ std::uint8_t Frame::start_opacity() const
 
 std::uint16_t Frame::start_scale() const
 {
-    return scales.first;
+    return static_cast<std::uint16_t>(scales.first);
 }
 
 std::uint16_t Frame::get_delay() const
@@ -108,7 +104,7 @@ Rectangle<std::int16_t> Frame::get_bounds() const
     return bounds;
 }
 
-float Frame::opcstep(std::uint16_t timestep) const
+float Frame::opc_step(std::uint16_t timestep) const
 {
     if (delay == 0) {
         return 0.0f;
@@ -118,7 +114,7 @@ float Frame::opcstep(std::uint16_t timestep) const
            delay;
 }
 
-float Frame::scalestep(std::uint16_t timestep) const
+float Frame::scale_step(std::uint16_t timestep) const
 {
     if (delay == 0) {
         return 0.0f;
@@ -129,22 +125,22 @@ float Frame::scalestep(std::uint16_t timestep) const
 
 Animation::Animation(nl::node src)
 {
-    bool istexture = src.data_type() == nl::node::type::bitmap;
-    if (istexture) {
+    bool is_texture = src.data_type() == nl::node::type::bitmap;
+    if (is_texture) {
         frames.emplace_back(src);
     } else {
-        std::set<std::int16_t> frameids;
+        boost::container::flat_set<std::int16_t> frame_ids;
         for (auto sub : src) {
             if (sub.data_type() == nl::node::type::bitmap) {
                 auto fid = string_conversion::or_default<std::int16_t>(
                     sub.name(), -1);
                 if (fid >= 0) {
-                    frameids.insert(fid);
+                    frame_ids.insert(fid);
                 }
             }
         }
 
-        for (auto& fid : frameids) {
+        for (auto fid : frame_ids) {
             frames.emplace_back(src[std::to_string(fid)]);
         }
 
@@ -159,11 +155,8 @@ Animation::Animation(nl::node src)
     reset();
 }
 
-Animation::Animation()
+Animation::Animation() noexcept : animated(false), zigzag(false)
 {
-    animated = false;
-    zigzag = false;
-
     frames.emplace_back();
 
     reset();
@@ -173,22 +166,22 @@ void Animation::reset()
 {
     frame.set(0);
     opacity.set(frames[0].start_opacity());
-    xyscale.set(frames[0].start_scale());
+    xy_scale.set(frames[0].start_scale());
     delay = frames[0].get_delay();
-    framestep = 1;
+    frame_step = 1;
 }
 
 void Animation::draw(const DrawArgument& args, float alpha) const
 {
     std::int16_t interframe = frame.get(alpha);
-    float interopc = opacity.get(alpha) / 255;
-    float interscale = xyscale.get(alpha) / 100;
+    float inter_opc = opacity.get(alpha) / 255.0f;
+    float inter_scale = xy_scale.get(alpha) / 100.0f;
 
-    bool modifyopc = interopc != 1.0f;
-    bool modifyscale = interscale != 1.0f;
-    if (modifyopc || modifyscale) {
+    bool modify_opc = inter_opc != 1.0f;
+    bool modify_scale = inter_scale != 1.0f;
+    if (modify_opc || modify_scale) {
         frames[interframe].draw(
-            args + DrawArgument(interscale, interscale, interopc));
+            args + DrawArgument{inter_scale, inter_scale, inter_opc});
     } else {
         frames[interframe].draw(args);
     }
@@ -201,57 +194,57 @@ bool Animation::update()
 
 bool Animation::update(std::uint16_t timestep)
 {
-    const Frame& framedata = get_frame();
+    const Frame& frame_data = get_frame();
 
-    opacity += framedata.opcstep(timestep);
+    opacity += frame_data.opc_step(timestep);
     if (opacity.last() < 0.0f) {
         opacity.set(0.0f);
     } else if (opacity.last() > 255.0f) {
         opacity.set(255.0f);
     }
 
-    xyscale += framedata.scalestep(timestep);
-    if (xyscale.last() < 0.0f) {
+    xy_scale += frame_data.scale_step(timestep);
+    if (xy_scale.last() < 0.0f) {
         opacity.set(0.0f);
     }
 
     if (timestep >= delay) {
-        auto lastframe = static_cast<std::int16_t>(frames.size() - 1);
-        std::int16_t nextframe;
+        auto last_frame = static_cast<std::int16_t>(frames.size() - 1);
+        std::int16_t next_frame;
         bool ended;
-        if (zigzag && lastframe > 0) {
-            if (framestep == 1 && frame == lastframe) {
-                framestep = -framestep;
+        if (zigzag && last_frame > 0) {
+            if (frame_step == 1 && frame == last_frame) {
+                frame_step = -frame_step;
                 ended = false;
-            } else if (framestep == -1 && frame == 0) {
-                framestep = -framestep;
+            } else if (frame_step == -1 && frame == 0) {
+                frame_step = -frame_step;
                 ended = true;
             } else {
                 ended = false;
             }
 
-            nextframe = frame + framestep;
+            next_frame = frame + frame_step;
         } else {
-            if (frame == lastframe) {
-                nextframe = 0;
+            if (frame == last_frame) {
+                next_frame = 0;
                 ended = true;
             } else {
-                nextframe = frame + 1;
+                next_frame = frame + 1;
                 ended = false;
             }
         }
 
         std::uint16_t delta = timestep - delay;
         float threshold = static_cast<float>(delta) / timestep;
-        frame.next(nextframe, threshold);
+        frame.next(next_frame, threshold);
 
-        delay = frames[nextframe].get_delay();
+        delay = frames[next_frame].get_delay();
         if (delay >= delta) {
             delay -= delta;
         }
 
-        opacity.set(frames[nextframe].start_opacity());
-        xyscale.set(frames[nextframe].start_scale());
+        opacity.set(frames[next_frame].start_opacity());
+        xy_scale.set(frames[next_frame].start_scale());
 
         return ended;
     } else {
@@ -268,7 +261,7 @@ std::uint16_t Animation::get_delay(std::int16_t frame_id) const
                                     : static_cast<std::uint16_t>(0u);
 }
 
-std::uint16_t Animation::getdelayuntil(std::int16_t frame_id) const
+std::uint16_t Animation::get_delay_until(std::int16_t frame_id) const
 {
     std::uint16_t total = 0;
     for (std::int16_t i = 0; i < frame_id; ++i) {

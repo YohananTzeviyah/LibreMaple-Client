@@ -29,16 +29,16 @@
 namespace jrc
 {
 Mob::Mob(std::int32_t oid,
-         std::int32_t mid,
+         std::int32_t mob_id,
          std::int8_t mode,
          std::uint8_t stance,
          std::uint16_t fh,
-         bool newspawn,
+         bool new_spawn,
          std::int8_t tm,
          Point<std::int16_t> position)
     : MapObject(oid)
 {
-    std::string strid = string_format::extend_id(mid, 7);
+    std::string strid = string_format::extend_id(mob_id, 7);
     const nl::node src = nl::nx::mob[strid + ".img"];
 
     nl::node info = src["info"];
@@ -52,16 +52,16 @@ Mob::Mob(std::int32_t oid,
     avoid = info["eva"];
     knockback = info["pushed"];
     speed = info["speed"];
-    flyspeed = info["flySpeed"];
-    touchdamage = info["bodyAttack"].get_bool();
+    fly_speed = info["flySpeed"];
+    touch_damage = info["bodyAttack"].get_bool();
     undead = info["undead"].get_bool();
-    noflip = info["noFlip"].get_bool();
-    notattack = info["notAttack"].get_bool();
-    canjump = src["jump"].size() > 0;
-    canfly = src["fly"].size() > 0;
-    canmove = src["move"].size() > 0 || canfly;
+    no_flip = info["noFlip"].get_bool();
+    not_attack = info["notAttack"].get_bool();
+    can_jump = src["jump"].size() > 0;
+    can_fly = src["fly"].size() > 0;
+    can_move = src["move"].size() > 0 || can_fly;
 
-    if (canfly) {
+    if (can_fly) {
         animations[STAND] = src["fly"];
         animations[MOVE] = src["fly"];
     } else {
@@ -72,50 +72,51 @@ Mob::Mob(std::int32_t oid,
     animations[HIT] = src["hit1"];
     animations[DIE] = src["die1"];
 
-    name = nl::nx::string["Mob.img"][std::to_string(mid)]["name"].get_string();
+    name =
+        nl::nx::string["Mob.img"][std::to_string(mob_id)]["name"].get_string();
 
     nl::node sndsrc = nl::nx::sound["Mob.img"][strid];
 
-    hitsound = sndsrc["Damage"];
-    diesound = sndsrc["Die"];
+    hit_sound = sndsrc["Damage"];
+    die_sound = sndsrc["Die"];
 
     speed += 100;
     speed *= 0.001f;
 
-    flyspeed += 100;
-    flyspeed *= 0.0005f;
+    fly_speed += 100;
+    fly_speed *= 0.0005f;
 
-    if (canfly) {
-        phobj.type = PhysicsObject::FLYING;
+    if (can_fly) {
+        ph_obj.type = PhysicsObject::FLYING;
     }
 
-    id = mid;
+    id = mob_id;
     team = tm;
     set_position(position);
     set_control(mode);
-    phobj.fhid = fh;
-    phobj.set_flag(PhysicsObject::TURN_AT_EDGES);
+    ph_obj.fh_id = fh;
+    ph_obj.set_flag(PhysicsObject::TURN_AT_EDGES);
 
-    hppercent = 0;
+    hp_percent = 0;
     dying = false;
     dead = false;
     fading = false;
-    awaitdeath = false;
+    await_death = false;
     set_stance(stance);
-    flydirection = STRAIGHT;
+    fly_direction = STRAIGHT;
     counter = 0;
 
-    namelabel = {Text::A13M,
-                 Text::CENTER,
-                 Text::WHITE,
-                 Text::NAMETAG,
-                 std::string{name}};
+    name_label = {Text::A13M,
+                  Text::CENTER,
+                  Text::WHITE,
+                  Text::NAMETAG,
+                  std::string{name}};
 
-    if (newspawn) {
-        fadein = true;
+    if (new_spawn) {
+        fade_in = true;
         opacity.set(0.0f);
     } else {
-        fadein = false;
+        fade_in = false;
         opacity.set(1.0f);
     }
 
@@ -150,7 +151,7 @@ void Mob::set_stance(Stance newstance)
 std::int8_t Mob::update(const Physics& physics)
 {
     if (!active) {
-        return phobj.fhlayer;
+        return ph_obj.fh_layer;
     }
 
     bool aniend = animations.at(stance).update();
@@ -165,11 +166,11 @@ std::int8_t Mob::update(const Physics& physics)
             fading = false;
             dead = true;
         }
-    } else if (fadein) {
+    } else if (fade_in) {
         opacity += 0.025f;
         if (opacity.last() > 0.975f) {
             opacity.set(1.0f);
-            fadein = false;
+            fade_in = false;
         }
     }
 
@@ -179,13 +180,13 @@ std::int8_t Mob::update(const Physics& physics)
     }
 
     effects.update();
-    showhp.update();
+    do_show_hp.update();
 
     if (!dying) {
-        if (!canfly) {
-            if (phobj.is_flag_not_set(PhysicsObject::TURN_AT_EDGES)) {
+        if (!can_fly) {
+            if (ph_obj.is_flag_not_set(PhysicsObject::TURN_AT_EDGES)) {
                 flip = !flip;
-                phobj.set_flag(PhysicsObject::TURN_AT_EDGES);
+                ph_obj.set_flag(PhysicsObject::TURN_AT_EDGES);
 
                 if (stance == HIT) {
                     set_stance(STAND);
@@ -195,36 +196,36 @@ std::int8_t Mob::update(const Physics& physics)
 
         switch (stance) {
         case MOVE:
-            if (canfly) {
-                phobj.hforce = flip ? flyspeed : -flyspeed;
-                switch (flydirection) {
+            if (can_fly) {
+                ph_obj.h_force = flip ? fly_speed : -fly_speed;
+                switch (fly_direction) {
                 case UPWARDS:
-                    phobj.vforce = -flyspeed;
+                    ph_obj.v_force = -fly_speed;
                     break;
                 case DOWNWARDS:
-                    phobj.vforce = flyspeed;
+                    ph_obj.v_force = fly_speed;
                     break;
                 default:
                     break;
                 }
             } else {
-                phobj.hforce = flip ? speed : -speed;
+                ph_obj.h_force = flip ? speed : -speed;
             }
             break;
         case HIT:
-            if (canmove) {
-                double KBFORCE = phobj.onground ? 0.2 : 0.1;
-                phobj.hforce = flip ? -KBFORCE : KBFORCE;
+            if (can_move) {
+                double KBFORCE = ph_obj.on_ground ? 0.2 : 0.1;
+                ph_obj.h_force = flip ? -KBFORCE : KBFORCE;
             }
             break;
         case JUMP:
-            phobj.vforce = -5.0;
+            ph_obj.v_force = -5.0;
             break;
         default:
             break;
         }
 
-        physics.move_object(phobj);
+        physics.move_object(ph_obj);
 
         if (control) {
             ++counter;
@@ -235,7 +236,7 @@ std::int8_t Mob::update(const Physics& physics)
                 next = counter > 200;
                 break;
             case JUMP:
-                next = phobj.onground;
+                next = ph_obj.on_ground;
                 break;
             default:
                 next = aniend && counter > 200;
@@ -249,16 +250,16 @@ std::int8_t Mob::update(const Physics& physics)
             }
         }
     } else {
-        phobj.normalize();
-        physics.get_fht().update_fh(phobj);
+        ph_obj.normalize();
+        physics.get_fht().update_fh(ph_obj);
     }
 
-    return phobj.fhlayer;
+    return ph_obj.fh_layer;
 }
 
 void Mob::next_move()
 {
-    if (canmove) {
+    if (can_move) {
         switch (stance) {
         case HIT:
         case STAND:
@@ -267,7 +268,7 @@ void Mob::next_move()
             break;
         case MOVE:
         case JUMP:
-            if (canjump && phobj.onground && randomizer.below(0.25f)) {
+            if (can_jump && ph_obj.on_ground && randomizer.below(0.25f)) {
                 set_stance(JUMP);
             } else {
                 switch (randomizer.next_int(3)) {
@@ -291,8 +292,8 @@ void Mob::next_move()
             break;
         }
 
-        if (stance == MOVE && canfly) {
-            flydirection = randomizer.next_enum(NUM_DIRECTIONS);
+        if (stance == MOVE && can_fly) {
+            fly_direction = randomizer.next_enum(NUM_DIRECTIONS);
         }
     } else {
         set_stance(STAND);
@@ -310,33 +311,33 @@ void Mob::update_movement()
                   0,
                   0,
                   get_position(),
-                  Movement(phobj, value_of(stance, flip)))
+                  Movement(ph_obj, value_of(stance, flip)))
         .dispatch();
 }
 
 void Mob::draw(double viewx, double viewy, float alpha) const
 {
-    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> absp = ph_obj.get_absolute(viewx, viewy, alpha);
     Point<std::int16_t> headpos = get_head_position(absp);
 
-    effects.drawbelow(absp, alpha);
+    effects.draw_below(absp, alpha);
 
     if (!dead) {
         float interopc = opacity.get(alpha);
 
         animations.at(stance).draw(
-            DrawArgument(absp, flip && !noflip, interopc), alpha);
+            DrawArgument(absp, flip && !no_flip, interopc), alpha);
 
-        if (showhp) {
-            namelabel.draw(absp);
+        if (do_show_hp) {
+            name_label.draw(absp);
 
-            if (!dying && hppercent > 0) {
-                hpbar.draw(headpos, hppercent);
+            if (!dying && hp_percent > 0) {
+                hp_bar.draw(headpos, hp_percent);
             }
         }
     }
 
-    effects.drawabove(absp, alpha);
+    effects.draw_above(absp, alpha);
 }
 
 void Mob::set_control(std::int8_t mode)
@@ -365,27 +366,27 @@ void Mob::send_movement(Point<std::int16_t> start,
     std::uint8_t laststance = lastmove.newstate;
     set_stance(laststance);
 
-    phobj.fhid = lastmove.fh;
+    ph_obj.fh_id = lastmove.fh;
 }
 
 Point<std::int16_t> Mob::get_head_position(Point<std::int16_t> position) const
 {
     Point<std::int16_t> head = animations.at(stance).get_head();
-    position.shift_x((flip && !noflip) ? -head.x() : head.x());
+    position.shift_x((flip && !no_flip) ? -head.x() : head.x());
     position.shift_y(head.y());
 
     return position;
 }
 
-void Mob::kill(std::int8_t animation)
+void Mob::kill(std::int8_t kill_type)
 {
-    switch (animation) {
+    switch (kill_type) {
     case 0:
         active = false;
         break;
     case 1:
         dying = true;
-        if (awaitdeath) {
+        if (await_death) {
             apply_death();
         }
         break;
@@ -398,14 +399,14 @@ void Mob::kill(std::int8_t animation)
     }
 }
 
-void Mob::show_hp(std::int8_t percent, std::uint16_t playerlevel)
+void Mob::show_hp(std::int8_t percent, std::uint16_t player_level)
 {
-    if (hppercent == 0) {
-        std::int16_t delta = playerlevel - level;
+    if (hp_percent == 0) {
+        std::int16_t delta = player_level - level;
         if (delta > 9) {
-            namelabel.change_color(Text::YELLOW);
+            name_label.change_color(Text::YELLOW);
         } else if (delta < -9) {
-            namelabel.change_color(Text::RED);
+            name_label.change_color(Text::RED);
         }
     }
 
@@ -414,8 +415,8 @@ void Mob::show_hp(std::int8_t percent, std::uint16_t playerlevel)
     } else if (percent < 0) {
         percent = 0;
     }
-    hppercent = percent;
-    showhp.set_for(2000);
+    hp_percent = percent;
+    do_show_hp.set_for(2000);
 }
 
 void Mob::show_effect(const Animation& animation,
@@ -446,12 +447,12 @@ void Mob::show_effect(const Animation& animation,
     effects.add(animation, {shift, f}, z);
 }
 
-float Mob::calculate_hitchance(std::int16_t leveldelta,
-                               std::int32_t player_accuracy) const
+float Mob::calculate_hit_chance(std::int16_t level_delta,
+                                std::int32_t player_accuracy) const
 {
     auto faccuracy = static_cast<float>(player_accuracy);
     float hitchance =
-        faccuracy / (((1.84f + 0.07f * leveldelta) * avoid) + 1.0f);
+        faccuracy / (((1.84f + 0.07f * level_delta) * avoid) + 1.0f);
     if (hitchance < 0.01f) {
         hitchance = 0.01f;
     }
@@ -459,22 +460,24 @@ float Mob::calculate_hitchance(std::int16_t leveldelta,
     return hitchance;
 }
 
-double Mob::calculate_mindamage(std::int16_t leveldelta,
-                                double damage,
-                                bool magic) const
+double Mob::calculate_min_damage(std::int16_t level_delta,
+                                 double min_damage,
+                                 bool magic) const
 {
-    double mindamage = magic ? damage - (1 + 0.01 * leveldelta) * mdef * 0.6
-                             : damage * (1 - 0.01 * leveldelta) - wdef * 0.6;
+    double mindamage =
+        magic ? min_damage - (1 + 0.01 * level_delta) * mdef * 0.6
+              : min_damage * (1 - 0.01 * level_delta) - wdef * 0.6;
 
     return mindamage < 1.0 ? 1.0 : mindamage;
 }
 
-double Mob::calculate_maxdamage(std::int16_t leveldelta,
-                                double damage,
-                                bool magic) const
+double Mob::calculate_max_damage(std::int16_t level_delta,
+                                 double max_damage,
+                                 bool magic) const
 {
-    double maxdamage = magic ? damage - (1 + 0.01 * leveldelta) * mdef * 0.5
-                             : damage * (1 - 0.01 * leveldelta) - wdef * 0.5;
+    double maxdamage =
+        magic ? max_damage - (1 + 0.01 * level_delta) * mdef * 0.5
+              : max_damage * (1 - 0.01 * level_delta) - wdef * 0.5;
 
     return maxdamage < 1.0 ? 1.0 : maxdamage;
 }
@@ -486,54 +489,54 @@ Mob::calculate_damage(const Attack& attack)
     double maxdamage;
     float hitchance;
     float critical;
-    std::int16_t leveldelta = level - attack.playerlevel;
+    std::int16_t leveldelta = level - attack.player_level;
     if (leveldelta < 0) {
         leveldelta = 0;
     }
 
-    Attack::DamageType damagetype = attack.damagetype;
+    Attack::DamageType damagetype = attack.damage_type;
     switch (damagetype) {
     case Attack::DMG_WEAPON:
     case Attack::DMG_MAGIC:
-        mindamage = calculate_mindamage(
-            leveldelta, attack.mindamage, damagetype == Attack::DMG_MAGIC);
-        maxdamage = calculate_maxdamage(
-            leveldelta, attack.maxdamage, damagetype == Attack::DMG_MAGIC);
-        hitchance = calculate_hitchance(leveldelta, attack.accuracy);
+        mindamage = calculate_min_damage(
+            leveldelta, attack.min_damage, damagetype == Attack::DMG_MAGIC);
+        maxdamage = calculate_max_damage(
+            leveldelta, attack.max_damage, damagetype == Attack::DMG_MAGIC);
+        hitchance = calculate_hit_chance(leveldelta, attack.accuracy);
         critical = attack.critical;
         break;
     case Attack::DMG_FIXED:
-        mindamage = attack.fixdamage;
-        maxdamage = attack.fixdamage;
+        mindamage = attack.fix_damage;
+        maxdamage = attack.fix_damage;
         hitchance = 1.0f;
         critical = 0.0f;
         break;
     }
 
-    std::vector<std::pair<std::int32_t, bool>> result(attack.hitcount);
+    std::vector<std::pair<std::int32_t, bool>> result(attack.hit_count);
     std::generate(result.begin(), result.end(), [&]() {
         return next_damage(mindamage, maxdamage, hitchance, critical);
     });
 
     update_movement();
-    awaitdeath = false;
+    await_death = false;
 
     return result;
 }
 
-std::pair<std::int32_t, bool> Mob::next_damage(double mindamage,
-                                               double maxdamage,
-                                               float hitchance,
+std::pair<std::int32_t, bool> Mob::next_damage(double min_damage,
+                                               double max_damage,
+                                               float hit_chance,
                                                float critical) const
 {
-    bool hit = randomizer.below(hitchance);
+    bool hit = randomizer.below(hit_chance);
     if (!hit) {
         return {0, false};
     }
 
     constexpr double DAMAGECAP = 999999.0;
 
-    double damage = randomizer.next_real(mindamage, maxdamage);
+    double damage = randomizer.next_real(min_damage, max_damage);
     bool iscritical = randomizer.below(critical);
     if (iscritical) {
         damage *= 1.5;
@@ -549,25 +552,25 @@ std::pair<std::int32_t, bool> Mob::next_damage(double mindamage,
     return {intdamage, iscritical};
 }
 
-void Mob::apply_damage(std::int32_t damage, bool toleft)
+void Mob::apply_damage(std::int32_t damage, bool to_left)
 {
-    hitsound.play();
+    hit_sound.play();
 
     if (dying && stance != DIE) {
         apply_death();
     } else if (control && is_alive() && damage >= knockback) {
-        flip = toleft;
+        flip = to_left;
         counter = 170;
         set_stance(HIT);
 
         update_movement();
-        awaitdeath = true;
+        await_death = true;
     }
 }
 
 MobAttack Mob::create_touch_attack() const
 {
-    if (!touchdamage) {
+    if (!touch_damage) {
         return {};
     }
 
@@ -580,7 +583,7 @@ MobAttack Mob::create_touch_attack() const
 void Mob::apply_death()
 {
     set_stance(DIE);
-    diesound.play();
+    die_sound.play();
     dying = true;
 }
 

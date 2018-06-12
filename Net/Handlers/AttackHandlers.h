@@ -27,7 +27,7 @@ public:
     void handle(InPacket& recv) const override;
 
 protected:
-    AttackHandler(Attack::Type type);
+    AttackHandler(Attack::Type type) noexcept;
 
 private:
     Attack::Type type;

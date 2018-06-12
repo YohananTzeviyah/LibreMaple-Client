@@ -39,8 +39,9 @@ void CharEquips::draw(Equipslot::Id slot,
 
 void CharEquips::add_equip(std::int32_t itemid, const BodyDrawinfo& drawinfo)
 {
-    if (itemid <= 0)
+    if (itemid <= 0) {
         return;
+    }
 
     auto iter = cloth_cache.find(itemid);
     if (iter == cloth_cache.end()) {
@@ -64,7 +65,7 @@ void CharEquips::remove_equip(Equipslot::Id slot)
 bool CharEquips::is_visible(Equipslot::Id slot) const
 {
     if (const Clothing* cloth = clothes[slot]) {
-        return cloth->is_transparent() == false;
+        return !cloth->is_transparent();
     } else {
         return false;
     }

@@ -36,7 +36,7 @@ void MesoDrop::draw(double viewx, double viewy, float alpha) const
     if (!active)
         return;
 
-    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> absp = ph_obj.get_absolute(viewx, viewy, alpha);
     icon.draw({angle.get(alpha), absp, opacity.get(alpha)}, alpha);
 }
 } // namespace jrc

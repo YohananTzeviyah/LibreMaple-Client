@@ -187,7 +187,7 @@ bool UIShop::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
 Cursor::State UIShop::send_cursor(bool clicked, Point<std::int16_t> cursorpos)
 {
     Point<std::int16_t> cursoroffset = cursorpos - position;
-    if (buy_slider.isenabled()) {
+    if (buy_slider.is_enabled()) {
         Cursor::State bstate = buy_slider.send_cursor(cursoroffset, clicked);
         if (bstate != Cursor::IDLE) {
             clear_tooltip();
@@ -195,7 +195,7 @@ Cursor::State UIShop::send_cursor(bool clicked, Point<std::int16_t> cursorpos)
         }
     }
 
-    if (sell_slider.isenabled()) {
+    if (sell_slider.is_enabled()) {
         Cursor::State sstate = sell_slider.send_cursor(cursoroffset, clicked);
         if (sstate != Cursor::IDLE) {
             clear_tooltip();
@@ -248,7 +248,7 @@ void UIShop::change_sell_tab(InventoryType::Id type)
 
     sellstate.change_tab(inventory, type, meso);
 
-    sell_slider.setrows(5, sellstate.last_slot);
+    sell_slider.set_rows(5, sellstate.last_slot);
 }
 
 void UIShop::reset(std::int32_t npc_id)
@@ -296,7 +296,7 @@ void UIShop::add_rechargable(std::int32_t id,
     auto buyitem = BuyItem(meso, id, price, pitch, time, chargeprice, buyable);
     buystate.add(buyitem);
 
-    buy_slider.setrows(5, buystate.last_slot);
+    buy_slider.set_rows(5, buystate.last_slot);
 }
 
 std::int16_t UIShop::slot_by_position(std::int16_t y)

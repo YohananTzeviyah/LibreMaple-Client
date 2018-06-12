@@ -32,7 +32,7 @@ public:
     {
         skip(1);
 
-        write_byte((attack.mobcount << 4) | attack.hitcount);
+        write_byte((attack.mob_count << 4) | attack.hit_count);
         write_int(attack.skill);
         if (attack.charge > 0)
             write_int(attack.charge);
@@ -40,7 +40,7 @@ public:
         skip(8);
 
         write_byte(attack.display);
-        write_byte(attack.toleft);
+        write_byte(attack.to_left);
         write_byte(attack.stance);
 
         skip(1);
@@ -49,14 +49,14 @@ public:
 
         if (attack.type == Attack::RANGED) {
             skip(1);
-            write_byte(attack.toleft);
+            write_byte(attack.to_left);
             skip(7);
             // skip(4); if hurricane, piercing arrow or rapidfire
         } else {
             skip(4);
         }
 
-        for (auto& damagetomob : attack.damagelines) {
+        for (auto& damagetomob : attack.damage_lines) {
             write_int(damagetomob.first);
 
             skip(14);
@@ -114,7 +114,7 @@ public:
         : TakeDamagePacket(from,
                            0,
                            result.damage,
-                           result.mobid,
+                           result.mob_id,
                            result.oid,
                            result.direction)
     {

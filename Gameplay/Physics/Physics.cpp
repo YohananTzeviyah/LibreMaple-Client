@@ -68,78 +68,78 @@ void Physics::move_object(PhysicsObject& phobj) const
 
 void Physics::move_normal(PhysicsObject& phobj) const
 {
-    phobj.vacc = 0.0;
-    phobj.hacc = 0.0;
-    if (phobj.onground) {
-        phobj.vacc += phobj.vforce;
-        phobj.hacc += phobj.hforce;
+    phobj.v_acc = 0.0;
+    phobj.h_acc = 0.0;
+    if (phobj.on_ground) {
+        phobj.v_acc += phobj.v_force;
+        phobj.h_acc += phobj.h_force;
 
-        if (phobj.hacc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1) {
+        if (phobj.h_acc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1) {
             phobj.hspeed = 0.0;
         } else {
             double inertia = phobj.hspeed / GROUNDSLIP;
-            double slopef = phobj.fhslope;
+            double slopef = phobj.fh_slope;
             if (slopef > 0.5) {
                 slopef = 0.5;
             } else if (slopef < -0.5) {
                 slopef = -0.5;
             }
-            phobj.hacc -=
+            phobj.h_acc -=
                 (FRICTION + SLOPEFACTOR * (1.0 + slopef * -inertia)) * inertia;
         }
     } else if (phobj.is_flag_not_set(PhysicsObject::NO_GRAVITY)) {
-        phobj.vacc += GRAVFORCE;
+        phobj.v_acc += GRAVFORCE;
     }
-    phobj.hforce = 0.0;
-    phobj.vforce = 0.0;
+    phobj.h_force = 0.0;
+    phobj.v_force = 0.0;
 
-    phobj.hspeed += phobj.hacc;
-    phobj.vspeed += phobj.vacc;
+    phobj.hspeed += phobj.h_acc;
+    phobj.vspeed += phobj.v_acc;
 }
 
 void Physics::move_flying(PhysicsObject& phobj) const
 {
-    phobj.hacc = phobj.hforce;
-    phobj.vacc = phobj.vforce;
-    phobj.hforce = 0.0;
-    phobj.vforce = 0.0;
+    phobj.h_acc = phobj.h_force;
+    phobj.v_acc = phobj.v_force;
+    phobj.h_force = 0.0;
+    phobj.v_force = 0.0;
 
-    phobj.hacc -= FLYFRICTION * phobj.hspeed;
-    phobj.vacc -= FLYFRICTION * phobj.vspeed;
+    phobj.h_acc -= FLYFRICTION * phobj.hspeed;
+    phobj.v_acc -= FLYFRICTION * phobj.vspeed;
 
-    phobj.hspeed += phobj.hacc;
-    phobj.vspeed += phobj.vacc;
+    phobj.hspeed += phobj.h_acc;
+    phobj.vspeed += phobj.v_acc;
 
-    if (phobj.hacc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1) {
+    if (phobj.h_acc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1) {
         phobj.hspeed = 0.0;
     }
 
-    if (phobj.vacc == 0.0 && phobj.vspeed < 0.1 && phobj.vspeed > -0.1) {
+    if (phobj.v_acc == 0.0 && phobj.vspeed < 0.1 && phobj.vspeed > -0.1) {
         phobj.vspeed = 0.0;
     }
 }
 
 void Physics::move_swimming(PhysicsObject& phobj) const
 {
-    phobj.hacc = phobj.hforce;
-    phobj.vacc = phobj.vforce;
-    phobj.hforce = 0.0;
-    phobj.vforce = 0.0;
+    phobj.h_acc = phobj.h_force;
+    phobj.v_acc = phobj.v_force;
+    phobj.h_force = 0.0;
+    phobj.v_force = 0.0;
 
-    phobj.hacc -= SWIMFRICTION * phobj.hspeed;
-    phobj.vacc -= SWIMFRICTION * phobj.vspeed;
+    phobj.h_acc -= SWIMFRICTION * phobj.hspeed;
+    phobj.v_acc -= SWIMFRICTION * phobj.vspeed;
 
     if (phobj.is_flag_not_set(PhysicsObject::NO_GRAVITY)) {
-        phobj.vacc += SWIMGRAVFORCE;
+        phobj.v_acc += SWIMGRAVFORCE;
     }
 
-    phobj.hspeed += phobj.hacc;
-    phobj.vspeed += phobj.vacc;
+    phobj.hspeed += phobj.h_acc;
+    phobj.vspeed += phobj.v_acc;
 
-    if (phobj.hacc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1) {
+    if (phobj.h_acc == 0.0 && phobj.hspeed < 0.1 && phobj.hspeed > -0.1) {
         phobj.hspeed = 0.0;
     }
-    if (phobj.vacc == 0.0 && phobj.vspeed < 0.1 && phobj.vspeed > -0.1) {
+    if (phobj.v_acc == 0.0 && phobj.vspeed < 0.1 && phobj.vspeed > -0.1) {
         phobj.vspeed = 0.0f;
     }
 }

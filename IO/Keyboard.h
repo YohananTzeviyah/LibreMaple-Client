@@ -81,7 +81,7 @@ private:
     std::unordered_map<std::int32_t, Mapping> keymap;
     std::unordered_map<std::uint8_t, Mapping> maplekeys;
     std::unordered_map<std::int32_t, KeyAction::Id> textactions;
-    std::unordered_map<std::int32_t, bool> keystate;
+    std::unordered_map<std::int32_t, bool> key_state;
 };
 
 constexpr std::array<std::int32_t, 90> KEY_TABLE{0,

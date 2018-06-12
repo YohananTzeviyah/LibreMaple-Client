@@ -75,7 +75,7 @@ void SpawnCharHandler::handle(InPacket& recv) const
             recv.read_int();
             recv.read_point(); // pos
             recv.read_byte();  // stance
-            recv.read_int();   // fhid
+            recv.read_int();   // fh_id
         } else {
             break;
         }
@@ -390,7 +390,7 @@ void SpawnReactorHandler::handle(InPacket& recv) const
     Point<std::int16_t> point = recv.read_point();
 
     // Unused in Solaxia
-    // std::uint16_t fhid = recv.read_short();
+    // std::uint16_t fh_id = recv.read_short();
     // recv.read_byte()
 
     Stage::get().get_reactors().spawn({oid, rid, state, point});

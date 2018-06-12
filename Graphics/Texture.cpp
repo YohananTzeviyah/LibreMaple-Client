@@ -28,34 +28,31 @@ Texture::Texture(nl::node src)
     if (src.data_type() == nl::node::type::bitmap) {
         std::string link = src["source"];
         if (!link.empty()) {
-            nl::node srcfile = src;
-            while (srcfile != srcfile.root()) {
-                srcfile = srcfile.root();
+            nl::node src_file = src;
+            while (src_file != src_file.root()) {
+                src_file = src_file.root();
             }
-            src = srcfile.resolve(link.substr(link.find('/') + 1));
+            src = src_file.resolve(link.substr(link.find('/') + 1));
         }
 
         bitmap = src;
         origin = src["origin"];
-        dimensions = Point<std::int16_t>(bitmap.width(), bitmap.height());
+        dimensions = {bitmap.width(), bitmap.height()};
 
         GraphicsGL::get().add_bitmap(bitmap);
     }
 }
 
-Texture::Texture()
-{
-}
+Texture::Texture() = default;
 
-Texture::~Texture()
-{
-}
+Texture::~Texture() = default;
 
 void Texture::draw(const DrawArgument& args) const
 {
     std::size_t id = bitmap.id();
-    if (id == 0)
+    if (id == 0) {
         return;
+    }
 
     GraphicsGL::get().draw(bitmap,
                            args.get_rectangle(origin, dimensions),

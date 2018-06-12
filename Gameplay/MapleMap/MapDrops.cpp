@@ -57,7 +57,7 @@ void MapDrops::update(const Physics& physics)
 
         std::int32_t oid = spawn.get_oid();
         if (nullable_ptr<MapObject> drop = drops.get(oid)) {
-            drop->makeactive();
+            drop->activate();
         } else {
             std::int32_t itemid = spawn.get_itemid();
             bool meso = spawn.is_meso();

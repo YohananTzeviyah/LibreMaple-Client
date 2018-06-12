@@ -35,10 +35,8 @@
 namespace jrc
 {
 UIStateGame::UIStateGame()
+    : focused(UIElement::NONE), tooltip_parent(Tooltip::NONE)
 {
-    focused = UIElement::NONE;
-    tooltipparent = Tooltip::NONE;
-
     const CharLook& look = Stage::get().get_player().get_look();
     const CharStats& stats = Stage::get().get_player().get_stats();
     const Inventory& inventory = Stage::get().get_player().get_inventory();
@@ -52,7 +50,7 @@ UIStateGame::UIStateGame()
 
 void UIStateGame::draw(float inter, Point<std::int16_t> cursor) const
 {
-    for (const auto& type : elementorder) {
+    for (const auto& type : element_order) {
         auto& element = elements[type];
         if (element && element->is_active()) {
             element->draw(inter);
@@ -63,14 +61,14 @@ void UIStateGame::draw(float inter, Point<std::int16_t> cursor) const
         tooltip->draw(cursor);
     }
 
-    if (draggedicon) {
-        draggedicon->dragdraw(cursor);
+    if (dragged_icon) {
+        dragged_icon->dragdraw(cursor);
     }
 }
 
 void UIStateGame::update()
 {
-    for (const auto& type : elementorder) {
+    for (const auto& type : element_order) {
         auto& element = elements[type];
         if (element && element->is_active()) {
             element->update();
@@ -87,7 +85,7 @@ void UIStateGame::drop_icon(const Icon& icon, Point<std::int16_t> pos)
     }
 }
 
-void UIStateGame::doubleclick(Point<std::int16_t> pos)
+void UIStateGame::double_click(Point<std::int16_t> pos)
 {
     if (UIElement* front = get_front(pos)) {
         front->double_click(pos);
@@ -137,12 +135,17 @@ void UIStateGame::send_key(KeyType::Id type, std::int32_t action, bool pressed)
 Cursor::State UIStateGame::send_cursor(Cursor::State mst,
                                        Point<std::int16_t> pos)
 {
-    if (draggedicon) {
+    if (dragged_icon) {
         switch (mst) {
         case Cursor::IDLE:
-            drop_icon(*draggedicon, pos);
-            draggedicon->reset();
-            draggedicon = {};
+            Console::get().print(str::concat("dropping icon at {",
+                                             std::to_string(pos.x()),
+                                             ", ",
+                                             std::to_string(pos.y()),
+                                             '}'));
+            drop_icon(*dragged_icon, pos);
+            dragged_icon->reset();
+            dragged_icon = {};
             return mst;
         default:
             return Cursor::GRABBING;
@@ -158,9 +161,9 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst,
             }
         } else {
             UIElement* front = nullptr;
-            UIElement::Type fronttype = UIElement::NONE;
+            UIElement::Type front_type = UIElement::NONE;
 
-            for (const auto& type : elementorder) {
+            for (const auto& type : element_order) {
                 auto& element = elements[type];
                 if (element && element->is_active()) {
                     bool found = element->is_in_range(pos)
@@ -172,19 +175,25 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst,
                         }
 
                         front = element.get();
-                        fronttype = type;
+                        front_type = type;
                     }
                 }
             }
 
-            if (Tooltip::same_ui_type(tooltipparent, fronttype)) {
-                clear_tooltip(tooltipparent);
+            if (Tooltip::same_ui_type(tooltip_parent, front_type)) {
+                clear_tooltip(tooltip_parent);
             }
 
             if (front) {
                 if (clicked) {
-                    elementorder.remove(fronttype);
-                    elementorder.push_back(fronttype);
+                    element_order.erase(std::remove_if(element_order.begin(),
+                                                       element_order.end(),
+                                                       [front_type](auto t) {
+                                                           return t ==
+                                                                  front_type;
+                                                       }),
+                                        element_order.end());
+                    element_order.push_back(front_type);
                 }
                 return front->send_cursor(clicked, pos);
             } else {
@@ -194,38 +203,38 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst,
     }
 }
 
-void UIStateGame::drag_icon(Icon* drgic)
+void UIStateGame::drag_icon(Icon* drg_ic)
 {
-    draggedicon = drgic;
+    dragged_icon = drg_ic;
 }
 
 void UIStateGame::clear_tooltip(Tooltip::Parent parent)
 {
-    if (parent == tooltipparent) {
-        eqtooltip.set_equip(Tooltip::NONE, 0);
-        ittooltip.set_item(0);
+    if (parent == tooltip_parent) {
+        eq_tooltip.set_equip(Tooltip::NONE, 0);
+        it_tooltip.set_item(0);
         tooltip = {};
-        tooltipparent = Tooltip::NONE;
+        tooltip_parent = Tooltip::NONE;
     }
 }
 
 void UIStateGame::show_equip(Tooltip::Parent parent, std::int16_t slot)
 {
-    eqtooltip.set_equip(parent, slot);
+    eq_tooltip.set_equip(parent, slot);
 
     if (slot) {
-        tooltip = eqtooltip;
-        tooltipparent = parent;
+        tooltip = eq_tooltip;
+        tooltip_parent = parent;
     }
 }
 
 void UIStateGame::show_item(Tooltip::Parent parent, std::int32_t itemid)
 {
-    ittooltip.set_item(itemid);
+    it_tooltip.set_item(itemid);
 
     if (itemid) {
-        tooltip = ittooltip;
-        tooltipparent = parent;
+        tooltip = it_tooltip;
+        tooltip_parent = parent;
     }
 }
 
@@ -239,7 +248,7 @@ void UIStateGame::show_skill(Tooltip::Parent parent,
 
     if (skill_id) {
         tooltip = sktooltip;
-        tooltipparent = parent;
+        tooltip_parent = parent;
     }
 }
 
@@ -256,13 +265,17 @@ UIStateGame::pre_add(UIElement::Type type, bool is_toggled, bool is_focused)
 {
     auto& element = elements[type];
     if (element && is_toggled) {
-        elementorder.remove(type);
-        elementorder.push_back(type);
+        element_order.erase(
+            std::remove_if(element_order.begin(),
+                           element_order.end(),
+                           [type](auto t) { return t == type; }),
+            element_order.end());
+        element_order.push_back(type);
         element->toggle_active();
         return elements.end();
     } else {
         remove(type);
-        elementorder.push_back(type);
+        element_order.push_back(type);
 
         if (is_focused) {
             focused = type;
@@ -278,11 +291,14 @@ void UIStateGame::remove(UIElement::Type type)
         focused = UIElement::NONE;
     }
 
-    if (Tooltip::same_ui_type(tooltipparent, type)) {
-        clear_tooltip(tooltipparent);
+    if (Tooltip::same_ui_type(tooltip_parent, type)) {
+        clear_tooltip(tooltip_parent);
     }
 
-    elementorder.remove(type);
+    element_order.erase(std::remove_if(element_order.begin(),
+                                       element_order.end(),
+                                       [type](auto t) { return t == type; }),
+                        element_order.end());
 
     if (auto& element = elements[type]) {
         element->deactivate();
@@ -297,14 +313,15 @@ UIElement* UIStateGame::get(UIElement::Type type)
 
 UIElement* UIStateGame::get_front(Point<std::int16_t> pos)
 {
-    auto begin = elementorder.rbegin();
-    auto end = elementorder.rend();
+    auto begin = element_order.rbegin();
+    auto end = element_order.rend();
     for (auto iter = begin; iter != end; ++iter) {
         const auto& element = elements[*iter];
         if (element && element->is_active() && element->is_in_range(pos)) {
             return element.get();
         }
     }
+
     return nullptr;
 }
 } // namespace jrc

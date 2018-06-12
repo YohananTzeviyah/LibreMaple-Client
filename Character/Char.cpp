@@ -41,9 +41,9 @@ Char::Char(std::int32_t o, const CharLook& lk, std::string&& name) noexcept
 
 void Char::draw(double viewx, double viewy, float alpha) const
 {
-    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> absp = ph_obj.get_absolute(viewx, viewy, alpha);
 
-    effects.drawbelow(absp, alpha);
+    effects.draw_below(absp, alpha);
 
     Color color;
     if (invincible) {
@@ -73,7 +73,7 @@ void Char::draw(double viewx, double viewy, float alpha) const
     name_label.draw(absp);
     chat_balloon.draw(absp - Point<std::int16_t>(0, 85));
 
-    effects.drawabove(absp, alpha);
+    effects.draw_above(absp, alpha);
 
     for (auto& number : damage_numbers) {
         number.draw(viewx, viewy, alpha);
@@ -126,10 +126,10 @@ float Char::get_stance_speed() const
 
     switch (state) {
     case WALK:
-        return static_cast<float>(std::abs(phobj.hspeed));
+        return static_cast<float>(std::abs(ph_obj.hspeed));
     case LADDER:
     case ROPE:
-        return static_cast<float>(std::abs(phobj.vspeed));
+        return static_cast<float>(std::abs(ph_obj.vspeed));
     default:
         return 1.0f;
     }
@@ -157,18 +157,18 @@ std::int8_t Char::update(const Physics& physics)
 
 std::int8_t Char::get_layer() const
 {
-    return is_climbing() ? static_cast<std::int8_t>(7) : phobj.fhlayer;
+    return is_climbing() ? static_cast<std::int8_t>(7) : ph_obj.fh_layer;
 }
 
-void Char::show_attack_effect(Animation toshow, std::int8_t z)
+void Char::show_attack_effect(Animation to_show, std::int8_t z)
 {
     float attackspeed = get_real_attack_speed();
-    effects.add(toshow, {flip}, z, attackspeed);
+    effects.add(to_show, {flip}, z, attackspeed);
 }
 
-void Char::show_effect_id(CharEffect::Id toshow)
+void Char::show_effect_id(CharEffect::Id to_show)
 {
-    effects.add(char_effects[toshow]);
+    effects.add(char_effects[to_show]);
 }
 
 void Char::show_iron_body()
@@ -178,12 +178,12 @@ void Char::show_iron_body()
 
 void Char::show_damage(std::int32_t damage)
 {
-    std::int16_t start_y = phobj.get_y() - 60;
-    std::int16_t x = phobj.get_x() - 10;
-    damage_numbers.emplace_back(DamageNumber::TOPLAYER, damage, start_y, x);
+    std::int16_t start_y = ph_obj.get_y() - 60;
+    std::int16_t x = ph_obj.get_x() - 10;
+    damage_numbers.emplace_back(DamageNumber::TO_PLAYER, damage, start_y, x);
 
-    look.set_alerted(5000);
-    invincible.set_for(2000);
+    look.set_alerted(5'000);
+    invincible.set_for(2'000);
 }
 
 void Char::speak(std::string&& line)
@@ -208,16 +208,16 @@ void Char::change_look(Maplestat::Id stat, std::int32_t id)
     }
 }
 
-void Char::set_state(std::uint8_t statebyte)
+void Char::set_state(std::uint8_t state_byte)
 {
-    if (statebyte % 2 == 1) {
+    if (state_byte % 2 == 1) {
         set_direction(false);
-        statebyte -= 1;
+        state_byte -= 1;
     } else {
         set_direction(true);
     }
 
-    Char::State newstate = by_value(statebyte);
+    Char::State newstate = by_value(state_byte);
     set_state(newstate);
 }
 
@@ -232,7 +232,7 @@ void Char::attack(const std::string& action)
     look.set_action(action);
 
     attacking = true;
-    look.set_alerted(5000);
+    look.set_alerted(5'000);
 }
 
 void Char::attack(Stance::Id stance)
@@ -240,7 +240,7 @@ void Char::attack(Stance::Id stance)
     look.attack(stance);
 
     attacking = true;
-    look.set_alerted(5000);
+    look.set_alerted(5'000);
 }
 
 void Char::attack(bool degenerate)
@@ -248,14 +248,15 @@ void Char::attack(bool degenerate)
     look.attack(degenerate);
 
     attacking = true;
-    look.set_alerted(5000);
+    look.set_alerted(5'000);
 }
 
 void Char::set_afterimage(std::int32_t skill_id)
 {
     std::int32_t weapon_id = look.get_equips().get_weapon();
-    if (weapon_id <= 0)
+    if (weapon_id <= 0) {
         return;
+    }
 
     const WeaponData& weapon = WeaponData::get(weapon_id);
 
@@ -364,7 +365,7 @@ const CharLook& Char::get_look() const
 
 PhysicsObject& Char::get_phobj()
 {
-    return phobj;
+    return ph_obj;
 }
 
 void Char::init()

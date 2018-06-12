@@ -19,16 +19,17 @@
 #include "../../Template/BoolPair.h"
 #include "../MapleMap/Mob.h"
 #include "Attack.h"
+#include "boost/container/flat_map.hpp"
+
+#include <unordered_map>
 
 namespace jrc
 {
-// Interface for hit effects, animations applied to a mob for each hit.
+//! Interface for hit effects, animations applied to a mob for each hit.
 class SkillHitEffect
 {
 public:
-    virtual ~SkillHitEffect()
-    {
-    }
+    virtual ~SkillHitEffect() = default;
 
     virtual void apply(const AttackUser& user, Mob& target) const = 0;
 
@@ -55,7 +56,7 @@ protected:
     };
 };
 
-// No animation.
+//! No animation.
 class NoHitEffect : public SkillHitEffect
 {
 public:
@@ -64,7 +65,7 @@ public:
     }
 };
 
-// A single animation.
+//! A single animation.
 class SingleHitEffect : public SkillHitEffect
 {
 public:
@@ -76,7 +77,7 @@ private:
     Effect effect;
 };
 
-// The animation changes depending on the weapon used.
+//! The animation changes depending on the weapon used.
 class TwoHHitEffect : public SkillHitEffect
 {
 public:
@@ -88,7 +89,7 @@ private:
     BoolPair<Effect> effects;
 };
 
-// The animation changes with the character level.
+//! The animation changes with the character level.
 class ByLevelHitEffect : public SkillHitEffect
 {
 public:
@@ -97,10 +98,10 @@ public:
     void apply(const AttackUser& user, Mob& target) const override;
 
 private:
-    std::map<std::uint16_t, Effect> effects;
+    boost::container::flat_map<std::uint16_t, Effect> effects;
 };
 
-// The animation changes with the character level and weapon used.
+//! The animation changes with the character level and weapon used.
 class ByLevelTwoHHitEffect : public SkillHitEffect
 {
 public:
@@ -109,10 +110,10 @@ public:
     void apply(const AttackUser& user, Mob& target) const override;
 
 private:
-    std::map<std::uint16_t, BoolPair<Effect>> effects;
+    boost::container::flat_map<std::uint16_t, BoolPair<Effect>> effects;
 };
 
-// The animation changes with the skill level.
+//! The animation changes with the skill level.
 class BySkillLevelHitEffect : public SkillHitEffect
 {
 public:
@@ -121,6 +122,6 @@ public:
     void apply(const AttackUser& user, Mob& target) const override;
 
 private:
-    std::map<std::int32_t, Effect> effects;
+    std::unordered_map<std::int32_t, Effect> effects;
 };
 } // namespace jrc

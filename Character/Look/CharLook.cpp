@@ -29,11 +29,11 @@ CharLook::CharLook(const LookEntry& entry)
     reset();
 
     set_body(entry.skin);
-    set_hair(entry.hairid);
-    set_face(entry.faceid);
+    set_hair(entry.hair_id);
+    set_face(entry.face_id);
 
-    for (auto& equip : entry.equips) {
-        add_equip(equip.second);
+    for (auto& [_, equip] : entry.equips) {
+        add_equip(equip);
     }
 }
 
@@ -363,7 +363,7 @@ bool CharLook::update(std::uint16_t timestep)
 
     alerted.update();
 
-    bool aniend = false;
+    bool ani_end = false;
     if (action == nullptr) {
         std::uint16_t delay = get_delay(stance.get(), st_frame.get());
         std::uint16_t delta = delay - st_elapsed;
@@ -376,7 +376,7 @@ bool CharLook::update(std::uint16_t timestep)
             st_frame.next(nextframe, threshold);
 
             if (st_frame == 0) {
-                aniend = true;
+                ani_end = true;
             }
         } else {
             stance.normalize();
@@ -398,7 +398,7 @@ bool CharLook::update(std::uint16_t timestep)
                 stance.next(action->get_stance(), threshold);
                 st_frame.next(action->get_frame(), threshold);
             } else {
-                aniend = true;
+                ani_end = true;
                 action = nullptr;
                 action_str = "";
                 set_stance(Stance::STAND1);
@@ -411,22 +411,22 @@ bool CharLook::update(std::uint16_t timestep)
         }
     }
 
-    std::uint16_t expdelay =
-        face->get_delay(expression.get(), exp_frame.get());
-    std::uint16_t expdelta = expdelay - exp_elapsed;
-    if (timestep >= expdelta) {
-        exp_elapsed = timestep - expdelta;
+    auto exp_delay = static_cast<std::uint16_t>(
+        face->get_delay(expression.get(), exp_frame.get()));
+    std::uint16_t exp_delta = exp_delay - exp_elapsed;
+    if (timestep >= exp_delta) {
+        exp_elapsed = timestep - exp_delta;
 
-        std::uint8_t nextexpframe =
+        std::uint8_t next_exp_frame =
             face->next_frame(expression.get(), exp_frame.get());
-        float fcthreshold = static_cast<float>(expdelta) / timestep;
-        exp_frame.next(nextexpframe, fcthreshold);
+        float fc_threshold = static_cast<float>(exp_delta) / timestep;
+        exp_frame.next(next_exp_frame, fc_threshold);
 
         if (exp_frame == 0) {
             if (expression == Expression::DEFAULT) {
-                expression.next(Expression::BLINK, fcthreshold);
+                expression.next(Expression::BLINK, fc_threshold);
             } else {
-                expression.next(Expression::DEFAULT, fcthreshold);
+                expression.next(Expression::DEFAULT, fc_threshold);
             }
         }
     } else {
@@ -436,7 +436,7 @@ bool CharLook::update(std::uint16_t timestep)
         exp_elapsed += timestep;
     }
 
-    return aniend;
+    return ani_end;
 }
 
 void CharLook::set_body(std::int32_t skin_id)
@@ -474,23 +474,23 @@ void CharLook::set_face(std::int32_t face_id)
     face = &iter->second;
 }
 
-void CharLook::updatetwohanded()
+void CharLook::update_two_handed()
 {
     Stance::Id basestance = Stance::base_of(stance.get());
     set_stance(basestance);
 }
 
-void CharLook::add_equip(std::int32_t itemid)
+void CharLook::add_equip(std::int32_t item_id)
 {
-    equips.add_equip(itemid, draw_info);
-    updatetwohanded();
+    equips.add_equip(item_id, draw_info);
+    update_two_handed();
 }
 
 void CharLook::remove_equip(Equipslot::Id slot)
 {
     equips.remove_equip(slot);
     if (slot == Equipslot::WEAPON) {
-        updatetwohanded();
+        update_two_handed();
     }
 }
 
@@ -503,12 +503,12 @@ void CharLook::attack(bool degenerate)
 
     const WeaponData& weapon = WeaponData::get(weapon_id);
 
-    std::uint8_t attacktype = weapon.get_attack();
-    if (attacktype == 9 && !degenerate) {
+    std::uint8_t attack_type = weapon.get_attack();
+    if (attack_type == 9 && !degenerate) {
         stance.set(Stance::SHOT);
         set_action("handgun");
     } else {
-        stance.set(getattackstance(attacktype, degenerate));
+        stance.set(getattackstance(attack_type, degenerate));
         st_frame.set(0);
         st_elapsed = 0;
     }
@@ -566,36 +566,36 @@ Stance::Id CharLook::getattackstance(std::uint8_t attack,
     };
 
     static const std::array<std::vector<Stance::Id>, NUM_ATTACKS>
-        degen_stances = {{{Stance::NONE},
-                          {Stance::NONE},
-                          {Stance::NONE},
-                          {Stance::SWINGT1, Stance::SWINGT3},
-                          {Stance::SWINGT1, Stance::STABT1},
-                          {Stance::NONE},
-                          {Stance::NONE},
-                          {Stance::SWINGT1, Stance::STABT1},
-                          {Stance::NONE},
-                          {Stance::SWINGP1, Stance::STABT2}}};
+        degen_stances{{{Stance::NONE},
+                       {Stance::NONE},
+                       {Stance::NONE},
+                       {Stance::SWINGT1, Stance::SWINGT3},
+                       {Stance::SWINGT1, Stance::STABT1},
+                       {Stance::NONE},
+                       {Stance::NONE},
+                       {Stance::SWINGT1, Stance::STABT1},
+                       {Stance::NONE},
+                       {Stance::SWINGP1, Stance::STABT2}}};
 
     static const std::array<std::vector<Stance::Id>, NUM_ATTACKS>
-        attack_stances = {{{Stance::NONE},
-                           {Stance::STABO1,
-                            Stance::STABO2,
-                            Stance::SWINGO1,
-                            Stance::SWINGO2,
-                            Stance::SWINGO3},
-                           {Stance::STABT1, Stance::SWINGP1},
-                           {Stance::SHOOT1},
-                           {Stance::SHOOT2},
-                           {Stance::STABO1,
-                            Stance::STABO2,
-                            Stance::SWINGT1,
-                            Stance::SWINGT2,
-                            Stance::SWINGT3},
-                           {Stance::SWINGO1, Stance::SWINGO2},
-                           {Stance::SWINGO1, Stance::SWINGO2},
-                           {Stance::NONE},
-                           {Stance::SHOT}}};
+        attack_stances{{{Stance::NONE},
+                        {Stance::STABO1,
+                         Stance::STABO2,
+                         Stance::SWINGO1,
+                         Stance::SWINGO2,
+                         Stance::SWINGO3},
+                        {Stance::STABT1, Stance::SWINGP1},
+                        {Stance::SHOOT1},
+                        {Stance::SHOOT2},
+                        {Stance::STABO1,
+                         Stance::STABO2,
+                         Stance::SWINGT1,
+                         Stance::SWINGT2,
+                         Stance::SWINGT3},
+                        {Stance::SWINGO1, Stance::SWINGO2},
+                        {Stance::SWINGO1, Stance::SWINGO2},
+                        {Stance::NONE},
+                        {Stance::SHOT}}};
 
     if (attack <= NONE || attack >= NUM_ATTACKS) {
         return Stance::STAND1;
@@ -607,8 +607,7 @@ Stance::Id CharLook::getattackstance(std::uint8_t attack,
         return Stance::STAND1;
     }
 
-    std::size_t index = randomizer.next_int(stances.size());
-    return stances[index];
+    return stances[randomizer.next_int(stances.size())];
 }
 
 std::uint16_t CharLook::get_delay(Stance::Id st, std::uint8_t fr) const

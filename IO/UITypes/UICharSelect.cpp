@@ -388,7 +388,7 @@ std::string UICharSelect::get_label_string(std::size_t label) const
     case WORLDRANK:
         return std::to_string(stats.rank.first);
     case JOBRANK:
-        return std::to_string(stats.jobrank.first);
+        return std::to_string(stats.job_rank.first);
     case STR:
         return std::to_string(stats.stats[Maplestat::STR]);
     case DEX:

@@ -19,17 +19,16 @@
 
 namespace jrc
 {
-Monsterbook::Monsterbook()
+Monsterbook::Monsterbook() noexcept : cover(0)
 {
-    cover = 0;
 }
 
-void Monsterbook::set_cover(std::int32_t cov)
+void Monsterbook::set_cover(std::int32_t cov) noexcept
 {
     cover = cov;
 }
 
-void Monsterbook::add_card(std::int16_t card, std::int8_t level)
+void Monsterbook::add_card(std::int16_t card, std::int8_t level) noexcept
 {
     cards[card] = level;
 }

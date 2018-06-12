@@ -39,7 +39,7 @@ public:
         case EQUIP_INVENTORY:
             return t == UIElement::Type::EQUIPINVENTORY;
         case ITEM_INVENTORY:
-            return t == UIElement::Type::ITEMINVENTORY;
+            return t == UIElement::Type::ITEM_INVENTORY;
         case SKILL_BOOK:
             return t == UIElement::Type::SKILLBOOK;
         case SHOP:

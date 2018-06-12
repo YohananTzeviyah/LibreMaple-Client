@@ -253,7 +253,7 @@ Cursor::State UISkillbook::send_cursor(bool clicked,
     }
 
     Point<std::int16_t> cursor_relative = cursorpos - position;
-    if (slider.isenabled()) {
+    if (slider.is_enabled()) {
         if (Cursor::State new_state =
                 slider.send_cursor(cursor_relative, clicked)) {
             clear_tooltip();
@@ -355,7 +355,7 @@ void UISkillbook::change_tab(std::uint16_t new_tab)
 
     for (std::int32_t skill_id : data.get_skills()) {
         std::int32_t level = skillbook.get_level(skill_id);
-        std::int32_t masterlevel = skillbook.get_masterlevel(skill_id);
+        std::int32_t masterlevel = skillbook.get_master_level(skill_id);
 
         bool invisible = SkillData::get(skill_id).is_invisible();
         if (invisible && masterlevel == 0) {
@@ -366,7 +366,7 @@ void UISkillbook::change_tab(std::uint16_t new_tab)
         ++skillcount;
     }
 
-    slider.setrows(ROWS, skillcount);
+    slider.set_rows(ROWS, skillcount);
     change_offset(0);
 }
 
@@ -391,7 +391,7 @@ void UISkillbook::show_skill(std::int32_t id)
 {
     std::int32_t skill_id = id;
     std::int32_t level = skillbook.get_level(id);
-    std::int32_t masterlevel = skillbook.get_masterlevel(id);
+    std::int32_t masterlevel = skillbook.get_master_level(id);
     std::int64_t expiration = skillbook.get_expiration(id);
 
     UI::get().show_skill(
@@ -410,7 +410,7 @@ bool UISkillbook::can_raise(std::int32_t skill_id) const
     }
 
     std::int32_t level = skillbook.get_level(skill_id);
-    std::int32_t masterlevel = skillbook.get_masterlevel(skill_id);
+    std::int32_t masterlevel = skillbook.get_master_level(skill_id);
     if (masterlevel == 0) {
         masterlevel = SkillData::get(skill_id).get_master_level();
     }

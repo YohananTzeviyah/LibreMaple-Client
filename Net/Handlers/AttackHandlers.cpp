@@ -25,9 +25,8 @@
 
 namespace jrc
 {
-AttackHandler::AttackHandler(Attack::Type t)
+AttackHandler::AttackHandler(Attack::Type t) noexcept : type{t}
 {
-    type = t;
 }
 
 void AttackHandler::handle(InPacket& recv) const
@@ -45,7 +44,7 @@ void AttackHandler::handle(InPacket& recv) const
     attack.skill = (attack.level > 0) ? recv.read_int() : 0;
 
     attack.display = recv.read_byte();
-    attack.toleft = recv.read_bool();
+    attack.to_left = recv.read_bool();
     attack.stance = recv.read_byte();
     attack.speed = recv.read_byte();
 
@@ -53,21 +52,20 @@ void AttackHandler::handle(InPacket& recv) const
 
     attack.bullet = recv.read_int();
 
-    attack.mobcount = (count >> 4) & 0x0F;
-    attack.hitcount = count & 0x0F;
-    for (std::uint8_t i = 0; i < attack.mobcount; ++i) {
+    attack.mob_count = (count >> 4) & 0x0F;
+    attack.hit_count = count & 0x0F;
+    for (std::uint8_t i = 0; i < attack.mob_count; ++i) {
         std::int32_t oid = recv.read_int();
 
         recv.skip(1);
 
-        std::uint8_t length = (attack.skill == SkillId::MESO_EXPLOSION)
+        std::uint8_t length = attack.skill == SkillId::MESO_EXPLOSION
                                   ? recv.read_byte()
-                                  : attack.hitcount;
+                                  : attack.hit_count;
         for (std::uint8_t j = 0; j < length; ++j) {
             std::int32_t damage = recv.read_int();
-            bool critical = false; // todo
-            auto singledamage = std::make_pair(damage, critical);
-            attack.damagelines[oid].push_back(singledamage);
+            bool critical = false; // TODO
+            attack.damage_lines[oid].emplace_back(damage, critical);
         }
     }
 

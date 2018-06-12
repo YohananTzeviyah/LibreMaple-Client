@@ -25,6 +25,8 @@
 #include "Charset.h"
 #include "Tooltip.h"
 
+#include <array>
+
 namespace jrc
 {
 class EquipTooltip : public Tooltip
@@ -36,20 +38,20 @@ public:
     void draw(Point<std::int16_t> position) const override;
 
 private:
-    std::int16_t invpos;
+    std::int16_t inv_pos;
     std::int16_t height;
-    bool hasdesc;
-    bool hasslots;
+    bool has_desc;
+    bool has_slots;
     bool is_weapon;
-    EnumMap<Maplestat::Id, std::string> reqstatstrings;
-    Texture itemicon;
+    EnumMap<Maplestat::Id, std::string> req_stat_strings;
+    Texture item_icon;
 
     Text name;
     Text desc;
-    Text potflag;
+    Text pot_flag;
     Text flag;
     Text category;
-    Text wepspeed;
+    Text wep_speed;
     Text slots;
     Text hammers;
     EnumMap<Equipstat::Id, Text> stat_labels;
@@ -67,13 +69,13 @@ private:
     Texture shade;
 
     std::vector<Maplestat::Id> requirements;
-    EnumMap<Maplestat::Id, BoolPair<Texture>> reqstattextures;
-    EnumMap<Maplestat::Id, bool> canequip;
-    EnumMap<Maplestat::Id, Point<std::int16_t>> reqstatpositions;
-    BoolPair<Charset> reqset;
+    EnumMap<Maplestat::Id, BoolPair<Texture>> req_stat_textures;
+    EnumMap<Maplestat::Id, bool> can_equip;
+    EnumMap<Maplestat::Id, Point<std::int16_t>> req_stat_positions;
+    BoolPair<Charset> req_set;
 
-    Texture jobsback;
-    BoolPair<std::map<std::uint8_t, Texture>> jobs;
-    std::vector<std::uint8_t> okjobs;
+    Texture jobs_back;
+    BoolPair<std::array<Texture, 6>> jobs;
+    std::vector<std::uint8_t> ok_jobs;
 };
 } // namespace jrc

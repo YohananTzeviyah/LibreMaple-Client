@@ -50,7 +50,7 @@ enum Id : std::int16_t {
     LENGTH
 };
 
-Id by_id(std::size_t id);
+[[nodiscard]] Id by_id(std::int16_t id) noexcept;
 
 constexpr Enumeration<Id> values;
 } // namespace Equipslot

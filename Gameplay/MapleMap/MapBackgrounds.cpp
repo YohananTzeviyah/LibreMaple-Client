@@ -90,7 +90,7 @@ void Background::settype(Type type)
 void Background::draw(double viewx, double viewy, float alpha) const
 {
     double x;
-    if (moveobj.hmobile()) {
+    if (moveobj.h_mobile()) {
         x = moveobj.get_absolute_x(viewx, alpha);
     } else {
         double shift_x = rx * (WOFFSET - viewx) / 100 + WOFFSET;
@@ -98,7 +98,7 @@ void Background::draw(double viewx, double viewy, float alpha) const
     }
 
     double y;
-    if (moveobj.vmobile()) {
+    if (moveobj.v_mobile()) {
         y = moveobj.get_absolute_y(viewy, alpha);
     } else {
         double shift_y = ry * (HOFFSET - viewy) / 100 + HOFFSET;

@@ -68,7 +68,7 @@ void ModifyInventoryHandler::handle(InPacket& recv) const
         case Inventory::ADD:
             ItemParser::parse_item(recv, mod.type, mod.pos, inventory);
             break;
-        case Inventory::CHANGECOUNT: {
+        case Inventory::CHANGE_COUNT: {
             mod.arg = recv.read_short();
 
             std::int16_t count_before =
@@ -79,7 +79,7 @@ void ModifyInventoryHandler::handle(InPacket& recv) const
                 mod.type, mod.pos, mod.mode, mod.arg, Inventory::MOVE_NONE);
 
             if (count_before < count_now) {
-                mod.mode = Inventory::ADDCOUNT;
+                mod.mode = Inventory::ADD_COUNT;
             }
         } break;
         case Inventory::SWAP:
@@ -98,7 +98,7 @@ void ModifyInventoryHandler::handle(InPacket& recv) const
     }
 
     Inventory::Movement move =
-        (recv.length() > 0) ? Inventory::movementbyvalue(recv.read_byte())
+        (recv.length() > 0) ? Inventory::movement_by_value(recv.read_byte())
                             : Inventory::MOVE_INTERNAL;
 
     for (const Mod& mod : mods) {

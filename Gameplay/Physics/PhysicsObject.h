@@ -23,7 +23,7 @@
 
 namespace jrc
 {
-// Struct that contains all properties for movement calculations.
+//! Struct that contains all properties for movement calculations.
 struct MovingObject {
     Linear<double> x;
     Linear<double> y;
@@ -52,47 +52,47 @@ struct MovingObject {
         y.set(d);
     }
 
-    void limitx(double d)
+    void limit_x(double d)
     {
         x = d;
         hspeed = 0.0;
     }
 
-    void limity(double d)
+    void limit_y(double d)
     {
         y = d;
         vspeed = 0.0;
     }
 
-    void movexuntil(double d, std::uint16_t delay)
+    void move_x_until(double d, std::uint16_t delay)
     {
         if (delay) {
-            double hdelta = d - x.get();
-            hspeed = Constants::TIMESTEP * hdelta / delay;
+            double h_delta = d - x.get();
+            hspeed = Constants::TIMESTEP * h_delta / delay;
         }
     }
 
-    void moveyuntil(double d, std::uint16_t delay)
+    void move_y_until(double d, std::uint16_t delay)
     {
         if (delay) {
-            double vdelta = d - y.get();
-            vspeed = Constants::TIMESTEP * vdelta / delay;
+            double v_delta = d - y.get();
+            vspeed = Constants::TIMESTEP * v_delta / delay;
         }
     }
 
-    bool hmobile() const
+    bool h_mobile() const
     {
         return hspeed != 0.0;
     }
 
-    bool vmobile() const
+    bool v_mobile() const
     {
         return vspeed != 0.0;
     }
 
     bool mobile() const
     {
-        return hmobile() || vmobile();
+        return h_mobile() || v_mobile();
     }
 
     double crnt_x() const
@@ -176,17 +176,17 @@ struct PhysicsObject : public MovingObject {
 
     Type type = NORMAL;
     std::uint32_t flags = 0;
-    std::uint16_t fhid = 0;
-    double fhslope = 0.0;
-    std::int8_t fhlayer = 0;
-    double groundbelow = 0.0;
-    bool onground = true;
-    bool enablejd = false;
+    std::uint16_t fh_id = 0;
+    double fh_slope = 0.0;
+    std::int8_t fh_layer = 0;
+    double ground_below = 0.0;
+    bool on_ground = true;
+    bool enable_jd = false;
 
-    double hforce = 0.0;
-    double vforce = 0.0;
-    double hacc = 0.0;
-    double vacc = 0.0;
+    double h_force = 0.0;
+    double v_force = 0.0;
+    double h_acc = 0.0;
+    double v_acc = 0.0;
 
     bool is_flag_set(Flag f)
     {

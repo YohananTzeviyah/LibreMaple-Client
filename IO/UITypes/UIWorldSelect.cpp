@@ -63,11 +63,11 @@ UIWorldSelect::UIWorldSelect(std::vector<World> worlds,
     sprites.emplace_back(channelsrc["release"]["layer:15"],
                          Point<std::int16_t>(200, 170));
 
-    if (channelid >= world.channelcount) {
+    if (channelid >= world.channel_count) {
         channelid = 0;
     }
 
-    for (std::uint8_t i = 0; i < world.channelcount; ++i) {
+    for (std::uint8_t i = 0; i < world.channel_count; ++i) {
         nl::node chnode = channelsrc["button:" + std::to_string(i)];
         buttons[BT_CHANNEL0 + i] =
             std::make_unique<TwoSpriteButton>(chnode["normal"]["0"],

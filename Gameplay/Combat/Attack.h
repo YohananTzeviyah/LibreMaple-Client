@@ -30,19 +30,19 @@ struct Attack {
     enum DamageType { DMG_WEAPON, DMG_MAGIC, DMG_FIXED };
 
     Type type = CLOSE;
-    DamageType damagetype = DMG_WEAPON;
+    DamageType damage_type = DMG_WEAPON;
 
-    double mindamage = 1.0;
-    double maxdamage = 1.0;
+    double min_damage = 1.0;
+    double max_damage = 1.0;
     float critical = 0.0f;
-    float ignoredef = 0.0f;
+    float ignore_def = 0.0f;
     std::int32_t matk = 0;
     std::int32_t accuracy = 0;
-    std::int32_t fixdamage = 0;
-    std::int16_t playerlevel = 1;
+    std::int32_t fix_damage = 0;
+    std::int16_t player_level = 1;
 
-    std::uint8_t hitcount = 0;
-    std::uint8_t mobcount = 0;
+    std::uint8_t hit_count = 0;
+    std::uint8_t mob_count = 0;
     std::uint8_t speed = 0;
     std::uint8_t stance = 0;
     std::int32_t skill = 0;
@@ -50,27 +50,27 @@ struct Attack {
 
     Point<std::int16_t> origin;
     Rectangle<std::int16_t> range;
-    float hrange = 1.0f;
-    bool toleft = false;
+    float h_range = 1.0f;
+    bool to_left = false;
 };
 
 struct MobAttack {
     Attack::Type type = Attack::CLOSE;
     std::int32_t watk = 0;
     std::int32_t matk = 0;
-    std::int32_t mobid = 0;
+    std::int32_t mob_id = 0;
     std::int32_t oid = 0;
     Point<std::int16_t> origin;
     bool valid = false;
 
-    // Create a mob attack for touch damage.
+    //! Create a mob attack for touch damage.
     MobAttack(std::int32_t watk,
               Point<std::int16_t> origin,
               std::int32_t mobid,
               std::int32_t oid)
         : type(Attack::CLOSE),
           watk(watk),
-          mobid(mobid),
+          mob_id(mobid),
           oid(oid),
           origin(origin),
           valid(true)
@@ -89,7 +89,7 @@ struct MobAttack {
 
 struct MobAttackResult {
     std::int32_t damage;
-    std::int32_t mobid;
+    std::int32_t mob_id;
     std::int32_t oid;
     std::uint8_t direction;
 
@@ -97,7 +97,7 @@ struct MobAttackResult {
                     std::int32_t damage,
                     std::uint8_t direction)
         : damage(damage),
-          mobid(attack.mobid),
+          mob_id(attack.mob_id),
           oid(attack.oid),
           direction(direction)
     {
@@ -107,12 +107,12 @@ struct MobAttackResult {
 struct AttackResult {
     AttackResult(const Attack& attack)
         : type(attack.type),
-          hitcount(attack.hitcount),
+          hit_count(attack.hit_count),
           skill(attack.skill),
           bullet(attack.bullet),
           stance(attack.stance),
           speed(attack.speed),
-          toleft(attack.toleft)
+          to_left(attack.to_left)
     {
     }
 
@@ -120,8 +120,8 @@ struct AttackResult {
 
     Attack::Type type;
     std::int32_t attacker = 0;
-    std::uint8_t mobcount = 0;
-    std::uint8_t hitcount = 1;
+    std::uint8_t mob_count = 0;
+    std::uint8_t hit_count = 1;
     std::int32_t skill = 0;
     std::int32_t charge = 0;
     std::int32_t bullet = 0;
@@ -129,18 +129,18 @@ struct AttackResult {
     std::uint8_t display = 0;
     std::uint8_t stance = 0;
     std::uint8_t speed = 0;
-    bool toleft = false;
+    bool to_left = false;
     std::unordered_map<std::int32_t,
                        std::vector<std::pair<std::int32_t, bool>>>
-        damagelines;
+        damage_lines;
     std::int32_t first_oid;
     std::int32_t last_oid;
 };
 
 struct AttackUser {
-    std::int32_t skilllevel;
+    std::int32_t skill_level;
     std::uint16_t level;
-    bool secondweapon;
+    bool second_weapon;
     bool flip;
 };
 } // namespace jrc

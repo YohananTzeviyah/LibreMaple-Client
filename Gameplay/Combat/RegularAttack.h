@@ -28,7 +28,7 @@ public:
     void apply_useeffects(Char& user) const override;
     void apply_actions(Char& user, Attack::Type type) const override;
     void apply_stats(const Char& user, Attack& attack) const override;
-    void apply_hiteffects(const AttackUser& user, Mob& target) const override;
+    void apply_hit_effects(const AttackUser& user, Mob& target) const override;
     Animation get_bullet(const Char& user,
                          std::int32_t bulletid) const override;
 

@@ -31,41 +31,42 @@ public:
     Slider(std::int32_t type,
            Range<std::int16_t> vertical,
            std::int16_t x,
-           std::int16_t unitrows,
-           std::int16_t rowmax,
-           std::function<void(bool upwards)> onmoved);
+           std::int16_t unit_rows,
+           std::int16_t row_max,
+           std::function<void(bool upwards)> on_moved);
     Slider();
 
-    bool isenabled() const;
-    void setenabled(bool enabled);
-    void
-    setrows(std::int16_t newrow, std::int16_t unitrows, std::int16_t rowmax);
-    void setrows(std::int16_t unitrows, std::int16_t rowmax);
-    void setvertical(Range<std::int16_t> vertical);
+    bool is_enabled() const;
+    void set_enabled(bool enabled);
+    void set_rows(std::int16_t new_row,
+                  std::int16_t unit_rows,
+                  std::int16_t row_max_);
+    void set_rows(std::int16_t unit_rows, std::int16_t row_max);
+    void set_vertical(Range<std::int16_t> vertical);
 
     void draw(Point<std::int16_t> position) const;
     bool remove_cursor(bool clicked);
     Cursor::State send_cursor(Point<std::int16_t> cursor, bool pressed);
 
 private:
-    Point<std::int16_t> getthumbpos() const;
+    Point<std::int16_t> get_thumb_pos() const;
 
-    std::function<void(bool upwards)> onmoved;
+    std::function<void(bool upwards)> on_moved;
 
     Range<std::int16_t> vertical;
     Point<std::int16_t> start;
     Point<std::int16_t> end;
-    std::int16_t buttonheight;
-    std::int16_t rowheight;
+    std::int16_t button_height;
+    std::int16_t row_height;
     std::int16_t x;
     std::int16_t row;
-    std::int16_t rowmax;
+    std::int16_t row_max;
     bool scrolling;
     bool enabled;
 
-    Texture dbase;
-    Texture dnext;
-    Texture dprev;
+    Texture d_base;
+    Texture d_next;
+    Texture d_prev;
     Texture base;
     TwoSpriteButton next;
     TwoSpriteButton prev;

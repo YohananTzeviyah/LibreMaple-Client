@@ -192,7 +192,7 @@ void Stage::check_seats()
         return;
     }
 
-    nullable_ptr<const Seat> seat = mapinfo.findseat(player.get_position());
+    nullable_ptr<const Seat> seat = mapinfo.find_seat(player.get_position());
     player.set_seat(seat);
 }
 
@@ -203,7 +203,7 @@ void Stage::check_ladders(bool up)
     }
 
     nullable_ptr<const Ladder> ladder =
-        mapinfo.findladder(player.get_position(), up);
+        mapinfo.find_ladder(player.get_position(), up);
     player.set_ladder(ladder);
 }
 

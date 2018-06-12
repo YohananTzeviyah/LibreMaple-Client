@@ -94,9 +94,9 @@ public:
     const Afterimage& get_afterimage() const;
 
     //! Display an animation as an effect with the character.
-    void show_attack_effect(Animation animation, std::int8_t z);
+    void show_attack_effect(Animation to_show, std::int8_t z);
     //! Display an animation as an effect ontop of the character.
-    void show_effect_id(CharEffect::Id toshow);
+    void show_effect_id(CharEffect::Id to_show);
     //! Display the iron body skill animation.
     void show_iron_body();
     //! Display damage over the characters head.
@@ -106,7 +106,7 @@ public:
     //! Change a part of the character's look.
     void change_look(Maplestat::Id stat, std::int32_t id);
     //! Change the character's state by id.
-    void set_state(std::uint8_t statebyte);
+    void set_state(std::uint8_t state_byte);
     //! Change the character's face expression by id.
     void set_expression(std::int32_t exp_id);
 

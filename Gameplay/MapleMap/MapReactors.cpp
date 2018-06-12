@@ -36,7 +36,7 @@ void MapReactors::update(const Physics& physics)
 
         std::int32_t oid = spawn.get_oid();
         if (auto reactor = reactors.get(oid)) {
-            reactor->makeactive();
+            reactor->activate();
         } else {
             reactors.add(spawn.instantiate(physics));
         }

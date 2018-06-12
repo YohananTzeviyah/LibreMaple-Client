@@ -21,21 +21,21 @@
 
 namespace jrc
 {
-// Combines an Animation with additional state.
+//! Combines an `Animation` with additional state.
 class Sprite
 {
 public:
-    Sprite(const Animation& animation, const DrawArgument& stateargs);
-    Sprite(nl::node src, const DrawArgument& stateargs);
+    Sprite(const Animation& a, const DrawArgument& s_args);
+    Sprite(nl::node src, const DrawArgument& s_args);
     Sprite(nl::node src);
     Sprite();
 
-    void draw(Point<std::int16_t> parentpos, float alpha) const;
+    void draw(Point<std::int16_t> parent_pos, float alpha) const;
     bool update(std::uint16_t timestep);
     bool update();
 
 private:
     Animation animation;
-    DrawArgument stateargs;
+    DrawArgument state_args;
 };
 } // namespace jrc

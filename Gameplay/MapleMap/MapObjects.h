@@ -27,39 +27,41 @@
 
 namespace jrc
 {
-// A collection of generic mapobjects.
+//! A collection of generic mapobjects.
 class MapObjects
 {
 public:
-    // Draw all mapobjects that are on the specified layer.
+    //! Draw all mapobjects that are on the specified layer.
     void draw(Layer::Id layer, double viewx, double viewy, float alpha) const;
-    // Update all mapobjects of this type. Also updates layers eg. drawing
-    // order.
+    //! Update all mapobjects of this type. Also updates layers eg. drawing
+    //! order.
     void update(const Physics& physics);
 
-    // Adds a mapobject of this type.
+    //! Adds a mapobject of this type.
     void add(std::unique_ptr<MapObject> mapobject);
-    // Removes the mapobject with the given oid.
+    //! Removes the mapobject with the given oid.
     void remove(std::int32_t oid);
-    // Removes all mapobjects of this type.
+    //! Removes all mapobjects of this type.
     void clear();
 
-    // Check if a map object with the specified id exists on the map.
+    //! Check if a map object with the specified id exists on the map.
     bool contains(std::int32_t oid) const;
-    // Obtains a pointer to the mapobject with the given oid.
+    //! Obtains a pointer to the mapobject with the given oid.
     nullable_ptr<MapObject> get(std::int32_t oid);
-    // Obtains a const pointer to the mapobject with the given oid.
+    //! Obtains a const pointer to the mapobject with the given oid.
     nullable_ptr<const MapObject> get(std::int32_t oid) const;
+    //! Number of mapobjects in this collection.
+    [[nodiscard]] std::size_t size() const noexcept;
 
     using underlying_t =
         typename std::unordered_map<std::int32_t, std::unique_ptr<MapObject>>;
-    // Return a begin iterator.
+    //! Return a begin iterator.
     underlying_t::iterator begin();
-    // Return an end iterator.
+    //! Return an end iterator.
     underlying_t::iterator end();
-    // Return a begin iterator.
+    //! Return a begin iterator.
     underlying_t::const_iterator begin() const;
-    // Return an end iterator.
+    //! Return an end iterator.
     underlying_t::const_iterator end() const;
 
 private:

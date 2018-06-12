@@ -29,13 +29,13 @@
 namespace jrc
 {
 Window::Window()
+    : glwnd{nullptr},
+      context{nullptr},
+      opacity{1.0f},
+      opcstep{0.0f},
+      width{Constants::VIEW_WIDTH},
+      height{Constants::VIEW_HEIGHT}
 {
-    context = nullptr;
-    glwnd = nullptr;
-    opacity = 1.0f;
-    opcstep = 0.0f;
-    width = Constants::VIEW_WIDTH;
-    height = Constants::VIEW_HEIGHT;
 }
 
 Window::~Window()

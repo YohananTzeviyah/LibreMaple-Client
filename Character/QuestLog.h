@@ -16,8 +16,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "boost/container/flat_map.hpp"
+
 #include <cstdint>
-#include <map>
 #include <string>
 #include <unordered_map>
 
@@ -34,7 +35,7 @@ public:
     std::int16_t get_last_started();
 
 private:
-    std::map<std::int16_t, std::string> started;
+    boost::container::flat_map<std::int16_t, std::string> started;
     std::unordered_map<std::int16_t, std::pair<std::int16_t, std::string>>
         in_progress;
     std::unordered_map<std::int16_t, std::int64_t> completed;

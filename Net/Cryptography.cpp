@@ -32,13 +32,9 @@ Cryptography::Cryptography(const std::int8_t* handshake)
 #endif
 }
 
-Cryptography::Cryptography()
-{
-}
+Cryptography::Cryptography() = default;
 
-Cryptography::~Cryptography()
-{
-}
+Cryptography::~Cryptography() = default;
 
 void Cryptography::encrypt(std::int8_t* bytes, std::size_t length)
 {

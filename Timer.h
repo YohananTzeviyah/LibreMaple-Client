@@ -23,7 +23,7 @@
 
 namespace jrc
 {
-// Small class for measuring elapsed time between game loops.
+//! Small class for measuring elapsed time between game loops.
 class Timer : public Singleton<Timer>
 {
 public:
@@ -32,17 +32,15 @@ public:
         start();
     }
 
-    ~Timer()
-    {
-    }
+    ~Timer() = default;
 
-    // Start the timer by setting the last measurement to now.
+    //! Start the timer by setting the last measurement to now.
     void start()
     {
         point = clock::now();
     }
 
-    // Return time elapsed since the last measurement.
+    //! Return time elapsed since the last measurement.
     std::int64_t stop()
     {
         clock::time_point last = point;

@@ -16,39 +16,46 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "boost/container/flat_map.hpp"
+
 #include <cstdint>
-#include <map>
 #include <unordered_map>
 
 namespace jrc
 {
-// Class that stores all information about the skills of an individual
-// character.
+//! Class that stores all information about the skills of an individual
+//! character.
 class Skillbook
 {
 public:
-    void set_skill(std::int32_t id,
-                   std::int32_t level,
-                   std::int32_t masterlevel,
-                   std::int64_t expiration);
-
-    bool has_skill(std::int32_t id) const;
-    std::int32_t get_level(std::int32_t id) const;
-    std::int32_t get_masterlevel(std::int32_t id) const;
-    std::int64_t get_expiration(std::int32_t id) const;
-
-    // Return id and level of all passive skills.
-    // An ordered map is used so that lower passive skills don't override
-    // higher ones.
-    std::map<std::int32_t, std::int32_t> collect_passives() const;
-
-private:
     struct SkillEntry {
         std::int32_t level;
-        std::int32_t masterlevel;
+        std::int32_t master_level;
         std::int64_t expiration;
     };
 
-    std::unordered_map<std::int32_t, SkillEntry> skillentries;
+    void set_skill(std::int32_t id,
+                   std::int32_t level,
+                   std::int32_t master_level,
+                   std::int64_t expiration) noexcept;
+
+    [[nodiscard]] bool has_skill(std::int32_t id) const noexcept;
+    [[nodiscard]] std::int32_t get_level(std::int32_t id) const noexcept;
+    [[nodiscard]] std::int32_t get_master_level(std::int32_t id) const
+        noexcept;
+    [[nodiscard]] std::int64_t get_expiration(std::int32_t id) const noexcept;
+
+    [[nodiscard]] const std::unordered_map<std::int32_t, SkillEntry>&
+    get_entries() const noexcept;
+
+    //! Return ID and level of all passive skills.
+    //!
+    //! An ordered map is used so that lower passive skills don't override
+    //! higher ones.
+    [[nodiscard]] boost::container::flat_map<std::int32_t, std::int32_t>
+    collect_passives() const noexcept;
+
+private:
+    std::unordered_map<std::int32_t, SkillEntry> skill_entries;
 };
 } // namespace jrc

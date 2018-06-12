@@ -44,29 +44,29 @@ Drop::Drop(std::int32_t id,
     case 1:
         state = DROPPED;
         basey = static_cast<double>(dest.y() - 4);
-        phobj.vspeed = -5.0f;
-        phobj.hspeed = static_cast<double>(dest.x() - start.x()) / 48;
+        ph_obj.vspeed = -5.0f;
+        ph_obj.hspeed = static_cast<double>(dest.x() - start.x()) / 48;
         break;
     case 2:
         state = FLOATING;
-        basey = phobj.crnt_y();
-        phobj.type = PhysicsObject::FIXATED;
+        basey = ph_obj.crnt_y();
+        ph_obj.type = PhysicsObject::FIXATED;
         break;
     case 3:
         state = PICKEDUP;
-        phobj.vspeed = -5.0f;
+        ph_obj.vspeed = -5.0f;
         break;
     }
 }
 
 std::int8_t Drop::update(const Physics& physics)
 {
-    physics.move_object(phobj);
+    physics.move_object(ph_obj);
 
     if (state == DROPPED) {
-        if (phobj.onground) {
-            phobj.hspeed = 0.0;
-            phobj.type = PhysicsObject::FIXATED;
+        if (ph_obj.on_ground) {
+            ph_obj.hspeed = 0.0;
+            ph_obj.type = PhysicsObject::FIXATED;
             state = FLOATING;
             angle.set(0.0f);
             set_position(dest.x(), dest.y() - 4);
@@ -77,7 +77,7 @@ std::int8_t Drop::update(const Physics& physics)
     }
 
     if (state == FLOATING) {
-        phobj.y = basey + 5.0f + (cos(moved) - 1.0f) * 2.5f;
+        ph_obj.y = basey + 5.0f + (cos(moved) - 1.0f) * 2.5f;
         moved = (moved < 360.0f) ? moved + 0.025f : 0.0f;
     }
 
@@ -86,8 +86,9 @@ std::int8_t Drop::update(const Physics& physics)
         static const float OPCSTEP = 1.0f / PICKUPTIME;
 
         if (looter) {
-            double hdelta = looter->x - phobj.x;
-            phobj.hspeed = looter->hspeed / 2.0 + (hdelta - 16.0) / PICKUPTIME;
+            double hdelta = looter->x - ph_obj.x;
+            ph_obj.hspeed =
+                looter->hspeed / 2.0 + (hdelta - 16.0) / PICKUPTIME;
         }
 
         opacity -= OPCSTEP;
@@ -99,7 +100,7 @@ std::int8_t Drop::update(const Physics& physics)
         }
     }
 
-    return phobj.fhlayer;
+    return ph_obj.fh_layer;
 }
 
 void Drop::expire(std::int8_t type, const PhysicsObject* lt)
@@ -115,8 +116,8 @@ void Drop::expire(std::int8_t type, const PhysicsObject* lt)
         angle.set(0.0f);
         state = PICKEDUP;
         looter = lt;
-        phobj.vspeed = -4.5f;
-        phobj.type = PhysicsObject::NORMAL;
+        ph_obj.vspeed = -4.5f;
+        ph_obj.type = PhysicsObject::NORMAL;
         break;
     }
 }

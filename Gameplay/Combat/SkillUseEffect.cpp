@@ -37,8 +37,7 @@ TwoHUseEffect::TwoHUseEffect(nl::node src)
 
 void TwoHUseEffect::apply(Char& target) const
 {
-    bool twohanded = target.is_two_handed();
-    effects[twohanded].apply(target);
+    effects[target.is_two_handed()].apply(target);
 }
 
 MultiUseEffect::MultiUseEffect(nl::node src)
@@ -55,7 +54,7 @@ MultiUseEffect::MultiUseEffect(nl::node src)
 
 void MultiUseEffect::apply(Char& target) const
 {
-    for (auto& effect : effects) {
+    for (const auto& effect : effects) {
         effect.apply(target);
     }
 }
@@ -70,13 +69,11 @@ ByLevelUseEffect::ByLevelUseEffect(nl::node src)
 
 void ByLevelUseEffect::apply(Char& target) const
 {
-    if (effects.empty())
+    if (effects.empty()) {
         return;
-
-    std::uint16_t level = target.get_level();
-    auto iter = effects.begin();
-    for (; iter != effects.end() && level > iter->first; ++iter) {
     }
+
+    auto iter = effects.upper_bound(target.get_level());
     if (iter != effects.begin()) {
         --iter;
     }

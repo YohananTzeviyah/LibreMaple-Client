@@ -19,29 +19,29 @@
 
 namespace jrc
 {
-Gauge::Gauge(
-    Texture front, Texture mid, Texture end, std::int16_t max, float percent)
-{
-    barfront = front;
-    barmid = mid;
-    barend = end;
-    maximum = max;
-    percentage = percent;
-
-    target = percentage;
-}
-
-Gauge::Gauge()
+Gauge::Gauge(Texture front,
+             Texture mid,
+             Texture end,
+             std::int16_t max,
+             float percent) noexcept
+    : bar_front{front},
+      bar_mid{mid},
+      bar_end{end},
+      maximum{max},
+      percentage{percent},
+      target{percent}
 {
 }
+
+Gauge::Gauge() = default;
 
 void Gauge::draw(const DrawArgument& args) const
 {
     std::int16_t length = static_cast<std::int16_t>(percentage * maximum);
     if (length > 0) {
-        barfront.draw(args);
-        barmid.draw(args + DrawArgument({1, 0}, {length, 0}));
-        barend.draw(args + DrawArgument(length + 1, 0));
+        bar_front.draw(args);
+        bar_mid.draw(args + DrawArgument{{1, 0}, {length, 0}});
+        bar_end.draw(args + DrawArgument{length + 1, 0});
     }
 }
 
@@ -49,17 +49,19 @@ void Gauge::update(float t)
 {
     if (target != t) {
         target = t;
-        step = (target - percentage) / 24;
+        step = (target - percentage) / 24.0f;
     }
 
     if (percentage != target) {
         percentage += step;
         if (step < 0.0f) {
-            if (target - percentage >= step)
+            if (target - percentage >= step) {
                 percentage = target;
+            }
         } else if (step > 0.0f) {
-            if (target - percentage <= step)
+            if (target - percentage <= step) {
                 percentage = target;
+            }
         }
     }
 }

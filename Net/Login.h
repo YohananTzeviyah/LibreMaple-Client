@@ -20,49 +20,49 @@
 #include "../Template/EnumMap.h"
 
 #include <cstdint>
-#include <map>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace jrc
 {
 struct Account {
     std::string name;
-    std::int32_t accid;
+    std::int32_t acc_id;
     bool female;
     bool muted;
     std::int16_t pin;
-    std::int8_t gmlevel;
+    std::int8_t gm_level;
 };
 
 struct World {
     std::string name;
     std::string message;
-    std::vector<std::int32_t> chloads;
-    std::uint8_t channelcount;
+    std::vector<std::int32_t> channel_loads;
+    std::uint8_t channel_count;
     std::uint8_t flag;
     std::int8_t wid;
 };
 
 struct StatsEntry {
     std::string name;
-    std::vector<std::int64_t> petids;
+    std::vector<std::int64_t> pet_ids;
     EnumMap<Maplestat::Id, std::uint16_t> stats;
     std::int64_t exp;
-    std::int32_t mapid;
+    std::int32_t map_id;
     std::uint8_t portal;
     std::pair<std::int32_t, std::int8_t> rank;
-    std::pair<std::int32_t, std::int8_t> jobrank;
+    std::pair<std::int32_t, std::int8_t> job_rank;
 };
 
 struct LookEntry {
     bool female;
     std::uint8_t skin;
-    std::int32_t faceid;
-    std::int32_t hairid;
-    std::map<std::int8_t, std::int32_t> equips;
-    std::map<std::int8_t, std::int32_t> maskedequips;
-    std::vector<std::int32_t> petids;
+    std::int32_t face_id;
+    std::int32_t hair_id;
+    std::unordered_map<std::int8_t, std::int32_t> equips;
+    std::unordered_map<std::int8_t, std::int32_t> masked_equips;
+    std::vector<std::int32_t> pet_ids;
 };
 
 struct CharEntry {

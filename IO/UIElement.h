@@ -49,7 +49,7 @@ public:
         NPCTALK,
         SHOP,
         STATSINFO,
-        ITEMINVENTORY,
+        ITEM_INVENTORY,
         EQUIPINVENTORY,
         SKILLBOOK,
         KEYCONFIG,

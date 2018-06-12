@@ -196,7 +196,7 @@ bool UIChatbar::remove_cursor(bool clicked, Point<std::int16_t> cursor_pos)
 Cursor::State UIChatbar::send_cursor(bool clicking,
                                      Point<std::int16_t> cursorpos)
 {
-    if (slider.isenabled()) {
+    if (slider.is_enabled()) {
         auto cursoroffset =
             cursorpos - Point<std::int16_t>(position.x(), get_chat_top() + 5);
         Cursor::State sstate = slider.send_cursor(cursoroffset, clicking);
@@ -227,8 +227,8 @@ Cursor::State UIChatbar::send_cursor(bool clicking,
                 ydelta += CHAT_ROW_HEIGHT;
             }
             chat_box.setheight(1 + chat_rows * CHAT_ROW_HEIGHT);
-            slider.setrows(row_pos, chat_rows, row_max);
-            slider.setvertical({0, CHAT_ROW_HEIGHT * chat_rows - 14});
+            slider.set_rows(row_pos, chat_rows, row_max);
+            slider.set_vertical({0, CHAT_ROW_HEIGHT * chat_rows - 14});
             return Cursor::CLICKING;
         } else {
             drag_chat_top = false;
@@ -250,7 +250,7 @@ void UIChatbar::send_line(std::string&& line, LineType type)
     ++row_max;
     row_pos = row_max;
 
-    slider.setrows(row_pos, chat_rows, row_max);
+    slider.set_rows(row_pos, chat_rows, row_max);
 
     row_texts.emplace(std::piecewise_construct,
                       std::forward_as_tuple(row_max),

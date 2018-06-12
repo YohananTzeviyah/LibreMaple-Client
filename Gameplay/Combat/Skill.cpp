@@ -142,27 +142,27 @@ void Skill::apply_stats(const Char& user, Attack& attack) const
     const SkillData::Stats stats = SkillData::get(skillid).get_stats(level);
 
     if (stats.fixdamage) {
-        attack.fixdamage = stats.fixdamage;
-        attack.damagetype = Attack::DMG_FIXED;
+        attack.fix_damage = stats.fixdamage;
+        attack.damage_type = Attack::DMG_FIXED;
     } else if (stats.matk) {
         attack.matk += stats.matk;
-        attack.damagetype = Attack::DMG_MAGIC;
+        attack.damage_type = Attack::DMG_MAGIC;
     } else {
-        attack.mindamage *= stats.damage;
-        attack.maxdamage *= stats.damage;
-        attack.damagetype = Attack::DMG_WEAPON;
+        attack.min_damage *= stats.damage;
+        attack.max_damage *= stats.damage;
+        attack.damage_type = Attack::DMG_WEAPON;
     }
     attack.critical += stats.critical;
-    attack.ignoredef += stats.ignoredef;
-    attack.mobcount = stats.mobcount;
-    attack.hrange = stats.hrange;
+    attack.ignore_def += stats.ignoredef;
+    attack.mob_count = stats.mobcount;
+    attack.h_range = stats.hrange;
 
     switch (attack.type) {
     case Attack::RANGED:
-        attack.hitcount = stats.bulletcount;
+        attack.hit_count = stats.bulletcount;
         break;
     default:
-        attack.hitcount = stats.attackcount;
+        attack.hit_count = stats.attackcount;
     }
 
     if (!stats.range.empty())
@@ -196,7 +196,7 @@ void Skill::apply_stats(const Char& user, Attack& attack) const
     }
 }
 
-void Skill::apply_hiteffects(const AttackUser& user, Mob& target) const
+void Skill::apply_hit_effects(const AttackUser& user, Mob& target) const
 {
     hiteffect->apply(user, target);
 

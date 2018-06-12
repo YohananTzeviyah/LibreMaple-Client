@@ -18,6 +18,7 @@
 #include "Player.h"
 
 #include "../Constants.h"
+#include "../Data/SkillData.h"
 #include "../Data/WeaponData.h"
 #include "../IO/UI.h"
 #include "../IO/UITypes/UIStatsInfo.h"
@@ -27,7 +28,7 @@
 
 namespace jrc
 {
-const PlayerNullState nullstate;
+const PlayerNullState null_state;
 
 const PlayerState* get_state(Char::State state)
 {
@@ -71,7 +72,7 @@ Player::Player(const CharEntry& entry)
     set_direction(false);
 }
 
-Player::Player() : Char(0, {}, "")
+Player::Player() : Char{0, {}, ""}
 {
 }
 
@@ -79,10 +80,10 @@ void Player::respawn(Point<std::int16_t> pos, bool uw)
 {
     set_position(pos.x(), pos.y());
     underwater = uw;
-    keysdown.clear();
+    keys_down.clear();
     attacking = false;
     ladder = nullptr;
-    nullstate.update_state(*this);
+    null_state.update_state(*this);
 }
 
 void Player::send_action(KeyAction::Id action, bool down)
@@ -91,18 +92,18 @@ void Player::send_action(KeyAction::Id action, bool down)
     if (pst) {
         pst->send_action(*this, action, down);
     }
-    keysdown[action] = down;
+    keys_down[action] = down;
 }
 
-void Player::recalc_stats(bool equipchanged)
+void Player::recalc_stats(bool equip_changed)
 {
-    Weapon::Type weapontype = get_weapon_type();
+    Weapon::Type weapon_type = get_weapon_type();
 
-    stats.set_weapontype(weapontype);
-    stats.init_totalstats();
+    stats.set_weapon_type(weapon_type);
+    stats.init_total_stats();
 
-    if (equipchanged) {
-        inventory.recalc_stats(weapontype);
+    if (equip_changed) {
+        inventory.recalc_stats(weapon_type);
     }
 
     for (auto stat : Equipstat::values) {
@@ -110,11 +111,17 @@ void Player::recalc_stats(bool equipchanged)
         stats.add_value(stat, inventory_total);
     }
 
-    auto passive_skills = skillbook.collect_passives();
-    for (auto& passive : passive_skills) {
-        std::int32_t skill_id = passive.first;
-        std::int32_t skill_level = passive.second;
-
+    /* // More efficient alternative to `skillbook.collect_passives()` when the
+       // order of applying passives doesn't matter. IMO it shouldn't matter,
+       // but in the interest of being compliant with standard Maplestory
+       // behavior, we retain the order.
+    for (const auto& [skill_id, entry] : skillbook.get_entries()) {
+        if (SkillData::get(skill_id).is_passive()) {
+            passive_buffs.apply_buff(stats, skill_id, entry.level);
+        }
+    }
+    */
+    for (auto&& [skill_id, skill_level] : skillbook.collect_passives()) {
         passive_buffs.apply_buff(stats, skill_id, skill_level);
     }
 
@@ -122,10 +129,10 @@ void Player::recalc_stats(bool equipchanged)
         active_buffs.apply_buff(stats, buff.stat, buff.value);
     }
 
-    stats.close_totalstats();
+    stats.close_total_stats();
 
-    if (auto statsinfo = UI::get().get_element<UIStatsinfo>()) {
-        statsinfo->update_all_stats();
+    if (auto stats_info = UI::get().get_element<UIStatsinfo>(); stats_info) {
+        stats_info->update_all_stats();
     }
 }
 
@@ -173,23 +180,23 @@ std::int8_t Player::update(const Physics& physics)
     const PlayerState* pst = get_state(state);
     if (pst) {
         pst->update(*this);
-        physics.move_object(phobj);
+        physics.move_object(ph_obj);
 
         bool aniend = Char::update(physics, get_stance_speed());
         if (aniend && attacking) {
             attacking = false;
-            nullstate.update_state(*this);
+            null_state.update_state(*this);
         } else {
             pst->update_state(*this);
         }
     }
 
     std::uint8_t stancebyte = flip ? state : state + 1;
-    Movement newmove(phobj, stancebyte);
-    bool needupdate = lastmove.hasmoved(newmove);
+    Movement newmove(ph_obj, stancebyte);
+    bool needupdate = last_move.hasmoved(newmove);
     if (needupdate) {
         MovePlayerPacket(newmove).dispatch();
-        lastmove = newmove;
+        last_move = newmove;
     }
 
     return get_layer();
@@ -204,7 +211,7 @@ std::int8_t Player::get_integer_attack_speed() const
 
     const WeaponData& weapon = WeaponData::get(weapon_id);
 
-    std::int8_t base_speed = stats.get_attackspeed();
+    std::int8_t base_speed = stats.get_attack_speed();
     std::int8_t weapon_speed = weapon.get_speed();
     return base_speed + weapon_speed;
 }
@@ -258,7 +265,7 @@ SpecialMove::ForbidReason Player::can_use(const SpecialMove& move) const
     const Job& job = stats.get_job();
     std::uint16_t hp = stats.get_stat(Maplestat::HP);
     std::uint16_t mp = stats.get_stat(Maplestat::MP);
-    std::uint16_t bullets = inventory.get_bulletcount();
+    std::uint16_t bullets = inventory.get_bullet_count();
 
     return move.can_use(level, weapon, job, hp, mp, bullets);
 }
@@ -293,20 +300,20 @@ Attack Player::prepare_attack(bool skill) const
 
     Attack attack;
     attack.type = attacktype;
-    attack.mindamage = stats.get_mindamage();
-    attack.maxdamage = stats.get_maxdamage();
+    attack.min_damage = stats.get_min_damage();
+    attack.max_damage = stats.get_max_damage();
     if (degenerate) {
-        attack.mindamage /= 10;
-        attack.maxdamage /= 10;
+        attack.min_damage /= 10;
+        attack.max_damage /= 10;
     }
     attack.critical = stats.get_critical();
-    attack.ignoredef = stats.get_ignoredef();
+    attack.ignore_def = stats.get_ignore_def();
     attack.accuracy = stats.get_total(Equipstat::ACC);
-    attack.playerlevel = stats.get_stat(Maplestat::LEVEL);
+    attack.player_level = stats.get_stat(Maplestat::LEVEL);
     attack.range = stats.get_range();
-    attack.bullet = inventory.get_bulletid();
+    attack.bullet = inventory.get_bullet_id();
     attack.origin = get_position();
-    attack.toleft = !flip;
+    attack.to_left = !flip;
     attack.speed = static_cast<std::uint8_t>(get_integer_attack_speed());
 
     return attack;
@@ -314,10 +321,10 @@ Attack Player::prepare_attack(bool skill) const
 
 void Player::rush(double targetx)
 {
-    if (phobj.onground) {
+    if (ph_obj.on_ground) {
         std::uint16_t delay = get_attack_delay(1);
-        phobj.movexuntil(targetx, delay);
-        phobj.set_flag(PhysicsObject::TURN_AT_EDGES);
+        ph_obj.move_x_until(targetx, delay);
+        ph_obj.set_flag(PhysicsObject::TURN_AT_EDGES);
     }
 }
 
@@ -339,14 +346,14 @@ MobAttackResult Player::damage(const MobAttack& attack)
     std::int32_t damage = stats.calculate_damage(attack.watk);
     show_damage(damage);
 
-    bool fromleft = attack.origin.x() > phobj.get_x();
+    bool fromleft = attack.origin.x() > ph_obj.get_x();
 
     bool missed = damage <= 0;
     bool immovable = ladder || state == DIED;
     bool knockback = !missed && !immovable;
     if (knockback && randomizer.above(stats.get_stance())) {
-        phobj.hspeed = fromleft ? -1.5 : 1.5;
-        phobj.vforce -= 3.5;
+        ph_obj.hspeed = fromleft ? -1.5 : 1.5;
+        ph_obj.v_force -= 3.5;
     }
 
     std::uint8_t direction = fromleft ? 0 : 1;
@@ -424,7 +431,7 @@ void Player::change_job(std::uint16_t jobid)
 void Player::set_seat(nullable_ptr<const Seat> seat)
 {
     if (seat) {
-        set_position(seat->getpos());
+        set_position(seat->get_pos());
         set_state(Char::SIT);
     }
 }
@@ -434,33 +441,33 @@ void Player::set_ladder(nullable_ptr<const Ladder> ldr)
     ladder = ldr;
 
     if (ladder) {
-        phobj.set_x(ldr->get_x());
-        phobj.hspeed = 0.0;
-        phobj.vspeed = 0.0;
-        phobj.fhlayer = 7;
+        ph_obj.set_x(ldr->get_x());
+        ph_obj.hspeed = 0.0;
+        ph_obj.vspeed = 0.0;
+        ph_obj.fh_layer = 7;
         set_state(ldr->is_ladder() ? Char::LADDER : Char::ROPE);
         set_direction(false);
     }
 }
 
-float Player::get_walkforce() const
+float Player::get_walk_force() const
 {
     return 0.05f +
            0.11f * static_cast<float>(stats.get_total(Equipstat::SPEED)) / 100;
 }
 
-float Player::get_jumpforce() const
+float Player::get_jump_force() const
 {
     return 1.0f +
            3.5f * static_cast<float>(stats.get_total(Equipstat::JUMP)) / 100;
 }
 
-float Player::get_climbforce() const
+float Player::get_climb_force() const
 {
     return static_cast<float>(stats.get_total(Equipstat::SPEED)) / 100;
 }
 
-float Player::get_flyforce() const
+float Player::get_fly_force() const
 {
     return 0.25f;
 }
@@ -472,7 +479,7 @@ bool Player::is_underwater() const
 
 bool Player::is_key_down(KeyAction::Id action) const
 {
-    return keysdown.count(action) ? keysdown.at(action) : false;
+    return keys_down.count(action) ? keys_down.at(action) : false;
 }
 
 CharStats& Player::get_stats()

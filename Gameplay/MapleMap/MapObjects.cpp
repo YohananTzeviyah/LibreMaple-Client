@@ -103,6 +103,11 @@ nullable_ptr<const MapObject> MapObjects::get(std::int32_t oid) const
     return iter != objects.end() ? iter->second.get() : nullptr;
 }
 
+std::size_t MapObjects::size() const noexcept
+{
+    return objects.size();
+}
+
 MapObjects::underlying_t::iterator MapObjects::begin()
 {
     return objects.begin();

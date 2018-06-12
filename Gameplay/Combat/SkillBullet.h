@@ -26,9 +26,7 @@ namespace jrc
 class SkillBullet
 {
 public:
-    virtual ~SkillBullet()
-    {
-    }
+    virtual ~SkillBullet() = default;
 
     virtual Animation get(const Char& user, std::int32_t bulletid) const = 0;
 

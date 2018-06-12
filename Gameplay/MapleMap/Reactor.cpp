@@ -36,7 +36,7 @@ Reactor::Reactor(std::int32_t o,
 
 void Reactor::draw(double viewx, double viewy, float alpha) const
 {
-    Point<std::int16_t> absp = phobj.get_absolute(viewx, viewy, alpha);
+    Point<std::int16_t> absp = ph_obj.get_absolute(viewx, viewy, alpha);
     Point<std::int16_t> shift = {0, normal.get_dimensions().y() / 2};
     normal.draw(absp - shift, alpha);
 }

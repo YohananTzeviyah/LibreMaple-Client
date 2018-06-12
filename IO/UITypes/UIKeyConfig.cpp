@@ -274,6 +274,12 @@ void UIKeyConfig::double_click(Point<std::int16_t>)
 
 void UIKeyConfig::send_icon(const Icon& icon, Point<std::int16_t> cursor_pos)
 {
+    Console::get().print(
+        str::concat("sending icon at {",
+                    std::to_string(cursor_pos.x() - position.x()),
+                    ", ",
+                    std::to_string(cursor_pos.y() - position.y()),
+                    '}'));
     if (std::uint8_t slot = slot_by_position(cursor_pos); slot) {
         update_key_slot(slot, icon.get_action_id());
     }

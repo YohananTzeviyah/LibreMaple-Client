@@ -19,14 +19,14 @@
 #include "../../Character/Char.h"
 #include "Attack.h"
 
+#include <unordered_map>
+
 namespace jrc
 {
 class SkillAction
 {
 public:
-    virtual ~SkillAction()
-    {
-    }
+    virtual ~SkillAction() = default;
 
     virtual void apply(Char& target, Attack::Type atype) const = 0;
 };
@@ -42,7 +42,7 @@ public:
 class RegularAction : public SkillAction
 {
 public:
-    void apply(Char& target, Attack::Type atype) const override;
+    void apply(Char& target, Attack::Type atk_type) const override;
 };
 
 class SingleAction : public SkillAction
@@ -75,7 +75,7 @@ public:
     void apply(Char& target, Attack::Type atype) const override;
 
 private:
-    std::map<std::int32_t, std::string> actions;
+    std::unordered_map<std::int32_t, std::string> actions;
     std::int32_t skillid;
 };
 } // namespace jrc

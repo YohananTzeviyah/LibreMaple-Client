@@ -30,17 +30,17 @@ void RegularAttack::apply_actions(Char& user, Attack::Type type) const
 
 void RegularAttack::apply_stats(const Char& user, Attack& attack) const
 {
-    attack.damagetype = Attack::DMG_WEAPON;
+    attack.damage_type = Attack::DMG_WEAPON;
     attack.skill = 0;
-    attack.mobcount = 1;
-    attack.hitcount = 1;
+    attack.mob_count = 1;
+    attack.hit_count = 1;
     attack.stance = user.get_look().get_stance();
     if (attack.type == Attack::CLOSE) {
         attack.range = user.get_afterimage().get_range();
     }
 }
 
-void RegularAttack::apply_hiteffects(const AttackUser&, Mob&) const
+void RegularAttack::apply_hit_effects(const AttackUser&, Mob&) const
 {
 }
 

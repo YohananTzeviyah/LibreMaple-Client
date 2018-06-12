@@ -56,9 +56,9 @@ public:
     void draw(float inter) const override;
     void update() override;
     Cursor::State send_cursor(bool pressed,
-                              Point<std::int16_t> position) override;
+                              Point<std::int16_t> cursor_position) override;
 
-    void add_buff(std::int32_t buffid, std::int32_t duration);
+    void add_buff(std::int32_t buff_id, std::int32_t duration);
 
 private:
     std::unordered_map<std::int32_t, BuffIcon> icons;

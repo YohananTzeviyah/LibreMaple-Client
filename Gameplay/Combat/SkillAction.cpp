@@ -19,16 +19,16 @@
 
 namespace jrc
 {
-void RegularAction::apply(Char& target, Attack::Type atype) const
+void RegularAction::apply(Char& target, Attack::Type atk_type) const
 {
-    Weapon::Type weapontype = target.get_weapon_type();
+    Weapon::Type weapon_type = target.get_weapon_type();
     bool degenerate;
-    switch (weapontype) {
+    switch (weapon_type) {
     case Weapon::BOW:
     case Weapon::CROSSBOW:
     case Weapon::CLAW:
     case Weapon::GUN:
-        degenerate = atype != Attack::RANGED;
+        degenerate = atk_type != Attack::RANGED;
         break;
     default:
         degenerate = false;

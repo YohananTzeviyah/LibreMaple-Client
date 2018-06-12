@@ -21,39 +21,38 @@ namespace jrc
 {
 TilesObjs::TilesObjs(nl::node src)
 {
-    auto tileset = src["info"]["tS"] + ".img";
-    for (auto tilenode : src["tile"]) {
-        Tile tile{tilenode, tileset};
+    std::string tile_set = src["info"]["tS"];
+    tile_set.append(".img", 4);
+    for (auto tile_node : src["tile"]) {
+        Tile tile{tile_node, tile_set};
         std::int8_t z = tile.get_z();
         tiles.emplace(z, std::move(tile));
     }
 
-    for (auto objnode : src["obj"]) {
-        Obj obj{objnode};
-        std::int8_t z = obj.getz();
+    for (auto obj_node : src["obj"]) {
+        Obj obj{obj_node};
+        std::int8_t z = obj.get_z();
         objs.emplace(z, std::move(obj));
     }
 }
 
-TilesObjs::TilesObjs()
-{
-}
+TilesObjs::TilesObjs() = default;
 
 void TilesObjs::update()
 {
-    for (auto& iter : objs) {
-        iter.second.update();
+    for (auto& [_, obj] : objs) {
+        obj.update();
     }
 }
 
-void TilesObjs::draw(Point<std::int16_t> viewpos, float alpha) const
+void TilesObjs::draw(Point<std::int16_t> view_pos, float alpha) const
 {
-    for (auto& iter : objs) {
-        iter.second.draw(viewpos, alpha);
+    for (auto& [_, obj] : objs) {
+        obj.draw(view_pos, alpha);
     }
 
-    for (auto& iter : tiles) {
-        iter.second.draw(viewpos);
+    for (auto& [_, tile] : tiles) {
+        tile.draw(view_pos);
     }
 }
 
@@ -64,15 +63,13 @@ MapTilesObjs::MapTilesObjs(nl::node src)
     }
 }
 
-MapTilesObjs::MapTilesObjs()
-{
-}
+MapTilesObjs::MapTilesObjs() = default;
 
 void MapTilesObjs::draw(Layer::Id layer,
-                        Point<std::int16_t> viewpos,
+                        Point<std::int16_t> view_pos,
                         float alpha) const
 {
-    layers[layer].draw(viewpos, alpha);
+    layers[layer].draw(view_pos, alpha);
 }
 
 void MapTilesObjs::update()

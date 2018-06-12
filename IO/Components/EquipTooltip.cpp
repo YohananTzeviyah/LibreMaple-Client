@@ -29,22 +29,22 @@ namespace jrc
 {
 EquipTooltip::EquipTooltip()
 {
-    nl::node itemtt = nl::nx::ui["UIToolTip.img"]["Item"];
+    nl::node item_tt = nl::nx::ui["UIToolTip.img"]["Item"];
 
-    top = itemtt["Frame"]["top"];
-    mid = itemtt["Frame"]["line"];
-    line = itemtt["Frame"]["dotline"];
-    bot = itemtt["Frame"]["bottom"];
-    base = itemtt["ItemIcon"]["base"];
-    cover = itemtt["ItemIcon"]["cover"];
-    shade = itemtt["ItemIcon"]["shade"];
+    top = item_tt["Frame"]["top"];
+    mid = item_tt["Frame"]["line"];
+    line = item_tt["Frame"]["dotline"];
+    bot = item_tt["Frame"]["bottom"];
+    base = item_tt["ItemIcon"]["base"];
+    cover = item_tt["ItemIcon"]["cover"];
+    shade = item_tt["ItemIcon"]["shade"];
 
     potential[Equip::POT_NONE] = {};
-    potential[Equip::POT_HIDDEN] = itemtt["ItemIcon"]["0"];
-    potential[Equip::POT_RARE] = itemtt["ItemIcon"]["1"];
-    potential[Equip::POT_EPIC] = itemtt["ItemIcon"]["2"];
-    potential[Equip::POT_UNIQUE] = itemtt["ItemIcon"]["3"];
-    potential[Equip::POT_LEGENDARY] = itemtt["ItemIcon"]["4"];
+    potential[Equip::POT_HIDDEN] = item_tt["ItemIcon"]["0"];
+    potential[Equip::POT_RARE] = item_tt["ItemIcon"]["1"];
+    potential[Equip::POT_EPIC] = item_tt["ItemIcon"]["2"];
+    potential[Equip::POT_UNIQUE] = item_tt["ItemIcon"]["3"];
+    potential[Equip::POT_LEGENDARY] = item_tt["ItemIcon"]["4"];
 
     requirements.push_back(Maplestat::LEVEL);
     requirements.push_back(Maplestat::STR);
@@ -52,57 +52,64 @@ EquipTooltip::EquipTooltip()
     requirements.push_back(Maplestat::INT);
     requirements.push_back(Maplestat::LUK);
 
-    reqstattextures[Maplestat::LEVEL][false] =
-        itemtt["Equip"]["Cannot"]["reqLEV"];
-    reqstattextures[Maplestat::LEVEL][true] = itemtt["Equip"]["Can"]["reqLEV"];
-    reqstattextures[Maplestat::FAME][false] =
-        itemtt["Equip"]["Cannot"]["reqPOP"];
-    reqstattextures[Maplestat::FAME][true] = itemtt["Equip"]["Can"]["reqPOP"];
-    reqstattextures[Maplestat::STR][false] =
-        itemtt["Equip"]["Cannot"]["reqSTR"];
-    reqstattextures[Maplestat::STR][true] = itemtt["Equip"]["Can"]["reqSTR"];
-    reqstattextures[Maplestat::DEX][false] =
-        itemtt["Equip"]["Cannot"]["reqDEX"];
-    reqstattextures[Maplestat::DEX][true] = itemtt["Equip"]["Can"]["reqDEX"];
-    reqstattextures[Maplestat::INT][false] =
-        itemtt["Equip"]["Cannot"]["reqINT"];
-    reqstattextures[Maplestat::INT][true] = itemtt["Equip"]["Can"]["reqINT"];
-    reqstattextures[Maplestat::LUK][false] =
-        itemtt["Equip"]["Cannot"]["reqLUK"];
-    reqstattextures[Maplestat::LUK][true] = itemtt["Equip"]["Can"]["reqLUK"];
+    req_stat_textures[Maplestat::LEVEL][false] =
+        item_tt["Equip"]["Cannot"]["reqLEV"];
+    req_stat_textures[Maplestat::LEVEL][true] =
+        item_tt["Equip"]["Can"]["reqLEV"];
+    req_stat_textures[Maplestat::FAME][false] =
+        item_tt["Equip"]["Cannot"]["reqPOP"];
+    req_stat_textures[Maplestat::FAME][true] =
+        item_tt["Equip"]["Can"]["reqPOP"];
+    req_stat_textures[Maplestat::STR][false] =
+        item_tt["Equip"]["Cannot"]["reqSTR"];
+    req_stat_textures[Maplestat::STR][true] =
+        item_tt["Equip"]["Can"]["reqSTR"];
+    req_stat_textures[Maplestat::DEX][false] =
+        item_tt["Equip"]["Cannot"]["reqDEX"];
+    req_stat_textures[Maplestat::DEX][true] =
+        item_tt["Equip"]["Can"]["reqDEX"];
+    req_stat_textures[Maplestat::INT][false] =
+        item_tt["Equip"]["Cannot"]["reqINT"];
+    req_stat_textures[Maplestat::INT][true] =
+        item_tt["Equip"]["Can"]["reqINT"];
+    req_stat_textures[Maplestat::LUK][false] =
+        item_tt["Equip"]["Cannot"]["reqLUK"];
+    req_stat_textures[Maplestat::LUK][true] =
+        item_tt["Equip"]["Can"]["reqLUK"];
 
-    reqstatpositions[Maplestat::LEVEL] = {98, 48};
-    reqstatpositions[Maplestat::STR] = {98, 64};
-    reqstatpositions[Maplestat::DEX] = {98, 72};
-    reqstatpositions[Maplestat::INT] = {173, 64};
-    reqstatpositions[Maplestat::LUK] = {173, 72};
+    req_stat_positions[Maplestat::LEVEL] = {98, 48};
+    req_stat_positions[Maplestat::STR] = {98, 64};
+    req_stat_positions[Maplestat::DEX] = {98, 72};
+    req_stat_positions[Maplestat::INT] = {173, 64};
+    req_stat_positions[Maplestat::LUK] = {173, 72};
 
-    reqset[false] = {itemtt["Equip"]["Cannot"], Charset::LEFT};
-    reqset[true] = {itemtt["Equip"]["Can"], Charset::LEFT};
+    req_set[false] = {item_tt["Equip"]["Cannot"], Charset::LEFT};
+    req_set[true] = {item_tt["Equip"]["Can"], Charset::LEFT};
 
-    jobsback = itemtt["Equip"]["Job"]["normal"];
-    jobs[false][0] = itemtt["Equip"]["Job"]["disable"]["0"];
-    jobs[false][1] = itemtt["Equip"]["Job"]["disable"]["1"];
-    jobs[false][2] = itemtt["Equip"]["Job"]["disable"]["2"];
-    jobs[false][3] = itemtt["Equip"]["Job"]["disable"]["3"];
-    jobs[false][4] = itemtt["Equip"]["Job"]["disable"]["4"];
-    jobs[false][5] = itemtt["Equip"]["Job"]["disable"]["5"];
-    jobs[true][0] = itemtt["Equip"]["Job"]["enable"]["0"];
-    jobs[true][1] = itemtt["Equip"]["Job"]["enable"]["1"];
-    jobs[true][2] = itemtt["Equip"]["Job"]["enable"]["2"];
-    jobs[true][3] = itemtt["Equip"]["Job"]["enable"]["3"];
-    jobs[true][4] = itemtt["Equip"]["Job"]["enable"]["4"];
-    jobs[true][5] = itemtt["Equip"]["Job"]["enable"]["5"];
+    jobs_back = item_tt["Equip"]["Job"]["normal"];
+    jobs[false][0] = item_tt["Equip"]["Job"]["disable"]["0"];
+    jobs[false][1] = item_tt["Equip"]["Job"]["disable"]["1"];
+    jobs[false][2] = item_tt["Equip"]["Job"]["disable"]["2"];
+    jobs[false][3] = item_tt["Equip"]["Job"]["disable"]["3"];
+    jobs[false][4] = item_tt["Equip"]["Job"]["disable"]["4"];
+    jobs[false][5] = item_tt["Equip"]["Job"]["disable"]["5"];
+    jobs[true][0] = item_tt["Equip"]["Job"]["enable"]["0"];
+    jobs[true][1] = item_tt["Equip"]["Job"]["enable"]["1"];
+    jobs[true][2] = item_tt["Equip"]["Job"]["enable"]["2"];
+    jobs[true][3] = item_tt["Equip"]["Job"]["enable"]["3"];
+    jobs[true][4] = item_tt["Equip"]["Job"]["enable"]["4"];
+    jobs[true][5] = item_tt["Equip"]["Job"]["enable"]["5"];
 
-    invpos = 0;
+    inv_pos = 0;
 }
 
 void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
 {
-    if (ivp == invpos)
+    if (ivp == inv_pos) {
         return;
+    }
 
-    invpos = ivp;
+    inv_pos = ivp;
 
     const Player& player = Stage::get().get_player();
 
@@ -120,86 +127,87 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
     }
 
     auto oequip = player.get_inventory().get_equip(invtype, ivp);
-    if (!oequip)
+    if (!oequip) {
         return;
+    }
 
     const Equip& equip = *oequip;
 
     std::int32_t item_id = equip.get_item_id();
 
-    const EquipData& equipdata = EquipData::get(item_id);
-    const ItemData& itemdata = equipdata.get_item_data();
+    const EquipData& equip_data = EquipData::get(item_id);
+    const ItemData& item_data = equip_data.get_item_data();
     const CharStats& stats = player.get_stats();
 
     height = 500;
 
-    itemicon = itemdata.get_icon(true);
+    item_icon = item_data.get_icon(true);
 
     for (auto& ms : requirements) {
-        canequip[ms] = stats.get_stat(ms) >= equipdata.get_req_stat(ms);
-        std::string reqstr = std::to_string(equipdata.get_req_stat(ms));
+        can_equip[ms] = stats.get_stat(ms) >= equip_data.get_req_stat(ms);
+        std::string reqstr = std::to_string(equip_data.get_req_stat(ms));
         reqstr.insert(0, 3 - reqstr.size(), '0');
-        reqstatstrings[ms] = reqstr;
+        req_stat_strings[ms] = reqstr;
     }
 
-    okjobs.clear();
-    switch (equipdata.get_req_stat(Maplestat::JOB)) {
+    ok_jobs.clear();
+    switch (equip_data.get_req_stat(Maplestat::JOB)) {
     case 0:
-        okjobs.push_back(0);
-        okjobs.push_back(1);
-        okjobs.push_back(2);
-        okjobs.push_back(3);
-        okjobs.push_back(4);
-        okjobs.push_back(5);
-        canequip[Maplestat::JOB] = true;
+        ok_jobs.push_back(0);
+        ok_jobs.push_back(1);
+        ok_jobs.push_back(2);
+        ok_jobs.push_back(3);
+        ok_jobs.push_back(4);
+        ok_jobs.push_back(5);
+        can_equip[Maplestat::JOB] = true;
         break;
     case 1:
-        okjobs.push_back(1);
-        canequip[Maplestat::JOB] =
+        ok_jobs.push_back(1);
+        can_equip[Maplestat::JOB] =
             (stats.get_stat(Maplestat::JOB) / 100 == 1) ||
             (stats.get_stat(Maplestat::JOB) / 100 >= 20);
         break;
     case 2:
-        okjobs.push_back(2);
-        canequip[Maplestat::JOB] = stats.get_stat(Maplestat::JOB) / 100 == 2;
+        ok_jobs.push_back(2);
+        can_equip[Maplestat::JOB] = stats.get_stat(Maplestat::JOB) / 100 == 2;
         break;
     case 4:
-        okjobs.push_back(3);
-        canequip[Maplestat::JOB] = stats.get_stat(Maplestat::JOB) / 100 == 3;
+        ok_jobs.push_back(3);
+        can_equip[Maplestat::JOB] = stats.get_stat(Maplestat::JOB) / 100 == 3;
         break;
     case 8:
-        okjobs.push_back(4);
-        canequip[Maplestat::JOB] = stats.get_stat(Maplestat::JOB) / 100 == 4;
+        ok_jobs.push_back(4);
+        can_equip[Maplestat::JOB] = stats.get_stat(Maplestat::JOB) / 100 == 4;
         break;
     case 16:
-        okjobs.push_back(5);
-        canequip[Maplestat::JOB] = stats.get_stat(Maplestat::JOB) / 100 == 5;
+        ok_jobs.push_back(5);
+        can_equip[Maplestat::JOB] = stats.get_stat(Maplestat::JOB) / 100 == 5;
         break;
     default:
-        canequip[Maplestat::JOB] = false;
+        can_equip[Maplestat::JOB] = false;
     }
 
     prank = equip.get_potrank();
     switch (prank) {
     case Equip::POT_HIDDEN:
-        potflag = Text(Text::A11M, Text::CENTER, Text::RED);
-        potflag.change_text("(Hidden Potential)");
+        pot_flag = Text(Text::A11M, Text::CENTER, Text::RED);
+        pot_flag.change_text("(Hidden Potential)");
         break;
     case Equip::POT_RARE:
-        potflag = Text(Text::A11M, Text::CENTER, Text::WHITE);
-        potflag.change_text("(Rare Item)");
+        pot_flag = Text(Text::A11M, Text::CENTER, Text::WHITE);
+        pot_flag.change_text("(Rare Item)");
         break;
     case Equip::POT_EPIC:
-        potflag = Text(Text::A11M, Text::CENTER, Text::WHITE);
-        potflag.change_text("(Epic Item)");
+        pot_flag = Text(Text::A11M, Text::CENTER, Text::WHITE);
+        pot_flag.change_text("(Epic Item)");
         break;
     case Equip::POT_UNIQUE:
-        potflag = Text(Text::A11M, Text::CENTER, Text::WHITE);
-        potflag.change_text("(Unique Item)");
+        pot_flag = Text(Text::A11M, Text::CENTER, Text::WHITE);
+        pot_flag.change_text("(Unique Item)");
         break;
     case Equip::POT_LEGENDARY:
-        potflag = Text(Text::A11M, Text::CENTER, Text::WHITE);
-        potflag.change_text("(Legendary Item)");
+        pot_flag = Text(Text::A11M, Text::CENTER, Text::WHITE);
+        pot_flag.change_text("(Legendary Item)");
         break;
     default:
         height -= 16;
@@ -226,7 +234,7 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
         namecolor = Text::WHITE;
     }
 
-    std::string name_str{itemdata.get_name()};
+    std::string name_str{item_data.get_name()};
     if (equip.get_level() > 0) {
         name_str.append(" (+");
         name_str.append(std::to_string(equip.get_level()));
@@ -234,9 +242,9 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
     }
     name = {Text::A12B, Text::CENTER, namecolor, std::move(name_str), 400};
 
-    std::string_view desc_text = itemdata.get_desc();
-    hasdesc = desc_text.size() > 0;
-    if (hasdesc) {
+    std::string_view desc_text = item_data.get_desc();
+    has_desc = desc_text.size() > 0;
+    if (has_desc) {
         desc = {
             Text::A12M, Text::LEFT, Text::WHITE, std::string{desc_text}, 250};
         height += desc.height() + 10;
@@ -245,21 +253,21 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
     category = {Text::A11L,
                 Text::LEFT,
                 Text::WHITE,
-                str::concat("CATEGORY: ", equipdata.get_type())};
+                str::concat("CATEGORY: ", equip_data.get_type())};
 
-    is_weapon = equipdata.is_weapon();
+    is_weapon = equip_data.is_weapon();
     if (is_weapon) {
         const WeaponData& weapon = WeaponData::get(item_id);
-        wepspeed = {Text::A11L,
-                    Text::LEFT,
-                    Text::WHITE,
-                    str::concat("ATTACK SPEED: ", weapon.get_speed_string())};
+        wep_speed = {Text::A11L,
+                     Text::LEFT,
+                     Text::WHITE,
+                     str::concat("ATTACK SPEED: ", weapon.get_speed_string())};
     } else {
         height -= 18;
     }
 
-    hasslots = equip.get_slots() > 0 || equip.get_level() > 0;
-    if (hasslots) {
+    has_slots = equip.get_slots() > 0 || equip.get_level() > 0;
+    if (has_slots) {
         slots = {Text::A11L,
                  Text::LEFT,
                  Text::WHITE,
@@ -282,7 +290,7 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
          es = static_cast<Equipstat::Id>(es + 1)) {
         if (equip.get_stat(es) > 0) {
             std::int16_t delta =
-                equip.get_stat(es) - equipdata.get_def_stat(es);
+                equip.get_stat(es) - equip_data.get_def_stat(es);
             std::string stat_str = std::to_string(equip.get_stat(es));
             if (delta != 0) {
                 stat_str.append(" (");
@@ -303,7 +311,7 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
 
 void EquipTooltip::draw(Point<std::int16_t> pos) const
 {
-    if (invpos == 0) {
+    if (inv_pos == 0) {
         return;
     }
 
@@ -314,36 +322,37 @@ void EquipTooltip::draw(Point<std::int16_t> pos) const
 
     name.draw(pos + Point<std::int16_t>{130, 3});
     if (prank != Equip::POT_NONE) {
-        potflag.draw(pos + Point<std::int16_t>{130, 20});
+        pot_flag.draw(pos + Point<std::int16_t>{130, 20});
         pos.shift_y(16);
     }
     pos.shift_y(26);
 
     line.draw({pos});
 
-    base.draw(pos + Point<std::int16_t>{10, 10});
-    shade.draw(pos + Point<std::int16_t>{10, 10});
-    itemicon.draw({pos + Point<std::int16_t>{20, 82}, 2.0f, 2.0f});
-    potential[prank].draw(pos + Point<std::int16_t>{10, 10});
-    cover.draw(pos + Point<std::int16_t>{10, 10});
+    auto pos_plus_10 = pos + 10;
+    base.draw(pos_plus_10);
+    shade.draw(pos_plus_10);
+    item_icon.draw({pos + Point<std::int16_t>{20, 82}, 2.0f, 2.0f});
+    potential[prank].draw(pos_plus_10);
+    cover.draw(pos_plus_10);
 
     pos.shift_y(12);
 
     for (Maplestat::Id ms : requirements) {
-        Point<std::int16_t> reqpos = reqstatpositions[ms];
-        bool reqok = canequip[ms];
-        reqstattextures[ms][reqok].draw({pos + reqpos});
-        reqset[reqok].draw(reqstatstrings[ms],
-                           6,
-                           {pos + reqpos + Point<std::int16_t>{54, 0}});
+        Point<std::int16_t> req_pos = req_stat_positions[ms];
+        bool req_ok = can_equip[ms];
+        req_stat_textures[ms][req_ok].draw({pos + req_pos});
+        req_set[req_ok].draw(req_stat_strings[ms],
+                             6,
+                             {pos + req_pos + Point<std::int16_t>{54, 0}});
     }
 
     pos.shift_y(88);
 
     Point<std::int16_t> job_position(pos + Point<std::int16_t>{8, 0});
-    jobsback.draw(job_position);
-    for (auto& jbit : okjobs) {
-        jobs[canequip[Maplestat::JOB]].at(jbit).draw(job_position);
+    jobs_back.draw(job_position);
+    for (auto& ok_job : ok_jobs) {
+        jobs[can_equip[Maplestat::JOB]][ok_job].draw(job_position);
     }
 
     line.draw({pos + Point<std::int16_t>{0, 30}});
@@ -355,7 +364,7 @@ void EquipTooltip::draw(Point<std::int16_t> pos) const
     pos.shift_y(18);
 
     if (is_weapon) {
-        wepspeed.draw(pos + Point<std::int16_t>{10, 0});
+        wep_speed.draw(pos + Point<std::int16_t>{10, 0});
         pos.shift_y(18);
     }
 
@@ -368,14 +377,14 @@ void EquipTooltip::draw(Point<std::int16_t> pos) const
         pos.shift_y(18);
     }
 
-    if (hasslots) {
+    if (has_slots) {
         slots.draw(pos + Point<std::int16_t>{10, 0});
         pos.shift_y(18);
         hammers.draw(pos + Point<std::int16_t>{10, 0});
         pos.shift_y(18);
     }
 
-    if (hasdesc) {
+    if (has_desc) {
         line.draw({pos + Point<std::int16_t>{0, 5}});
         desc.draw({pos + Point<std::int16_t>{10, 6}});
     }

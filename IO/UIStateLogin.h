@@ -31,7 +31,7 @@ public:
     void draw(float inter, Point<std::int16_t> cursor) const override;
     void update() override;
 
-    void doubleclick(Point<std::int16_t> pos) override;
+    void double_click(Point<std::int16_t> pos) override;
     void
     send_key(KeyType::Id type, std::int32_t action, bool pressed) override;
     Cursor::State send_cursor(Cursor::State mst,

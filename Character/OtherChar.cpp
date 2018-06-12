@@ -61,11 +61,11 @@ std::int8_t OtherChar::update(const Physics& physics)
         set_state(laststate);
     }
 
-    phobj.hspeed = lastmove.xpos - phobj.crnt_x();
-    phobj.vspeed = lastmove.ypos - phobj.crnt_y();
-    phobj.move();
+    ph_obj.hspeed = lastmove.xpos - ph_obj.crnt_x();
+    ph_obj.vspeed = lastmove.ypos - ph_obj.crnt_y();
+    ph_obj.move();
 
-    physics.get_fht().update_fh(phobj);
+    physics.get_fht().update_fh(ph_obj);
 
     bool aniend = Char::update(physics, get_stance_speed());
     if (aniend && attacking) {
