@@ -264,14 +264,14 @@ void Mob::next_move()
         case HIT:
         case STAND:
             set_stance(MOVE);
-            flip = randomizer.next_bool();
+            flip = Randomizer::next_bool();
             break;
         case MOVE:
         case JUMP:
-            if (can_jump && ph_obj.on_ground && randomizer.below(0.25f)) {
+            if (can_jump && ph_obj.on_ground && Randomizer::below(0.25f)) {
                 set_stance(JUMP);
             } else {
-                switch (randomizer.next_int(3)) {
+                switch (Randomizer::next_int(3)) {
                 case 0:
                     set_stance(STAND);
                     break;
@@ -293,7 +293,7 @@ void Mob::next_move()
         }
 
         if (stance == MOVE && can_fly) {
-            fly_direction = randomizer.next_enum(NUM_DIRECTIONS);
+            fly_direction = Randomizer::next_enum(NUM_DIRECTIONS);
         }
     } else {
         set_stance(STAND);
@@ -485,37 +485,37 @@ double Mob::calculate_max_damage(std::int16_t level_delta,
 std::vector<std::pair<std::int32_t, bool>>
 Mob::calculate_damage(const Attack& attack)
 {
-    double mindamage;
-    double maxdamage;
-    float hitchance;
+    double min_damage;
+    double max_damage;
+    float hit_chance;
     float critical;
-    std::int16_t leveldelta = level - attack.player_level;
-    if (leveldelta < 0) {
-        leveldelta = 0;
+    std::int16_t level_delta = level - attack.player_level;
+    if (level_delta < 0) {
+        level_delta = 0;
     }
 
-    Attack::DamageType damagetype = attack.damage_type;
-    switch (damagetype) {
+    Attack::DamageType damage_type = attack.damage_type;
+    switch (damage_type) {
     case Attack::DMG_WEAPON:
     case Attack::DMG_MAGIC:
-        mindamage = calculate_min_damage(
-            leveldelta, attack.min_damage, damagetype == Attack::DMG_MAGIC);
-        maxdamage = calculate_max_damage(
-            leveldelta, attack.max_damage, damagetype == Attack::DMG_MAGIC);
-        hitchance = calculate_hit_chance(leveldelta, attack.accuracy);
+        min_damage = calculate_min_damage(
+            level_delta, attack.min_damage, damage_type == Attack::DMG_MAGIC);
+        max_damage = calculate_max_damage(
+            level_delta, attack.max_damage, damage_type == Attack::DMG_MAGIC);
+        hit_chance = calculate_hit_chance(level_delta, attack.accuracy);
         critical = attack.critical;
         break;
     case Attack::DMG_FIXED:
-        mindamage = attack.fix_damage;
-        maxdamage = attack.fix_damage;
-        hitchance = 1.0f;
+        min_damage = attack.fix_damage;
+        max_damage = attack.fix_damage;
+        hit_chance = 1.0f;
         critical = 0.0f;
         break;
     }
 
     std::vector<std::pair<std::int32_t, bool>> result(attack.hit_count);
     std::generate(result.begin(), result.end(), [&]() {
-        return next_damage(mindamage, maxdamage, hitchance, critical);
+        return next_damage(min_damage, max_damage, hit_chance, critical);
     });
 
     update_movement();
@@ -529,15 +529,15 @@ std::pair<std::int32_t, bool> Mob::next_damage(double min_damage,
                                                float hit_chance,
                                                float critical) const
 {
-    bool hit = randomizer.below(hit_chance);
+    bool hit = Randomizer::below(hit_chance);
     if (!hit) {
         return {0, false};
     }
 
     constexpr double DAMAGECAP = 999999.0;
 
-    double damage = randomizer.next_real(min_damage, max_damage);
-    bool iscritical = randomizer.below(critical);
+    double damage = Randomizer::next_real(min_damage, max_damage);
+    bool iscritical = Randomizer::below(critical);
     if (iscritical) {
         damage *= 1.5;
     }
@@ -576,7 +576,7 @@ MobAttack Mob::create_touch_attack() const
 
     auto minattack = static_cast<std::int32_t>(watk * 0.8f);
     std::int32_t maxattack = watk;
-    std::int32_t attack = randomizer.next_int(minattack, maxattack);
+    std::int32_t attack = Randomizer::next_int(minattack, maxattack);
     return {attack, get_position(), id, oid};
 }
 

@@ -23,7 +23,7 @@
 
 namespace jrc
 {
-UISoftkey::UISoftkey(Callback c) : callback(c)
+UISoftkey::UISoftkey(Callback c) : callback{c}
 {
     nl::node src = nl::nx::ui["Login.img"]["Common"]["SoftKey"];
 
@@ -66,7 +66,7 @@ void UISoftkey::draw(float alpha) const
 {
     UIElement::draw(alpha);
 
-    entry.draw(position + Point<std::int16_t>(15, 43));
+    entry.draw(position + Point<std::int16_t>{15, 43});
 }
 
 Button::State UISoftkey::button_pressed(std::uint16_t id)
@@ -138,14 +138,14 @@ void UISoftkey::shufflekeys()
         reserve.push_back(i);
     }
     for (std::uint8_t i = 0; i < NUM_KEYS; ++i) {
-        std::size_t rand = random.next_int(reserve.size());
-        Point<std::int16_t> pos = keypos(reserve[rand]);
+        std::size_t rand = Randomizer::next_int(reserve.size());
+        Point<std::int16_t> pos = key_pos(reserve[rand]);
         buttons[BT_0 + i]->set_position(pos);
         reserve.erase(reserve.begin() + rand);
     }
 }
 
-Point<std::int16_t> UISoftkey::keypos(std::uint8_t num) const
+Point<std::int16_t> UISoftkey::key_pos(std::uint8_t num) const
 {
     return {12 + (num % 3) * 39, 94 + (num / 3) * 35};
 }

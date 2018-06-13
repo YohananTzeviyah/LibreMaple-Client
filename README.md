@@ -392,7 +392,7 @@ where you cloned all of the repos and extracted the ZIP files:
 LibreMaple is built against the latest version of
 [Clang](http://clang.llvm.org/) (6.0.X as of this writing), again for
 cross-platform considerations and efficiency. [The GCC](https://gcc.gnu.org/)
-(version 7.3.X as of this writing) is another excellent choice, especially for
+(version 8.1.X as of this writing) is another excellent choice, especially for
 those on GNU+Linux operating systems (or other OSs which default to GCC), but
 GCC is **not** officially supported by LibreMaple.
 

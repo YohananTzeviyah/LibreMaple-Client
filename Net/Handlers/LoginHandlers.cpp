@@ -137,7 +137,7 @@ void CharnameResponseHandler::handle(InPacket& recv) const
     }
 
     // Notify the character creation screen.
-    if (auto charcreation = UI::get().get_element<UICharcreation>()) {
+    if (auto charcreation = UI::get().get_element<UICharCreation>()) {
         charcreation->send_naming_result(used);
     }
 

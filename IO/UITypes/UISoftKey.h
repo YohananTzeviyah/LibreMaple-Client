@@ -44,7 +44,7 @@ protected:
 
 private:
     void shufflekeys();
-    Point<std::int16_t> keypos(std::uint8_t) const;
+    Point<std::int16_t> key_pos(std::uint8_t) const;
 
     enum Buttons {
         BT_0,
@@ -63,12 +63,11 @@ private:
         BT_OK
     };
 
-    static constexpr std::size_t MIN_SIZE = 6;
-    static constexpr std::size_t MAX_SIZE = 12;
-    static constexpr std::uint8_t NUM_KEYS = 10;
+    static constexpr const std::size_t MIN_SIZE = 6;
+    static constexpr const std::size_t MAX_SIZE = 12;
+    static constexpr const std::uint8_t NUM_KEYS = 10;
 
     Callback callback;
     Text entry;
-    Randomizer random;
 };
 } // namespace jrc

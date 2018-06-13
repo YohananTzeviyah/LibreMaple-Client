@@ -80,7 +80,7 @@ public:
     Attack prepare_attack(bool skill) const;
 
     //! Execute a rush movement.
-    void rush(double targetx);
+    void rush(double target_x);
 
     //! Check wether the player is invincible.
     bool is_invincible() const override;
@@ -97,22 +97,22 @@ public:
     //! Change a skill.
     void change_skill(std::int32_t skill_id,
                       std::int32_t level,
-                      std::int32_t masterlevel,
+                      std::int32_t master_level,
                       std::int64_t expiration);
     //! Put a skill on cooldown.
-    void add_cooldown(std::int32_t skill_id, std::int32_t time);
+    void add_cooldown(std::int32_t skill_id, std::int32_t cool_time);
     //! Check if a skill is on cooldown.
     bool has_cooldown(std::int32_t skill_id) const;
 
     //! Change the player's level, display the levelup effect.
     void change_level(std::uint16_t level);
     //! Change the player's job, display the job change effect.
-    void change_job(std::uint16_t jobid);
+    void change_job(std::uint16_t job_id);
 
     //! Return the character's level.
     std::uint16_t get_level() const override;
     //! Return the character's level of a skill.
-    std::int32_t get_skill_level(std::int32_t skillid) const override;
+    std::int32_t get_skill_level(std::int32_t skill_id) const override;
     //! Return the character's attacking speed.
     std::int8_t get_integer_attack_speed() const override;
 
@@ -174,8 +174,6 @@ private:
     std::unordered_map<KeyAction::Id, bool> keys_down;
 
     Movement last_move;
-
-    Randomizer randomizer;
 
     nullable_ptr<const Ladder> ladder;
     bool underwater;

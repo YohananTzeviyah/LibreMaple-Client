@@ -319,11 +319,11 @@ Attack Player::prepare_attack(bool skill) const
     return attack;
 }
 
-void Player::rush(double targetx)
+void Player::rush(double target_x)
 {
     if (ph_obj.on_ground) {
         std::uint16_t delay = get_attack_delay(1);
-        ph_obj.move_x_until(targetx, delay);
+        ph_obj.move_x_until(target_x, delay);
         ph_obj.set_flag(PhysicsObject::TURN_AT_EDGES);
     }
 }
@@ -346,17 +346,17 @@ MobAttackResult Player::damage(const MobAttack& attack)
     std::int32_t damage = stats.calculate_damage(attack.watk);
     show_damage(damage);
 
-    bool fromleft = attack.origin.x() > ph_obj.get_x();
+    bool from_left = attack.origin.x() > ph_obj.get_x();
 
     bool missed = damage <= 0;
     bool immovable = ladder || state == DIED;
     bool knockback = !missed && !immovable;
-    if (knockback && randomizer.above(stats.get_stance())) {
-        ph_obj.hspeed = fromleft ? -1.5 : 1.5;
+    if (knockback && Randomizer::above(stats.get_stance())) {
+        ph_obj.hspeed = from_left ? -1.5 : 1.5;
         ph_obj.v_force -= 3.5;
     }
 
-    std::uint8_t direction = fromleft ? 0 : 1;
+    std::uint8_t direction = from_left ? 0 : 1;
     return {attack, damage, direction};
 }
 
@@ -377,20 +377,20 @@ bool Player::has_buff(Buffstat::Id stat) const
 
 void Player::change_skill(std::int32_t skill_id,
                           std::int32_t skill_level,
-                          std::int32_t masterlevel,
+                          std::int32_t master_level,
                           std::int64_t expiration)
 {
     std::int32_t old_level = skillbook.get_level(skill_id);
-    skillbook.set_skill(skill_id, skill_level, masterlevel, expiration);
+    skillbook.set_skill(skill_id, skill_level, master_level, expiration);
 
     if (old_level != skill_level) {
         recalc_stats(false);
     }
 }
 
-void Player::add_cooldown(std::int32_t skill_id, std::int32_t cooltime)
+void Player::add_cooldown(std::int32_t skill_id, std::int32_t cool_time)
 {
-    cooldowns[skill_id] = cooltime;
+    cooldowns[skill_id] = cool_time;
 }
 
 bool Player::has_cooldown(std::int32_t skill_id) const
@@ -417,15 +417,15 @@ std::uint16_t Player::get_level() const
     return stats.get_stat(Maplestat::LEVEL);
 }
 
-std::int32_t Player::get_skill_level(std::int32_t skillid) const
+std::int32_t Player::get_skill_level(std::int32_t skill_id) const
 {
-    return skillbook.get_level(skillid);
+    return skillbook.get_level(skill_id);
 }
 
-void Player::change_job(std::uint16_t jobid)
+void Player::change_job(std::uint16_t job_id)
 {
     show_effect_id(CharEffect::JOBCHANGE);
-    stats.change_job(jobid);
+    stats.change_job(job_id);
 }
 
 void Player::set_seat(nullable_ptr<const Seat> seat)

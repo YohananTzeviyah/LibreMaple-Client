@@ -39,11 +39,11 @@ public:
     std::int32_t get_id() const;
 
 private:
-    enum State { NORMAL, DISABLED, MOUSEOVER };
+    enum State { NORMAL, DISABLED, MOUSE_OVER };
 
     Texture normal;
     Texture disabled;
-    Texture mouseover;
+    Texture mouse_over;
     Text name;
     Text level;
     std::int32_t id;
@@ -55,9 +55,9 @@ private:
 class UISkillbook : public UIDragElement<PosSKILL>
 {
 public:
-    static constexpr Type TYPE = SKILLBOOK;
-    static constexpr bool FOCUSED = false;
-    static constexpr bool TOGGLED = true;
+    static constexpr const Type TYPE = SKILLBOOK;
+    static constexpr const bool FOCUSED = false;
+    static constexpr const bool TOGGLED = true;
 
     UISkillbook(const CharStats& stats, const Skillbook& skillbook);
 
@@ -86,7 +86,7 @@ private:
     bool can_raise(std::int32_t skill_id) const;
     void send_spup(std::uint16_t row);
 
-    Job::Level joblevel_by_tab(std::uint16_t tab) const;
+    Job::Level job_level_by_tab(std::uint16_t tab) const;
     SkillIcon* icon_by_position(Point<std::int16_t> cursorpos);
 
     enum Buttons : std::uint16_t {
@@ -103,28 +103,28 @@ private:
         BT_SPUP3
     };
 
-    static constexpr std::int16_t ROWS = 4;
-    static constexpr std::int16_t ROW_HEIGHT = 40;
-    static constexpr Point<std::int16_t> SKILL_OFFSET = {11, 93};
-    static constexpr Point<std::int16_t> ICON_OFFSET = {2, 33};
-    static constexpr Point<std::int16_t> LINE_OFFSET = {2, 37};
+    static constexpr const std::int16_t ROWS = 4;
+    static constexpr const std::int16_t ROW_HEIGHT = 40;
+    static constexpr const Point<std::int16_t> SKILL_OFFSET = {11, 93};
+    static constexpr const Point<std::int16_t> ICON_OFFSET = {2, 33};
+    static constexpr const Point<std::int16_t> LINE_OFFSET = {2, 37};
 
     const CharStats& stats;
     const Skillbook& skillbook;
 
     Slider slider;
-    Texture skille;
-    Texture skilld;
+    Texture skill_e;
+    Texture skill_d;
     Texture line;
-    Texture bookicon;
-    Text booktext;
-    Text splabel;
+    Texture book_icon;
+    Text book_text;
+    Text sp_label;
 
     Job job;
     std::int16_t sp;
 
     std::uint16_t tab;
-    std::uint16_t skillcount;
+    std::uint16_t skill_count;
     std::uint16_t offset;
 
     std::vector<SkillIcon> icons;

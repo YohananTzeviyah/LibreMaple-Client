@@ -175,7 +175,6 @@ private:
     EffectLayer effects;
     Text name_label;
     MobHpBar hp_bar;
-    Randomizer randomizer;
 
     TimedBool do_show_hp;
 

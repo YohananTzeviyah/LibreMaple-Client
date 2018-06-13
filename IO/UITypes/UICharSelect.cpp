@@ -180,7 +180,7 @@ Button::State UICharSelect::button_pressed(std::uint16_t bid)
             return Button::NORMAL;
         case BT_CREATECHAR:
             active = false;
-            UI::get().emplace<UICharcreation>();
+            UI::get().emplace<UICharCreation>();
             return Button::NORMAL;
         case BT_DELETECHAR:
             send_deletion();

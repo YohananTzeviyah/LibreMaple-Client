@@ -94,7 +94,7 @@ void Npc::draw(double viewx, double viewy, float alpha) const
 
     if (!hide_name) {
         name_label.draw(absp);
-        func_label.draw(absp + Point<std::int16_t>(0, 18));
+        func_label.draw(absp + Point<std::int16_t>{0, 18});
     }
 }
 
@@ -107,9 +107,9 @@ std::int8_t Npc::update(const Physics& physics)
     physics.move_object(ph_obj);
 
     if (animations.count(stance)) {
-        bool aniend = animations.at(stance).update();
-        if (aniend && states.size() > 0) {
-            std::size_t next_stance = random.next_int(states.size());
+        bool ani_end = animations.at(stance).update();
+        if (ani_end && states.size() > 0) {
+            std::size_t next_stance = Randomizer::next_int(states.size());
             std::string new_stance = states[next_stance];
             set_stance(new_stance);
         }
@@ -147,12 +147,12 @@ bool Npc::in_range(Point<std::int16_t> cursor_pos,
     Point<std::int16_t> absp = get_position() + view_pos;
     Point<std::int16_t> dim = animations.count(stance)
                                   ? animations.at(stance).get_dimensions()
-                                  : Point<std::int16_t>();
+                                  : Point<std::int16_t>{};
 
-    return Rectangle<std::int16_t>(absp.x() - dim.x() / 2,
+    return Rectangle<std::int16_t>{absp.x() - dim.x() / 2,
                                    absp.x() + dim.x() / 2,
                                    absp.y() - dim.y(),
-                                   absp.y())
+                                   absp.y()}
         .contains(cursor_pos);
 }
 } // namespace jrc

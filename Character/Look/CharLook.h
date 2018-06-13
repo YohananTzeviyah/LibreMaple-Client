@@ -38,8 +38,8 @@ public:
     void draw(const DrawArgument& args, float alpha) const;
     void draw(Point<std::int16_t> pos,
               bool flip,
-              Stance::Id stance,
-              Expression::Id expression) const;
+              Stance::Id inter_stance,
+              Expression::Id inter_expression) const;
     bool update(std::uint16_t timestep);
 
     void set_hair(std::int32_t hairid);
@@ -49,16 +49,16 @@ public:
     void remove_equip(Equipslot::Id slot);
 
     void attack(bool degenerate);
-    void attack(Stance::Id stance);
-    void set_stance(Stance::Id stance);
-    void set_expression(Expression::Id expression);
+    void attack(Stance::Id new_stance);
+    void set_stance(Stance::Id new_stance);
+    void set_expression(Expression::Id new_expression);
     void set_action(const std::string& ac_str);
     void set_direction(bool mirrored);
     void set_alerted(std::int64_t millis);
 
     bool is_twohanded(Stance::Id stance) const;
-    std::uint16_t get_attackdelay(std::size_t no,
-                                  std::uint8_t first_frame) const;
+    std::uint16_t get_attack_delay(std::size_t no,
+                                   std::uint8_t first_frame) const;
     std::uint8_t get_frame() const;
     Stance::Id get_stance() const;
 
@@ -67,19 +67,19 @@ public:
     const Face* get_face() const;
     const CharEquips& get_equips() const;
 
-    // Initialize draw_info.
+    //! Initialize draw_info.
     static void init();
 
 private:
     void update_two_handed();
     void draw(const DrawArgument& args,
-              Stance::Id interstance,
-              Expression::Id interexp,
-              std::uint8_t interframe,
-              std::uint8_t interfcframe) const;
+              Stance::Id inter_stance,
+              Expression::Id inter_expression,
+              std::uint8_t inter_frame,
+              std::uint8_t inter_exp_frame) const;
     std::uint16_t get_delay(Stance::Id stance, std::uint8_t frame) const;
-    std::uint8_t getnextframe(Stance::Id stance, std::uint8_t frame) const;
-    Stance::Id getattackstance(std::uint8_t attack, bool degenerate) const;
+    std::uint8_t get_next_frame(Stance::Id stance, std::uint8_t frame) const;
+    Stance::Id get_attack_stance(std::uint8_t attack, bool degenerate) const;
 
     Nominal<Stance::Id> stance;
     Nominal<std::uint8_t> st_frame;
@@ -100,12 +100,11 @@ private:
     const Face* face;
     CharEquips equips;
 
-    Randomizer randomizer;
     TimedBool alerted;
 
     static BodyDrawinfo draw_info;
-    static std::unordered_map<std::int32_t, Hair> hairstyles;
-    static std::unordered_map<std::int32_t, Face> facetypes;
-    static std::unordered_map<std::int32_t, Body> bodytypes;
+    static std::unordered_map<std::int32_t, Hair> hair_styles;
+    static std::unordered_map<std::int32_t, Face> face_types;
+    static std::unordered_map<std::int32_t, Body> body_types;
 };
 } // namespace jrc

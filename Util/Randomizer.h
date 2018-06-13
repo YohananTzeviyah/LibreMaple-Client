@@ -21,73 +21,87 @@
 
 namespace jrc
 {
-// Can be used to generate random numbers.
+//! Can be used to generate random numbers.
 class Randomizer
 {
 public:
-    bool next_bool() const
+    static bool next_bool() noexcept
     {
         return next_int(2) == 1;
     }
 
-    bool below(float percent) const
+    static bool below(float percent) noexcept
     {
         return next_real(1.0f) < percent;
     }
 
-    bool above(float percent) const
+    static bool above(float percent) noexcept
     {
         return next_real(1.0f) > percent;
     }
 
     template<class T>
-    T next_real(T to) const
+    static T next_real(T to) noexcept
     {
-        return next_real<T>(0, to);
+        return next_real<T>(static_cast<T>(0), to);
     }
 
     template<class T>
-    T next_real(T from, T to) const
+    static T next_real(T from, T to) noexcept
     {
-        if (from >= to)
+        if (from >= to) {
             return from;
+        }
 
-        std::uniform_real_distribution<T> range(from, to);
-        std::random_device rd;
-        std::default_random_engine engine{rd()};
-        return range(engine);
+        std::uniform_real_distribution<T> range{from, to};
+        return range(state.mersenne_twister);
     }
 
     template<class T>
-    T next_int(T to) const
+    static T next_int(T to) noexcept
     {
-        return next_int<T>(0, to);
+        return next_int<T>(static_cast<T>(0), to);
     }
 
     template<class T>
-    T next_int(T from, T to) const
+    static T next_int(T from, T to) noexcept
     {
-        if (from >= to)
+        if (from >= to) {
             return from;
+        }
 
-        std::uniform_int_distribution<T> range(from, to - 1);
-        std::random_device rd;
-        std::default_random_engine engine{rd()};
-        return range(engine);
+        std::uniform_int_distribution<T> range{from, to - 1};
+        return range(state.mersenne_twister);
     }
 
     template<class E>
-    E next_enum(E to = E::LENGTH) const
+    static E next_enum(E to = E::LENGTH) noexcept
     {
         return next_enum(E(), to);
     }
 
     template<class E>
-    E next_enum(E from, E to) const
+    static E next_enum(E from, E to) noexcept
     {
-        auto next_underlying =
-            next_int<typename std::underlying_type<E>::type>(from, to);
-        return static_cast<E>(next_underlying);
+        return static_cast<E>(next_int<std::underlying_type_t<E>>(from, to));
     }
+
+private:
+    struct RandomizerState {
+        RandomizerState() : mersenne_twister{std::random_device{}()}
+        {
+        }
+        RandomizerState(const RandomizerState&) = delete;
+        RandomizerState(RandomizerState&&) = delete;
+
+        ~RandomizerState() noexcept = default;
+
+        RandomizerState& operator=(const RandomizerState&) = delete;
+        RandomizerState& operator=(RandomizerState&&) = delete;
+
+        std::mt19937_64 mersenne_twister;
+    };
+
+    inline static thread_local RandomizerState state;
 };
 } // namespace jrc

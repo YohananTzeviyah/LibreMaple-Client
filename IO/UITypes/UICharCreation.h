@@ -27,14 +27,14 @@
 namespace jrc
 {
 //! Character creation screen.
-class UICharcreation : public UIElement
+class UICharCreation : public UIElement
 {
 public:
     static constexpr Type TYPE = CHARCREATION;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = false;
 
-    UICharcreation();
+    UICharCreation();
 
     void draw(float) const override;
     void update() override;
@@ -74,14 +74,13 @@ private:
         BT_CHARC_GEMDERR,
     };
 
-    std::vector<Sprite> sprites_lookboard;
+    std::vector<Sprite> sprites_look_board;
     Texture sky;
     Texture cloud;
-    float cloudfx;
-    Texture nameboard;
-    Textfield namechar;
-    CharLook newchar;
-    Randomizer randomizer;
+    float cloud_fx;
+    Texture name_board;
+    Textfield name_char;
+    CharLook new_char;
 
     BoolPair<std::vector<std::uint8_t>> skins;
     BoolPair<std::vector<std::uint8_t>> hair_colors;
@@ -95,21 +94,21 @@ private:
     bool named;
     bool female;
     std::size_t skin;
-    std::size_t haircolor;
+    std::size_t hair_color;
     std::size_t face;
     std::size_t hair;
     std::size_t top;
-    std::size_t bot;
+    std::size_t bottom;
     std::size_t shoe;
     std::size_t weapon;
-    Text facename;
-    Text hairname;
-    Text haircname;
-    Text bodyname;
-    Text topname;
-    Text botname;
-    Text shoename;
-    Text wepname;
-    Text gendername;
+    Text face_name;
+    Text hair_name;
+    Text hair_cname;
+    Text body_name;
+    Text top_name;
+    Text bottom_name;
+    Text shoe_name;
+    Text weapon_name;
+    Text gender_name;
 };
 } // namespace jrc

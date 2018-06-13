@@ -70,7 +70,6 @@ private:
     std::string stance;
     bool control;
 
-    Randomizer random;
     Text name_label;
     Text func_label;
 };

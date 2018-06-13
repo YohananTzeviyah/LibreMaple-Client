@@ -28,85 +28,85 @@
 
 namespace jrc
 {
-UICharcreation::UICharcreation()
+UICharCreation::UICharCreation()
 {
     nl::node src = nl::nx::ui["Login.img"];
-    nl::node bgsrc = nl::nx::map["Back"]["login.img"]["back"];
-    nl::node crsrc = src["NewChar"];
+    nl::node bg_src = nl::nx::map["Back"]["login.img"]["back"];
+    nl::node cr_src = src["NewChar"];
 
-    sky = bgsrc["2"];
-    cloud = bgsrc["27"];
+    sky = bg_src["2"];
+    cloud = bg_src["27"];
 
-    sprites.emplace_back(bgsrc["15"], Point<std::int16_t>(153, 685));
-    sprites.emplace_back(bgsrc["16"], Point<std::int16_t>(200, 400));
-    sprites.emplace_back(bgsrc["17"], Point<std::int16_t>(160, 263));
-    sprites.emplace_back(bgsrc["18"], Point<std::int16_t>(349, 1220));
+    sprites.emplace_back(bg_src["15"], Point<std::int16_t>{153, 685});
+    sprites.emplace_back(bg_src["16"], Point<std::int16_t>{200, 400});
+    sprites.emplace_back(bg_src["17"], Point<std::int16_t>{160, 263});
+    sprites.emplace_back(bg_src["18"], Point<std::int16_t>{349, 1220});
     sprites.emplace_back(src["Common"]["frame"],
-                         Point<std::int16_t>(400, 290));
+                         Point<std::int16_t>{400, 290});
 
-    nameboard = crsrc["charName"];
+    name_board = cr_src["charName"];
 
-    sprites_lookboard.emplace_back(crsrc["charSet"],
-                                   Point<std::int16_t>(450, 115));
-    sprites_lookboard.emplace_back(crsrc["avatarSel"]["0"]["normal"],
-                                   Point<std::int16_t>(461, 217));
-    sprites_lookboard.emplace_back(crsrc["avatarSel"]["1"]["normal"],
-                                   Point<std::int16_t>(461, 236));
-    sprites_lookboard.emplace_back(crsrc["avatarSel"]["2"]["normal"],
-                                   Point<std::int16_t>(461, 255));
-    sprites_lookboard.emplace_back(crsrc["avatarSel"]["3"]["normal"],
-                                   Point<std::int16_t>(461, 274));
-    sprites_lookboard.emplace_back(crsrc["avatarSel"]["4"]["normal"],
-                                   Point<std::int16_t>(461, 293));
-    sprites_lookboard.emplace_back(crsrc["avatarSel"]["5"]["normal"],
-                                   Point<std::int16_t>(461, 312));
-    sprites_lookboard.emplace_back(crsrc["avatarSel"]["6"]["normal"],
-                                   Point<std::int16_t>(461, 331));
-    sprites_lookboard.emplace_back(crsrc["avatarSel"]["7"]["normal"],
-                                   Point<std::int16_t>(461, 350));
-    sprites_lookboard.emplace_back(crsrc["avatarSel"]["8"]["normal"],
-                                   Point<std::int16_t>(461, 369));
+    sprites_look_board.emplace_back(cr_src["charSet"],
+                                   Point<std::int16_t>{450, 115});
+    sprites_look_board.emplace_back(cr_src["avatarSel"]["0"]["normal"],
+                                   Point<std::int16_t>{461, 217});
+    sprites_look_board.emplace_back(cr_src["avatarSel"]["1"]["normal"],
+                                   Point<std::int16_t>{461, 236});
+    sprites_look_board.emplace_back(cr_src["avatarSel"]["2"]["normal"],
+                                   Point<std::int16_t>{461, 255});
+    sprites_look_board.emplace_back(cr_src["avatarSel"]["3"]["normal"],
+                                   Point<std::int16_t>{461, 274});
+    sprites_look_board.emplace_back(cr_src["avatarSel"]["4"]["normal"],
+                                   Point<std::int16_t>{461, 293});
+    sprites_look_board.emplace_back(cr_src["avatarSel"]["5"]["normal"],
+                                   Point<std::int16_t>{461, 312});
+    sprites_look_board.emplace_back(cr_src["avatarSel"]["6"]["normal"],
+                                   Point<std::int16_t>{461, 331});
+    sprites_look_board.emplace_back(cr_src["avatarSel"]["7"]["normal"],
+                                   Point<std::int16_t>{461, 350});
+    sprites_look_board.emplace_back(cr_src["avatarSel"]["8"]["normal"],
+                                   Point<std::int16_t>{461, 369});
 
     buttons[BT_CHARC_OK] = std::make_unique<MapleButton>(
-        crsrc["BtYes"], Point<std::int16_t>(482, 292));
+        cr_src["BtYes"], Point<std::int16_t>{482, 292});
     buttons[BT_CHARC_CANCEL] = std::make_unique<MapleButton>(
-        crsrc["BtNo"], Point<std::int16_t>(555, 292));
+        cr_src["BtNo"], Point<std::int16_t>{555, 292});
     buttons[BT_CHARC_FACEL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<std::int16_t>(521, 216));
+        cr_src["BtLeft"], Point<std::int16_t>{521, 216});
     buttons[BT_CHARC_FACER] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<std::int16_t>(645, 216));
+        cr_src["BtRight"], Point<std::int16_t>{645, 216});
     buttons[BT_CHARC_HAIRL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<std::int16_t>(521, 235));
+        cr_src["BtLeft"], Point<std::int16_t>{521, 235});
     buttons[BT_CHARC_HAIRR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<std::int16_t>(645, 235));
+        cr_src["BtRight"], Point<std::int16_t>{645, 235});
     buttons[BT_CHARC_HAIRCL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<std::int16_t>(521, 254));
+        cr_src["BtLeft"], Point<std::int16_t>{521, 254});
     buttons[BT_CHARC_HAIRCR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<std::int16_t>(645, 254));
+        cr_src["BtRight"], Point<std::int16_t>{645, 254});
     buttons[BT_CHARC_SKINL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<std::int16_t>(521, 273));
+        cr_src["BtLeft"], Point<std::int16_t>{521, 273});
     buttons[BT_CHARC_SKINR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<std::int16_t>(645, 273));
+        cr_src["BtRight"], Point<std::int16_t>{645, 273});
     buttons[BT_CHARC_TOPL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<std::int16_t>(521, 292));
+        cr_src["BtLeft"], Point<std::int16_t>{521, 292});
     buttons[BT_CHARC_TOPR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<std::int16_t>(645, 292));
+        cr_src["BtRight"], Point<std::int16_t>{645, 292});
     buttons[BT_CHARC_BOTL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<std::int16_t>(521, 311));
+        cr_src["BtLeft"], Point<std::int16_t>{521, 311});
     buttons[BT_CHARC_BOTR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<std::int16_t>(645, 311));
+        cr_src["BtRight"], Point<std::int16_t>{645, 311});
     buttons[BT_CHARC_SHOESL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<std::int16_t>(521, 330));
+        cr_src["BtLeft"], Point<std::int16_t>{521, 330});
     buttons[BT_CHARC_SHOESR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<std::int16_t>(645, 330));
+        cr_src["BtRight"], Point<std::int16_t>{645, 330});
     buttons[BT_CHARC_WEPL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<std::int16_t>(521, 349));
+        cr_src["BtLeft"], Point<std::int16_t>{521, 349});
     buttons[BT_CHARC_WEPR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<std::int16_t>(645, 348));
+        cr_src["BtRight"], Point<std::int16_t>{645, 348});
     buttons[BT_CHARC_GENDERL] = std::make_unique<MapleButton>(
-        crsrc["BtLeft"], Point<std::int16_t>(521, 368));
+        cr_src["BtLeft"], Point<std::int16_t>{521, 368});
     buttons[BT_CHARC_GEMDERR] = std::make_unique<MapleButton>(
-        crsrc["BtRight"], Point<std::int16_t>(645, 368));
+        cr_src["BtRight"], Point<std::int16_t>{645, 368});
 
     buttons[BT_CHARC_FACEL]->set_active(false);
     buttons[BT_CHARC_FACER]->set_active(false);
@@ -127,22 +127,22 @@ UICharcreation::UICharcreation()
     buttons[BT_CHARC_GENDERL]->set_active(false);
     buttons[BT_CHARC_GEMDERR]->set_active(false);
 
-    namechar = {
+    name_char = {
         Text::A13M, Text::LEFT, Text::WHITE, {{490, 219}, {630, 243}}, 12};
-    namechar.set_state(Textfield::FOCUSED);
+    name_char.set_state(Textfield::FOCUSED);
 
-    facename = {Text::A11M, Text::CENTER, Text::BLACK};
-    hairname = {Text::A11M, Text::CENTER, Text::BLACK};
-    haircname = {Text::A11M, Text::CENTER, Text::BLACK};
-    bodyname = {Text::A11M, Text::CENTER, Text::BLACK};
-    topname = {Text::A11M, Text::CENTER, Text::BLACK};
-    botname = {Text::A11M, Text::CENTER, Text::BLACK};
-    shoename = {Text::A11M, Text::CENTER, Text::BLACK};
-    wepname = {Text::A11M, Text::CENTER, Text::BLACK};
-    gendername = {Text::A11M, Text::CENTER, Text::BLACK};
+    face_name = {Text::A11M, Text::CENTER, Text::BLACK};
+    hair_name = {Text::A11M, Text::CENTER, Text::BLACK};
+    hair_cname = {Text::A11M, Text::CENTER, Text::BLACK};
+    body_name = {Text::A11M, Text::CENTER, Text::BLACK};
+    top_name = {Text::A11M, Text::CENTER, Text::BLACK};
+    bottom_name = {Text::A11M, Text::CENTER, Text::BLACK};
+    shoe_name = {Text::A11M, Text::CENTER, Text::BLACK};
+    weapon_name = {Text::A11M, Text::CENTER, Text::BLACK};
+    gender_name = {Text::A11M, Text::CENTER, Text::BLACK};
 
     nl::node mkinfo = nl::nx::etc["MakeCharInfo.img"]["Info"];
-    for (std::int32_t i = 0; i < 2; ++i) {
+    for (auto i = 0; i < 2; ++i) {
         bool f;
         nl::node mk_n;
         if (i == 0) {
@@ -153,10 +153,10 @@ UICharcreation::UICharcreation()
             mk_n = mkinfo["CharMale"];
         }
 
-        for (auto subnode : mk_n) {
-            int num = stoi(subnode.name());
-            for (auto idnode : subnode) {
-                int value = idnode;
+        for (auto sub_node : mk_n) {
+            int num = stoi(sub_node.name());
+            for (auto id_node : sub_node) {
+                int value = id_node;
                 switch (num) {
                 case 0:
                     faces[f].push_back(value);
@@ -190,58 +190,58 @@ UICharcreation::UICharcreation()
     female = false;
     randomize_look();
 
-    newchar.set_direction(true);
+    new_char.set_direction(true);
 
     position = {0, 0};
     dimension = {Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT};
     active = true;
-    cloudfx = 200.0f;
+    cloud_fx = 200.0f;
 }
 
-void UICharcreation::randomize_look()
+void UICharCreation::randomize_look()
 {
-    hair = randomizer.next_int(hairs[female].size());
-    face = randomizer.next_int(faces[female].size());
-    skin = randomizer.next_int(skins[female].size());
-    haircolor = randomizer.next_int(hair_colors[female].size());
-    top = randomizer.next_int(tops[female].size());
-    bot = randomizer.next_int(bots[female].size());
-    shoe = randomizer.next_int(shoes[female].size());
-    weapon = randomizer.next_int(weapons[female].size());
+    hair = Randomizer::next_int(hairs[female].size());
+    face = Randomizer::next_int(faces[female].size());
+    skin = Randomizer::next_int(skins[female].size());
+    hair_color = Randomizer::next_int(hair_colors[female].size());
+    top = Randomizer::next_int(tops[female].size());
+    bottom = Randomizer::next_int(bots[female].size());
+    shoe = Randomizer::next_int(shoes[female].size());
+    weapon = Randomizer::next_int(weapons[female].size());
 
-    newchar.set_body(skins[female][skin]);
-    newchar.set_face(faces[female][face]);
-    newchar.set_hair(hairs[female][hair] + hair_colors[female][haircolor]);
-    newchar.add_equip(tops[female][top]);
-    newchar.add_equip(bots[female][bot]);
-    newchar.add_equip(shoes[female][shoe]);
-    newchar.add_equip(weapons[female][weapon]);
+    new_char.set_body(skins[female][skin]);
+    new_char.set_face(faces[female][face]);
+    new_char.set_hair(hairs[female][hair] + hair_colors[female][hair_color]);
+    new_char.add_equip(tops[female][top]);
+    new_char.add_equip(bots[female][bottom]);
+    new_char.add_equip(shoes[female][shoe]);
+    new_char.add_equip(weapons[female][weapon]);
 
-    bodyname.change_text(std::string{newchar.get_body()->get_name()});
-    facename.change_text(std::string{newchar.get_face()->get_name()});
-    hairname.change_text(std::string{newchar.get_hair()->get_name()});
-    haircname.change_text(std::string{newchar.get_hair()->get_color()});
+    body_name.change_text(std::string{new_char.get_body()->get_name()});
+    face_name.change_text(std::string{new_char.get_face()->get_name()});
+    hair_name.change_text(std::string{new_char.get_hair()->get_name()});
+    hair_cname.change_text(std::string{new_char.get_hair()->get_color()});
 
-    topname.change_text(std::string{get_equip_name(Equipslot::TOP)});
-    botname.change_text(std::string{get_equip_name(Equipslot::PANTS)});
-    shoename.change_text(std::string{get_equip_name(Equipslot::SHOES)});
-    wepname.change_text(std::string{get_equip_name(Equipslot::WEAPON)});
-    gendername.change_text(female ? "Female" : "Male");
+    top_name.change_text(std::string{get_equip_name(Equipslot::TOP)});
+    bottom_name.change_text(std::string{get_equip_name(Equipslot::PANTS)});
+    shoe_name.change_text(std::string{get_equip_name(Equipslot::SHOES)});
+    weapon_name.change_text(std::string{get_equip_name(Equipslot::WEAPON)});
+    gender_name.change_text(female ? "Female" : "Male");
 }
 
-Button::State UICharcreation::button_pressed(std::uint16_t id)
+Button::State UICharCreation::button_pressed(std::uint16_t id)
 {
     switch (id) {
     case BT_CHARC_OK:
         if (named) {
-            std::string cname = namechar.get_text();
+            std::string cname = name_char.get_text();
             std::uint16_t cjob = 1;
             std::int32_t cface = faces[female][face];
             std::int32_t chair = hairs[female][hair];
-            std::uint8_t chairc = hair_colors[female][haircolor];
+            std::uint8_t chairc = hair_colors[female][hair_color];
             std::uint8_t cskin = skins[female][skin];
             std::int32_t ctop = tops[female][top];
-            std::int32_t cbot = bots[female][bot];
+            std::int32_t cbot = bots[female][bottom];
             std::int32_t cshoe = shoes[female][shoe];
             std::int32_t cwep = weapons[female][weapon];
             CreateCharPacket(cname,
@@ -258,9 +258,9 @@ Button::State UICharcreation::button_pressed(std::uint16_t id)
                 .dispatch();
             return Button::PRESSED;
         } else {
-            std::string name = namechar.get_text();
+            std::string name = name_char.get_text();
             if (name.size() >= 4) {
-                namechar.set_state(Textfield::NORMAL);
+                name_char.set_state(Textfield::NORMAL);
 
                 UI::get().disable();
                 UI::get().focus_text_field(nullptr);
@@ -294,7 +294,7 @@ Button::State UICharcreation::button_pressed(std::uint16_t id)
             buttons[BT_CHARC_GENDERL]->set_active(false);
             buttons[BT_CHARC_GEMDERR]->set_active(false);
             buttons[BT_CHARC_CANCEL]->set_state(Button::NORMAL);
-            namechar.set_state(Textfield::NORMAL);
+            name_char.set_state(Textfield::NORMAL);
             named = false;
             return Button::NORMAL;
         } else {
@@ -309,95 +309,95 @@ Button::State UICharcreation::button_pressed(std::uint16_t id)
         switch (id) {
         case BT_CHARC_FACEL:
             face = (face > 0) ? face - 1 : faces[female].size() - 1;
-            newchar.set_face(faces[female][face]);
-            facename.change_text(std::string{newchar.get_face()->get_name()});
+            new_char.set_face(faces[female][face]);
+            face_name.change_text(std::string{new_char.get_face()->get_name()});
             break;
         case BT_CHARC_FACER:
             face = (face < faces[female].size() - 1) ? face + 1 : 0;
-            newchar.set_face(faces[female][face]);
-            facename.change_text(std::string{newchar.get_face()->get_name()});
+            new_char.set_face(faces[female][face]);
+            face_name.change_text(std::string{new_char.get_face()->get_name()});
             break;
         case BT_CHARC_HAIRL:
             hair = (hair > 0) ? hair - 1 : hairs[female].size() - 1;
-            newchar.set_hair(hairs[female][hair] +
-                             hair_colors[female][haircolor]);
-            hairname.change_text(std::string{newchar.get_hair()->get_name()});
+            new_char.set_hair(hairs[female][hair] +
+                             hair_colors[female][hair_color]);
+            hair_name.change_text(std::string{new_char.get_hair()->get_name()});
             break;
         case BT_CHARC_HAIRR:
             hair = (hair < hairs[female].size() - 1) ? hair + 1 : 0;
-            newchar.set_hair(hairs[female][hair] +
-                             hair_colors[female][haircolor]);
-            hairname.change_text(std::string{newchar.get_hair()->get_name()});
+            new_char.set_hair(hairs[female][hair] +
+                             hair_colors[female][hair_color]);
+            hair_name.change_text(std::string{new_char.get_hair()->get_name()});
             break;
         case BT_CHARC_HAIRCL:
-            haircolor = (haircolor > 0) ? haircolor - 1
+            hair_color = (hair_color > 0) ? hair_color - 1
                                         : hair_colors[female].size() - 1;
-            newchar.set_hair(hairs[female][hair] +
-                             hair_colors[female][haircolor]);
-            haircname.change_text(
-                std::string{newchar.get_hair()->get_color()});
+            new_char.set_hair(hairs[female][hair] +
+                             hair_colors[female][hair_color]);
+            hair_cname.change_text(
+                std::string{new_char.get_hair()->get_color()});
             break;
         case BT_CHARC_HAIRCR:
-            haircolor = (haircolor < hair_colors[female].size() - 1)
-                            ? haircolor + 1
+            hair_color = (hair_color < hair_colors[female].size() - 1)
+                            ? hair_color + 1
                             : 0;
-            newchar.set_hair(hairs[female][hair] +
-                             hair_colors[female][haircolor]);
-            haircname.change_text(
-                std::string{newchar.get_hair()->get_color()});
+            new_char.set_hair(hairs[female][hair] +
+                             hair_colors[female][hair_color]);
+            hair_cname.change_text(
+                std::string{new_char.get_hair()->get_color()});
             break;
         case BT_CHARC_SKINL:
             skin = (skin > 0) ? skin - 1 : skins[female].size() - 1;
-            newchar.set_body(skins[female][skin]);
-            bodyname.change_text(std::string{newchar.get_body()->get_name()});
+            new_char.set_body(skins[female][skin]);
+            body_name.change_text(std::string{new_char.get_body()->get_name()});
             break;
         case BT_CHARC_SKINR:
             skin = (skin < skins[female].size() - 1) ? skin + 1 : 0;
-            newchar.set_body(skins[female][skin]);
-            bodyname.change_text(std::string{newchar.get_body()->get_name()});
+            new_char.set_body(skins[female][skin]);
+            body_name.change_text(std::string{new_char.get_body()->get_name()});
             break;
         case BT_CHARC_TOPL:
             top = (top > 0) ? top - 1 : tops[female].size() - 1;
-            newchar.add_equip(tops[female][top]);
-            topname.change_text(std::string{get_equip_name(Equipslot::TOP)});
+            new_char.add_equip(tops[female][top]);
+            top_name.change_text(std::string{get_equip_name(Equipslot::TOP)});
             break;
         case BT_CHARC_TOPR:
             top = (top < tops[female].size() - 1) ? top + 1 : 0;
-            newchar.add_equip(tops[female][top]);
-            topname.change_text(std::string{get_equip_name(Equipslot::TOP)});
+            new_char.add_equip(tops[female][top]);
+            top_name.change_text(std::string{get_equip_name(Equipslot::TOP)});
             break;
         case BT_CHARC_BOTL:
-            bot = (bot > 0) ? bot - 1 : bots[female].size() - 1;
-            newchar.add_equip(bots[female][bot]);
-            botname.change_text(std::string{get_equip_name(Equipslot::PANTS)});
+            bottom = (bottom > 0) ? bottom - 1 : bots[female].size() - 1;
+            new_char.add_equip(bots[female][bottom]);
+            bottom_name.change_text(std::string{get_equip_name(Equipslot::PANTS)});
             break;
         case BT_CHARC_BOTR:
-            bot = (bot < bots[female].size() - 1) ? bot + 1 : 0;
-            newchar.add_equip(bots[female][bot]);
-            botname.change_text(std::string{get_equip_name(Equipslot::PANTS)});
+            bottom = (bottom < bots[female].size() - 1) ? bottom + 1 : 0;
+            new_char.add_equip(bots[female][bottom]);
+            bottom_name.change_text(std::string{get_equip_name(Equipslot::PANTS)});
             break;
         case BT_CHARC_SHOESL:
             shoe = (shoe > 0) ? shoe - 1 : shoes[female].size() - 1;
-            newchar.add_equip(shoes[female][shoe]);
-            shoename.change_text(
+            new_char.add_equip(shoes[female][shoe]);
+            shoe_name.change_text(
                 std::string{get_equip_name(Equipslot::SHOES)});
             break;
         case BT_CHARC_SHOESR:
             shoe = (shoe < shoes[female].size() - 1) ? shoe + 1 : 0;
-            newchar.add_equip(shoes[female][shoe]);
-            shoename.change_text(
+            new_char.add_equip(shoes[female][shoe]);
+            shoe_name.change_text(
                 std::string{get_equip_name(Equipslot::SHOES)});
             break;
         case BT_CHARC_WEPL:
             weapon = (weapon > 0) ? weapon - 1 : weapons[female].size() - 1;
-            newchar.add_equip(weapons[female][weapon]);
-            wepname.change_text(
+            new_char.add_equip(weapons[female][weapon]);
+            weapon_name.change_text(
                 std::string{get_equip_name(Equipslot::WEAPON)});
             break;
         case BT_CHARC_WEPR:
             weapon = (weapon < weapons[female].size() - 1) ? weapon + 1 : 0;
-            newchar.add_equip(weapons[female][weapon]);
-            wepname.change_text(
+            new_char.add_equip(weapons[female][weapon]);
+            weapon_name.change_text(
                 std::string{get_equip_name(Equipslot::WEAPON)});
             break;
         case BT_CHARC_GENDERL:
@@ -411,21 +411,21 @@ Button::State UICharcreation::button_pressed(std::uint16_t id)
     return Button::PRESSED;
 }
 
-Cursor::State UICharcreation::send_cursor(bool clicked,
+Cursor::State UICharCreation::send_cursor(bool clicked,
                                           Point<std::int16_t> cursorpos)
 {
-    if (Cursor::State new_state = namechar.send_cursor(cursorpos, clicked)) {
+    if (Cursor::State new_state = name_char.send_cursor(cursorpos, clicked)) {
         return new_state;
     }
 
     return UIElement::send_cursor(clicked, cursorpos);
 }
 
-void UICharcreation::send_naming_result(bool nameused)
+void UICharCreation::send_naming_result(bool nameused)
 {
     if (!named) {
         if (nameused) {
-            namechar.change_text("");
+            name_char.change_text("");
         } else {
             named = true;
             buttons[BT_CHARC_OK]->set_position(Point<std::int16_t>{486, 445});
@@ -449,76 +449,76 @@ void UICharcreation::send_naming_result(bool nameused)
             buttons[BT_CHARC_WEPR]->set_active(true);
             buttons[BT_CHARC_GENDERL]->set_active(true);
             buttons[BT_CHARC_GEMDERR]->set_active(true);
-            namechar.set_state(Textfield::DISABLED);
+            name_char.set_state(Textfield::DISABLED);
         }
         buttons[BT_CHARC_OK]->set_state(Button::NORMAL);
     }
 }
 
-void UICharcreation::draw(float alpha) const
+void UICharCreation::draw(float alpha) const
 {
     for (std::int16_t i = 0; i < 2; ++i) {
         for (std::int16_t k = 0; k < Constants::VIEW_WIDTH; k += sky.width()) {
-            sky.draw(Point<std::int16_t>(
-                k, static_cast<std::int16_t>((400 * i) - 100)));
+            sky.draw(Point<std::int16_t>{
+                k, static_cast<std::int16_t>((400 * i) - 100)});
         }
     }
 
     std::int16_t cloudx =
-        static_cast<std::int16_t>(cloudfx) % Constants::VIEW_WIDTH;
+        static_cast<std::int16_t>(cloud_fx) % Constants::VIEW_WIDTH;
     cloud.draw(Point<std::int16_t>(cloudx - cloud.width(), 300));
-    cloud.draw(Point<std::int16_t>(cloudx, 300));
+    cloud.draw(Point<std::int16_t>{cloudx, 300});
     cloud.draw(Point<std::int16_t>(cloudx + cloud.width(), 300));
 
     if (!named) {
-        nameboard.draw(Point<std::int16_t>(455, 115));
-        namechar.draw(position);
+        name_board.draw(Point<std::int16_t>{455, 115});
+        name_char.draw(position);
     } else {
-        for (auto& sprite : sprites_lookboard) {
+        for (auto& sprite : sprites_look_board) {
             sprite.draw(position, alpha);
         }
     }
 
     UIElement::draw(alpha);
 
-    newchar.draw({360, 348}, alpha);
+    new_char.draw({360, 348}, alpha);
 
     if (named) {
-        facename.draw(Point<std::int16_t>(591, 214));
-        hairname.draw(Point<std::int16_t>(591, 233));
-        haircname.draw(Point<std::int16_t>(591, 252));
-        bodyname.draw(Point<std::int16_t>(591, 271));
-        topname.draw(Point<std::int16_t>(591, 290));
-        botname.draw(Point<std::int16_t>(591, 309));
-        shoename.draw(Point<std::int16_t>(591, 328));
-        wepname.draw(Point<std::int16_t>(591, 347));
-        gendername.draw(Point<std::int16_t>(591, 366));
+        face_name.draw(Point<std::int16_t>{591, 214});
+        hair_name.draw(Point<std::int16_t>{591, 233});
+        hair_cname.draw(Point<std::int16_t>{591, 252});
+        body_name.draw(Point<std::int16_t>{591, 271});
+        top_name.draw(Point<std::int16_t>{591, 290});
+        bottom_name.draw(Point<std::int16_t>{591, 309});
+        shoe_name.draw(Point<std::int16_t>{591, 328});
+        weapon_name.draw(Point<std::int16_t>{591, 347});
+        gender_name.draw(Point<std::int16_t>{591, 366});
     }
 }
 
-void UICharcreation::update()
+void UICharCreation::update()
 {
     UIElement::update();
 
     if (named) {
-        for (auto& sprite : sprites_lookboard) {
+        for (auto& sprite : sprites_look_board) {
             sprite.update();
         }
     }
 
-    newchar.update(Constants::TIMESTEP);
-    namechar.update(position);
+    new_char.update(Constants::TIMESTEP);
+    name_char.update(position);
 
-    cloudfx += 0.25f;
+    cloud_fx += 0.25f;
 }
 
-std::string_view UICharcreation::get_equip_name(Equipslot::Id slot) const
+std::string_view UICharCreation::get_equip_name(Equipslot::Id slot) const
     noexcept
 {
-    if (std::int32_t item_id = newchar.get_equips().get_equip(slot)) {
+    if (std::int32_t item_id = new_char.get_equips().get_equip(slot)) {
         return ItemData::get(item_id).get_name();
     } else {
-        static constexpr std::string_view nullstr = "Missing name.";
+        static constexpr const std::string_view nullstr = "Missing name.";
         return nullstr;
     }
 }

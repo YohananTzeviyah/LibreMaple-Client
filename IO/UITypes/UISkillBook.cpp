@@ -39,7 +39,7 @@ SkillIcon::SkillIcon(std::int32_t i, std::int32_t lv) : id(i)
     const SkillData& data = SkillData::get(id);
 
     normal = data.get_icon(SkillData::NORMAL);
-    mouseover = data.get_icon(SkillData::MOUSEOVER);
+    mouse_over = data.get_icon(SkillData::MOUSEOVER);
     disabled = data.get_icon(SkillData::DISABLED);
 
     std::string name_str{data.get_name()};
@@ -48,7 +48,7 @@ SkillIcon::SkillIcon(std::int32_t i, std::int32_t lv) : id(i)
     level = {Text::A11L, Text::LEFT, Text::DARKGREY, std::to_string(lv)};
     state = NORMAL;
 
-    constexpr std::uint16_t MAX_NAME_WIDTH = 96;
+    static constexpr const std::uint16_t MAX_NAME_WIDTH = 96;
     std::size_t overhang = 3;
     while (name.width() > MAX_NAME_WIDTH) {
         name_str.replace(name_str.end() - overhang, name_str.end(), "...", 3);
@@ -67,41 +67,41 @@ void SkillIcon::draw(const DrawArgument& args) const
     case DISABLED:
         disabled.draw(args);
         break;
-    case MOUSEOVER:
-        mouseover.draw(args);
+    case MOUSE_OVER:
+        mouse_over.draw(args);
         break;
     }
 
-    name.draw(args + Point<std::int16_t>(38, -34));
-    level.draw(args + Point<std::int16_t>(38, -16));
+    name.draw(args + Point<std::int16_t>{38, -34});
+    level.draw(args + Point<std::int16_t>{38, -16});
 }
 
 Cursor::State SkillIcon::send_cursor(Point<std::int16_t> cursorpos,
                                      bool clicked)
 {
-    constexpr Rectangle<std::int16_t> bounds(0, 32, 0, 32);
-    bool inrange = bounds.contains(cursorpos);
+    static constexpr const Rectangle<std::int16_t> bounds{0, 32, 0, 32};
+    bool in_range = bounds.contains(cursorpos);
     switch (state) {
     case NORMAL:
     case DISABLED:
-        if (inrange) {
+        if (in_range) {
             if (clicked) {
-                state = MOUSEOVER;
+                state = MOUSE_OVER;
                 return Cursor::GRABBING;
             } else {
-                state = MOUSEOVER;
+                state = MOUSE_OVER;
                 return Cursor::CANGRAB;
             }
         } else {
             return Cursor::IDLE;
         }
-    case MOUSEOVER:
-        if (inrange) {
+    case MOUSE_OVER:
+        if (in_range) {
             if (clicked) {
-                state = MOUSEOVER;
+                state = MOUSE_OVER;
                 return Cursor::GRABBING;
             } else {
-                state = MOUSEOVER;
+                state = MOUSE_OVER;
                 return Cursor::CANGRAB;
             }
         } else {
@@ -120,7 +120,7 @@ std::int32_t SkillIcon::get_id() const
 
 UISkillbook::UISkillbook(const CharStats& in_stats,
                          const Skillbook& in_skillbook)
-    : UIDragElement({174, 20}), stats(in_stats), skillbook(in_skillbook)
+    : UIDragElement({174, 20}), stats(in_stats), skillbook(in_skillbook), tab(0)
 {
     nl::node main = nl::nx::ui["UIWindow2.img"]["Skill"]["main"];
 
@@ -128,33 +128,33 @@ UISkillbook::UISkillbook(const CharStats& in_stats,
     sprites.emplace_back(main["backgrnd2"]);
     sprites.emplace_back(main["backgrnd3"]);
 
-    skilld = main["skill0"];
-    skille = main["skill1"];
+    skill_d = main["skill0"];
+    skill_e = main["skill1"];
     line = main["line"];
 
-    nl::node tabe = main["Tab"]["enabled"];
-    nl::node tabd = main["Tab"]["disabled"];
+    nl::node tab_e = main["Tab"]["enabled"];
+    nl::node tab_d = main["Tab"]["disabled"];
 
     for (std::uint16_t i = BT_TAB0; i <= BT_TAB4; ++i) {
-        std::uint16_t tabid = i - BT_TAB0;
+        std::uint16_t tab_id = i - BT_TAB0;
         buttons[i] =
-            std::make_unique<TwoSpriteButton>(tabd[tabid], tabe[tabid]);
+            std::make_unique<TwoSpriteButton>(tab_d[tab_id], tab_e[tab_id]);
     }
     for (std::uint16_t i = BT_SPUP0; i <= BT_SPUP3; ++i) {
-        std::uint16_t spupid = i - BT_SPUP0;
+        std::uint16_t spup_id = i - BT_SPUP0;
         Point<std::int16_t> spup_position =
-            SKILL_OFFSET + Point<std::int16_t>(124, 20 + spupid * ROW_HEIGHT);
+            SKILL_OFFSET + Point<std::int16_t>{124, 20 + spup_id * ROW_HEIGHT};
         buttons[i] =
             std::make_unique<MapleButton>(main["BtSpUp"], spup_position);
     }
 
-    booktext = {Text::A12M, Text::CENTER, Text::WHITE, "", 100};
-    splabel = {Text::A11M, Text::RIGHT, Text::LIGHTGREY};
+    book_text = {Text::A12M, Text::CENTER, Text::WHITE, "", 100};
+    sp_label = {Text::A11M, Text::RIGHT, Text::LIGHTGREY};
 
-    slider = {11, {92, 236}, 154, ROWS, 1, [&](bool upwards) {
+    slider = {11, {92, 236}, 154, ROWS, 1, [this](bool upwards) {
                   std::int16_t shift = upwards ? -1 : 1;
                   bool above = offset + shift >= 0;
-                  bool below = offset + 4 + shift <= skillcount;
+                  bool below = offset + 4 + shift <= skill_count;
                   if (above && below) {
                       change_offset(offset + shift);
                   }
@@ -164,17 +164,15 @@ UISkillbook::UISkillbook(const CharStats& in_stats,
     change_sp(stats.get_stat(Maplestat::SP));
 
     dimension = {174, 299};
-
-    tab = 0;
 }
 
 void UISkillbook::draw(float alpha) const
 {
     draw_sprites(alpha);
 
-    bookicon.draw(position + Point<std::int16_t>(12, 85));
-    booktext.draw(position + Point<std::int16_t>(100, 49));
-    splabel.draw(position + Point<std::int16_t>(162, 254));
+    book_icon.draw(position + Point<std::int16_t>{12, 85});
+    book_text.draw(position + Point<std::int16_t>{100, 49});
+    sp_label.draw(position + Point<std::int16_t>{162, 254});
 
     auto begin = icons.begin();
     if (icons.size() > offset) {
@@ -188,7 +186,7 @@ void UISkillbook::draw(float alpha) const
 
     Point<std::int16_t> skill_position = position + SKILL_OFFSET;
     for (auto iter = begin; iter != end; ++iter) {
-        skille.draw(skill_position);
+        skill_e.draw(skill_position);
         iter->draw(skill_position + ICON_OFFSET);
         if (iter != end - 1) {
             line.draw(skill_position + LINE_OFFSET);
@@ -210,7 +208,7 @@ Button::State UISkillbook::button_pressed(std::uint16_t id)
     case BT_TAB2:
     case BT_TAB3:
     case BT_TAB4:
-        change_tab(id - BT_TAB0);
+        change_tab(id - BT_TAB0); // id - BT_TAB0
         return Button::PRESSED;
     case BT_SPUP0:
     case BT_SPUP1:
@@ -331,7 +329,7 @@ void UISkillbook::change_job(std::uint16_t id)
 void UISkillbook::change_sp(std::int16_t s)
 {
     sp = s;
-    splabel.change_text(std::to_string(sp));
+    sp_label.change_text(std::to_string(sp));
 
     change_offset(offset);
 }
@@ -343,30 +341,30 @@ void UISkillbook::change_tab(std::uint16_t new_tab)
     tab = new_tab;
 
     icons.clear();
-    skillcount = 0;
+    skill_count = 0;
 
-    Job::Level joblevel = joblevel_by_tab(tab);
-    std::uint16_t subid = job.get_subjob(joblevel);
+    Job::Level job_level = job_level_by_tab(tab);
+    std::uint16_t sub_id = job.get_subjob(job_level);
 
-    const JobData& data = JobData::get(subid);
+    const JobData& data = JobData::get(sub_id);
 
-    bookicon = data.get_icon();
-    booktext.change_text(std::string{data.get_name()});
+    book_icon = data.get_icon();
+    book_text.change_text(std::string{data.get_name()});
 
     for (std::int32_t skill_id : data.get_skills()) {
         std::int32_t level = skillbook.get_level(skill_id);
-        std::int32_t masterlevel = skillbook.get_master_level(skill_id);
+        std::int32_t master_level = skillbook.get_master_level(skill_id);
 
         bool invisible = SkillData::get(skill_id).is_invisible();
-        if (invisible && masterlevel == 0) {
+        if (invisible && master_level == 0) {
             continue;
         }
 
         icons.emplace_back(skill_id, level);
-        ++skillcount;
+        ++skill_count;
     }
 
-    slider.set_rows(ROWS, skillcount);
+    slider.set_rows(ROWS, skill_count);
     change_offset(0);
 }
 
@@ -377,11 +375,10 @@ void UISkillbook::change_offset(std::uint16_t new_offset)
     for (std::int16_t i = 0; i < ROWS; ++i) {
         std::uint16_t index = BT_SPUP0 + i;
         std::uint16_t row = offset + i;
-        buttons[index]->set_active(row < skillcount);
+        buttons[index]->set_active(row < skill_count);
         if (row < icons.size()) {
             std::int32_t skill_id = icons[row].get_id();
-            bool canraise = can_raise(skill_id);
-            buttons[index]->set_state(canraise ? Button::NORMAL
+            buttons[index]->set_state(can_raise(skill_id) ? Button::NORMAL
                                                : Button::DISABLED);
         }
     }
@@ -391,11 +388,11 @@ void UISkillbook::show_skill(std::int32_t id)
 {
     std::int32_t skill_id = id;
     std::int32_t level = skillbook.get_level(id);
-    std::int32_t masterlevel = skillbook.get_master_level(id);
+    std::int32_t master_level = skillbook.get_master_level(id);
     std::int64_t expiration = skillbook.get_expiration(id);
 
     UI::get().show_skill(
-        Tooltip::SKILL_BOOK, skill_id, level, masterlevel, expiration);
+        Tooltip::SKILL_BOOK, skill_id, level, master_level, expiration);
 }
 
 void UISkillbook::clear_tooltip()
@@ -439,7 +436,7 @@ void UISkillbook::send_spup(std::uint16_t row)
     UI::get().disable();
 }
 
-Job::Level UISkillbook::joblevel_by_tab(std::uint16_t t) const
+Job::Level UISkillbook::job_level_by_tab(std::uint16_t t) const
 {
     switch (t) {
     case 1:

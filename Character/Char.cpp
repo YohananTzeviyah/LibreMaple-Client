@@ -144,7 +144,7 @@ float Char::get_real_attack_speed() const
 std::uint16_t Char::get_attack_delay(std::size_t no) const
 {
     std::uint8_t first_frame = afterimage.get_first_frame();
-    std::uint16_t delay = look.get_attackdelay(no, first_frame);
+    std::uint16_t delay = look.get_attack_delay(no, first_frame);
     float fspeed = get_real_attack_speed();
     return static_cast<std::uint16_t>(delay / fspeed);
 }
