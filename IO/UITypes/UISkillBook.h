@@ -87,7 +87,7 @@ private:
     void send_spup(std::uint16_t row);
 
     Job::Level job_level_by_tab(std::uint16_t tab) const;
-    SkillIcon* icon_by_position(Point<std::int16_t> cursorpos);
+    SkillIcon* icon_by_position(Point<std::int16_t> cursor_pos);
 
     enum Buttons : std::uint16_t {
         BT_GUILD,
@@ -105,9 +105,9 @@ private:
 
     static constexpr const std::int16_t ROWS = 4;
     static constexpr const std::int16_t ROW_HEIGHT = 40;
-    static constexpr const Point<std::int16_t> SKILL_OFFSET = {11, 93};
-    static constexpr const Point<std::int16_t> ICON_OFFSET = {2, 33};
-    static constexpr const Point<std::int16_t> LINE_OFFSET = {2, 37};
+    static constexpr const Point<std::int16_t> SKILL_OFFSET{11, 93};
+    static constexpr const Point<std::int16_t> ICON_OFFSET{2, 33};
+    static constexpr const Point<std::int16_t> LINE_OFFSET{2, 37};
 
     const CharStats& stats;
     const Skillbook& skillbook;

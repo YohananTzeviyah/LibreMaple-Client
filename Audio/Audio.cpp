@@ -139,9 +139,9 @@ Music::Music(std::string&& p) noexcept : path(std::move(p))
 void Music::play() const
 {
     static HSTREAM stream = 0;
-    static std::string bgmpath;
+    static std::string bgm_path;
 
-    if (path == bgmpath) {
+    if (path == bgm_path) {
         return;
     }
 
@@ -158,7 +158,7 @@ void Music::play() const
             true, data, 82, ad.length(), BASS_SAMPLE_FLOAT | BASS_SAMPLE_LOOP);
         BASS_ChannelPlay(stream, true);
 
-        bgmpath = path;
+        bgm_path = path;
     }
 }
 

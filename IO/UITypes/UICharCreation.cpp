@@ -47,25 +47,25 @@ UICharCreation::UICharCreation()
     name_board = cr_src["charName"];
 
     sprites_look_board.emplace_back(cr_src["charSet"],
-                                   Point<std::int16_t>{450, 115});
+                                    Point<std::int16_t>{450, 115});
     sprites_look_board.emplace_back(cr_src["avatarSel"]["0"]["normal"],
-                                   Point<std::int16_t>{461, 217});
+                                    Point<std::int16_t>{461, 217});
     sprites_look_board.emplace_back(cr_src["avatarSel"]["1"]["normal"],
-                                   Point<std::int16_t>{461, 236});
+                                    Point<std::int16_t>{461, 236});
     sprites_look_board.emplace_back(cr_src["avatarSel"]["2"]["normal"],
-                                   Point<std::int16_t>{461, 255});
+                                    Point<std::int16_t>{461, 255});
     sprites_look_board.emplace_back(cr_src["avatarSel"]["3"]["normal"],
-                                   Point<std::int16_t>{461, 274});
+                                    Point<std::int16_t>{461, 274});
     sprites_look_board.emplace_back(cr_src["avatarSel"]["4"]["normal"],
-                                   Point<std::int16_t>{461, 293});
+                                    Point<std::int16_t>{461, 293});
     sprites_look_board.emplace_back(cr_src["avatarSel"]["5"]["normal"],
-                                   Point<std::int16_t>{461, 312});
+                                    Point<std::int16_t>{461, 312});
     sprites_look_board.emplace_back(cr_src["avatarSel"]["6"]["normal"],
-                                   Point<std::int16_t>{461, 331});
+                                    Point<std::int16_t>{461, 331});
     sprites_look_board.emplace_back(cr_src["avatarSel"]["7"]["normal"],
-                                   Point<std::int16_t>{461, 350});
+                                    Point<std::int16_t>{461, 350});
     sprites_look_board.emplace_back(cr_src["avatarSel"]["8"]["normal"],
-                                   Point<std::int16_t>{461, 369});
+                                    Point<std::int16_t>{461, 369});
 
     buttons[BT_CHARC_OK] = std::make_unique<MapleButton>(
         cr_src["BtYes"], Point<std::int16_t>{482, 292});
@@ -310,51 +310,57 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
         case BT_CHARC_FACEL:
             face = (face > 0) ? face - 1 : faces[female].size() - 1;
             new_char.set_face(faces[female][face]);
-            face_name.change_text(std::string{new_char.get_face()->get_name()});
+            face_name.change_text(
+                std::string{new_char.get_face()->get_name()});
             break;
         case BT_CHARC_FACER:
             face = (face < faces[female].size() - 1) ? face + 1 : 0;
             new_char.set_face(faces[female][face]);
-            face_name.change_text(std::string{new_char.get_face()->get_name()});
+            face_name.change_text(
+                std::string{new_char.get_face()->get_name()});
             break;
         case BT_CHARC_HAIRL:
             hair = (hair > 0) ? hair - 1 : hairs[female].size() - 1;
             new_char.set_hair(hairs[female][hair] +
-                             hair_colors[female][hair_color]);
-            hair_name.change_text(std::string{new_char.get_hair()->get_name()});
+                              hair_colors[female][hair_color]);
+            hair_name.change_text(
+                std::string{new_char.get_hair()->get_name()});
             break;
         case BT_CHARC_HAIRR:
             hair = (hair < hairs[female].size() - 1) ? hair + 1 : 0;
             new_char.set_hair(hairs[female][hair] +
-                             hair_colors[female][hair_color]);
-            hair_name.change_text(std::string{new_char.get_hair()->get_name()});
+                              hair_colors[female][hair_color]);
+            hair_name.change_text(
+                std::string{new_char.get_hair()->get_name()});
             break;
         case BT_CHARC_HAIRCL:
             hair_color = (hair_color > 0) ? hair_color - 1
-                                        : hair_colors[female].size() - 1;
+                                          : hair_colors[female].size() - 1;
             new_char.set_hair(hairs[female][hair] +
-                             hair_colors[female][hair_color]);
+                              hair_colors[female][hair_color]);
             hair_cname.change_text(
                 std::string{new_char.get_hair()->get_color()});
             break;
         case BT_CHARC_HAIRCR:
             hair_color = (hair_color < hair_colors[female].size() - 1)
-                            ? hair_color + 1
-                            : 0;
+                             ? hair_color + 1
+                             : 0;
             new_char.set_hair(hairs[female][hair] +
-                             hair_colors[female][hair_color]);
+                              hair_colors[female][hair_color]);
             hair_cname.change_text(
                 std::string{new_char.get_hair()->get_color()});
             break;
         case BT_CHARC_SKINL:
             skin = (skin > 0) ? skin - 1 : skins[female].size() - 1;
             new_char.set_body(skins[female][skin]);
-            body_name.change_text(std::string{new_char.get_body()->get_name()});
+            body_name.change_text(
+                std::string{new_char.get_body()->get_name()});
             break;
         case BT_CHARC_SKINR:
             skin = (skin < skins[female].size() - 1) ? skin + 1 : 0;
             new_char.set_body(skins[female][skin]);
-            body_name.change_text(std::string{new_char.get_body()->get_name()});
+            body_name.change_text(
+                std::string{new_char.get_body()->get_name()});
             break;
         case BT_CHARC_TOPL:
             top = (top > 0) ? top - 1 : tops[female].size() - 1;
@@ -369,12 +375,14 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
         case BT_CHARC_BOTL:
             bottom = (bottom > 0) ? bottom - 1 : bots[female].size() - 1;
             new_char.add_equip(bots[female][bottom]);
-            bottom_name.change_text(std::string{get_equip_name(Equipslot::PANTS)});
+            bottom_name.change_text(
+                std::string{get_equip_name(Equipslot::PANTS)});
             break;
         case BT_CHARC_BOTR:
             bottom = (bottom < bots[female].size() - 1) ? bottom + 1 : 0;
             new_char.add_equip(bots[female][bottom]);
-            bottom_name.change_text(std::string{get_equip_name(Equipslot::PANTS)});
+            bottom_name.change_text(
+                std::string{get_equip_name(Equipslot::PANTS)});
             break;
         case BT_CHARC_SHOESL:
             shoe = (shoe > 0) ? shoe - 1 : shoes[female].size() - 1;

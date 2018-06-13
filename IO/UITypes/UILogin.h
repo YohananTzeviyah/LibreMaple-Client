@@ -25,9 +25,9 @@ namespace jrc
 class UILogin : public UIElement
 {
 public:
-    static constexpr Type TYPE = LOGIN;
-    static constexpr bool FOCUSED = false;
-    static constexpr bool TOGGLED = false;
+    static constexpr const Type TYPE = LOGIN;
+    static constexpr const bool FOCUSED = false;
+    static constexpr const bool TOGGLED = false;
 
     UILogin();
 

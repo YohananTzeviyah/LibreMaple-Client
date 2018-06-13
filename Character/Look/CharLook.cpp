@@ -76,12 +76,21 @@ void CharLook::draw(const DrawArgument& args,
 
     if (Stance::is_climbing(inter_stance)) {
         body->draw(inter_stance, Body::BODY, inter_frame, args);
-        equips.draw(
-            Equipslot::GLOVES, inter_stance, Clothing::GLOVE, inter_frame, args);
-        equips.draw(
-            Equipslot::SHOES, inter_stance, Clothing::SHOES, inter_frame, args);
-        equips.draw(
-            Equipslot::PANTS, inter_stance, Clothing::PANTS, inter_frame, args);
+        equips.draw(Equipslot::GLOVES,
+                    inter_stance,
+                    Clothing::GLOVE,
+                    inter_frame,
+                    args);
+        equips.draw(Equipslot::SHOES,
+                    inter_stance,
+                    Clothing::SHOES,
+                    inter_frame,
+                    args);
+        equips.draw(Equipslot::PANTS,
+                    inter_stance,
+                    Clothing::PANTS,
+                    inter_frame,
+                    args);
         equips.draw(
             Equipslot::TOP, inter_stance, Clothing::TOP, inter_frame, args);
         equips.draw(
@@ -100,18 +109,27 @@ void CharLook::draw(const DrawArgument& args,
             hair->draw(inter_stance, Hair::BACK, inter_frame, args);
             break;
         case CharEquips::HEADBAND:
-            equips.draw(
-                Equipslot::CAP, inter_stance, Clothing::CAP, inter_frame, args);
+            equips.draw(Equipslot::CAP,
+                        inter_stance,
+                        Clothing::CAP,
+                        inter_frame,
+                        args);
             hair->draw(inter_stance, Hair::BACK, inter_frame, args);
             break;
         case CharEquips::HALFCOVER:
             hair->draw(inter_stance, Hair::BELOWCAP, inter_frame, args);
-            equips.draw(
-                Equipslot::CAP, inter_stance, Clothing::CAP, inter_frame, args);
+            equips.draw(Equipslot::CAP,
+                        inter_stance,
+                        Clothing::CAP,
+                        inter_frame,
+                        args);
             break;
         case CharEquips::FULLCOVER:
-            equips.draw(
-                Equipslot::CAP, inter_stance, Clothing::CAP, inter_frame, args);
+            equips.draw(Equipslot::CAP,
+                        inter_stance,
+                        Clothing::CAP,
+                        inter_frame,
+                        args);
             break;
         case CharEquips::HAIRPIN:
             // TODO
@@ -158,21 +176,30 @@ void CharLook::draw(const DrawArgument& args,
                     Clothing::GLOVE_OVER_BODY,
                     inter_frame,
                     args);
-        equips.draw(
-            Equipslot::SHOES, inter_stance, Clothing::SHOES, inter_frame, args);
+        equips.draw(Equipslot::SHOES,
+                    inter_stance,
+                    Clothing::SHOES,
+                    inter_frame,
+                    args);
         body->draw(inter_stance, Body::ARM_BELOW_HEAD, inter_frame, args);
 
         if (equips.has_overall()) {
-            equips.draw(
-                Equipslot::TOP, inter_stance, Clothing::MAIL, inter_frame, args);
+            equips.draw(Equipslot::TOP,
+                        inter_stance,
+                        Clothing::MAIL,
+                        inter_frame,
+                        args);
         } else {
             equips.draw(Equipslot::PANTS,
                         inter_stance,
                         Clothing::PANTS,
                         inter_frame,
                         args);
-            equips.draw(
-                Equipslot::TOP, inter_stance, Clothing::TOP, inter_frame, args);
+            equips.draw(Equipslot::TOP,
+                        inter_stance,
+                        Clothing::TOP,
+                        inter_frame,
+                        args);
         }
 
         body->draw(
@@ -209,8 +236,11 @@ void CharLook::draw(const DrawArgument& args,
             hair->draw(inter_stance, Hair::OVERHEAD, inter_frame, args);
             break;
         case CharEquips::HEADBAND:
-            equips.draw(
-                Equipslot::CAP, inter_stance, Clothing::CAP, inter_frame, args);
+            equips.draw(Equipslot::CAP,
+                        inter_stance,
+                        Clothing::CAP,
+                        inter_frame,
+                        args);
             hair->draw(inter_stance, Hair::DEFAULT, inter_frame, args);
             hair->draw(inter_stance, Hair::OVERHEAD, inter_frame, args);
             equips.draw(Equipslot::CAP,
@@ -221,12 +251,18 @@ void CharLook::draw(const DrawArgument& args,
             break;
         case CharEquips::HALFCOVER:
             hair->draw(inter_stance, Hair::DEFAULT, inter_frame, args);
-            equips.draw(
-                Equipslot::CAP, inter_stance, Clothing::CAP, inter_frame, args);
+            equips.draw(Equipslot::CAP,
+                        inter_stance,
+                        Clothing::CAP,
+                        inter_frame,
+                        args);
             break;
         case CharEquips::FULLCOVER:
-            equips.draw(
-                Equipslot::CAP, inter_stance, Clothing::CAP, inter_frame, args);
+            equips.draw(Equipslot::CAP,
+                        inter_stance,
+                        Clothing::CAP,
+                        inter_frame,
+                        args);
             break;
         default:
             break;
@@ -264,10 +300,16 @@ void CharLook::draw(const DrawArgument& args,
                         args);
         }
 
-        equips.draw(
-            Equipslot::GLOVES, inter_stance, Clothing::WRIST, inter_frame, args);
-        equips.draw(
-            Equipslot::GLOVES, inter_stance, Clothing::GLOVE, inter_frame, args);
+        equips.draw(Equipslot::GLOVES,
+                    inter_stance,
+                    Clothing::WRIST,
+                    inter_frame,
+                    args);
+        equips.draw(Equipslot::GLOVES,
+                    inter_stance,
+                    Clothing::GLOVE,
+                    inter_frame,
+                    args);
         equips.draw(Equipslot::WEAPON,
                     inter_stance,
                     Clothing::WEAPON_OVER_GLOVE,

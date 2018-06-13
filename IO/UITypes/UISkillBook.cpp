@@ -120,7 +120,10 @@ std::int32_t SkillIcon::get_id() const
 
 UISkillbook::UISkillbook(const CharStats& in_stats,
                          const Skillbook& in_skillbook)
-    : UIDragElement({174, 20}), stats(in_stats), skillbook(in_skillbook), tab(0)
+    : UIDragElement({174, 20}),
+      stats(in_stats),
+      skillbook(in_skillbook),
+      tab(0)
 {
     nl::node main = nl::nx::ui["UIWindow2.img"]["Skill"]["main"];
 
@@ -208,7 +211,7 @@ Button::State UISkillbook::button_pressed(std::uint16_t id)
     case BT_TAB2:
     case BT_TAB3:
     case BT_TAB4:
-        change_tab(id - BT_TAB0); // id - BT_TAB0
+        change_tab(id - BT_TAB0);
         return Button::PRESSED;
     case BT_SPUP0:
     case BT_SPUP1:
@@ -272,7 +275,8 @@ Cursor::State UISkillbook::send_cursor(bool clicked,
     Point<std::int16_t> skill_position = position + SKILL_OFFSET;
     for (auto iter = begin; iter != end; ++iter) {
         if (Cursor::State state =
-                iter->send_cursor(cursorpos - skill_position, clicked)) {
+                iter->send_cursor(cursorpos - skill_position, clicked);
+            state) {
             switch (state) {
             case Cursor::GRABBING:
                 clear_tooltip();
@@ -379,7 +383,7 @@ void UISkillbook::change_offset(std::uint16_t new_offset)
         if (row < icons.size()) {
             std::int32_t skill_id = icons[row].get_id();
             buttons[index]->set_state(can_raise(skill_id) ? Button::NORMAL
-                                               : Button::DISABLED);
+                                                          : Button::DISABLED);
         }
     }
 }
@@ -432,7 +436,7 @@ void UISkillbook::send_spup(std::uint16_t row)
 
     std::int32_t skill_id = icons[row].get_id();
 
-    SpendSpPacket(skill_id).dispatch();
+    SpendSpPacket{skill_id}.dispatch();
     UI::get().disable();
 }
 
@@ -452,14 +456,14 @@ Job::Level UISkillbook::job_level_by_tab(std::uint16_t t) const
     }
 }
 
-SkillIcon* UISkillbook::icon_by_position(Point<std::int16_t> cursorpos)
+SkillIcon* UISkillbook::icon_by_position(Point<std::int16_t> cursor_pos)
 {
-    std::int16_t x = cursorpos.x();
+    std::int16_t x = cursor_pos.x();
     if (x < SKILL_OFFSET.x() || x > 148) {
         return nullptr;
     }
 
-    std::int16_t y = cursorpos.y();
+    std::int16_t y = cursor_pos.y();
     if (y < SKILL_OFFSET.y()) {
         return nullptr;
     }
@@ -469,12 +473,12 @@ SkillIcon* UISkillbook::icon_by_position(Point<std::int16_t> cursorpos)
         return nullptr;
     }
 
-    std::uint16_t absrow = offset + row;
-    if (icons.size() <= absrow) {
+    std::uint16_t abs_row = offset + row;
+    if (icons.size() <= abs_row) {
         return nullptr;
     }
 
-    auto iter = icons.begin() + absrow;
+    auto iter = icons.begin() + abs_row;
     return icons.data() + (iter - icons.begin());
 }
 } // namespace jrc
