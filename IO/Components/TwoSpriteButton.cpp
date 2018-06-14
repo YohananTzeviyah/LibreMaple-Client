@@ -41,7 +41,7 @@ TwoSpriteButton::TwoSpriteButton() : textures({}, {})
 void TwoSpriteButton::draw(Point<std::int16_t> parentpos) const
 {
     if (active) {
-        bool selected = state == MOUSEOVER || state == PRESSED;
+        bool selected = state == MOUSE_OVER || state == PRESSED;
         textures[selected].draw(position + parentpos);
     }
 }
@@ -49,7 +49,7 @@ void TwoSpriteButton::draw(Point<std::int16_t> parentpos) const
 Rectangle<std::int16_t>
 TwoSpriteButton::bounds(Point<std::int16_t> parentpos) const
 {
-    bool selected = state == MOUSEOVER || state == PRESSED;
+    bool selected = state == MOUSE_OVER || state == PRESSED;
     Point<std::int16_t> absp =
         parentpos + position - textures[selected].get_origin();
     Point<std::int16_t> dim = textures[selected].get_dimensions();

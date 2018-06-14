@@ -376,7 +376,7 @@ void RemoveLootHandler::handle(InPacket& recv) const
             looter = character->get_phobj();
         }
 
-        Sound(Sound::PICKUP).play();
+        Sound(Sound::PICK_UP).play();
     }
 
     Stage::get().get_drops().remove(oid, mode, looter.get());

@@ -22,7 +22,7 @@ namespace jrc
 MapleButton::MapleButton(nl::node src, Point<std::int16_t> pos)
 {
     textures[PRESSED] = src["pressed"]["0"];
-    textures[MOUSEOVER] = src["mouseOver"]["0"];
+    textures[MOUSE_OVER] = src["mouseOver"]["0"];
     textures[NORMAL] = src["normal"]["0"];
     textures[DISABLED] = src["disabled"]["0"];
     position = pos;

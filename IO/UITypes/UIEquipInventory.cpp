@@ -143,7 +143,7 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
             return Cursor::GRABBING;
         } else {
             show_equip(slot);
-            return Cursor::CANGRAB;
+            return Cursor::CAN_GRAB;
         }
     } else {
         clear_tooltip();

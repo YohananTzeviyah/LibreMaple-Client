@@ -25,17 +25,17 @@ SingleSkillSound::SingleSkillSound(std::string_view str_id)
 {
     nl::node sound_src = nl::nx::sound["Skill.img"][str_id];
 
-    usesound = sound_src["Use"];
-    hitsound = sound_src["Hit"];
+    use_sound = sound_src["Use"];
+    hit_sound = sound_src["Hit"];
 }
 
 void SingleSkillSound::play_use() const
 {
-    usesound.play();
+    use_sound.play();
 }
 
 void SingleSkillSound::play_hit() const
 {
-    hitsound.play();
+    hit_sound.play();
 }
 } // namespace jrc

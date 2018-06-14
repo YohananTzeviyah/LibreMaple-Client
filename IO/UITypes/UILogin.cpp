@@ -31,7 +31,9 @@ namespace jrc
 {
 UILogin::UILogin()
 {
-    Music{"BgmUI.img/Title"}.play();
+    if (auto mus_err = Music::play("BgmUI.img/Title"); mus_err) {
+        Console::get().print("Error playing music BgmUI.img/Title");
+    }
 
     nl::node title = nl::nx::ui["Login.img"]["Title"];
     nl::node common = nl::nx::ui["Login.img"]["Common"];
@@ -151,7 +153,7 @@ Button::State UILogin::button_pressed(std::uint16_t id)
     case BT_SAVE_ID:
         save_id = !save_id;
         Setting<SaveLogin>::get().save(save_id);
-        return Button::MOUSEOVER;
+        return Button::MOUSE_OVER;
     default:
         return Button::PRESSED;
     }

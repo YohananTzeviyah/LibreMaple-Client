@@ -44,7 +44,7 @@ public:
     void init();
 
     // Loads the map to display.
-    void load(std::int32_t mapid, std::int8_t portalid);
+    void load(std::int32_t map_id, std::int8_t portal_id);
     // Remove all map objects and graphics.
     void clear();
 
@@ -102,8 +102,8 @@ private:
     nullable_ptr<Playable> playable;
     State state;
 
-    MapInfo mapinfo;
-    MapTilesObjs tilesobjs;
+    MapInfo map_info;
+    MapTilesObjs tiles_objs;
     MapBackgrounds backgrounds;
     MapPortals portals;
     MapReactors reactors;

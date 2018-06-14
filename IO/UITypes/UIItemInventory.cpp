@@ -284,7 +284,7 @@ Cursor::State UIItemInventory::send_cursor(bool pressed,
             return Cursor::GRABBING;
         } else {
             show_item(slot);
-            return Cursor::CANGRAB;
+            return Cursor::CAN_GRAB;
         }
     } else {
         clear_tooltip();

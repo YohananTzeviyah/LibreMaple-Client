@@ -238,7 +238,7 @@ Cursor::State UIChatbar::send_cursor(bool clicking,
             drag_chat_top = true;
             return Cursor::CLICKING;
         } else {
-            return Cursor::CANCLICK;
+            return Cursor::CAN_CLICK;
         }
     }
 

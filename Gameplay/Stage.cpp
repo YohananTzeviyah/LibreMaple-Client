@@ -39,15 +39,15 @@ void Stage::init()
     drops.init();
 }
 
-void Stage::load(std::int32_t mapid, std::int8_t portalid)
+void Stage::load(std::int32_t map_id, std::int8_t portal_id)
 {
     switch (state) {
     case INACTIVE:
-        load_map(mapid);
-        respawn(portalid);
+        load_map(map_id);
+        respawn(portal_id);
         break;
     case TRANSITION:
-        respawn(portalid);
+        respawn(portal_id);
         break;
     case ACTIVE:
         break;
@@ -79,27 +79,30 @@ void Stage::load_map(std::int32_t map_id)
     str_id += ".img";
 
     nl::node src =
-        nl::nx::map["Map"]["Map" + std::to_string(map_id / 100000000)][str_id];
+        nl::nx::map["Map"]["Map" + std::to_string(map_id / 100'000'000)]
+                   [str_id];
 
-    tilesobjs = MapTilesObjs(src);
+    tiles_objs = MapTilesObjs(src);
     backgrounds = MapBackgrounds(src["back"]);
     physics = Physics(src["foothold"]);
-    mapinfo = MapInfo(
+    map_info = MapInfo(
         src, physics.get_fht().get_walls(), physics.get_fht().get_borders());
     portals = MapPortals(src["portal"], map_id);
 }
 
 void Stage::respawn(std::int8_t portal_id)
 {
-    Music(mapinfo.get_bgm()).play();
+    if (auto mus_err = Music::play(map_info.get_bgm()); mus_err) {
+        Console::get().print("Error playing music " + map_info.get_bgm());
+    }
 
     Point<std::int16_t> spawn_point =
         portals.get_portal_by_id(static_cast<std::uint8_t>(portal_id));
     Point<std::int16_t> start_pos = physics.get_y_below(spawn_point);
 
-    player.respawn(start_pos, mapinfo.is_underwater());
+    player.respawn(start_pos, map_info.is_underwater());
     camera.set_position(start_pos);
-    camera.set_view(mapinfo.get_walls(), mapinfo.get_borders());
+    camera.set_view(map_info.get_walls(), map_info.get_borders());
 }
 
 void Stage::draw(float alpha) const
@@ -115,7 +118,7 @@ void Stage::draw(float alpha) const
 
     backgrounds.drawbackgrounds(viewx, viewy, alpha);
     for (auto id : Layer::IDs) {
-        tilesobjs.draw(id, viewpos, alpha);
+        tiles_objs.draw(id, viewpos, alpha);
         reactors.draw(id, viewx, viewy, alpha);
         npcs.draw(id, viewx, viewy, alpha);
         mobs.draw(id, viewx, viewy, alpha);
@@ -136,7 +139,7 @@ void Stage::update()
 
     combat.update();
     backgrounds.update();
-    tilesobjs.update();
+    tiles_objs.update();
 
     reactors.update(physics);
     npcs.update(physics);
@@ -179,7 +182,7 @@ void Stage::check_portals()
         Point<std::int16_t> spawnpoint =
             portals.get_portal_by_name(warpinfo.to_name);
         Point<std::int16_t> startpos = physics.get_y_below(spawnpoint);
-        player.respawn(startpos, mapinfo.is_underwater());
+        player.respawn(startpos, map_info.is_underwater());
     } else if (warpinfo.valid) {
         ChangeMapPacket(false, warpinfo.mapid, warpinfo.name, false)
             .dispatch();
@@ -192,7 +195,7 @@ void Stage::check_seats()
         return;
     }
 
-    nullable_ptr<const Seat> seat = mapinfo.find_seat(player.get_position());
+    nullable_ptr<const Seat> seat = map_info.find_seat(player.get_position());
     player.set_seat(seat);
 }
 
@@ -203,7 +206,7 @@ void Stage::check_ladders(bool up)
     }
 
     nullable_ptr<const Ladder> ladder =
-        mapinfo.find_ladder(player.get_position(), up);
+        map_info.find_ladder(player.get_position(), up);
     player.set_ladder(ladder);
 }
 

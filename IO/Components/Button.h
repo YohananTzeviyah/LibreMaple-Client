@@ -28,7 +28,7 @@ namespace jrc
 class Button
 {
 public:
-    enum State { NORMAL, DISABLED, MOUSEOVER, PRESSED, IDENTITY, NUM_STATES };
+    enum State { NORMAL, DISABLED, MOUSE_OVER, PRESSED, IDENTITY, NUM_STATES };
 
     virtual ~Button() = default;
 

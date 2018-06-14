@@ -48,6 +48,9 @@ The client is currently compatible with GMS version 83 servers. For the UI file
 * [autoconf](https://www.gnu.org/software/autoconf/autoconf.html)
 * [libtool](https://www.gnu.org/software/libtool/)
 * [sh or bash](https://en.wikipedia.org/wiki/Bourne_shell)
+* [SDL2](https://www.libsdl.org/) / sdl2 / sdl2-dev / libsdl2 / libsdl2-dev
+* [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/) / sdl2_mixer /
+  libsdl2-mixer / libsdl2-mixer-dev
 * [glut](http://freeglut.sourceforge.net/) / freeglut / freeglut3,
   freeglut3-dev (an implementation of GLUT, including development files,
   version 3)
@@ -97,12 +100,6 @@ $ tar xf glew-* --strip-components=1 -C glew/
 $ rm glew-*
 
 $ git clone git://git.sv.nongnu.org/freetype/freetype2.git freetype
-
-# www.un4seen.com
-$ wget http://www.un4seen.com/files/bass24-linux.zip
-$ mkdir bass
-$ unzip bass2* -d bass/
-$ rm bass2*
 
 $ git clone https://github.com/lz4/lz4.git
 
@@ -170,6 +167,9 @@ directory (`LibreMaple-Client/build`).
 * [libtool](https://www.gnu.org/software/libtool/) (`brew install libtool`; the
   macOS CL tools come with a libtool, but this installs the GNU version with
   'g' prefix e.g. `glibtoolize`)
+* [SDL2](https://www.libsdl.org/) (`brew install sdl2`)
+* [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/)
+  (`brew install sdl2_mixer`)
 * [freeglut](http://freeglut.sourceforge.net/) (`brew install freeglut`; may
   require you to separately install XQuartz, one way to do this is
   `brew cask install xquartz`)
@@ -198,12 +198,6 @@ $ wget https://downloads.sourceforge.net/project/glew/glew/2.1.0/glew-2.1.0.tgz
 $ mkdir glew
 $ tar xf glew-* --strip-components=1 -C glew/
 $ rm glew-*
-
-# www.un4seen.com
-$ wget http://www.un4seen.com/files/bass24-osx.zip
-$ mkdir bass
-$ unzip bass2* -d bass/
-$ rm bass2*
 
 $ git clone https://github.com/lz4/lz4.git
 
@@ -256,7 +250,6 @@ same directory as the executable for ease of use). All paths shown here are
 relative to the base directory where you cloned all of the repos and extracted
 the tarballs:
 
-* `libbass.dylib` (found as `bass/libbass.dylib`)
 * `libGLEW.dylib` (found as `glew/lib/libGLEW.dylib`, this should be a symlink
   to `libGLEW.2.1.0.dylib` or something like that, so be aware)
 * `liblz4.dylib` (found as `lz4/lib/liblz4.dylib`, this should be a symlink to
@@ -266,7 +259,6 @@ Now that you have the locations of these dylibs, you can change the executable
 to point to them. Like this, for example:
 
 ```bash
-$ install_name_tool -change @loader_path/libbass.dylib ./libbass.dylib JourneyClient
 $ install_name_tool -change /usr/local/lib/libGLEW.2.1.0.dylib ./libGLEW.2.1.0.dylib JourneyClient
 $ install_name_tool -change /usr/local/lib/liblz4.1.dylib ./liblz4.1.8.2.dylib JourneyClient
 ```
@@ -315,13 +307,6 @@ download the "Binaries: Windows 32-bit and 64-bit" ZIP file (called
 Use 7-Zip to extract the contents of the glew ZIP file into a directory called
 `glew` (make sure that the contents are at the top level of `glew`, you want
 `glew\bin`, not `glew\glew-2.1.0\bin`).
-
-Navigate to [https://www.un4seen.com/](https://www.un4seen.com/) and download
-the latest version of BASS for Windows (called `bass24.zip` as of this
-writing).
-
-Use 7-Zip to extract the contents of the bass ZIP file into a directory called
-`bass`.
 
 Navigate to
 [https://github.com/lz4/lz4/releases](https://github.com/lz4/lz4/releases) and
@@ -382,7 +367,6 @@ next to the executable. All paths shown here are relative to the base directory
 where you cloned all of the repos and extracted the ZIP files:
 
 * `freetype.dll` (found as `freetype\win64\freetype.dll`)
-* `bass.dll` (found as `bass\x64\bass.dll`)
 * `glew32.dll` (found as `glew\bin\Release\x64\glew32.dll`)
 * `liblz4.dll` (found as `lz4\dll\liblz4.so.1.8.2.dll`, the version number may
   be different and you will have to rename your copied version to `liblz4.dll`)
@@ -435,7 +419,7 @@ LibreMaple uses crypto (`JOURNEY_USE_CRYPTO`), and also uses ASIO
 | Graphics          | [GLFW3](http://www.glfw.org/download.html)                 | zlib/libpng         | OpenGL support | No               | No            |
 | Graphics          | [GLEW](http://glew.sourceforge.net/)                       | Modified BSD/MIT    | OpenGL support | No               | No            |
 | Graphics          | [FreeType](http://www.freetype.org/)                       | FreeType            | -              | No               | No            |
-| Audio             | [Bass](http://www.un4seen.com/)                            | Proprietary(!)      | -              | No               | No            |
+| Audio             | [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/)   | zlib/libpng         | SDL2           | No               | No            |
 | Networking        | [Asio](http://think-async.com/) (standalone; no Boost)     | Boost               | -              | Yes              | No            |
 | General           | [Boost](https://www.boost.org/) (Bimap, Container)         | Boost               | -              | Yes              | No            |
 

@@ -279,7 +279,7 @@ void UICharSelect::update_counts()
 void UICharSelect::send_selection()
 {
     if (selected_relative >= charcount_relative) {
-        buttons[BT_SELECTCHAR]->set_state(Button::MOUSEOVER);
+        buttons[BT_SELECTCHAR]->set_state(Button::MOUSE_OVER);
         return;
     }
 
@@ -300,7 +300,7 @@ void UICharSelect::send_selection()
         break;
     case 2:
         UI::get().disable();
-        Sound(Sound::SELECTCHAR).play();
+        Sound(Sound::SELECT_CHAR).play();
         SelectCharPacket(cid).dispatch();
         break;
     default:
@@ -312,7 +312,7 @@ void UICharSelect::send_selection()
 void UICharSelect::send_deletion()
 {
     if (selected_relative >= charcount_relative) {
-        buttons[BT_DELETECHAR]->set_state(Button::MOUSEOVER);
+        buttons[BT_DELETECHAR]->set_state(Button::MOUSE_OVER);
         return;
     }
 

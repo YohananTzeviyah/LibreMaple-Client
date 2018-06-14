@@ -177,8 +177,8 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
             thumb.set_state(Button::PRESSED);
             return Cursor::CLICKING;
         } else {
-            thumb.set_state(Button::MOUSEOVER);
-            return Cursor::VSCROLL;
+            thumb.set_state(Button::MOUSE_OVER);
+            return Cursor::V_SCROLL;
         }
     } else {
         thumb.set_state(Button::NORMAL);
@@ -194,8 +194,8 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
             prev.set_state(Button::PRESSED);
             return Cursor::CLICKING;
         } else {
-            prev.set_state(Button::MOUSEOVER);
-            return Cursor::CANCLICK;
+            prev.set_state(Button::MOUSE_OVER);
+            return Cursor::CAN_CLICK;
         }
     } else {
         prev.set_state(Button::NORMAL);
@@ -211,8 +211,8 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
             next.set_state(Button::PRESSED);
             return Cursor::CLICKING;
         } else {
-            next.set_state(Button::MOUSEOVER);
-            return Cursor::CANCLICK;
+            next.set_state(Button::MOUSE_OVER);
+            return Cursor::CAN_CLICK;
         }
     } else {
         next.set_state(Button::NORMAL);

@@ -414,7 +414,7 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
             randomize_look();
             break;
         }
-        return Button::MOUSEOVER;
+        return Button::MOUSE_OVER;
     }
     return Button::PRESSED;
 }

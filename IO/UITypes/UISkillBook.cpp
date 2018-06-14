@@ -90,7 +90,7 @@ Cursor::State SkillIcon::send_cursor(Point<std::int16_t> cursorpos,
                 return Cursor::GRABBING;
             } else {
                 state = MOUSE_OVER;
-                return Cursor::CANGRAB;
+                return Cursor::CAN_GRAB;
             }
         } else {
             return Cursor::IDLE;
@@ -102,7 +102,7 @@ Cursor::State SkillIcon::send_cursor(Point<std::int16_t> cursorpos,
                 return Cursor::GRABBING;
             } else {
                 state = MOUSE_OVER;
-                return Cursor::CANGRAB;
+                return Cursor::CAN_GRAB;
             }
         } else {
             state = NORMAL;
@@ -281,7 +281,7 @@ Cursor::State UISkillbook::send_cursor(bool clicked,
             case Cursor::GRABBING:
                 clear_tooltip();
                 break;
-            case Cursor::CANGRAB:
+            case Cursor::CAN_GRAB:
                 show_skill(iter->get_id());
                 break;
             default:

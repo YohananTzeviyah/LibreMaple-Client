@@ -123,7 +123,7 @@ void SetfieldHandler::set_field(InPacket& recv) const
 
     PlayerUpdatePacket().dispatch();
 
-    Sound(Sound::GAMESTART).play();
+    Sound(Sound::GAME_START).play();
 
     UI::get().change_state(UI::GAME);
 }

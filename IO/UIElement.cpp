@@ -108,7 +108,7 @@ bool UIElement::remove_cursor(bool, Point<std::int16_t>)
 {
     for (auto& [_, button] : buttons) {
         switch (button->get_state()) {
-        case Button::MOUSEOVER:
+        case Button::MOUSE_OVER:
             button->set_state(Button::NORMAL);
             break;
         default:
@@ -125,22 +125,22 @@ Cursor::State UIElement::send_cursor(bool down, Point<std::int16_t> pos)
     for (auto& [button_id, button] : buttons) {
         if (button->is_active() && button->bounds(position).contains(pos)) {
             if (button->get_state() == Button::NORMAL) {
-                Sound(Sound::BUTTONOVER).play();
+                Sound{Sound::BUTTON_OVER}.play();
 
-                button->set_state(Button::MOUSEOVER);
-                ret = Cursor::CANCLICK;
-            } else if (button->get_state() == Button::MOUSEOVER) {
+                button->set_state(Button::MOUSE_OVER);
+                ret = Cursor::CAN_CLICK;
+            } else if (button->get_state() == Button::MOUSE_OVER) {
                 if (down) {
-                    Sound(Sound::BUTTONCLICK).play();
+                    Sound{Sound::BUTTON_CLICK}.play();
 
                     button->set_state(button_pressed(button_id));
 
                     ret = Cursor::IDLE;
                 } else {
-                    ret = Cursor::CANCLICK;
+                    ret = Cursor::CAN_CLICK;
                 }
             }
-        } else if (button->get_state() == Button::MOUSEOVER) {
+        } else if (button->get_state() == Button::MOUSE_OVER) {
             button->set_state(Button::NORMAL);
         }
     }

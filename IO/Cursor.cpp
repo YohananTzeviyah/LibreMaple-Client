@@ -50,9 +50,9 @@ void Cursor::update()
     animations[state].update();
 
     switch (state) {
-    case CANCLICK:
-    case CANCLICK2:
-    case CANGRAB:
+    case CAN_CLICK:
+    case CAN_CLICK_2:
+    case CAN_GRAB:
     case CLICKING:
     case GRABBING:
         hide_counter = 0;

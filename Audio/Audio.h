@@ -20,6 +20,8 @@
 #include "../Template/EnumMap.h"
 #include "nlnx/node.hpp"
 
+#include <SDL.h>
+#include <SDL_mixer.h>
 #include <cstdint>
 #include <string>
 #include <unordered_map>
@@ -29,58 +31,56 @@ namespace jrc
 class Sound
 {
 public:
-    // Preloaded sounds.
+    //! Preloaded sounds.
     enum Name {
         // UI
-        BUTTONCLICK,
-        BUTTONOVER,
+        BUTTON_CLICK,
+        BUTTON_OVER,
 
         // Login
-        SELECTCHAR,
-        GAMESTART,
+        SELECT_CHAR,
+        GAME_START,
 
         // Game
         JUMP,
         DROP,
-        PICKUP,
+        PICK_UP,
         PORTAL,
-        LEVELUP,
+        LEVEL_UP,
         LENGTH
     };
 
-    Sound(Name name);
-    Sound(nl::node src);
-    Sound();
+    Sound() noexcept;
+    Sound(Name name) noexcept;
+    Sound(nl::node src) noexcept;
 
-    void play() const;
+    void play() const noexcept;
 
-    static Error init();
-    static void close();
-    static bool set_sfx_volume(std::uint8_t volume);
+    [[nodiscard]] static Error init();
+    static void close() noexcept;
+    static void set_sfx_volume(std::uint8_t volume) noexcept;
 
 private:
     std::size_t id;
 
-    static void play(std::size_t id);
-
     static std::size_t add_sound(nl::node src);
-    static void add_sound(Sound::Name name, nl::node src);
+    static void add_sound(Sound::Name name, nl::node src) noexcept;
 
-    static std::unordered_map<std::size_t, std::uint64_t> samples;
+    static std::unordered_map<std::size_t, Mix_Chunk*> samples;
     static EnumMap<Name, std::size_t> sound_ids;
 };
 
 class Music
 {
 public:
-    Music(std::string&& path) noexcept;
+    [[nodiscard]] static Error play(std::string&& bgm_path);
 
-    void play() const;
-
-    static Error init();
-    static bool set_bgm_volume(std::uint8_t volume);
+    static void init() noexcept;
+    static void set_bgm_volume(std::uint8_t volume) noexcept;
 
 private:
-    std::string path;
+    static Mix_Music* stream;
+
+    friend Sound;
 };
 } // namespace jrc

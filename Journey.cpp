@@ -50,10 +50,7 @@ Error init()
         return error;
     }
 
-    if (Error error = Music::init()) {
-        return error;
-    }
-
+    Music::init();
     Char::init();
     DamageNumber::init();
     MapPortals::init();

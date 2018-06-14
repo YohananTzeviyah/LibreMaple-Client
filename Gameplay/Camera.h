@@ -36,7 +36,7 @@ public:
     void update(Point<std::int16_t> position);
     // Set the position, changing the view immediatly.
     void set_position(Point<std::int16_t> position);
-    // Updates the view's boundaries. Determined by mapinfo or footholds.
+    // Updates the view's boundaries. Determined by map_info or footholds.
     void set_view(Range<std::int16_t> hborders, Range<std::int16_t> vborders);
     // Return the current position.
     Point<std::int16_t> position() const;

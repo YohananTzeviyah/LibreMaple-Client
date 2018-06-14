@@ -28,19 +28,19 @@ public:
     // Maple-cursorstates, linked to the cursor's animation.
     enum State {
         IDLE,
-        CANCLICK,
+        CAN_CLICK,
         GAME,
         HOUSE,
-        CANCLICK2,
-        CANGRAB,
+        CAN_CLICK_2,
+        CAN_GRAB,
         GIFT,
-        VSCROLL,
-        HSCROLL,
-        VSCROLLIDLE,
-        HSCROLLIDLE,
+        V_SCROLL,
+        H_SCROLL,
+        V_SCROLL_IDLE,
+        H_SCROLL_IDLE,
         GRABBING,
         CLICKING,
-        RCLICK,
+        R_CLICK,
         LENGTH
     };
 

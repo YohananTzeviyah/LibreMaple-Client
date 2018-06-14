@@ -206,7 +206,7 @@ Cursor::State Textfield::send_cursor(Point<std::int16_t> cursorpos,
             }
             return Cursor::CLICKING;
         } else {
-            return Cursor::CANCLICK;
+            return Cursor::CAN_CLICK;
         }
     } else {
         if (clicked) {

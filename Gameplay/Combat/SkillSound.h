@@ -53,7 +53,7 @@ public:
     void play_hit() const override;
 
 private:
-    Sound usesound;
-    Sound hitsound;
+    Sound use_sound;
+    Sound hit_sound;
 };
 } // namespace jrc

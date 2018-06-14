@@ -75,7 +75,7 @@ Cursor::State MapNpcs::send_cursor(bool pressed,
                 TalkToNPCPacket(npc->get_oid()).dispatch();
                 return Cursor::IDLE;
             } else {
-                return Cursor::CANCLICK;
+                return Cursor::CAN_CLICK;
             }
         }
     }
