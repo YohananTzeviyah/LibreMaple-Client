@@ -44,11 +44,11 @@ private:
 class UIStatusMessenger : public UIElement
 {
 public:
-    static constexpr Type TYPE = STATUSMESSENGER;
+    static constexpr Type TYPE = STATUS_MESSENGER;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = false;
 
-    UIStatusMessenger();
+    UIStatusMessenger() noexcept;
 
     void draw(float alpha) const override;
     void update() override;
@@ -56,8 +56,8 @@ public:
     void show_status(Text::Color color, std::string&& message);
 
 private:
-    static constexpr std::size_t MAX_MESSAGES = 5ull;
+    static constexpr const std::size_t MAX_MESSAGES = 5;
 
-    std::deque<StatusInfo> statusinfos;
+    std::deque<StatusInfo> status_infos;
 };
 } // namespace jrc

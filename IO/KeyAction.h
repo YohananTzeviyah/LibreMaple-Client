@@ -18,9 +18,7 @@
 #pragma once
 #include <cstdint>
 
-namespace jrc
-{
-namespace KeyAction
+namespace jrc::KeyAction
 {
 //! Maple-specific keycodes, sent via the Keymap Packet.
 enum Id : std::int32_t {
@@ -95,5 +93,4 @@ inline Id action_by_id(std::int32_t id) noexcept
 {
     return static_cast<Id>(id);
 }
-} // namespace KeyAction
-} // namespace jrc
+} // namespace jrc::KeyAction

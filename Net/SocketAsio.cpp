@@ -45,7 +45,7 @@ bool SocketAsio::open(const char* address, const char* port)
     return !error;
 }
 
-bool SocketAsio::close()
+bool SocketAsio::close() noexcept
 {
     error_code error;
     socket.shutdown(tcp::socket::shutdown_both, error);
@@ -69,7 +69,8 @@ const std::int8_t* SocketAsio::get_buffer() const
     return buffer;
 }
 
-bool SocketAsio::dispatch(const std::int8_t* bytes, std::size_t length)
+bool SocketAsio::dispatch(const std::int8_t* bytes,
+                          std::size_t length) noexcept
 {
     error_code error;
     std::size_t result =

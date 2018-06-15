@@ -34,7 +34,7 @@ Keyboard::Keyboard() noexcept
     textactions[GLFW_KEY_TAB] = KeyAction::TAB;
 }
 
-std::int32_t Keyboard::shiftcode() const noexcept
+std::int32_t Keyboard::shift_code() const noexcept
 {
     return GLFW_KEY_LEFT_SHIFT;
 }
@@ -60,7 +60,7 @@ void Keyboard::assign(std::uint8_t key,
                       std::uint8_t tid,
                       KeyAction::Id action) noexcept
 {
-    if (KeyType::Id type = KeyType::type_by_id(tid)) {
+    if (KeyType::Id type = KeyType::type_by_id(tid); type) {
         Mapping mapping{type, action};
         keymap[KEY_TABLE[key]] = mapping;
         maplekeys[key] = mapping;
@@ -121,5 +121,21 @@ const std::unordered_map<std::uint8_t, Keyboard::Mapping>&
 Keyboard::get_maplekeys() const noexcept
 {
     return maplekeys;
+}
+
+bool Keyboard::send_mappings() const noexcept
+{
+    return ChangeKeymapPacket{maplekeys}.dispatch();
+}
+
+void Keyboard::clear_mappings() noexcept
+{
+    keymap.clear();
+    maplekeys.clear();
+
+    keymap[GLFW_KEY_LEFT] = {KeyType::ACTION, KeyAction::LEFT};
+    keymap[GLFW_KEY_RIGHT] = {KeyType::ACTION, KeyAction::RIGHT};
+    keymap[GLFW_KEY_UP] = {KeyType::ACTION, KeyAction::UP};
+    keymap[GLFW_KEY_DOWN] = {KeyType::ACTION, KeyAction::DOWN};
 }
 } // namespace jrc

@@ -30,47 +30,47 @@ StatusInfo::StatusInfo(std::string&& str, Text::Color color)
 
 void StatusInfo::draw(Point<std::int16_t> position, float alpha) const
 {
-    float interopc = opacity.get(alpha);
-    shadow.draw({position + 1, interopc});
-    text.draw({position, interopc});
+    float inter_opc = opacity.get(alpha);
+    shadow.draw({position + 1, inter_opc});
+    text.draw({position, inter_opc});
 }
 
 bool StatusInfo::update()
 {
-    static constexpr float FADE_STEP =
+    static constexpr const float FADE_STEP =
         Constants::TIMESTEP * 1.0f / FADE_DURATION;
 
     opacity -= FADE_STEP;
     return opacity.last() < FADE_STEP;
 }
 
-UIStatusMessenger::UIStatusMessenger()
+UIStatusMessenger::UIStatusMessenger() noexcept
 {
-    position = {790, 500};
+    position = {1020, 660};
 }
 
 void UIStatusMessenger::draw(float inter) const
 {
-    Point<std::int16_t> infopos = {position.x(), position.y()};
-    for (const StatusInfo& info : statusinfos) {
-        info.draw(infopos, inter);
-        infopos.shift_y(-16);
+    Point<std::int16_t> info_pos = {position.x(), position.y()};
+    for (const StatusInfo& info : status_infos) {
+        info.draw(info_pos, inter);
+        info_pos.shift_y(-16);
     }
 }
 
 void UIStatusMessenger::update()
 {
-    for (StatusInfo& info : statusinfos) {
+    for (StatusInfo& info : status_infos) {
         info.update();
     }
 }
 
 void UIStatusMessenger::show_status(Text::Color color, std::string&& message)
 {
-    statusinfos.emplace_front(std::move(message), color);
+    status_infos.emplace_front(std::move(message), color);
 
-    if (statusinfos.size() > MAX_MESSAGES) {
-        statusinfos.pop_back();
+    if (status_infos.size() > MAX_MESSAGES) {
+        status_infos.pop_back();
     }
 }
 } // namespace jrc

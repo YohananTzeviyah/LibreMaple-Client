@@ -36,7 +36,7 @@ Cryptography::Cryptography() = default;
 
 Cryptography::~Cryptography() = default;
 
-void Cryptography::encrypt(std::int8_t* bytes, std::size_t length)
+void Cryptography::encrypt(std::int8_t* bytes, std::size_t length) noexcept
 {
 #ifdef JOURNEY_USE_CRYPTO
     mapleencrypt(bytes, length);
@@ -53,11 +53,12 @@ void Cryptography::decrypt(std::int8_t* bytes, std::size_t length)
 }
 
 void Cryptography::create_header(std::int8_t* buffer, std::size_t length) const
+    noexcept
 {
 #ifdef JOURNEY_USE_CRYPTO
-    static const std::uint8_t MAPLEVERSION = 83;
+    static constexpr const std::uint8_t MAPLE_VERSION = 83;
 
-    std::size_t a = ((sendiv[3] << 8) | sendiv[2]) ^ MAPLEVERSION;
+    std::size_t a = ((sendiv[3] << 8) | sendiv[2]) ^ MAPLE_VERSION;
     std::size_t b = a ^ length;
     buffer[0] = static_cast<std::int8_t>(a % 0x100);
     buffer[1] = static_cast<std::int8_t>(a / 0x100);
@@ -98,6 +99,7 @@ std::size_t Cryptography::check_length(const std::int8_t* bytes) const
 }
 
 void Cryptography::mapleencrypt(std::int8_t* bytes, std::size_t length) const
+    noexcept
 {
     for (std::size_t j = 0; j < 3; ++j) {
         std::int8_t remember = 0;
@@ -149,7 +151,7 @@ void Cryptography::mapledecrypt(std::int8_t* bytes, std::size_t length) const
     }
 }
 
-void Cryptography::updateiv(std::uint8_t* iv) const
+void Cryptography::updateiv(std::uint8_t* iv) const noexcept
 {
     static const std::uint8_t maplebytes[256] = // This is called `funnyBytes`
                                                 // in OdinMS-based sources.
@@ -223,7 +225,7 @@ std::int8_t Cryptography::rollright(std::int8_t data, std::size_t count) const
 
 void Cryptography::aesofb(std::int8_t* bytes,
                           std::size_t length,
-                          std::uint8_t* iv) const
+                          std::uint8_t* iv) const noexcept
 {
     std::size_t blocklength = 0x5B0;
     std::size_t offset = 0;

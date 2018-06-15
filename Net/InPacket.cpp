@@ -19,11 +19,9 @@
 
 namespace jrc
 {
-InPacket::InPacket(const std::int8_t* recv, std::size_t length)
+InPacket::InPacket(const std::int8_t* recv, std::size_t length) noexcept
+    : bytes(recv), top(length), pos(0)
 {
-    bytes = recv;
-    top = length;
-    pos = 0;
 }
 
 bool InPacket::available() const
@@ -36,7 +34,7 @@ std::size_t InPacket::length() const
     return top - pos;
 }
 
-void InPacket::skip(std::size_t count)
+void InPacket::skip(std::size_t count) noexcept(false)
 {
     if (count > length()) {
         throw PacketError("Stack underflow at " + std::to_string(pos));

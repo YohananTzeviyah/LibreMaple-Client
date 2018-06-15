@@ -27,11 +27,17 @@ namespace jrc
 {
 constexpr const char* Error::messages[];
 
-Sound::Sound() noexcept : id(0) {}
+Sound::Sound() noexcept : id(0)
+{
+}
 
-Sound::Sound(Name name) noexcept : id(sound_ids[name]) {}
+Sound::Sound(Name name) noexcept : id(sound_ids[name])
+{
+}
 
-Sound::Sound(nl::node src) noexcept : id(add_sound(src)) {}
+Sound::Sound(nl::node src) noexcept : id(add_sound(src))
+{
+}
 
 void Sound::play() const noexcept
 {

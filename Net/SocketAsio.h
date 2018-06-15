@@ -44,10 +44,10 @@ public:
     ~SocketAsio();
 
     bool open(const char* address, const char* port);
-    bool close();
+    bool close() noexcept;
     std::size_t receive(bool* connected);
     const std::int8_t* get_buffer() const;
-    bool dispatch(const std::int8_t* bytes, std::size_t length);
+    bool dispatch(const std::int8_t* bytes, std::size_t length) noexcept;
 
 private:
     io_service ioservice;

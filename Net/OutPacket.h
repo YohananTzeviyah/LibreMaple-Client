@@ -34,7 +34,7 @@ public:
     //! Construct a packet by writing its opcode.
     OutPacket(std::int16_t opcode);
 
-    void dispatch();
+    bool dispatch() noexcept;
 
 protected:
     //! Skip a number of bytes (filled with zeroes).
@@ -60,18 +60,18 @@ private:
     std::vector<std::int8_t> bytes;
 };
 
-//! Opcodes for OutPackets associated with version 83 of the game.
+//! Opcodes for `OutPacket`s associated with version 83 of the game.
 enum OutPacket::Opcode : std::uint16_t {
     // Login
-    LOGIN = 0x1,
-    SERVERLIST_REREQUEST = 0x4,
-    CHARLIST_REQUEST = 0x5,
-    STATUS_REQUEST = 0x6,
-    ACCEPT_TOS = 0x7,
-    SET_GENDER = 0x8,
-    AFTER_LOGIN = 0x9,
-    REGISTER_PIN = 0xA,
-    SERVERLIST_REQUEST = 0xB,
+    LOGIN = 0x01,
+    SERVERLIST_REREQUEST = 0x04,
+    CHARLIST_REQUEST = 0x05,
+    STATUS_REQUEST = 0x06,
+    ACCEPT_TOS = 0x07,
+    SET_GENDER = 0x08,
+    AFTER_LOGIN = 0x09,
+    REGISTER_PIN = 0x0A,
+    SERVERLIST_REQUEST = 0x0B,
     SELECT_CHAR = 0x13,
     PLAYER_LOGIN = 0x14,
     NAME_CHAR = 0x15,
@@ -82,43 +82,43 @@ enum OutPacket::Opcode : std::uint16_t {
     SELECT_CHAR_PIC = 0x1E,
 
     // Gameplay 1
-    CHANGEMAP = 38,
-    MOVE_PLAYER = 41,
-    CLOSE_ATTACK = 44,
-    RANGED_ATTACK = 45,
-    MAGIC_ATTACK = 46,
-    TAKE_DAMAGE = 48,
+    CHANGEMAP = 0x26,
+    MOVE_PLAYER = 0x29,
+    CLOSE_ATTACK = 0x2C,
+    RANGED_ATTACK = 0x2D,
+    MAGIC_ATTACK = 0x2E,
+    TAKE_DAMAGE = 0x30,
 
     // Messaging
-    GENERAL_CHAT = 49,
+    GENERAL_CHAT = 0x31,
 
-    // Npc Interaction
-    TALK_TO_NPC = 58,
-    NPC_TALK_MORE = 60,
-    NPC_SHOP_ACTION = 61,
+    // NPC interaction
+    TALK_TO_NPC = 0x3A,
+    NPC_TALK_MORE = 0x3C,
+    NPC_SHOP_ACTION = 0x3D,
 
     // Inventory
-    GATHER_ITEMS = 69,
-    SORT_ITEMS = 70,
-    MOVE_ITEM = 71,
-    USE_ITEM = 72,
-    SCROLL_EQUIP = 86,
+    GATHER_ITEMS = 0x45,
+    SORT_ITEMS = 0x46,
+    MOVE_ITEM = 0x47,
+    USE_ITEM = 0x48,
+    SCROLL_EQUIP = 0x56,
 
     // Player
-    SPEND_AP = 87,
-    SPEND_SP = 90,
+    SPEND_AP = 0x57,
+    SPEND_SP = 0x5A,
 
     // Skill
-    USE_SKILL = 91,
+    USE_SKILL = 0x5B,
 
     // Gameplay 2
-    PARTY_OPERATION = 124,
+    PARTY_OPERATION = 0x7C,
     CHANGE_KEYMAP = 0x87,
-    MOVE_MONSTER = 188,
-    PICKUP_ITEM = 202,
+    MOVE_MONSTER = 0xBC,
+    PICKUP_ITEM = 0xCA,
     PLAYER_UPDATE = 0xDF,
 
     // Custom
-    HASH_CHECK = 30000
+    HASH_CHECK = 0x7530
 };
 } // namespace jrc

@@ -30,7 +30,7 @@ namespace jrc
 class UICharCreation : public UIElement
 {
 public:
-    static constexpr Type TYPE = CHARCREATION;
+    static constexpr Type TYPE = CHAR_CREATION;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = false;
 

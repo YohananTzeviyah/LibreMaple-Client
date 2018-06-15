@@ -24,56 +24,76 @@
 
 namespace jrc
 {
-/// A packet received from the server.
-/// Contains reading functions.
+//! A packet received from the server.
+//! Contains reading functions.
 class InPacket
 {
 public:
-    /// Construct a packet from an array of bytes.
-    InPacket(const std::int8_t* bytes, std::size_t length);
+    //! Construct a packet from an array of bytes.
+    InPacket(const std::int8_t* bytes, std::size_t length) noexcept;
 
-    /// Check if there are more bytes available.
+    //! Check if there are more bytes available.
     bool available() const;
-    /// Return the remaining length in bytes.
+    //! Return the remaining length in bytes.
     std::size_t length() const;
-    /// Skip a number of bytes (by increasing the offset).
-    void skip(std::size_t count);
+    //! Skip a number of bytes (by increasing the offset).
+    //!
+    //! Throws a `PacketError` if `count > length()`.
+    void skip(std::size_t count) noexcept(false);
 
-    /// Read a byte and check if it is 1.
-    bool read_bool();
-    /// Read a byte.
-    std::int8_t read_byte();
-    /// Read a short.
-    std::int16_t read_short();
-    /// Read an int.
-    std::int32_t read_int();
-    /// Read a long.
-    std::int64_t read_long();
+    //! Read a byte and check if it is 1.
+    //!
+    //! Throws a `PacketError` on stack underflow.
+    bool read_bool() noexcept(false);
+    //! Read a byte.
+    //!
+    //! Throws a `PacketError` on stack underflow.
+    std::int8_t read_byte() noexcept(false);
+    //! Read a short.
+    //!
+    //! Throws a `PacketError` on stack underflow.
+    std::int16_t read_short() noexcept(false);
+    //! Read an int.
+    //!
+    //! Throws a `PacketError` on stack underflow.
+    std::int32_t read_int() noexcept(false);
+    //! Read a long.
+    //!
+    //! Throws a `PacketError` on stack underflow.
+    std::int64_t read_long() noexcept(false);
 
-    /// Read a point.
-    Point<std::int16_t> read_point();
+    //! Read a point.
+    //!
+    //! Throws a `PacketError` on stack underflow.
+    Point<std::int16_t> read_point() noexcept(false);
 
-    /// Read a string.
-    std::string read_string();
-    /// Read a fixed-length string.
-    std::string read_padded_string(std::uint16_t length);
+    //! Read a string.
+    //!
+    //! Throws a `PacketError` on stack underflow.
+    std::string read_string() noexcept(false);
+    //! Read a fixed-length string.
+    //!
+    //! Throws a `PacketError` on stack underflow.
+    std::string read_padded_string(std::uint16_t length) noexcept(false);
 
-    /// Inspect a byte and check if it is 1. Does not advance the buffer
-    /// position.
+    //! Inspect a byte and check if it is 1. Does not advance the buffer
+    //! position.
     bool inspect_bool();
-    /// Inspect a byte. Does not advance the buffer position.
+    //! Inspect a byte. Does not advance the buffer position.
     std::int8_t inspect_byte();
-    /// Inspect a short. Does not advance the buffer position.
+    //! Inspect a short. Does not advance the buffer position.
     std::int16_t inspect_short();
-    /// Inspect an int. Does not advance the buffer position.
+    //! Inspect an int. Does not advance the buffer position.
     std::int32_t inspect_int();
-    /// Inspect a long. Does not advance the buffer position.
+    //! Inspect a long. Does not advance the buffer position.
     std::int64_t inspect_long();
 
 private:
     template<typename T>
-    /// Read a number and advance the buffer position.
-    T read()
+    //! Read a number and advance the buffer position.
+    //!
+    //! Throws a `PacketError` on stack underflow.
+    T read() noexcept(false)
     {
         constexpr std::size_t count = sizeof(T) / sizeof(std::int8_t);
         T all = 0;
@@ -88,7 +108,7 @@ private:
     }
 
     template<typename T>
-    /// Read without advancing the buffer position.
+    //! Read without advancing the buffer position.
     T inspect()
     {
         std::size_t before = pos;

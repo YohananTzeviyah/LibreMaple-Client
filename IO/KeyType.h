@@ -16,14 +16,15 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "KeyAction.h"
+
+#include <array>
 #include <cstdint>
 
-namespace jrc
+namespace jrc::KeyType
 {
-namespace KeyType
-{
-// Keytypes determine how a keycode is interpreted.
-enum Id {
+//! Keytypes determine how a keycode is interpreted.
+enum Id : std::uint8_t {
     NONE = 0,
     SKILL = 1,
     ITEM = 2,
@@ -37,7 +38,7 @@ enum Id {
     LENGTH
 };
 
-inline Id type_by_id(std::uint8_t id)
+inline Id type_by_id(std::uint8_t id) noexcept
 {
     if (id <= NONE || id >= LENGTH) {
         return NONE;
@@ -45,5 +46,22 @@ inline Id type_by_id(std::uint8_t id)
 
     return static_cast<Id>(id);
 }
-} // namespace KeyType
-} // namespace jrc
+
+inline Id type_by_action(KeyAction::Id action) noexcept
+{
+    static constexpr const std::array<Id, 107> ACTIONS_TO_TYPES{
+        MENU,   MENU,   MENU,   MENU,   MENU,   MENU, MENU, MENU, MENU, MENU,
+        MENU,   MENU,   MENU,   MENU,   MENU,   MENU, MENU, MENU, MENU, MENU,
+        MENU,   MENU,   MENU,   MENU,   MENU,   MENU, MENU, MENU, NONE, NONE,
+        NONE,   NONE,   NONE,   NONE,   NONE,   NONE, NONE, NONE, NONE, NONE,
+        NONE,   NONE,   NONE,   NONE,   NONE,   NONE, NONE, NONE, NONE, NONE,
+        ACTION, ACTION, ACTION, ACTION, ACTION, NONE, NONE, NONE, NONE, NONE,
+        NONE,   NONE,   NONE,   NONE,   NONE,   NONE, NONE, NONE, NONE, NONE,
+        NONE,   NONE,   NONE,   NONE,   NONE,   NONE, NONE, NONE, NONE, NONE,
+        NONE,   NONE,   NONE,   NONE,   NONE,   NONE, NONE, NONE, NONE, NONE,
+        NONE,   NONE,   NONE,   NONE,   NONE,   NONE, NONE, NONE, NONE, NONE,
+        FACE,   FACE,   FACE,   FACE,   FACE,   FACE, FACE};
+
+    return ACTIONS_TO_TYPES[action];
+}
+} // namespace jrc::KeyType

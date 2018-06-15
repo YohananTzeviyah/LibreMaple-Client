@@ -150,7 +150,9 @@ std::int16_t Foothold::vdelta() const
 
 double Foothold::slope() const
 {
-    return is_wall() ? 0.0f : static_cast<double>(vdelta()) / hdelta();
+    std::int16_t h_delta = hdelta();
+    return h_delta == 0 || is_wall() ? 0.0
+                                     : static_cast<double>(vdelta()) / h_delta;
 }
 
 double Foothold::ground_below(double x) const

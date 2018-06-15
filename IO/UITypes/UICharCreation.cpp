@@ -300,7 +300,7 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
         } else {
             active = false;
             if (auto charselect = UI::get().get_element<UICharSelect>())
-                charselect->makeactive();
+                charselect->make_active();
             return Button::PRESSED;
         }
     }

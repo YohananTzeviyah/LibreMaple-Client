@@ -36,7 +36,8 @@ UIKeyConfig::UIKeyConfig() noexcept : UIDragElement<PosKEYCONFIG>({622, 20})
     sprites.emplace_back(source["backgrnd2"]);
     sprites.emplace_back(source["backgrnd3"]);
 
-    buttons[BT_CANCEL] = std::make_unique<MapleButton>(source["BtCancel"]);
+    buttons[BT_CANCEL] = std::make_unique<MapleButton>(
+        source["BtCancel"], Point<std::int16_t>{422, 58});
     buttons[BT_DEFAULT] = std::make_unique<MapleButton>(source["BtDefault"]);
     buttons[BT_DELETE] = std::make_unique<MapleButton>(source["BtDelete"]);
     buttons[BT_OK] = std::make_unique<MapleButton>(source["BtOK"]);
@@ -217,7 +218,17 @@ void UIKeyConfig::draw(float alpha) const
 Button::State UIKeyConfig::button_pressed(std::uint16_t id)
 {
     switch (id) {
-    // TODO
+    case Buttons::BT_DEFAULT:
+        reset_to_default();
+        return Button::NORMAL;
+    case Buttons::BT_CANCEL:
+        UIElement::deactivate();
+        reload_mappings();
+        return Button::NORMAL;
+    case Buttons::BT_OK:
+        commit_mappings();
+        UIElement::deactivate();
+        return Button::NORMAL;
     default:
         return Button::PRESSED;
     }
@@ -231,6 +242,26 @@ void UIKeyConfig::reload_mappings() noexcept
     }
 }
 
+void UIKeyConfig::reset_to_default() noexcept
+{
+    slot_mappings.left.clear();
+    for (auto [key_id, action_id] : DEFAULT_MAPPINGS) {
+        slot_mappings.insert({key_id, KeyAction::action_by_id(action_id)});
+    }
+}
+
+bool UIKeyConfig::commit_mappings() const noexcept
+{
+    auto& keyboard = UI::get().get_keyboard_mut();
+    keyboard.clear_mappings();
+
+    for (auto [key, action] : slot_mappings) {
+        keyboard.assign(key, KeyType::type_by_action(action), action);
+    }
+
+    return keyboard.send_mappings();
+}
+
 void UIKeyConfig::update_key_slot(std::uint8_t key_slot,
                                   KeyAction::Id action_id) noexcept
 {
@@ -240,9 +271,9 @@ void UIKeyConfig::update_key_slot(std::uint8_t key_slot,
 Cursor::State UIKeyConfig::send_cursor(bool pressed,
                                        Point<std::int16_t> cursor_pos)
 {
-    Cursor::State dstate = UIDragElement::send_cursor(pressed, cursor_pos);
+    Cursor::State drag_state = UIDragElement::send_cursor(pressed, cursor_pos);
     if (dragged) {
-        return dstate;
+        return drag_state;
     }
 
     std::uint8_t slot = slot_by_position(cursor_pos);
@@ -274,12 +305,6 @@ void UIKeyConfig::double_click(Point<std::int16_t>)
 
 void UIKeyConfig::send_icon(const Icon& icon, Point<std::int16_t> cursor_pos)
 {
-    Console::get().print(
-        str::concat("sending icon at {",
-                    std::to_string(cursor_pos.x() - position.x()),
-                    ", ",
-                    std::to_string(cursor_pos.y() - position.y()),
-                    '}'));
     if (std::uint8_t slot = slot_by_position(cursor_pos); slot) {
         update_key_slot(slot, icon.get_action_id());
     }
@@ -296,8 +321,7 @@ UIKeyConfig::slot_by_position(Point<std::int16_t> cursor_pos) const noexcept
     std::uint8_t slot_ix = 0;
     for (auto slot_pos : SLOT_POSITIONS) {
         Rectangle<std::int16_t> slot_rect{position + slot_pos,
-                                          position + slot_pos +
-                                              Point<std::int16_t>{32, 32}};
+                                          position + slot_pos + 32};
         if (slot_rect.contains(cursor_pos)) {
             return slot_ix;
         }

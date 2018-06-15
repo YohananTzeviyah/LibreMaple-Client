@@ -29,8 +29,8 @@ public:
     MapleButton(nl::node src, std::int16_t x, std::int16_t y);
     MapleButton(nl::node src);
 
-    void draw(Point<std::int16_t> position) const;
-    Rectangle<std::int16_t> bounds(Point<std::int16_t> parentpos) const;
+    void draw(Point<std::int16_t> parent_pos) const;
+    Rectangle<std::int16_t> bounds(Point<std::int16_t> parent_pos) const;
 
 private:
     Texture textures[NUM_STATES];

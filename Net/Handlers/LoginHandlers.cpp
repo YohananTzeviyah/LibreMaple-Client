@@ -33,7 +33,7 @@ namespace jrc
 void LoginResultHandler::handle(InPacket& recv) const
 {
     // Remove previous UIs.
-    UI::get().remove(UIElement::LOGINNOTICE);
+    UI::get().remove(UIElement::LOGIN_NOTICE);
     UI::get().remove(UIElement::LOGIN_WAIT);
 
     // The packet should contain a 'reason' integer which can signify various
@@ -96,7 +96,7 @@ void ServerlistHandler::handle(InPacket& recv) const
 
     // Remove previous UIs.
     UI::get().remove(UIElement::LOGIN);
-    UI::get().remove(UIElement::CHARSELECT);
+    UI::get().remove(UIElement::CHAR_SELECT);
 
     // Add the world selection screen to the ui.
     UI::get().emplace<UIWorldSelect>(worlds, worldcount);
@@ -117,8 +117,8 @@ void CharlistHandler::handle(InPacket& recv) const
     auto slots = static_cast<std::uint8_t>(recv.read_int());
 
     // Remove previous UIs.
-    UI::get().remove(UIElement::WORLDSELECT);
-    UI::get().remove(UIElement::CHARCREATION);
+    UI::get().remove(UIElement::WORLD_SELECT);
+    UI::get().remove(UIElement::CHAR_CREATION);
 
     // Add the character selection screen.
     UI::get().emplace<UICharSelect>(
@@ -152,12 +152,12 @@ void AddNewCharEntryHandler::handle(InPacket& recv) const
     CharEntry character = LoginParser::parse_charentry(recv);
 
     // Remove the character creation ui.
-    UI::get().remove(UIElement::CHARCREATION);
+    UI::get().remove(UIElement::CHAR_CREATION);
 
     // Readd the updated character selection.
     if (auto charselect = UI::get().get_element<UICharSelect>()) {
         charselect->add_character(std::move(character));
-        charselect->makeactive();
+        charselect->make_active();
     }
 
     UI::get().enable();

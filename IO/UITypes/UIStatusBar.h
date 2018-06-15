@@ -33,7 +33,7 @@ namespace jrc
 class UIStatusbar : public UIElement
 {
 public:
-    static constexpr Type TYPE = STATUSBAR;
+    static constexpr Type TYPE = STATUS_BAR;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 

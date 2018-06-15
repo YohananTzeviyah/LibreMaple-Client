@@ -37,22 +37,22 @@ public:
         NONE,
         LOGIN,
         LOGIN_WAIT,
-        LOGINNOTICE,
-        WORLDSELECT,
-        CHARSELECT,
-        CHARCREATION,
-        SOFTKEYBOARD,
-        STATUSMESSENGER,
-        STATUSBAR,
-        BUFFLIST,
+        LOGIN_NOTICE,
+        WORLD_SELECT,
+        CHAR_SELECT,
+        CHAR_CREATION,
+        SOFT_KEYBOARD,
+        STATUS_MESSENGER,
+        STATUS_BAR,
+        BUFF_LIST,
         NOTICE,
-        NPCTALK,
+        NPC_TALK,
         SHOP,
-        STATSINFO,
+        STATS_INFO,
         ITEM_INVENTORY,
-        EQUIPINVENTORY,
+        EQUIP_INVENTORY,
         SKILLBOOK,
-        KEYCONFIG,
+        KEY_CONFIG,
         NUM_TYPES
     };
 
@@ -61,19 +61,19 @@ public:
     virtual void draw(float inter) const;
     virtual void update();
 
-    void makeactive();
+    void make_active();
     void deactivate();
     bool is_active() const;
 
     virtual void toggle_active();
-    virtual Button::State button_pressed(std::uint16_t buttonid);
-    virtual void send_icon(const Icon& icon, Point<std::int16_t> cursorpos);
+    virtual Button::State button_pressed(std::uint16_t button_id);
+    virtual void send_icon(const Icon& icon, Point<std::int16_t> cursor_pos);
 
-    virtual void double_click(Point<std::int16_t> cursorpos);
-    virtual bool is_in_range(Point<std::int16_t> cursorpos) const;
-    virtual bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos);
+    virtual void double_click(Point<std::int16_t> cursor_pos);
+    virtual bool is_in_range(Point<std::int16_t> cursor_pos) const;
+    virtual bool remove_cursor(bool clicked, Point<std::int16_t> cursor_pos);
     virtual Cursor::State send_cursor(bool clicked,
-                                      Point<std::int16_t> cursorpos);
+                                      Point<std::int16_t> cursor_pos);
 
 protected:
     UIElement(Point<std::int16_t> position,

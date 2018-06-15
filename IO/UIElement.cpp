@@ -52,7 +52,7 @@ void UIElement::draw_sprites(float alpha) const
 void UIElement::draw_buttons(float) const
 {
     for (auto& iter : buttons) {
-        if (const Button* button = iter.second.get()) {
+        if (const Button* button = iter.second.get(); button) {
             button->draw(position);
         }
     }
@@ -65,7 +65,7 @@ void UIElement::update()
     }
 }
 
-void UIElement::makeactive()
+void UIElement::make_active()
 {
     active = true;
 }
@@ -98,10 +98,10 @@ void UIElement::double_click(Point<std::int16_t>)
 {
 }
 
-bool UIElement::is_in_range(Point<std::int16_t> cursorpos) const
+bool UIElement::is_in_range(Point<std::int16_t> cursor_pos) const
 {
-    const Rectangle<std::int16_t> bounds(position, position + dimension);
-    return bounds.contains(cursorpos);
+    const Rectangle<std::int16_t> bounds{position, position + dimension};
+    return bounds.contains(cursor_pos);
 }
 
 bool UIElement::remove_cursor(bool, Point<std::int16_t>)
@@ -118,12 +118,13 @@ bool UIElement::remove_cursor(bool, Point<std::int16_t>)
     return false;
 }
 
-Cursor::State UIElement::send_cursor(bool down, Point<std::int16_t> pos)
+Cursor::State UIElement::send_cursor(bool down, Point<std::int16_t> cursor_pos)
 {
     Cursor::State ret = down ? Cursor::CLICKING : Cursor::IDLE;
 
     for (auto& [button_id, button] : buttons) {
-        if (button->is_active() && button->bounds(position).contains(pos)) {
+        if (button->is_active() &&
+            button->bounds(position).contains(cursor_pos)) {
             if (button->get_state() == Button::NORMAL) {
                 Sound{Sound::BUTTON_OVER}.play();
 

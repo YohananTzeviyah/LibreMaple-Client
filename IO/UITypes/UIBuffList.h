@@ -47,7 +47,7 @@ private:
 class UIBuffList : public UIElement
 {
 public:
-    static constexpr Type TYPE = BUFFLIST;
+    static constexpr Type TYPE = BUFF_LIST;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = false;
 

@@ -138,7 +138,7 @@ void WeekEventMessageHandler::handle(InPacket& recv) const
     recv.read_byte(); // always 0xFF in solaxia and moople
     std::string message = recv.read_string();
 
-    static const std::string_view MAPLETIP = "[MapleTip]";
+    static constexpr const std::string_view MAPLETIP = "[MapleTip]";
     if (std::string_view(message)
             .substr(0, MAPLETIP.length())
             .compare(MAPLETIP)) {

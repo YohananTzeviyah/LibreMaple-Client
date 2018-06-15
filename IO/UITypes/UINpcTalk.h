@@ -25,7 +25,7 @@ namespace jrc
 class UINpcTalk : public UIElement
 {
 public:
-    static constexpr Type TYPE = NPCTALK;
+    static constexpr Type TYPE = NPC_TALK;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 

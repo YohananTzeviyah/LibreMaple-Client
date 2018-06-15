@@ -16,6 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "../Net/Packets/GameplayPackets.h"
 #include "../Template/Enumeration.h"
 #include "KeyAction.h"
 #include "KeyType.h"
@@ -64,11 +65,13 @@ public:
     };
 
     Keyboard() noexcept;
+    Keyboard(const Keyboard&) = delete;
+    Keyboard(Keyboard&&) = delete;
 
     void
     assign(std::uint8_t key, std::uint8_t type, KeyAction::Id action) noexcept;
 
-    std::int32_t shiftcode() const noexcept;
+    std::int32_t shift_code() const noexcept;
     std::int32_t ctrl_code() const noexcept;
     KeyAction::Id get_ctrl_action(std::int32_t keycode) const noexcept;
     Mapping get_mapping(std::int32_t keycode) const noexcept;
@@ -76,6 +79,10 @@ public:
     const std::unordered_map<std::uint8_t, Mapping>& get_maplekeys() const
         noexcept;
     Mapping get_text_mapping(std::int32_t keycode, bool shift) const noexcept;
+    //! Sends a `ChangeKeymapPacket` packet to the server. Returns `true` on
+    //! success.
+    bool send_mappings() const noexcept;
+    void clear_mappings() noexcept;
 
 private:
     std::unordered_map<std::int32_t, Mapping> keymap;
@@ -187,6 +194,7 @@ template<>
 struct tuple_element<0, jrc::Keyboard::Mapping> {
     using type = jrc::KeyType::Id;
 };
+
 template<>
 struct tuple_element<1, jrc::Keyboard::Mapping> {
     using type = std::int32_t;

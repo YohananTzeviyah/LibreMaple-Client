@@ -31,7 +31,7 @@ class UISoftkey : public UIElement
 public:
     using Callback = std::function<void(std::string_view)>;
 
-    static constexpr Type TYPE = SOFTKEYBOARD;
+    static constexpr Type TYPE = SOFT_KEYBOARD;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 

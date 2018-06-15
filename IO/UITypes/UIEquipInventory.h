@@ -28,7 +28,7 @@ namespace jrc
 class UIEquipInventory : public UIDragElement<PosEQINV>
 {
 public:
-    static constexpr Type TYPE = EQUIPINVENTORY;
+    static constexpr Type TYPE = EQUIP_INVENTORY;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 

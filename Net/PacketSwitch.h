@@ -36,7 +36,7 @@ public:
 private:
     //! Print a warning to the console about something strange or amiss in
     //! the packet switcher.
-    void warn(std::string_view message, std::size_t opcode) const;
+    void warn(std::string_view message, std::size_t opcode) const noexcept;
 
     //! Opcodes for which handlers can be registered.
     enum Opcode : std::uint16_t;

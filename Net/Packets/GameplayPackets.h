@@ -16,7 +16,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../../IO/Keyboard.h"
 #include "MovementPacket.h"
 
 #include <string_view>
@@ -61,8 +60,9 @@ public:
 class ChangeKeymapPacket : public OutPacket
 {
 public:
+    template<typename KeyboardMapping>
     ChangeKeymapPacket(
-        const std::unordered_map<std::int32_t, Keyboard::Mapping>& maplekeys)
+        const std::unordered_map<std::uint8_t, KeyboardMapping>& maplekeys)
         : OutPacket(CHANGE_KEYMAP)
     {
         // Mode
@@ -72,7 +72,7 @@ public:
         write_int(static_cast<std::int32_t>(maplekeys.size()));
 
         for (const auto& [key, mapping] : maplekeys) {
-            const auto& [type, action] = mapping;
+            const auto [type, action] = mapping;
 
             write_int(key);
             write_byte(static_cast<std::int8_t>(type));

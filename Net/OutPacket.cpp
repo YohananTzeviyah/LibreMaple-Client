@@ -28,9 +28,9 @@ OutPacket::OutPacket(std::int16_t opcode)
     write_short(opcode);
 }
 
-void OutPacket::dispatch()
+bool OutPacket::dispatch() noexcept
 {
-    Session::get().write(bytes.data(), bytes.size());
+    return Session::get().write(bytes.data(), bytes.size());
 }
 
 void OutPacket::skip(std::size_t count)

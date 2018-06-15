@@ -77,6 +77,7 @@ public:
     void remove(UIElement::Type type);
 
     const Keyboard& get_keyboard() const noexcept;
+    Keyboard& get_keyboard_mut() noexcept;
 
 private:
     std::unique_ptr<UIState> state;

@@ -21,7 +21,7 @@
 
 namespace jrc
 {
-// Base class for packets which update object movements with the server.
+//! Base class for packets which update object movements with the server.
 class MovementPacket : public OutPacket
 {
 public:

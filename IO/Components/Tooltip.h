@@ -37,7 +37,7 @@ public:
         case NONE:
             return t == UIElement::Type::NONE;
         case EQUIP_INVENTORY:
-            return t == UIElement::Type::EQUIPINVENTORY;
+            return t == UIElement::Type::EQUIP_INVENTORY;
         case ITEM_INVENTORY:
             return t == UIElement::Type::ITEM_INVENTORY;
         case SKILL_BOOK:

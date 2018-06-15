@@ -143,7 +143,7 @@ void UI::send_key(std::int32_t keycode, bool pressed)
                 }
             }
         } else {
-            bool shift = is_key_down[keyboard.shiftcode()];
+            bool shift = is_key_down[keyboard.shift_code()];
             Keyboard::Mapping mapping =
                 keyboard.get_text_mapping(keycode, shift);
             focused_text_field->send_key(
@@ -221,6 +221,11 @@ void UI::remove(UIElement::Type type)
 }
 
 const Keyboard& UI::get_keyboard() const noexcept
+{
+    return keyboard;
+}
+
+Keyboard& UI::get_keyboard_mut() noexcept
 {
     return keyboard;
 }

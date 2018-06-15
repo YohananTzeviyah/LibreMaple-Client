@@ -32,7 +32,7 @@
 
 namespace jrc
 {
-// Opcodes for InPackets.
+//! Opcodes for InPackets.
 enum PacketSwitch::Opcode : std::uint16_t {
     // Login 1
     LOGIN_RESULT = 0,
@@ -227,7 +227,7 @@ PacketSwitch::PacketSwitch()
 void PacketSwitch::forward(const std::int8_t* bytes, std::size_t length) const
 {
     // Wrap the bytes with a parser.
-    InPacket recv = {bytes, length};
+    InPacket recv{bytes, length};
     // Read the opcode to determine handler responsible.
     auto opcode = static_cast<std::uint16_t>(recv.read_short());
 
@@ -251,6 +251,7 @@ void PacketSwitch::forward(const std::int8_t* bytes, std::size_t length) const
 }
 
 void PacketSwitch::warn(std::string_view message, std::size_t opcode) const
+    noexcept
 {
     Console::get().print(
         str::concat(message, ", Opcode: ", std::to_string(opcode)));

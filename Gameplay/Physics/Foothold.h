@@ -21,64 +21,64 @@
 
 namespace jrc
 {
-// Represents a platform part on a maple-map.
+//! Represents a platform part on a maple-map.
 class Foothold
 {
 public:
     Foothold(nl::node src, std::uint16_t id, std::uint8_t layer);
     Foothold();
 
-    // Returns the foothold id aka the identifier in game data of this
-    // platform.
+    //! Returns the foothold id aka the identifier in game data of this
+    //! platform.
     std::uint16_t id() const;
-    // Returns the platform left to this.
+    //! Returns the platform left to this.
     std::uint16_t prev() const;
-    // Returns the platform right to this.
+    //! Returns the platform right to this.
     std::uint16_t next() const;
-    // Returns the platform's layer.
+    //! Returns the platform's layer.
     std::uint8_t layer() const;
-    // Returns the horizontal component.
+    //! Returns the horizontal component.
     const Range<std::int16_t>& horizontal() const;
-    // Returns the vertical component.
+    //! Returns the vertical component.
     const Range<std::int16_t>& vertical() const;
 
-    // Return the left edge.
+    //! Return the left edge.
     std::int16_t l() const;
-    // Return the right edge.
+    //! Return the right edge.
     std::int16_t r() const;
-    // Return the top edge.
+    //! Return the top edge.
     std::int16_t t() const;
-    // Return the bottom edge.
+    //! Return the bottom edge.
     std::int16_t b() const;
-    // Return the first horizontal component.
+    //! Return the first horizontal component.
     std::int16_t x1() const;
-    // Return the second horizontal component.
+    //! Return the second horizontal component.
     std::int16_t x2() const;
-    // Return the first vertical component.
+    //! Return the first vertical component.
     std::int16_t y1() const;
-    // Return the second vertical component.
+    //! Return the second vertical component.
     std::int16_t y2() const;
-    // Return if the platform is a wall (x1 == x2).
+    //! Return if the platform is a wall (x1 == x2).
     bool is_wall() const;
-    // Return if the platform is a floor (y1 == y2).
+    //! Return if the platform is a floor (y1 == y2).
     bool is_floor() const;
-    // Return if this platform is a left edge.
+    //! Return if this platform is a left edge.
     bool is_left_edge() const;
-    // Return if this platform is a right edge.
+    //! Return if this platform is a right edge.
     bool is_right_edge() const;
-    // Returns if a x-coordinate is above or below this platform.
+    //! Returns if a x-coordinate is above or below this platform.
     bool hcontains(std::int16_t x) const;
-    // Returns if a y-coordinate is right or left of this platform.
+    //! Returns if a y-coordinate is right or left of this platform.
     bool vcontains(std::int16_t y) const;
-    // Check wether this foothold blocks an object.
+    //! Check wether this foothold blocks an object.
     bool is_blocking(const Range<std::int16_t>& vertical) const;
-    // Returns the width.
+    //! Returns the width.
     std::int16_t hdelta() const;
-    // Returns the height.
+    //! Returns the height.
     std::int16_t vdelta() const;
-    // Returns the slope as a ratio of vertical/horizontal.
+    //! Returns the slope as a ratio of vertical/horizontal.
     double slope() const;
-    // Returns a y-coordinate right below the given x-coordinate.
+    //! Returns a y-coordinate right below the given x-coordinate.
     double ground_below(double x) const;
 
 private:

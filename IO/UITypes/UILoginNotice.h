@@ -25,7 +25,7 @@ namespace jrc
 class UILoginNotice : public UIElement
 {
 public:
-    static constexpr Type TYPE = LOGINNOTICE;
+    static constexpr Type TYPE = LOGIN_NOTICE;
     static constexpr bool FOCUSED = true;
     static constexpr bool TOGGLED = false;
 

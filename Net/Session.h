@@ -32,26 +32,26 @@ namespace jrc
 class Session : public Singleton<Session>
 {
 public:
-    Session();
-    ~Session() override;
+    Session() noexcept;
+    ~Session() noexcept override;
 
     //! Connect using host and port from the configuration file.
     Error init();
     //! Send a packet to the server.
-    void write(std::int8_t* bytes, std::size_t length);
+    bool write(std::int8_t* bytes, std::size_t length) noexcept;
     //! Check for incoming packets and handle them.
     void read();
     //! Closes the current connection and opens a new one.
     void reconnect(const char* address, const char* port);
     //! Check if the connection is alive.
-    bool is_connected() const;
+    bool is_connected() const noexcept;
 
 private:
     bool init(const char* host, const char* port);
     void process(const std::int8_t* bytes, std::size_t available);
 
     Cryptography cryptography;
-    PacketSwitch packetswitch;
+    PacketSwitch packet_switch;
 
     std::int8_t buffer[MAX_PACKET_LENGTH];
     std::size_t length;

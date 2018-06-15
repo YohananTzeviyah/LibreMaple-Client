@@ -138,11 +138,6 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst,
     if (dragged_icon) {
         switch (mst) {
         case Cursor::IDLE:
-            Console::get().print(str::concat("dropping icon at {",
-                                             std::to_string(pos.x()),
-                                             ", ",
-                                             std::to_string(pos.y()),
-                                             '}'));
             drop_icon(*dragged_icon, pos);
             dragged_icon->reset();
             dragged_icon = {};

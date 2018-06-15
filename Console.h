@@ -49,17 +49,17 @@ public:
 class Console : public Singleton<Console>
 {
 public:
-    void print(const char* func, std::string_view msg)
+    void print(const char* func, std::string_view msg) noexcept
     {
         print(str::concat(std::string_view{func}, ", ", msg));
     }
 
-    void print(const char* func, const std::exception& ex)
+    void print(const char* func, const std::exception& ex) noexcept
     {
         print(func, {ex.what()});
     }
 
-    void print(const std::string& str)
+    void print(const std::string& str) noexcept
     {
         if (!printed.count(str)) {
             std::cout << str << '\n';

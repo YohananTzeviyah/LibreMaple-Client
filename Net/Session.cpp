@@ -21,14 +21,11 @@
 
 namespace jrc
 {
-Session::Session()
+Session::Session() noexcept : length(0), pos(0), connected(false)
 {
-    connected = false;
-    length = 0;
-    pos = 0;
 }
 
-Session::~Session()
+Session::~Session() noexcept
 {
     if (connected) {
         socket.close();
@@ -103,7 +100,7 @@ void Session::process(const std::int8_t* bytes, std::size_t available)
         cryptography.decrypt(buffer, length);
 
         try {
-            packetswitch.forward(buffer, length);
+            packet_switch.forward(buffer, length);
         } catch (const PacketError& err) {
             Console::get().print(err.what());
         }
@@ -121,18 +118,21 @@ void Session::process(const std::int8_t* bytes, std::size_t available)
     }
 }
 
-void Session::write(std::int8_t* packet_bytes, std::size_t packet_length)
+bool Session::write(std::int8_t* packet_bytes,
+                    std::size_t packet_length) noexcept
 {
     if (!connected) {
-        return;
+        return false;
     }
 
     std::int8_t header[HEADER_LENGTH];
     cryptography.create_header(header, packet_length);
     cryptography.encrypt(packet_bytes, packet_length);
 
-    socket.dispatch(header, HEADER_LENGTH);
-    socket.dispatch(packet_bytes, packet_length);
+    if (!socket.dispatch(header, HEADER_LENGTH)) {
+        return false;
+    }
+    return socket.dispatch(packet_bytes, packet_length);
 }
 
 void Session::read()
@@ -148,7 +148,7 @@ void Session::read()
     }
 }
 
-bool Session::is_connected() const
+bool Session::is_connected() const noexcept
 {
     return connected;
 }

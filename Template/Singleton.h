@@ -25,7 +25,7 @@ class Singleton
 public:
     virtual ~Singleton() = default;
 
-    static T& get()
+    static T& get() noexcept
     {
         return instance;
     }

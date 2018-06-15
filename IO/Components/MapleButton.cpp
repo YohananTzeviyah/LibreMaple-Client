@@ -31,27 +31,27 @@ MapleButton::MapleButton(nl::node src, Point<std::int16_t> pos)
 }
 
 MapleButton::MapleButton(nl::node src, std::int16_t x, std::int16_t y)
-    : MapleButton(src, Point<std::int16_t>(x, y))
+    : MapleButton(src, Point<std::int16_t>{x, y})
 {
 }
 
 MapleButton::MapleButton(nl::node src)
-    : MapleButton(src, Point<std::int16_t>())
+    : MapleButton(src, Point<std::int16_t>{})
 {
 }
 
-void MapleButton::draw(Point<std::int16_t> parentpos) const
+void MapleButton::draw(Point<std::int16_t> parent_pos) const
 {
     if (active) {
-        textures[state].draw(position + parentpos);
+        textures[state].draw(position + parent_pos);
     }
 }
 
 Rectangle<std::int16_t>
-MapleButton::bounds(Point<std::int16_t> parentpos) const
+MapleButton::bounds(Point<std::int16_t> parent_pos) const
 {
-    auto lt = parentpos + position - textures[state].get_origin();
+    auto lt = parent_pos + position - textures[state].get_origin();
     auto rb = lt + textures[state].get_dimensions();
-    return Rectangle<std::int16_t>(lt, rb);
+    return {lt, rb};
 }
 } // namespace jrc

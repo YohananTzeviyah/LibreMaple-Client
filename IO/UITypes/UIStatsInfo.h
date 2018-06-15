@@ -25,7 +25,7 @@ namespace jrc
 class UIStatsinfo : public UIDragElement<PosSTATS>
 {
 public:
-    static constexpr Type TYPE = STATSINFO;
+    static constexpr Type TYPE = STATS_INFO;
     static constexpr bool FOCUSED = false;
     static constexpr bool TOGGLED = true;
 

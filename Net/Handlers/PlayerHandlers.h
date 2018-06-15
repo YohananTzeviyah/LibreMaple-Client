@@ -22,20 +22,20 @@
 
 namespace jrc
 {
-// Parses keymappings and sends them to the Keyboard.
+//! Parses keymappings and sends them to the Keyboard.
 class KeymapHandler : public PacketHandler
 {
     void handle(InPacket& recv) const override;
 };
 
-// Parses skill macros.
+//! Parses skill macros.
 class SkillMacrosHandler : public PacketHandler
 {
     void handle(InPacket& recv) const override;
 };
 
-// Notifies the client of changes in character stats.
-// Opcode: CHANGE_STATS(31)
+//! Notifies the client of changes in character stats.
+//! Opcode: CHANGE_STATS(31)
 class ChangeStatsHandler : public PacketHandler
 {
 public:
@@ -47,7 +47,7 @@ private:
     bool need_skillbook_update(Maplestat::Id stat) const;
 };
 
-// Base class for packets which need to parse buffstats.
+//! Base class for packets which need to parse buffstats.
 class BuffHandler : public PacketHandler
 {
 public:
@@ -57,38 +57,38 @@ protected:
     virtual void handle_buff(InPacket& recv, Buffstat::Id stat) const = 0;
 };
 
-// Notifies the client that a buff was applied to the player.
-// Opcode: GIVE_BUFF(32)
+//! Notifies the client that a buff was applied to the player.
+//! Opcode: GIVE_BUFF(32)
 class ApplyBuffHandler : public BuffHandler
 {
 protected:
     void handle_buff(InPacket& recv, Buffstat::Id stat) const override;
 };
 
-// Notifies the client that a buff was cancelled.
-// Opcode: CANCEL_BUFF(33)
+//! Notifies the client that a buff was cancelled.
+//! Opcode: CANCEL_BUFF(33)
 class CancelBuffHandler : public BuffHandler
 {
 protected:
     void handle_buff(InPacket& recv, Buffstat::Id stat) const override;
 };
 
-// Force a stats recalculation.
-// Opcode: RECALCULATE_STATS(35)
+//! Force a stats recalculation.
+//! Opcode: RECALCULATE_STATS(35)
 class RecalculateStatsHandler : public PacketHandler
 {
     void handle(InPacket&) const override;
 };
 
-// Updates the player's skills with the client.
-// Opcode: UPDATE_SKILL(36)
+//! Updates the player's skills with the client.
+//! Opcode: UPDATE_SKILL(36)
 class UpdateSkillHandler : public PacketHandler
 {
     void handle(InPacket& recv) const override;
 };
 
-// Notifies the client that a skill is on cooldown.
-// Opcode: ADD_COOLDOWN(234)
+//! Notifies the client that a skill is on cooldown.
+//! Opcode: ADD_COOLDOWN(234)
 class AddCooldownHandler : public PacketHandler
 {
     void handle(InPacket& recv) const override;
