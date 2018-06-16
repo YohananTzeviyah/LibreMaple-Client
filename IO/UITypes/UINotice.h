@@ -41,11 +41,11 @@ protected:
 private:
     Texture top;
     Texture center;
-    Texture centerbox;
+    Texture center_box;
     Texture box;
     Texture box2;
     Texture bottom;
-    Texture bottombox;
+    Texture bottom_box;
     Text question;
     std::int16_t height;
 };
@@ -59,7 +59,7 @@ public:
     void draw(float alpha) const override;
 
 protected:
-    Button::State button_pressed(std::uint16_t buttonid) override;
+    Button::State button_pressed(std::uint16_t button_id) override;
 
 private:
     enum Buttons : std::int16_t { YES, NO };
@@ -71,7 +71,7 @@ class UIEnterNumber : public UINotice
 {
 public:
     UIEnterNumber(std::string&& question,
-                  std::function<void(std::int32_t number)> numhandler,
+                  std::function<void(std::int32_t number)> n_handler,
                   std::int32_t min,
                   std::int32_t max,
                   std::int32_t def);
@@ -80,10 +80,10 @@ public:
     void update() override;
 
     Cursor::State send_cursor(bool pressed,
-                              Point<std::int16_t> cursorpos) override;
+                              Point<std::int16_t> cursor_pos) override;
 
 protected:
-    Button::State button_pressed(std::uint16_t buttonid) override;
+    Button::State button_pressed(std::uint16_t button_id) override;
 
 private:
     void handle_string(const std::string& num_str);

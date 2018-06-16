@@ -30,11 +30,6 @@ MapleButton::MapleButton(nl::node src, Point<std::int16_t> pos)
     active = true;
 }
 
-MapleButton::MapleButton(nl::node src, std::int16_t x, std::int16_t y)
-    : MapleButton(src, Point<std::int16_t>{x, y})
-{
-}
-
 MapleButton::MapleButton(nl::node src)
     : MapleButton(src, Point<std::int16_t>{})
 {

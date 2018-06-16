@@ -215,19 +215,54 @@ void UIKeyConfig::draw(float alpha) const
     }
 }
 
-Button::State UIKeyConfig::button_pressed(std::uint16_t id)
+Button::State UIKeyConfig::button_pressed(std::uint16_t button_id)
 {
-    switch (id) {
+    switch (button_id) {
     case Buttons::BT_DEFAULT:
-        reset_to_default();
+        UI::get().emplace<UIKeyConfigNotice>(
+            UIKeyConfigNotice::RESET_TO_DEFAULT,
+            [this](bool ok) noexcept {
+                if (ok) {
+                    reset_to_default();
+                }
+            },
+            position,
+            dimension,
+            true);
         return Button::NORMAL;
     case Buttons::BT_CANCEL:
-        UIElement::deactivate();
-        reload_mappings();
+        if (dirty) {
+            UI::get().emplace<UIKeyConfigNotice>(
+                UIKeyConfigNotice::SAVE_CHANGES,
+                [this](bool yes) noexcept {
+                    if (yes) {
+                        commit_mappings();
+                    }
+                    UIElement::deactivate();
+                    reload_mappings();
+                },
+                position,
+                dimension,
+                false);
+        } else {
+            UIElement::deactivate();
+        }
         return Button::NORMAL;
     case Buttons::BT_OK:
         commit_mappings();
         UIElement::deactivate();
+        return Button::NORMAL;
+    case Buttons::BT_DELETE:
+        UI::get().emplace<UIKeyConfigNotice>(
+            UIKeyConfigNotice::CLEAR_ALL_SHORTCUTS,
+            [this](bool yes) noexcept {
+                if (yes) {
+                    clear_mappings();
+                }
+            },
+            position,
+            dimension,
+            false);
         return Button::NORMAL;
     default:
         return Button::PRESSED;
@@ -240,6 +275,7 @@ void UIKeyConfig::reload_mappings() noexcept
     for (auto [slot_id, mapping] : UI::get().get_keyboard().get_maplekeys()) {
         update_key_slot(slot_id, mapping.action);
     }
+    dirty = false;
 }
 
 void UIKeyConfig::reset_to_default() noexcept
@@ -248,9 +284,16 @@ void UIKeyConfig::reset_to_default() noexcept
     for (auto [key_id, action_id] : DEFAULT_MAPPINGS) {
         slot_mappings.insert({key_id, KeyAction::action_by_id(action_id)});
     }
+    dirty = true;
 }
 
-bool UIKeyConfig::commit_mappings() const noexcept
+void UIKeyConfig::clear_mappings() noexcept
+{
+    slot_mappings.left.clear();
+    dirty = true;
+}
+
+bool UIKeyConfig::commit_mappings() noexcept
 {
     auto& keyboard = UI::get().get_keyboard_mut();
     keyboard.clear_mappings();
@@ -259,6 +302,8 @@ bool UIKeyConfig::commit_mappings() const noexcept
         keyboard.assign(key, KeyType::type_by_action(action), action);
     }
 
+    dirty = false;
+
     return keyboard.send_mappings();
 }
 
@@ -266,6 +311,7 @@ void UIKeyConfig::update_key_slot(std::uint8_t key_slot,
                                   KeyAction::Id action_id) noexcept
 {
     bimap::assign(slot_mappings, key_slot, action_id);
+    dirty = true;
 }
 
 Cursor::State UIKeyConfig::send_cursor(bool pressed,
@@ -340,5 +386,60 @@ UIKeyConfig::KeyIcon::KeyIcon(KeyAction::Id action_id) noexcept
 KeyAction::Id UIKeyConfig::KeyIcon::get_action_id() const noexcept
 {
     return action_id;
+}
+
+UIKeyConfig::UIKeyConfigNotice::UIKeyConfigNotice(
+    NoticeType type,
+    std::function<void(bool)> yn_handler,
+    Point<std::int16_t> parent_pos,
+    Point<std::int16_t> parent_dim,
+    bool ok_cancel)
+    : yes_no_handler(yn_handler)
+{
+    nl::node src = nl::nx::ui["UIWindow2.img"]["KeyConfig"]["notice"];
+
+    sprites.emplace_back(src[type]);
+
+    nl::node button_src = nl::nx::ui["Basic.img"];
+
+    if (ok_cancel) {
+        buttons[OK] = std::make_unique<MapleButton>(
+            button_src["BtOK4"], Point<std::int16_t>{152, 53});
+        buttons[CANCEL] = std::make_unique<MapleButton>(
+            button_src["BtCancel4"], Point<std::int16_t>{202, 53});
+    } else {
+        buttons[OK] = std::make_unique<MapleButton>(
+            button_src["BtYes2"], Point<std::int16_t>{145, 52});
+        buttons[CANCEL] = std::make_unique<MapleButton>(
+            button_src["BtNo2"], Point<std::int16_t>{200, 52});
+    }
+
+    dimension = {260, 84};
+    // Centering the child notice on top of the parent.
+    position = parent_pos + parent_dim / 2 - dimension / 2;
+
+    active = true;
+}
+
+void UIKeyConfig::UIKeyConfigNotice::draw(float inter) const
+{
+    UIElement::draw(inter);
+}
+
+Button::State
+UIKeyConfig::UIKeyConfigNotice::button_pressed(std::uint16_t button_id)
+{
+    switch (static_cast<ButtonType>(button_id)) {
+    case ButtonType::OK:
+        yes_no_handler(true);
+        break;
+    case ButtonType::CANCEL:
+        yes_no_handler(false);
+        break;
+    }
+
+    active = false;
+
+    return Button::PRESSED;
 }
 } // namespace jrc

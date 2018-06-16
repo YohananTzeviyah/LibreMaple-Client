@@ -26,7 +26,6 @@ class MapleButton : public Button
 {
 public:
     MapleButton(nl::node src, Point<std::int16_t> position);
-    MapleButton(nl::node src, std::int16_t x, std::int16_t y);
     MapleButton(nl::node src);
 
     void draw(Point<std::int16_t> parent_pos) const;

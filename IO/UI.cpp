@@ -124,6 +124,8 @@ void UI::doubleclick()
 
 void UI::send_key(std::int32_t keycode, bool pressed)
 {
+    keycode = Keyboard::align_key_parity(keycode);
+
     if (focused_text_field) {
         bool ctrl = is_key_down[keyboard.ctrl_code()];
         if (ctrl) {

@@ -61,9 +61,9 @@ public:
     virtual void draw(float inter) const;
     virtual void update();
 
-    void make_active();
-    void deactivate();
-    bool is_active() const;
+    void make_active() noexcept;
+    void deactivate() noexcept;
+    bool is_active() const noexcept;
 
     virtual void toggle_active();
     virtual Button::State button_pressed(std::uint16_t button_id);

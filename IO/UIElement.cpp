@@ -65,17 +65,17 @@ void UIElement::update()
     }
 }
 
-void UIElement::make_active()
+void UIElement::make_active() noexcept
 {
     active = true;
 }
 
-void UIElement::deactivate()
+void UIElement::deactivate() noexcept
 {
     active = false;
 }
 
-bool UIElement::is_active() const
+bool UIElement::is_active() const noexcept
 {
     return active;
 }

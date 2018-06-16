@@ -44,7 +44,7 @@ public:
 
     void set_clipboard(const char* text) const;
     void set_clipboard(const std::string& text) const;
-    std::string get_clipboard() const;
+    const char* get_clipboard() const;
 
     void resize(bool in_game) noexcept;
     std::int16_t get_width() const noexcept;

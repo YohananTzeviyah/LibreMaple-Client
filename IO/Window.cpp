@@ -213,7 +213,7 @@ void Window::set_clipboard(const std::string& text) const
     glfwSetClipboardString(glwnd, text.c_str());
 }
 
-std::string Window::get_clipboard() const
+const char* Window::get_clipboard() const
 {
     const char* text = glfwGetClipboardString(glwnd);
     return text ? text : "";

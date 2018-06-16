@@ -84,6 +84,20 @@ public:
     bool send_mappings() const noexcept;
     void clear_mappings() noexcept;
 
+    static constexpr std::int32_t align_key_parity(std::int32_t keycode) noexcept
+    {
+        switch (keycode) {
+        case GLFW_KEY_RIGHT_ALT:
+            return GLFW_KEY_LEFT_ALT;
+        case GLFW_KEY_RIGHT_CONTROL:
+            return GLFW_KEY_LEFT_CONTROL;
+        case GLFW_KEY_RIGHT_SHIFT:
+            return GLFW_KEY_LEFT_SHIFT;
+        default:
+            return keycode;
+        }
+    }
+
 private:
     std::unordered_map<std::int32_t, Mapping> keymap;
     std::unordered_map<std::uint8_t, Mapping> maplekeys;

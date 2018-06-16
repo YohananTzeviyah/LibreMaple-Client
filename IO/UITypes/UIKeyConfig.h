@@ -23,6 +23,7 @@
 #include "../Components/Icon.h"
 #include "../Keyboard.h"
 #include "../UIDragElement.h"
+#include "UINotice.h"
 
 #include <unordered_map>
 
@@ -32,9 +33,9 @@ namespace jrc
 class UIKeyConfig : public UIDragElement<PosKEYCONFIG>
 {
 public:
-    static constexpr Type TYPE = KEY_CONFIG;
-    static constexpr bool FOCUSED = false;
-    static constexpr bool TOGGLED = true;
+    static constexpr const Type TYPE = KEY_CONFIG;
+    static constexpr const bool FOCUSED = false;
+    static constexpr const bool TOGGLED = true;
 
     UIKeyConfig() noexcept;
 
@@ -47,12 +48,13 @@ public:
                               Point<std::int16_t> cursor_pos) override;
 
 protected:
-    Button::State button_pressed(std::uint16_t buttonid) override;
+    Button::State button_pressed(std::uint16_t button_id) override;
 
 private:
     void reload_mappings() noexcept;
     void reset_to_default() noexcept;
-    bool commit_mappings() const noexcept;
+    void clear_mappings() noexcept;
+    bool commit_mappings() noexcept;
     void update_key_slot(std::uint8_t key_slot,
                          KeyAction::Id action_id) noexcept;
     std::uint8_t slot_by_position(Point<std::int16_t> position) const noexcept;
@@ -88,8 +90,41 @@ private:
 
     bimap::unordered_bimap<std::uint8_t, KeyAction::Id> slot_mappings;
     std::unordered_map<KeyAction::Id, std::unique_ptr<Icon>> icons{70};
+    bool dirty;
 
-    //! A deeply mysterious array of deeply mysterious magic numbers.
+    class UIKeyConfigNotice : public UIElement
+    {
+    public:
+        static constexpr const Type TYPE = NOTICE;
+        static constexpr const bool FOCUSED = true;
+        static constexpr const bool TOGGLED = false;
+
+        enum NoticeType : std::uint16_t {
+            RESET_TO_DEFAULT,
+            CLEAR_ALL_SHORTCUTS,
+            SAVE_CHANGES
+        };
+
+        UIKeyConfigNotice(NoticeType type,
+                          std::function<void(bool)> yn_handler,
+                          Point<std::int16_t> parent_pos,
+                          Point<std::int16_t> parent_dim,
+                          bool ok_cancel);
+
+        void draw(float inter) const override;
+
+    protected:
+        Button::State button_pressed(std::uint16_t button_id) override;
+
+    private:
+        std::function<void(bool)> yes_no_handler;
+
+        enum ButtonType : std::uint16_t { OK, CANCEL };
+    };
+
+    //! The `n`th element of this array represents the position (relative to
+    //! the position of the `UIKeyConfig`) of the key slot for the key with
+    //! an ID of `n`.
     static constexpr const std::array<Point<std::int16_t>, 90> SLOT_POSITIONS{
         {{0, 0},     {0, 0},     {351, 65},  {45, 65},   {79, 65},
          {113, 65},  {147, 65},  {181, 65},  {215, 65},  {249, 65},
@@ -110,6 +145,9 @@ private:
          {0, 0},     {579, 99},  {511, 65},  {511, 99},  {0, 0},
          {0, 0},     {0, 0},     {0, 0},     {0, 0},     {0, 0}}};
 
+    //! Each element of this array represents a mapping from key ID (on the
+    //! left) to action ID (on the right). This particular set of mappings
+    //! is the default for GMS v83.
     static constexpr const std::array<std::pair<std::uint8_t, std::int32_t>,
                                       40>
         DEFAULT_MAPPINGS{
