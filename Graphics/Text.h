@@ -95,14 +95,14 @@ public:
          Background background,
          std::string&& text = "",
          std::uint16_t maxwidth = 0,
-         bool formatted = true);
+         bool formatted = true) noexcept;
     Text(Font font,
          Alignment alignment,
          Color color,
          std::string&& text = "",
          std::uint16_t maxwidth = 0,
-         bool formatted = true);
-    Text();
+         bool formatted = true) noexcept;
+    Text() noexcept;
 
     void draw(const DrawArgument& args) const;
 

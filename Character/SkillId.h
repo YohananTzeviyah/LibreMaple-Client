@@ -17,9 +17,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-namespace jrc
-{
-namespace SkillId
+namespace jrc::SkillId
 {
 enum {
     // Beginner
@@ -160,5 +158,4 @@ enum {
     // Bandit
     MESO_EXPLOSION = 4211006
 };
-}
-} // namespace jrc
+} // namespace jrc::SkillId

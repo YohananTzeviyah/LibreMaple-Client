@@ -86,7 +86,7 @@ bool running()
 void loop()
 {
     Timer::get().start();
-    std::int64_t timestep = Constants::TIMESTEP * 1000;
+    std::int64_t timestep = Constants::TIMESTEP * 1'000;
     std::int64_t accumulator = timestep;
 
     std::int64_t period = 0;
@@ -128,7 +128,7 @@ void start()
         const char* args = error.get_args();
         const bool can_retry = error.can_retry();
 
-        std::cout << "Error: " << message << args << '\n';
+        std::cerr << "Error: " << message << args << '\n';
 
         std::string command;
         std::cin >> command;

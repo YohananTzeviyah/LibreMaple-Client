@@ -84,7 +84,8 @@ public:
     bool send_mappings() const noexcept;
     void clear_mappings() noexcept;
 
-    static constexpr std::int32_t align_key_parity(std::int32_t keycode) noexcept
+    static constexpr std::int32_t
+    align_key_parity(std::int32_t keycode) noexcept
     {
         switch (keycode) {
         case GLFW_KEY_RIGHT_ALT:

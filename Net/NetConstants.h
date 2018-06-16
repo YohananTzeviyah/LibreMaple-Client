@@ -20,11 +20,11 @@
 
 namespace jrc
 {
-constexpr std::size_t HEADER_LENGTH = 4;
+constexpr const std::size_t HEADER_LENGTH = 4;
 
-constexpr std::size_t OPCODE_LENGTH = 2;
+constexpr const std::size_t OPCODE_LENGTH = 2;
 
-constexpr std::size_t MIN_PACKET_LENGTH = HEADER_LENGTH + OPCODE_LENGTH;
+constexpr const std::size_t MIN_PACKET_LENGTH = HEADER_LENGTH + OPCODE_LENGTH;
 
-constexpr std::size_t MAX_PACKET_LENGTH = 131072;
+constexpr const std::size_t MAX_PACKET_LENGTH = 131072;
 } // namespace jrc

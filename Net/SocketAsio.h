@@ -24,12 +24,14 @@
 #    define BOOST_REGEX_NO_LIB
 #    include "asio.hpp"
 
+#    include <cstdint>
+
 namespace jrc
 {
 #    ifndef JOURNEY_USE_CRYPTO
-constexpr std::size_t HANDSHAKE_LEN = 2;
+constexpr const std::size_t HANDSHAKE_LEN = 2;
 #    else
-constexpr std::size_t HANDSHAKE_LEN = 16;
+constexpr const std::size_t HANDSHAKE_LEN = 16;
 #    endif
 
 using asio::error_code;

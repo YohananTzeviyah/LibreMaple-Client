@@ -27,7 +27,7 @@ Text::Text(Font f,
            Background b,
            std::string&& t,
            std::uint16_t mw,
-           bool fm)
+           bool fm) noexcept
     : font(f),
       alignment(a),
       color(c),
@@ -38,13 +38,17 @@ Text::Text(Font f,
     change_text(std::move(t));
 }
 
-Text::Text(
-    Font f, Alignment a, Color c, std::string&& t, std::uint16_t mw, bool fm)
+Text::Text(Font f,
+           Alignment a,
+           Color c,
+           std::string&& t,
+           std::uint16_t mw,
+           bool fm) noexcept
     : Text(f, a, c, NONE, std::move(t), mw, fm)
 {
 }
 
-Text::Text() : Text(A11M, LEFT, BLACK)
+Text::Text() noexcept : Text(A11M, LEFT, BLACK)
 {
 }
 

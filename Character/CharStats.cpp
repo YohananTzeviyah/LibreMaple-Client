@@ -147,7 +147,7 @@ void CharStats::set_total(Equipstat::Id stat, std::int32_t value)
 {
     auto iter = EQSTAT_CAPS.find(stat);
     if (iter != EQSTAT_CAPS.end()) {
-        std::int32_t cap_value = iter->second;
+        std::int32_t cap_value = iter.second();
 
         if (value > cap_value) {
             value = cap_value;

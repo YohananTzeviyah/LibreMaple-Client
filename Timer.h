@@ -27,21 +27,21 @@ namespace jrc
 class Timer : public Singleton<Timer>
 {
 public:
-    Timer()
+    Timer() noexcept
     {
         start();
     }
 
-    ~Timer() = default;
+    ~Timer() noexcept = default;
 
     //! Start the timer by setting the last measurement to now.
-    void start()
+    void start() noexcept
     {
         point = clock::now();
     }
 
     //! Return time elapsed since the last measurement.
-    std::int64_t stop()
+    std::int64_t stop() noexcept
     {
         clock::time_point last = point;
         point = clock::now();

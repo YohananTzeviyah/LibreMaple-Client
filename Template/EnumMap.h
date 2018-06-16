@@ -22,51 +22,73 @@
 
 namespace jrc
 {
-template<typename K, typename V, K LENGTH = K::LENGTH>
-//! Wraps an array so that it is adressable by enum values.
+template<typename K,
+         typename V,
+         K LENGTH = K::LENGTH,
+         typename = std::enable_if_t<std::is_enum_v<K>>>
+//! Wraps an array so that it is addressable by `enum [class]` values.
 class EnumMap
 {
 public:
-    template<typename... Args>
-    //! Initialize with an initializer list.
-    EnumMap(Args&&... args) noexcept : m_values{{std::forward<Args>(args)...}}
-    {
-        static_assert(std::is_enum<K>::value,
-                      "Template parameter `K` for EnumMap must be an enum");
+    using array_size_t = typename std::array<V, LENGTH>::size_type;
 
-        for (std::size_t i = 0; i < LENGTH; ++i) {
-            m_keys[i] = static_cast<K>(i);
+    //! Default constructor.
+    EnumMap() = default;
+    template<typename... Args,
+             typename = std::enable_if_t<
+                 std::conjunction_v<std::is_same<Args, std::pair<K, V>>...>>>
+    //! Initialize with a varargs initialization list.
+    constexpr EnumMap(Args&&... args) noexcept : m_values{}
+    {
+        ((m_values[static_cast<array_size_t>(args.first)] =
+              std::forward<V>(args.second)),
+         ...);
+    }
+    template<typename... Args>
+    //! Initialize with a varargs initialization list, taking one value for
+    //! every possible enumeration key.
+    constexpr EnumMap(Args&&... args) noexcept
+        : m_values{{std::forward<Args>(args)...}}
+    {
+    }
+    //! Initialize with a `std::initializer_list`.
+    constexpr EnumMap(std::initializer_list<std::pair<K, V>> init) noexcept
+        : m_values{}
+    {
+        for (auto [k, v] : init) {
+            m_values[static_cast<array_size_t>(k)] = v;
         }
     }
 
-    void clear() noexcept
+    constexpr void clear() noexcept
     {
         for (std::size_t i = 0; i < LENGTH; ++i) {
             m_values[i] = V();
         }
     }
 
-    void erase(K key) noexcept
+    constexpr void erase(K key) noexcept
     {
         if (key >= 0 && key < LENGTH) {
-            m_values[key] = V();
+            m_values[static_cast<array_size_t>(key)] = V();
         }
     }
 
     template<typename... Args>
-    void emplace(K key, Args&&... args) noexcept
+    constexpr void emplace(K key, Args&&... args) noexcept
     {
-        m_values[key] = {std::forward<Args>(args)...};
+        m_values[static_cast<array_size_t>(key)] = {
+            std::forward<Args>(args)...};
     }
 
-    V& operator[](K key) noexcept
+    constexpr V& operator[](K key) noexcept
     {
-        return m_values[key];
+        return m_values[static_cast<array_size_t>(key)];
     }
 
-    const V& operator[](K key) const noexcept
+    constexpr const V& operator[](K key) const noexcept
     {
-        return m_values[key];
+        return m_values[static_cast<array_size_t>(key)];
     }
 
     template<typename T>
@@ -75,7 +97,8 @@ public:
     public:
         using index_type = typename std::underlying_type<K>::type;
 
-        base_iterator(T* p, index_type i) noexcept : value(p), index(i)
+        constexpr base_iterator(T* p, index_type i) noexcept
+            : value(p), index(i)
         {
         }
 
@@ -83,50 +106,50 @@ public:
             K first;
             T& second;
 
-            node(K f, T& s) noexcept : first(f), second(s)
+            constexpr node(K f, T& s) noexcept : first(f), second(s)
             {
             }
 
-            node& operator=(const node&) = delete;
+            constexpr node& operator=(const node&) = delete;
 
-            void set(const T& t) noexcept
+            constexpr void set(const T& t) noexcept
             {
                 second = t;
             }
         };
 
-        node operator*() noexcept
+        constexpr node operator*() noexcept
         {
             return node{first(), second()};
         }
 
-        explicit operator bool() const noexcept
+        constexpr explicit operator bool() const noexcept
         {
             return index >= 0 && index < LENGTH;
         }
 
-        K first() const noexcept
+        constexpr K first() const noexcept
         {
             return static_cast<K>(index);
         }
 
-        T& second() noexcept
+        constexpr T& second() noexcept
         {
             return *(value + index);
         }
 
-        base_iterator& operator++() noexcept
+        constexpr base_iterator& operator++() noexcept
         {
             ++index;
             return *this;
         }
 
-        bool operator!=(const base_iterator& other) const noexcept
+        constexpr bool operator!=(const base_iterator& other) const noexcept
         {
             return index != other.index;
         }
 
-        bool operator==(const base_iterator& other) const noexcept
+        constexpr bool operator==(const base_iterator& other) const noexcept
         {
             return index == other.index;
         }
@@ -141,53 +164,47 @@ public:
     using node = typename iterator::node;
     using cnode = typename const_iterator::node;
 
-    iterator find(K key) noexcept
+    constexpr iterator find(K key) noexcept
     {
         return {m_values.data(), key};
     }
 
-    const_iterator find(K key) const noexcept
+    constexpr const_iterator find(K key) const noexcept
     {
         return {m_values.data(), key};
     }
 
-    iterator begin() noexcept
+    constexpr iterator begin() noexcept
     {
         return {m_values.data(), 0};
     }
 
-    iterator end() noexcept
+    constexpr iterator end() noexcept
     {
         return {m_values.data(), LENGTH};
     }
 
-    const_iterator begin() const noexcept
+    constexpr const_iterator begin() const noexcept
     {
         return {m_values.data(), 0};
     }
 
-    const_iterator end() const noexcept
+    constexpr const_iterator end() const noexcept
     {
         return {m_values.data(), LENGTH};
     }
 
-    const std::array<K, LENGTH>& keys() const noexcept
-    {
-        return m_keys;
-    }
-
-    std::array<V, LENGTH>& values() noexcept
+    constexpr std::array<V, LENGTH>& values() noexcept
     {
         return m_values;
     }
 
-    const std::array<V, LENGTH>& values() const noexcept
+    constexpr const std::array<V, LENGTH>& values() const noexcept
     {
         return m_values;
     }
 
 private:
-    std::array<K, LENGTH> m_keys;
     std::array<V, LENGTH> m_values;
 };
 } // namespace jrc

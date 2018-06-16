@@ -35,12 +35,12 @@ SocketAsio::~SocketAsio()
 bool SocketAsio::open(const char* address, const char* port)
 {
     tcp::resolver::query query(address, port);
-    tcp::resolver::iterator endpointiter = resolver.resolve(query);
+    tcp::resolver::iterator endpoint_iter = resolver.resolve(query);
     error_code error;
-    asio::connect(socket, endpointiter, error);
+    asio::connect(socket, endpoint_iter, error);
     if (!error) {
         std::size_t result = socket.read_some(asio::buffer(buffer), error);
-        return !error && (result == HANDSHAKE_LEN);
+        return !error && result == HANDSHAKE_LEN;
     }
     return !error;
 }
