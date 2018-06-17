@@ -145,8 +145,8 @@ void SetfieldHandler::parse_inventory(InPacket& recv, Inventory& invent) const
     recv.skip(8);
 
     for (std::size_t i = 0; i < 3; ++i) {
-        InventoryType::Id inv =
-            i == 0 ? InventoryType::EQUIPPED : InventoryType::EQUIP;
+        InventoryType::Id inv
+            = i == 0 ? InventoryType::EQUIPPED : InventoryType::EQUIP;
         std::int16_t pos = recv.read_short();
         while (pos != 0) {
             std::int16_t slot = i == 1 ? -pos : pos;

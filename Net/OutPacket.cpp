@@ -72,8 +72,8 @@ void OutPacket::write_long(std::int64_t lg)
 void OutPacket::write_time()
 {
     auto duration = std::chrono::steady_clock::now().time_since_epoch();
-    auto since_epoch =
-        std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+    auto since_epoch
+        = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
     auto timestamp = static_cast<std::int32_t>(since_epoch.count());
     write_int(timestamp);
 }

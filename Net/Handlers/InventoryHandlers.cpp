@@ -71,8 +71,8 @@ void ModifyInventoryHandler::handle(InPacket& recv) const
         case Inventory::CHANGE_COUNT: {
             mod.arg = recv.read_short();
 
-            std::int16_t count_before =
-                inventory.get_item_count(mod.type, mod.pos);
+            std::int16_t count_before
+                = inventory.get_item_count(mod.type, mod.pos);
             std::int16_t count_now = mod.arg;
 
             inventory.modify(
@@ -97,9 +97,9 @@ void ModifyInventoryHandler::handle(InPacket& recv) const
         mods.push_back(mod);
     }
 
-    Inventory::Movement move =
-        (recv.length() > 0) ? Inventory::movement_by_value(recv.read_byte())
-                            : Inventory::MOVE_INTERNAL;
+    Inventory::Movement move
+        = (recv.length() > 0) ? Inventory::movement_by_value(recv.read_byte())
+                              : Inventory::MOVE_INTERNAL;
 
     for (const Mod& mod : mods) {
         if (mod.mode == 2) {

@@ -118,8 +118,8 @@ std::size_t Sound::add_sound(nl::node src)
     if (data) {
         std::size_t id = ad.id();
 
-        samples[id] =
-            Mix_LoadWAV_RW(SDL_RWFromConstMem(data + 82, ad.length() - 82), 0);
+        samples[id] = Mix_LoadWAV_RW(
+            SDL_RWFromConstMem(data + 82, ad.length() - 82), 0);
 
         return id;
     } else {

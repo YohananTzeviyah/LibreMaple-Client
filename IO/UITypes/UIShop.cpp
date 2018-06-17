@@ -74,8 +74,8 @@ UIShop::UIShop(const CharLook& in_charlook, const Inventory& in_inventory)
     buy_slider = {11, {115, 308}, 214, 5, 1, [&](bool upwards) {
                       std::int16_t shift = upwards ? -1 : 1;
                       bool above = buystate.offset + shift >= 0;
-                      bool below =
-                          buystate.offset + shift <= buystate.last_slot - 5;
+                      bool below
+                          = buystate.offset + shift <= buystate.last_slot - 5;
                       if (above && below) {
                           buystate.offset += shift;
                       }
@@ -83,8 +83,8 @@ UIShop::UIShop(const CharLook& in_charlook, const Inventory& in_inventory)
     sell_slider = {11, {115, 308}, 445, 5, 1, [&](bool upwards) {
                        std::int16_t shift = upwards ? -1 : 1;
                        bool above = sellstate.offset + shift >= 0;
-                       bool below =
-                           sellstate.offset + shift <= sellstate.last_slot - 5;
+                       bool below = sellstate.offset + shift
+                                    <= sellstate.last_slot - 5;
                        if (above && below) {
                            sellstate.offset += shift;
                        }
@@ -413,8 +413,8 @@ void UIShop::SellItem::draw(Point<std::int16_t> pos) const
 {
     icon.draw(pos + Point<std::int16_t>{0, 32});
     if (show_count) {
-        static const Charset countset = {nl::nx::ui["Basic.img"]["ItemNo"],
-                                         Charset::LEFT};
+        static const Charset countset
+            = {nl::nx::ui["Basic.img"]["ItemNo"], Charset::LEFT};
         countset.draw(std::to_string(sellable),
                       pos + Point<std::int16_t>{0, 20});
     }

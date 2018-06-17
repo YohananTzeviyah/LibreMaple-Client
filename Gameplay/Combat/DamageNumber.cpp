@@ -142,8 +142,8 @@ bool DamageNumber::update()
 {
     move_obj.move();
 
-    static constexpr const float FADE_STEP =
-        Constants::TIMESTEP * 1.0f / FADE_TIME;
+    static constexpr const float FADE_STEP
+        = Constants::TIMESTEP * 1.0f / FADE_TIME;
     opacity -= FADE_STEP;
     return opacity.last() <= 0.0f;
 }

@@ -37,8 +37,8 @@ void StatusInfo::draw(Point<std::int16_t> position, float alpha) const
 
 bool StatusInfo::update()
 {
-    static constexpr const float FADE_STEP =
-        Constants::TIMESTEP * 1.0f / FADE_DURATION;
+    static constexpr const float FADE_STEP
+        = Constants::TIMESTEP * 1.0f / FADE_DURATION;
 
     opacity -= FADE_STEP;
     return opacity.last() < FADE_STEP;

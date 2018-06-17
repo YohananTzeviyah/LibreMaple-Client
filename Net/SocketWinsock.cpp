@@ -92,8 +92,8 @@ bool SocketWinsock::close()
 bool SocketWinsock::dispatch(const std::int8_t* bytes,
                              std::size_t length) const
 {
-    return send(sock, (char*)bytes, static_cast<int>(length), 0) !=
-           SOCKET_ERROR;
+    return send(sock, (char*)bytes, static_cast<int>(length), 0)
+           != SOCKET_ERROR;
 }
 
 std::size_t SocketWinsock::receive(bool* success)

@@ -72,8 +72,8 @@ Mob::Mob(std::int32_t oid,
     animations[HIT] = src["hit1"];
     animations[DIE] = src["die1"];
 
-    name =
-        nl::nx::string["Mob.img"][std::to_string(mob_id)]["name"].get_string();
+    name = nl::nx::string["Mob.img"][std::to_string(mob_id)]["name"]
+               .get_string();
 
     nl::node sndsrc = nl::nx::sound["Mob.img"][strid];
 
@@ -451,8 +451,8 @@ float Mob::calculate_hit_chance(std::int16_t level_delta,
                                 std::int32_t player_accuracy) const
 {
     auto faccuracy = static_cast<float>(player_accuracy);
-    float hitchance =
-        faccuracy / (((1.84f + 0.07f * level_delta) * avoid) + 1.0f);
+    float hitchance
+        = faccuracy / (((1.84f + 0.07f * level_delta) * avoid) + 1.0f);
     if (hitchance < 0.01f) {
         hitchance = 0.01f;
     }
@@ -464,9 +464,9 @@ double Mob::calculate_min_damage(std::int16_t level_delta,
                                  double min_damage,
                                  bool magic) const
 {
-    double mindamage =
-        magic ? min_damage - (1 + 0.01 * level_delta) * mdef * 0.6
-              : min_damage * (1 - 0.01 * level_delta) - wdef * 0.6;
+    double mindamage
+        = magic ? min_damage - (1 + 0.01 * level_delta) * mdef * 0.6
+                : min_damage * (1 - 0.01 * level_delta) - wdef * 0.6;
 
     return mindamage < 1.0 ? 1.0 : mindamage;
 }
@@ -475,9 +475,9 @@ double Mob::calculate_max_damage(std::int16_t level_delta,
                                  double max_damage,
                                  bool magic) const
 {
-    double maxdamage =
-        magic ? max_damage - (1 + 0.01 * level_delta) * mdef * 0.5
-              : max_damage * (1 - 0.01 * level_delta) - wdef * 0.5;
+    double maxdamage
+        = magic ? max_damage - (1 + 0.01 * level_delta) * mdef * 0.5
+                : max_damage * (1 - 0.01 * level_delta) - wdef * 0.5;
 
     return maxdamage < 1.0 ? 1.0 : maxdamage;
 }

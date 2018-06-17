@@ -103,8 +103,8 @@ Button::State UIEquipInventory::button_pressed(std::uint16_t button_id)
 
 void UIEquipInventory::update_slot(Equipslot::Id slot)
 {
-    if (std::int32_t item_id =
-            inventory.get_item_id(InventoryType::EQUIPPED, slot)) {
+    if (std::int32_t item_id
+        = inventory.get_item_id(InventoryType::EQUIPPED, slot)) {
         const Texture& texture = ItemData::get(item_id).get_icon(false);
         icons[slot] = std::make_unique<Icon>(
             std::make_unique<EquipIcon>(slot), texture, -1);
@@ -155,8 +155,8 @@ void UIEquipInventory::double_click(Point<std::int16_t> cursorpos)
 {
     Equipslot::Id slot = slot_by_position(cursorpos);
     if (icons[slot]) {
-        if (std::int16_t freeslot =
-                inventory.find_free_slot(InventoryType::EQUIP)) {
+        if (std::int16_t freeslot
+            = inventory.find_free_slot(InventoryType::EQUIP)) {
             UnequipItemPacket(slot, freeslot).dispatch();
         }
     }
@@ -209,8 +209,8 @@ UIEquipInventory::slot_by_position(Point<std::int16_t> cursor_pos) const
 {
     for (auto [slot, slot_pos] : icon_positions) {
         Rectangle<std::int16_t> icon_rect{position + slot_pos,
-                                          position + slot_pos +
-                                              Point<std::int16_t>{32, 32}};
+                                          position + slot_pos
+                                              + Point<std::int16_t>{32, 32}};
         if (icon_rect.contains(cursor_pos)) {
             return slot;
         }

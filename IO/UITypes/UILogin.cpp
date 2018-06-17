@@ -38,9 +38,11 @@ UILogin::UILogin()
     nl::node title = nl::nx::ui["Login.img"]["Title"];
     nl::node common = nl::nx::ui["Login.img"]["Common"];
 
-    sprites.emplace_back(title["11"], Point<std::int16_t>{410, 300});
-    sprites.emplace_back(title["35"], Point<std::int16_t>{410, 260});
-    sprites.emplace_back(title["Logo"], Point<std::int16_t>{410, 130});
+    sprites.emplace_back(nl::nx::map["Back"]["login.img"]["back"]["11"],
+                         Point<std::int16_t>{370, 300});
+    // sprites.emplace_back(title["35"], Point<std::int16_t>{410, 260});
+    sprites.emplace_back(nl::nx::map["Obj"]["login.img"]["Title"]["logo"]["0"],
+                         Point<std::int16_t>{410, 130});
     sprites.emplace_back(title["signboard"], Point<std::int16_t>{410, 300});
     sprites.emplace_back(common["frame"], Point<std::int16_t>{400, 290});
 
@@ -71,8 +73,8 @@ UILogin::UILogin()
     checkbox[false] = title["check"]["0"];
     checkbox[true] = title["check"]["1"];
 
-    account = {
-        Text::A13M, Text::LEFT, Text::WHITE, {{315, 249}, {465, 273}}, 12};
+    account
+        = {Text::A13M, Text::LEFT, Text::WHITE, {{315, 249}, {465, 273}}, 12};
     account.set_key_callback(KeyAction::TAB, [this] {
         account.set_state(Textfield::NORMAL);
         password.set_state(Textfield::FOCUSED);
@@ -80,8 +82,8 @@ UILogin::UILogin()
     account.set_enter_callback([this](const std::string&) { login(); });
     account_bg = title["ID"];
 
-    password = {
-        Text::A13M, Text::LEFT, Text::WHITE, {{315, 275}, {465, 299}}, 12};
+    password
+        = {Text::A13M, Text::LEFT, Text::WHITE, {{315, 275}, {465, 299}}, 12};
     password.set_key_callback(KeyAction::TAB, [this] {
         password.set_state(Textfield::NORMAL);
         account.set_state(Textfield::FOCUSED);

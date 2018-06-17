@@ -47,8 +47,8 @@ Afterimage::Afterimage(std::int32_t skill_id,
     displayed = false;
 
     for (nl::node sub : src) {
-        std::uint8_t frame =
-            string_conversion::or_default<std::uint8_t>(sub.name(), 255);
+        std::uint8_t frame
+            = string_conversion::or_default<std::uint8_t>(sub.name(), 255);
         if (frame < 255) {
             animation = sub;
             first_frame = frame;
@@ -62,18 +62,18 @@ Afterimage::Afterimage() noexcept
     displayed = true;
 }
 
-void Afterimage::draw(std::uint8_t stframe,
+void Afterimage::draw(std::uint8_t st_frame,
                       const DrawArgument& args,
                       float alpha) const
 {
-    if (!displayed && stframe >= first_frame) {
+    if (!displayed && st_frame >= first_frame) {
         animation.draw(args, alpha);
     }
 }
 
-void Afterimage::update(std::uint8_t stframe, std::uint16_t timestep)
+void Afterimage::update(std::uint8_t st_frame, std::uint16_t timestep)
 {
-    if (!displayed && stframe >= first_frame) {
+    if (!displayed && st_frame >= first_frame) {
         displayed = animation.update(timestep);
     }
 }

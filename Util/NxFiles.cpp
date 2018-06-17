@@ -47,10 +47,10 @@ Error NxFiles::init()
         return {Error::NLNX, message.c_str()};
     }
 
-    constexpr const char* POSTCHAOS_BITMAP =
-        "Login.img/WorldSelect/BtChannel/layer:bg";
-    auto postChaosBitmapType =
-        nl::nx::ui.resolve(POSTCHAOS_BITMAP).data_type();
+    constexpr const char* POSTCHAOS_BITMAP
+        = "Login.img/WorldSelect/BtChannel/layer:bg";
+    auto postChaosBitmapType
+        = nl::nx::ui.resolve(POSTCHAOS_BITMAP).data_type();
 
     if (postChaosBitmapType != nl::node::type::bitmap) {
         return Error::WRONG_UI_FILE;

@@ -39,10 +39,11 @@ public:
     virtual void update() = 0;
 
     virtual void double_click(Point<std::int16_t> pos) = 0;
-    virtual void
-    send_key(KeyType::Id type, std::int32_t action, bool pressed) = 0;
+    virtual void send_key(KeyType::Id type, std::int32_t action, bool pressed)
+        = 0;
     virtual Cursor::State send_cursor(Cursor::State mst,
-                                      Point<std::int16_t> pos) = 0;
+                                      Point<std::int16_t> pos)
+        = 0;
 
     virtual void drag_icon(Icon* icon) = 0;
     virtual void clear_tooltip(Tooltip::Parent parent) = 0;
@@ -52,10 +53,11 @@ public:
                             std::int32_t skill_id,
                             std::int32_t level,
                             std::int32_t masterlevel,
-                            std::int64_t expiration) = 0;
+                            std::int64_t expiration)
+        = 0;
 
-    virtual Iterator
-    pre_add(UIElement::Type type, bool toggled, bool focused) = 0;
+    virtual Iterator pre_add(UIElement::Type type, bool toggled, bool focused)
+        = 0;
     virtual void remove(UIElement::Type type) = 0;
     virtual UIElement* get(UIElement::Type type) = 0;
     virtual UIElement* get_front(Point<std::int16_t> pos) = 0;

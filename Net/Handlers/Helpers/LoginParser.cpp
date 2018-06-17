@@ -82,8 +82,8 @@ CharEntry LoginParser::parse_charentry(InPacket& recv)
         std::int32_t curjobrank = recv.read_int();
         std::int32_t jobrankmv = recv.read_int();
         std::int8_t rankmc = (rankmv > 0) ? '+' : (rankmv < 0) ? '-' : '=';
-        std::int8_t jobrankmc =
-            (jobrankmv > 0) ? '+' : (jobrankmv < 0) ? '-' : '=';
+        std::int8_t jobrankmc
+            = (jobrankmv > 0) ? '+' : (jobrankmv < 0) ? '-' : '=';
 
         stats.rank = std::make_pair(currank, rankmc);
         stats.job_rank = std::make_pair(curjobrank, jobrankmc);

@@ -84,8 +84,8 @@ std::size_t Cryptography::check_length(const std::int8_t* bytes) const
         headermask |= static_cast<std::uint8_t>(bytes[i]) << (8 * i);
     }
 
-    return static_cast<std::int16_t>((headermask >> 16) ^
-                                     (headermask & 0xFFFF));
+    return static_cast<std::int16_t>((headermask >> 16)
+                                     ^ (headermask & 0xFFFF));
 #else
     std::size_t length = 0;
 
@@ -367,8 +367,9 @@ void Cryptography::shiftrows(std::uint8_t* bytes) const
 
 std::uint8_t Cryptography::gmul(std::uint8_t x) const
 {
-    return (x << 1) ^ (static_cast<std::uint8_t>(0x1Bu) &
-                       (std::uint8_t)((std::int8_t)x >> 7));
+    return (x << 1)
+           ^ (static_cast<std::uint8_t>(0x1Bu)
+              & (std::uint8_t)((std::int8_t)x >> 7));
 }
 
 void Cryptography::mixcolumns(std::uint8_t* bytes) const

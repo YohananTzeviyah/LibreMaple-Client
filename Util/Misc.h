@@ -78,8 +78,8 @@ T saturating_cast(U u)
             if constexpr (sizeof(T) > sizeof(U)) {
                 return static_cast<T>(u);
             } else if constexpr (sizeof(T) == sizeof(U)) {
-                if constexpr (std::numeric_limits<T>::is_signed ==
-                              std::numeric_limits<U>::is_signed) {
+                if constexpr (std::numeric_limits<T>::is_signed
+                              == std::numeric_limits<U>::is_signed) {
                     return static_cast<T>(u);
                 } else if constexpr (std::numeric_limits<T>::is_signed) {
                     return static_cast<T>(std::min(

@@ -93,14 +93,14 @@ void UI::send_cursor(Point<std::int16_t> cursorpos, Cursor::State cursorstate)
 
 void UI::send_cursor(bool pressed)
 {
-    Cursor::State cursorstate =
-        pressed && enabled ? Cursor::CLICKING : Cursor::IDLE;
+    Cursor::State cursorstate
+        = pressed && enabled ? Cursor::CLICKING : Cursor::IDLE;
     Point<std::int16_t> cursor_pos = cursor.get_position();
     send_cursor(cursor_pos, cursorstate);
 
     if (focused_text_field && pressed) {
-        Cursor::State tstate =
-            focused_text_field->send_cursor(cursor_pos, pressed);
+        Cursor::State tstate
+            = focused_text_field->send_cursor(cursor_pos, pressed);
         switch (tstate) {
         case Cursor::IDLE:
             focused_text_field = {};
@@ -146,8 +146,8 @@ void UI::send_key(std::int32_t keycode, bool pressed)
             }
         } else {
             bool shift = is_key_down[keyboard.shift_code()];
-            Keyboard::Mapping mapping =
-                keyboard.get_text_mapping(keycode, shift);
+            Keyboard::Mapping mapping
+                = keyboard.get_text_mapping(keycode, shift);
             focused_text_field->send_key(
                 mapping.type, mapping.action, pressed);
         }

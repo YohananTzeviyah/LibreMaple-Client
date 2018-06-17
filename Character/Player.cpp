@@ -138,8 +138,8 @@ void Player::recalc_stats(bool equip_changed)
 
 void Player::change_equip(std::int16_t slot)
 {
-    if (std::int32_t itemid =
-            inventory.get_item_id(InventoryType::EQUIPPED, slot)) {
+    if (std::int32_t itemid
+        = inventory.get_item_id(InventoryType::EQUIPPED, slot)) {
         look.add_equip(itemid);
     } else {
         look.remove_equip(Equipslot::by_id(slot));
@@ -242,8 +242,8 @@ bool Player::is_attacking() const
 
 bool Player::can_attack() const
 {
-    return !attacking && !is_climbing() && !is_sitting() &&
-           look.get_equips().has_weapon();
+    return !attacking && !is_climbing() && !is_sitting()
+           && look.get_equips().has_weapon();
 }
 
 SpecialMove::ForbidReason Player::can_use(const SpecialMove& move) const
@@ -452,14 +452,15 @@ void Player::set_ladder(nullable_ptr<const Ladder> ldr)
 
 float Player::get_walk_force() const
 {
-    return 0.05f +
-           0.11f * static_cast<float>(stats.get_total(Equipstat::SPEED)) / 100;
+    return 0.05f
+           + 0.11f * static_cast<float>(stats.get_total(Equipstat::SPEED))
+                 / 100;
 }
 
 float Player::get_jump_force() const
 {
-    return 1.0f +
-           3.5f * static_cast<float>(stats.get_total(Equipstat::JUMP)) / 100;
+    return 1.0f
+           + 3.5f * static_cast<float>(stats.get_total(Equipstat::JUMP)) / 100;
 }
 
 float Player::get_climb_force() const

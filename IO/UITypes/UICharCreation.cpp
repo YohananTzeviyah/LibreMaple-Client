@@ -127,8 +127,8 @@ UICharCreation::UICharCreation()
     buttons[BT_CHARC_GENDERL]->set_active(false);
     buttons[BT_CHARC_GEMDERR]->set_active(false);
 
-    name_char = {
-        Text::A13M, Text::LEFT, Text::WHITE, {{490, 219}, {630, 243}}, 12};
+    name_char
+        = {Text::A13M, Text::LEFT, Text::WHITE, {{490, 219}, {630, 243}}, 12};
     name_char.set_state(Textfield::FOCUSED);
 
     face_name = {Text::A11M, Text::CENTER, Text::BLACK};
@@ -321,23 +321,23 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
             break;
         case BT_CHARC_HAIRL:
             hair = (hair > 0) ? hair - 1 : hairs[female].size() - 1;
-            new_char.set_hair(hairs[female][hair] +
-                              hair_colors[female][hair_color]);
+            new_char.set_hair(hairs[female][hair]
+                              + hair_colors[female][hair_color]);
             hair_name.change_text(
                 std::string{new_char.get_hair()->get_name()});
             break;
         case BT_CHARC_HAIRR:
             hair = (hair < hairs[female].size() - 1) ? hair + 1 : 0;
-            new_char.set_hair(hairs[female][hair] +
-                              hair_colors[female][hair_color]);
+            new_char.set_hair(hairs[female][hair]
+                              + hair_colors[female][hair_color]);
             hair_name.change_text(
                 std::string{new_char.get_hair()->get_name()});
             break;
         case BT_CHARC_HAIRCL:
             hair_color = (hair_color > 0) ? hair_color - 1
                                           : hair_colors[female].size() - 1;
-            new_char.set_hair(hairs[female][hair] +
-                              hair_colors[female][hair_color]);
+            new_char.set_hair(hairs[female][hair]
+                              + hair_colors[female][hair_color]);
             hair_cname.change_text(
                 std::string{new_char.get_hair()->get_color()});
             break;
@@ -345,8 +345,8 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
             hair_color = (hair_color < hair_colors[female].size() - 1)
                              ? hair_color + 1
                              : 0;
-            new_char.set_hair(hairs[female][hair] +
-                              hair_colors[female][hair_color]);
+            new_char.set_hair(hairs[female][hair]
+                              + hair_colors[female][hair_color]);
             hair_cname.change_text(
                 std::string{new_char.get_hair()->get_color()});
             break;
@@ -472,8 +472,8 @@ void UICharCreation::draw(float alpha) const
         }
     }
 
-    std::int16_t cloudx =
-        static_cast<std::int16_t>(cloud_fx) % Constants::VIEW_WIDTH;
+    std::int16_t cloudx
+        = static_cast<std::int16_t>(cloud_fx) % Constants::VIEW_WIDTH;
     cloud.draw(Point<std::int16_t>(cloudx - cloud.width(), 300));
     cloud.draw(Point<std::int16_t>{cloudx, 300});
     cloud.draw(Point<std::int16_t>(cloudx + cloud.width(), 300));

@@ -79,8 +79,8 @@ void draw(float alpha)
 
 bool running()
 {
-    return Session::get().is_connected() && UI::get().not_quitted() &&
-           Window::get().not_closed();
+    return Session::get().is_connected() && UI::get().not_quitted()
+           && Window::get().not_closed();
 }
 
 void loop()

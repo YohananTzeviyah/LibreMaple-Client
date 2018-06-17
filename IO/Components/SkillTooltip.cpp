@@ -107,40 +107,40 @@ void SkillTooltip::set_skill(std::int32_t id,
             std::string{data.get_name()},
             320};
     desc = {Text::A12M, Text::LEFT, Text::WHITE, std::move(desc_str), 230};
-    leveldesc = {
-        Text::A12M,
-        Text::LEFT,
-        Text::WHITE,
-        [level, master_level, &data]() {
-            if (level > 0) {
-                if (level < master_level) {
-                    return str::concat("[Current Level: ",
-                                       std::to_string(level),
-                                       "]\\n",
-                                       data.get_level_desc(level),
-                                       "\\n",
-                                       "[Next Level: ",
-                                       std::to_string(level + 1),
-                                       "]\\n",
-                                       data.get_level_desc(level + 1));
-                } else {
-                    return str::concat("[Current Level: ",
-                                       std::to_string(level),
-                                       "]\\n",
-                                       data.get_level_desc(level));
-                }
-            } else {
-                if (level < master_level) {
-                    return str::concat("[Next Level: ",
-                                       std::to_string(level + 1),
-                                       "]\\n",
-                                       data.get_level_desc(level + 1));
-                } else {
-                    return std::string{};
-                }
-            }
-        }(),
-        330};
+    leveldesc
+        = {Text::A12M,
+           Text::LEFT,
+           Text::WHITE,
+           [level, master_level, &data]() {
+               if (level > 0) {
+                   if (level < master_level) {
+                       return str::concat("[Current Level: ",
+                                          std::to_string(level),
+                                          "]\\n",
+                                          data.get_level_desc(level),
+                                          "\\n",
+                                          "[Next Level: ",
+                                          std::to_string(level + 1),
+                                          "]\\n",
+                                          data.get_level_desc(level + 1));
+                   } else {
+                       return str::concat("[Current Level: ",
+                                          std::to_string(level),
+                                          "]\\n",
+                                          data.get_level_desc(level));
+                   }
+               } else {
+                   if (level < master_level) {
+                       return str::concat("[Next Level: ",
+                                          std::to_string(level + 1),
+                                          "]\\n",
+                                          data.get_level_desc(level + 1));
+                   } else {
+                       return std::string{};
+                   }
+               }
+           }(),
+           330};
 
     icon_offset = 4 + name.height();
     level_offset = std::max<std::int16_t>(desc.height(), 92) + 16;

@@ -25,13 +25,13 @@
 
 namespace jrc
 {
-// The character selection screen.
+//! The character selection screen.
 class UICharSelect : public UIElement
 {
 public:
-    static constexpr Type TYPE = CHAR_SELECT;
-    static constexpr bool FOCUSED = false;
-    static constexpr bool TOGGLED = false;
+    static constexpr const Type TYPE = CHAR_SELECT;
+    static constexpr const bool FOCUSED = false;
+    static constexpr const bool TOGGLED = false;
 
     UICharSelect(std::vector<CharEntry> characters,
                  std::uint8_t count,
@@ -68,22 +68,22 @@ private:
         BT_CHAR0
     };
 
-    static constexpr std::uint8_t PAGESIZE = 8;
+    static constexpr const std::uint8_t PAGE_SIZE = 8;
 
     Sprite empty_slot;
     Charset level_set;
     nl::node name_tag;
 
-    Point<std::int16_t> selworldpos;
-    Point<std::int16_t> charinfopos;
+    Point<std::int16_t> sel_world_pos;
+    Point<std::int16_t> char_info_pos;
 
     std::vector<CharEntry> characters;
-    std::vector<CharLook> charlooks;
+    std::vector<CharLook> char_looks;
     std::vector<Nametag> name_tags;
     std::int8_t require_pic;
 
     std::uint8_t char_count_absolute;
-    std::uint8_t charcount_relative;
+    std::uint8_t char_count_relative;
     std::uint8_t slots_absolute;
     std::uint8_t slots_relative;
     std::uint8_t selected_absolute;
@@ -98,12 +98,12 @@ private:
         Text b;
 
         OutlinedText(Text::Font font, Text::Alignment alignment)
+            : inner{font, alignment, Text::WHITE},
+              l{font, alignment, Text::DARKGREY},
+              r{font, alignment, Text::DARKGREY},
+              t{font, alignment, Text::DARKGREY},
+              b{font, alignment, Text::DARKGREY}
         {
-            inner = Text(font, alignment, Text::WHITE);
-            l = Text(font, alignment, Text::DARKGREY);
-            r = Text(font, alignment, Text::DARKGREY);
-            t = Text(font, alignment, Text::DARKGREY);
-            b = Text(font, alignment, Text::DARKGREY);
         }
 
         OutlinedText() = default;
@@ -128,8 +128,8 @@ private:
     };
     OutlinedText name_label;
 
-    static const std::size_t NUM_LABELS = 7;
+    static constexpr const std::size_t NUM_LABELS = 7;
     enum InfoLabel { JOB, WORLDRANK, JOBRANK, STR, DEX, INT, LUK };
-    OutlinedText infolabels[NUM_LABELS];
+    OutlinedText info_labels[NUM_LABELS];
 };
 } // namespace jrc

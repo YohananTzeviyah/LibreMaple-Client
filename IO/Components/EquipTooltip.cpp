@@ -52,30 +52,30 @@ EquipTooltip::EquipTooltip()
     requirements.push_back(Maplestat::INT);
     requirements.push_back(Maplestat::LUK);
 
-    req_stat_textures[Maplestat::LEVEL][false] =
-        item_tt["Equip"]["Cannot"]["reqLEV"];
-    req_stat_textures[Maplestat::LEVEL][true] =
-        item_tt["Equip"]["Can"]["reqLEV"];
-    req_stat_textures[Maplestat::FAME][false] =
-        item_tt["Equip"]["Cannot"]["reqPOP"];
-    req_stat_textures[Maplestat::FAME][true] =
-        item_tt["Equip"]["Can"]["reqPOP"];
-    req_stat_textures[Maplestat::STR][false] =
-        item_tt["Equip"]["Cannot"]["reqSTR"];
-    req_stat_textures[Maplestat::STR][true] =
-        item_tt["Equip"]["Can"]["reqSTR"];
-    req_stat_textures[Maplestat::DEX][false] =
-        item_tt["Equip"]["Cannot"]["reqDEX"];
-    req_stat_textures[Maplestat::DEX][true] =
-        item_tt["Equip"]["Can"]["reqDEX"];
-    req_stat_textures[Maplestat::INT][false] =
-        item_tt["Equip"]["Cannot"]["reqINT"];
-    req_stat_textures[Maplestat::INT][true] =
-        item_tt["Equip"]["Can"]["reqINT"];
-    req_stat_textures[Maplestat::LUK][false] =
-        item_tt["Equip"]["Cannot"]["reqLUK"];
-    req_stat_textures[Maplestat::LUK][true] =
-        item_tt["Equip"]["Can"]["reqLUK"];
+    req_stat_textures[Maplestat::LEVEL][false]
+        = item_tt["Equip"]["Cannot"]["reqLEV"];
+    req_stat_textures[Maplestat::LEVEL][true]
+        = item_tt["Equip"]["Can"]["reqLEV"];
+    req_stat_textures[Maplestat::FAME][false]
+        = item_tt["Equip"]["Cannot"]["reqPOP"];
+    req_stat_textures[Maplestat::FAME][true]
+        = item_tt["Equip"]["Can"]["reqPOP"];
+    req_stat_textures[Maplestat::STR][false]
+        = item_tt["Equip"]["Cannot"]["reqSTR"];
+    req_stat_textures[Maplestat::STR][true]
+        = item_tt["Equip"]["Can"]["reqSTR"];
+    req_stat_textures[Maplestat::DEX][false]
+        = item_tt["Equip"]["Cannot"]["reqDEX"];
+    req_stat_textures[Maplestat::DEX][true]
+        = item_tt["Equip"]["Can"]["reqDEX"];
+    req_stat_textures[Maplestat::INT][false]
+        = item_tt["Equip"]["Cannot"]["reqINT"];
+    req_stat_textures[Maplestat::INT][true]
+        = item_tt["Equip"]["Can"]["reqINT"];
+    req_stat_textures[Maplestat::LUK][false]
+        = item_tt["Equip"]["Cannot"]["reqLUK"];
+    req_stat_textures[Maplestat::LUK][true]
+        = item_tt["Equip"]["Can"]["reqLUK"];
 
     req_stat_positions[Maplestat::LEVEL] = {98, 48};
     req_stat_positions[Maplestat::STR] = {98, 64};
@@ -163,9 +163,9 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
         break;
     case 1:
         ok_jobs.push_back(1);
-        can_equip[Maplestat::JOB] =
-            (stats.get_stat(Maplestat::JOB) / 100 == 1) ||
-            (stats.get_stat(Maplestat::JOB) / 100 >= 20);
+        can_equip[Maplestat::JOB]
+            = (stats.get_stat(Maplestat::JOB) / 100 == 1)
+              || (stats.get_stat(Maplestat::JOB) / 100 >= 20);
         break;
     case 2:
         ok_jobs.push_back(2);
@@ -289,8 +289,8 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
     for (Equipstat::Id es = Equipstat::STR; es <= Equipstat::JUMP;
          es = static_cast<Equipstat::Id>(es + 1)) {
         if (equip.get_stat(es) > 0) {
-            std::int16_t delta =
-                equip.get_stat(es) - equip_data.get_def_stat(es);
+            std::int16_t delta
+                = equip.get_stat(es) - equip_data.get_def_stat(es);
             std::string stat_str = std::to_string(equip.get_stat(es));
             if (delta != 0) {
                 stat_str.append(" (");
@@ -298,11 +298,11 @@ void EquipTooltip::set_equip(Parent parent, std::int16_t ivp)
                 stat_str.append(std::to_string(std::abs(delta)));
                 stat_str.push_back(')');
             }
-            stat_labels[es] = {Text::A11L,
-                               Text::LEFT,
-                               Text::WHITE,
-                               Equipstat::names[es] + std::string(": ") +
-                                   stat_str};
+            stat_labels[es]
+                = {Text::A11L,
+                   Text::LEFT,
+                   Text::WHITE,
+                   Equipstat::names[es] + std::string(": ") + stat_str};
         } else {
             height -= 18;
         }

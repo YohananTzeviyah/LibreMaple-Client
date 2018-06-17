@@ -15,17 +15,18 @@ template<typename T>
 {
     typedef std::remove_cv_t<T> no_cv_t;
 
-    static_assert(!std::is_same_v<no_cv_t, const char*> &&
-                      !std::is_same_v<no_cv_t, char*>,
-                  "Don't try to `concat()` together `char*`s. If needed, call "
-                  "`strlen()` yourself by convering your `char*` to a "
-                  "`std::string_view`. `char` arrays with compile-time size "
-                  "work fine.");
+    static_assert(
+        !std::is_same_v<no_cv_t,
+                        const char*> && !std::is_same_v<no_cv_t, char*>,
+        "Don't try to `concat()` together `char*`s. If needed, call "
+        "`strlen()` yourself by convering your `char*` to a "
+        "`std::string_view`. `char` arrays with compile-time size "
+        "work fine.");
 
     if constexpr (std::is_same_v<no_cv_t, char>) {
         return 1;
-    } else if constexpr (std::is_array_v<T> && std::rank_v<T> == 1 &&
-                         std::extent_v<T>> 0) {
+    } else if constexpr (std::is_array_v<T> && std::rank_v<T> == 1
+                         && std::extent_v<T>> 0) {
         static_assert(
             std::is_same_v<std::remove_cv_t<std::remove_extent_t<no_cv_t>>,
                            char>,

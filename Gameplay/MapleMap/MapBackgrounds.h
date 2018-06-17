@@ -52,8 +52,8 @@ private:
             return static_cast<Type>(id);
         }
 
-        Console::get().print("Unhandled background type: " +
-                             std::to_string(id));
+        Console::get().print("Unhandled background type: "
+                             + std::to_string(id));
 
         return NORMAL;
     }
@@ -61,8 +61,8 @@ private:
     void settype(Type type);
 
     static const std::int16_t WOFFSET = Constants::GAME_VIEW_WIDTH / 2;
-    static const std::int16_t HOFFSET =
-        Constants::GAME_VIEW_HEIGHT / 2 - Constants::VIEW_Y_OFFSET;
+    static const std::int16_t HOFFSET
+        = Constants::GAME_VIEW_HEIGHT / 2 - Constants::VIEW_Y_OFFSET;
 
     Animation animation;
     bool animated;

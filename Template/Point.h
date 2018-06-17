@@ -94,31 +94,31 @@ public:
     }
 
     //! Set the x-coordinate.
-    void set_x(T v) noexcept
+    constexpr void set_x(T v) noexcept
     {
         a = v;
     }
 
     //! Set the y-coordinate.
-    void set_y(T v) noexcept
+    constexpr void set_y(T v) noexcept
     {
         b = v;
     }
 
     //! Shift the x-coordinate by the specified amount.
-    void shift_x(T v) noexcept
+    constexpr void shift_x(T v) noexcept
     {
         a += v;
     }
 
     //! Shift the y-coordinate by the specified amount.
-    void shift_y(T v) noexcept
+    constexpr void shift_y(T v) noexcept
     {
         b += v;
     }
 
     //! Shift the coordinates by the specified amounts.
-    void shift(T x, T y) noexcept
+    constexpr void shift(T x, T y) noexcept
     {
         a += x;
         b += y;
@@ -126,7 +126,7 @@ public:
 
     //! Shift the this point by the amounts defined by another point.
     //! Equivalent to `operator +=`.
-    void shift(Point<T> v) noexcept
+    constexpr void shift(Point<T> v) noexcept
     {
         a += v.a;
         b += v.b;
@@ -146,7 +146,7 @@ public:
     }
 
     //! Shift this point by the amounts defined by another point.
-    void operator+=(Point<T> v) noexcept
+    constexpr void operator+=(Point<T> v) noexcept
     {
         a += v.a;
         b += v.b;
@@ -154,7 +154,7 @@ public:
 
     //! Shift this point by the opposite of the amounts defined by another
     //! point.
-    void operator-=(Point<T> v) noexcept
+    constexpr void operator-=(Point<T> v) noexcept
     {
         a -= v.a;
         b -= v.b;

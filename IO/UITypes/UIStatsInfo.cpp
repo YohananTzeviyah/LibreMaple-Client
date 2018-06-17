@@ -53,10 +53,10 @@ UIStatsinfo::UIStatsinfo(const CharStats& st)
     buttons[BT_LUK] = std::make_unique<MapleButton>(src["BtLukUp"]);
     buttons[BT_INT] = std::make_unique<MapleButton>(src["BtIntUp"]);
 
-    buttons[BT_DETAILOPEN] =
-        std::make_unique<MapleButton>(src["BtDetailOpen"]);
-    buttons[BT_DETAILCLOSE] =
-        std::make_unique<MapleButton>(src["BtDetailClose"]);
+    buttons[BT_DETAILOPEN]
+        = std::make_unique<MapleButton>(src["BtDetailOpen"]);
+    buttons[BT_DETAILCLOSE]
+        = std::make_unique<MapleButton>(src["BtDetailClose"]);
     buttons[BT_DETAILCLOSE]->set_active(false);
 
     update_ap();

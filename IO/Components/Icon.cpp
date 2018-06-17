@@ -40,10 +40,10 @@ void Icon::draw(Point<std::int16_t> position) const
     texture.draw({position, opacity});
 
     if (showcount) {
-        static const Charset countset = {nl::nx::ui["Basic.img"]["ItemNo"],
-                                         Charset::LEFT};
-        std::int16_t tempc =
-            dragged ? (count - static_cast<std::int16_t>(1)) : count;
+        static const Charset countset
+            = {nl::nx::ui["Basic.img"]["ItemNo"], Charset::LEFT};
+        std::int16_t tempc
+            = dragged ? (count - static_cast<std::int16_t>(1)) : count;
         countset.draw(std::to_string(tempc),
                       position + Point<std::int16_t>{0, 20});
     }

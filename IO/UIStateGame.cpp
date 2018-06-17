@@ -181,13 +181,12 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst,
 
             if (front) {
                 if (clicked) {
-                    element_order.erase(std::remove_if(element_order.begin(),
-                                                       element_order.end(),
-                                                       [front_type](auto t) {
-                                                           return t ==
-                                                                  front_type;
-                                                       }),
-                                        element_order.end());
+                    element_order.erase(
+                        std::remove_if(
+                            element_order.begin(),
+                            element_order.end(),
+                            [front_type](auto t) { return t == front_type; }),
+                        element_order.end());
                     element_order.push_back(front_type);
                 }
                 return front->send_cursor(clicked, pos);

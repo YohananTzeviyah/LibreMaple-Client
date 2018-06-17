@@ -83,8 +83,8 @@ UIItemInventory::UIItemInventory(const Inventory& invent)
               [this](bool upwards) {
                   auto shift = static_cast<std::int16_t>(upwards ? -4 : 4);
                   bool above = slot_range.first + shift > 0;
-                  bool below = slot_range.second + shift <
-                               inventory.get_slotmax(tab) + 1 + 4;
+                  bool below = slot_range.second + shift
+                               < inventory.get_slotmax(tab) + 1 + 4;
                   if (above && below) {
                       slot_range.first += shift;
                       slot_range.second += shift;
@@ -223,8 +223,8 @@ void UIItemInventory::double_click(Point<std::int16_t> cursor_pos)
                     .dispatch();
                 break;
             case InventoryType::USE:
-                if (item_id / 10000 != 204 && item_id / 10000 != 206 &&
-                    item_id / 10000 != 207) {
+                if (item_id / 10000 != 204 && item_id / 10000 != 206
+                    && item_id / 10000 != 207) {
                     UseItemPacket(slot, item_id).dispatch();
                 }
                 break;

@@ -64,8 +64,8 @@ void TwoHAction::apply(Char& target, Attack::Type) const
 ByLevelAction::ByLevelAction(nl::node src, std::int32_t id)
 {
     for (auto sub : src["level"]) {
-        std::int32_t level =
-            string_conversion::or_zero<std::int32_t>(sub.name());
+        std::int32_t level
+            = string_conversion::or_zero<std::int32_t>(sub.name());
         actions[level] = sub["action"].get_string();
     }
 

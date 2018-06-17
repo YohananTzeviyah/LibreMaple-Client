@@ -39,8 +39,8 @@ BuffIcon::BuffIcon(std::int32_t buff, std::int32_t dur)
         char str_id_buf[7];
         std::memcpy(str_id_buf, str_id.data(), 3);
         std::memcpy(str_id_buf + 3, ".img", 4);
-        nl::node src =
-            nl::nx::skill[std::string_view{str_id_buf, 7}]["skill"][str_id];
+        nl::node src
+            = nl::nx::skill[std::string_view{str_id_buf, 7}]["skill"][str_id];
         icon = src["icon"];
     } else {
         icon = ItemData::get(-buffid).get_icon(true);

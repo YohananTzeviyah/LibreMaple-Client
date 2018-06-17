@@ -24,11 +24,11 @@ namespace jrc
 class UIWorldSelect : public UIElement
 {
 public:
-    static constexpr Type TYPE = WORLD_SELECT;
-    static constexpr bool FOCUSED = false;
-    static constexpr bool TOGGLED = false;
+    static constexpr const Type TYPE = WORLD_SELECT;
+    static constexpr const bool FOCUSED = false;
+    static constexpr const bool TOGGLED = false;
 
-    UIWorldSelect(std::vector<World> worlds, std::uint8_t worldcount);
+    UIWorldSelect(std::vector<World> worlds, std::uint8_t world_count);
 
     void draw(float alpha) const override;
 
@@ -41,7 +41,7 @@ protected:
 private:
     enum Buttons { BT_ENTERWORLD = 0, BT_WORLD0 = 1, BT_CHANNEL0 = 17 };
 
-    std::uint8_t worldid;
-    std::uint8_t channelid;
+    std::uint8_t world_id;
+    std::uint8_t channel_id;
 };
 } // namespace jrc

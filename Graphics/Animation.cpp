@@ -19,48 +19,47 @@
 
 #include "../Constants.h"
 #include "../Util/Misc.h"
-#include "boost/container/flat_set.hpp"
 
 namespace jrc
 {
-Frame::Frame(nl::node src)
+Frame::Frame(nl::node src) : texture{src}, bounds{src}
 {
-    texture = src;
-    bounds = src;
     head = src["head"];
     delay = src["delay"];
+    bool no_delay = false;
     if (delay == 0) {
         delay = 100;
+        no_delay = true;
     }
 
-    bool hasa0 = src["a0"].data_type() == nl::node::type::integer;
-    bool hasa1 = src["a1"].data_type() == nl::node::type::integer;
-    if (hasa0 && hasa1) {
+    bool has_a0 = src["a0"].data_type() == nl::node::type::integer;
+    bool has_a1 = src["a1"].data_type() == nl::node::type::integer;
+    if (has_a0 && has_a1) {
         opacities = {src["a0"], src["a1"]};
-    } else if (hasa0) {
+    } else if (has_a0) {
         std::uint8_t a0 = src["a0"];
-        opacities = {a0, 255 - a0};
-    } else if (hasa1) {
+        opacities = {a0, no_delay ? a0 : 255 - a0};
+    } else if (has_a1) {
         std::uint8_t a1 = src["a1"];
-        opacities = {255 - a1, a1};
+        opacities = {no_delay ? a1 : 255 - a1, a1};
     } else {
         opacities = {255, 255};
     }
 
-    bool hasz0 = src["z0"].data_type() == nl::node::type::integer;
-    bool hasz1 = src["z1"].data_type() == nl::node::type::integer;
-    if (hasz0 && hasz1) {
+    bool has_z0 = src["z0"].data_type() == nl::node::type::integer;
+    bool has_z1 = src["z1"].data_type() == nl::node::type::integer;
+    if (has_z0 && has_z1) {
         scales = {src["z0"], src["z1"]};
-    } else if (hasz0) {
-        scales = {src["z0"], 0};
-    } else if (hasz1) {
-        scales = {100, src["z1"]};
+    } else if (has_z0) {
+        scales = {src["z0"], no_delay ? src["z0"] : 0};
+    } else if (has_z1) {
+        scales = {no_delay ? src["z1"] : 100, src["z1"]};
     } else {
         scales = {100, 100};
     }
 }
 
-Frame::Frame() noexcept : delay(0), opacities{0, 0}, scales{0, 0}
+Frame::Frame() noexcept : delay{0}, opacities{0, 0}, scales{0, 0}
 {
 }
 
@@ -74,9 +73,19 @@ std::uint8_t Frame::start_opacity() const
     return opacities.first;
 }
 
+std::uint8_t Frame::end_opacity() const
+{
+    return opacities.second;
+}
+
 std::uint16_t Frame::start_scale() const
 {
     return static_cast<std::uint16_t>(scales.first);
+}
+
+std::uint16_t Frame::end_scale() const
+{
+    return static_cast<std::uint16_t>(scales.second);
 }
 
 std::uint16_t Frame::get_delay() const
@@ -110,8 +119,8 @@ float Frame::opc_step(std::uint16_t timestep) const
         return 0.0f;
     }
 
-    return timestep * static_cast<float>(opacities.second - opacities.first) /
-           delay;
+    return timestep * static_cast<float>(opacities.second - opacities.first)
+           / delay;
 }
 
 float Frame::scale_step(std::uint16_t timestep) const
@@ -123,25 +132,27 @@ float Frame::scale_step(std::uint16_t timestep) const
     return timestep * static_cast<float>(scales.second - scales.first) / delay;
 }
 
-Animation::Animation(nl::node src)
+Animation::Animation(nl::node src) : finished(false)
 {
     bool is_texture = src.data_type() == nl::node::type::bitmap;
     if (is_texture) {
         frames.emplace_back(src);
     } else {
-        boost::container::flat_set<std::int16_t> frame_ids;
+        std::vector<std::int16_t> frame_ids;
+        frame_ids.reserve(src.size());
         for (auto sub : src) {
             if (sub.data_type() == nl::node::type::bitmap) {
                 auto fid = string_conversion::or_default<std::int16_t>(
                     sub.name(), -1);
                 if (fid >= 0) {
-                    frame_ids.insert(fid);
+                    frame_ids.push_back(fid);
                 }
             }
         }
+        std::sort(frame_ids.begin(), frame_ids.end());
 
         for (auto fid : frame_ids) {
-            frames.emplace_back(src[std::to_string(fid)]);
+            frames.emplace_back(src[fid]);
         }
 
         if (frames.empty()) {
@@ -151,11 +162,13 @@ Animation::Animation(nl::node src)
 
     animated = frames.size() > 1;
     zigzag = src["zigzag"].get_bool();
+    repeat = src["repeat"];
 
     reset();
 }
 
-Animation::Animation() noexcept : animated(false), zigzag(false)
+Animation::Animation() noexcept
+    : animated(false), zigzag(false), finished(true)
 {
     frames.emplace_back();
 
@@ -194,6 +207,10 @@ bool Animation::update()
 
 bool Animation::update(std::uint16_t timestep)
 {
+    if (finished) {
+        return true;
+    }
+
     const Frame& frame_data = get_frame();
 
     opacity += frame_data.opc_step(timestep);
@@ -234,31 +251,38 @@ bool Animation::update(std::uint16_t timestep)
             }
         }
 
-        std::uint16_t delta = timestep - delay;
-        float threshold = static_cast<float>(delta) / timestep;
-        frame.next(next_frame, threshold);
+        if (ended && repeat == -1) {
+            finished = true;
 
-        delay = frames[next_frame].get_delay();
-        if (delay >= delta) {
-            delay -= delta;
+            opacity.set(frames[last_frame].end_opacity());
+            xy_scale.set(frames[last_frame].end_scale());
+        } else {
+            std::uint16_t delta = timestep - delay;
+            float threshold = static_cast<float>(delta) / timestep;
+            frame.next(next_frame, threshold);
+
+            delay = frames[next_frame].get_delay();
+            if (delay >= delta) {
+                delay -= delta;
+            }
+
+            opacity.set(frames[next_frame].start_opacity());
+            xy_scale.set(frames[next_frame].start_scale());
         }
 
-        opacity.set(frames[next_frame].start_opacity());
-        xy_scale.set(frames[next_frame].start_scale());
-
         return ended;
-    } else {
-        frame.normalize();
-        delay -= timestep;
-
-        return false;
     }
+
+    frame.normalize();
+    delay -= timestep;
+
+    return false;
 }
 
 std::uint16_t Animation::get_delay(std::int16_t frame_id) const
 {
     return frame_id < frames.size() ? frames[frame_id].get_delay()
-                                    : static_cast<std::uint16_t>(0u);
+                                    : static_cast<std::uint16_t>(0);
 }
 
 std::uint16_t Animation::get_delay_until(std::int16_t frame_id) const

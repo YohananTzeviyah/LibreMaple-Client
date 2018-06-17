@@ -102,8 +102,8 @@ bool Char::update(const Physics& physics, float speed)
                 pet.set_stance(PetLook::FLY);
                 break;
             default:
-                if (pet.get_stance() == PetLook::HANG ||
-                    pet.get_stance() == PetLook::FLY) {
+                if (pet.get_stance() == PetLook::HANG
+                    || pet.get_stance() == PetLook::FLY) {
                     pet.set_stance(PetLook::STAND);
                 }
             }
@@ -261,8 +261,8 @@ void Char::set_afterimage(std::int32_t skill_id)
     const WeaponData& weapon = WeaponData::get(weapon_id);
 
     std::string stance_name = Stance::names[look.get_stance()];
-    std::int16_t weapon_level =
-        weapon.get_equip_data().get_req_stat(Maplestat::LEVEL);
+    std::int16_t weapon_level
+        = weapon.get_equip_data().get_req_stat(Maplestat::LEVEL);
     auto ai_name = weapon.get_afterimage();
     afterimage = {skill_id, ai_name, stance_name, weapon_level};
 }

@@ -71,9 +71,9 @@ void UINotice::draw_notice(bool textfield) const
 
 std::int16_t UINotice::box2offset() const
 {
-    return top.height() + center_box.height() +
-           box.height() *
-               (static_cast<std::int16_t>(1) + height / box.height());
+    return top.height() + center_box.height()
+           + box.height()
+                 * (static_cast<std::int16_t>(1) + height / box.height());
 }
 
 UIYesNo::UIYesNo(std::string&& q, std::function<void(bool)> yh)

@@ -215,15 +215,15 @@ std::int32_t CharStats::calculate_damage(std::int32_t mob_atk) const
 {
     // TODO: This is just random stuff, need to find the actual formula
     // somewhere.
-    std::int32_t reduceatk =
-        mob_atk / 2 + mob_atk / get_total(Equipstat::WDEF);
+    std::int32_t reduceatk
+        = mob_atk / 2 + mob_atk / get_total(Equipstat::WDEF);
     return reduceatk - static_cast<std::int32_t>(reduceatk * reduce_damage);
 }
 
 bool CharStats::is_damage_buffed() const
 {
-    return get_buff_delta(Equipstat::WATK) > 0 ||
-           get_buff_delta(Equipstat::MAGIC) > 0;
+    return get_buff_delta(Equipstat::WATK) > 0
+           || get_buff_delta(Equipstat::MAGIC) > 0;
 }
 
 std::uint16_t CharStats::get_stat(Maplestat::Id stat) const

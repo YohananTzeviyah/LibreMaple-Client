@@ -34,17 +34,17 @@ Expression::Id Expression::byaction(std::size_t action)
     return DEFAULT;
 }
 
-const EnumMap<Expression::Id, std::string> Expression::names = {
-    "default", "blink",      "hit",     "smile",   "troubled", "cry",
-    "angry",   "bewildered", "stunned", "blaze",   "bowing",   "cheers",
-    "chu",     "dam",        "despair", "glitter", "hot",      "hum",
-    "love",    "oops",       "pain",    "shine",   "vomit",    "wink"};
+const EnumMap<Expression::Id, std::string> Expression::names
+    = {"default", "blink",      "hit",     "smile",   "troubled", "cry",
+       "angry",   "bewildered", "stunned", "blaze",   "bowing",   "cheers",
+       "chu",     "dam",        "despair", "glitter", "hot",      "hum",
+       "love",    "oops",       "pain",    "shine",   "vomit",    "wink"};
 
 Face::Face(std::int32_t face_id)
 {
     const std::string face_id_str = std::to_string(face_id);
-    nl::node face_node =
-        nl::nx::character["Face"][str::concat("000", face_id_str, ".img")];
+    nl::node face_node
+        = nl::nx::character["Face"][str::concat("000", face_id_str, ".img")];
 
     for (auto iter : Expression::names) {
         Expression::Id exp = iter.first;

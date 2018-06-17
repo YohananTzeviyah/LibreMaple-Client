@@ -31,8 +31,8 @@ public:
     Afterimage() noexcept;
 
     void
-    draw(std::uint8_t stframe, const DrawArgument& args, float alpha) const;
-    void update(std::uint8_t stframe, std::uint16_t timestep);
+    draw(std::uint8_t st_frame, const DrawArgument& args, float alpha) const;
+    void update(std::uint8_t st_frame, std::uint16_t timestep);
 
     std::uint8_t get_first_frame() const;
     Rectangle<std::int16_t> get_range() const;

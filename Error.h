@@ -73,21 +73,21 @@ private:
     Code code;
     const char* args;
 
-    static constexpr const char* messages[LENGTH] = {
-        "",
-        "The server seems to be offline. Please start the server and enter "
-        "'retry'.",
-        "Could not initialize NLNX. Message: ",
-        "Missing a game file: ",
-        "UI.nx has wrong version.",
-        "Could not initialize GLFW.",
-        "Could not initialize GLEW.",
-        "Could not initialize FreeType.",
-        "Failed to create vertex shader.",
-        "Failed to create fragment shader.",
-        "Failed to create shader program.",
-        "Failed to locate shader variables.",
-        "Failed to create window.",
-        "Failed to initialize audio."};
+    static constexpr const char* messages[LENGTH]
+        = {"",
+           "The server seems to be offline. Please start the server and enter "
+           "'retry'.",
+           "Could not initialize NLNX. Message: ",
+           "Missing a game file: ",
+           "UI.nx has wrong version.",
+           "Could not initialize GLFW.",
+           "Could not initialize GLEW.",
+           "Could not initialize FreeType.",
+           "Failed to create vertex shader.",
+           "Failed to create fragment shader.",
+           "Failed to create shader program.",
+           "Failed to locate shader variables.",
+           "Failed to create window.",
+           "Failed to initialize audio."};
 };
 } // namespace jrc

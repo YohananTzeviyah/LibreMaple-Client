@@ -41,15 +41,15 @@ void Camera::update(Point<std::int16_t> position)
         next_y += vdelta * (12.0 / Constants::GAME_VIEW_HEIGHT);
     }
 
-    if (next_x > hbounds.first() ||
-        hbounds.length() < Constants::GAME_VIEW_WIDTH) {
+    if (next_x > hbounds.first()
+        || hbounds.length() < Constants::GAME_VIEW_WIDTH) {
         next_x = hbounds.first();
     } else if (next_x < hbounds.second() + Constants::GAME_VIEW_WIDTH) {
         next_x = hbounds.second() + Constants::GAME_VIEW_WIDTH;
     }
 
-    if (next_y > vbounds.first() ||
-        vbounds.length() < Constants::GAME_VIEW_HEIGHT) {
+    if (next_y > vbounds.first()
+        || vbounds.length() < Constants::GAME_VIEW_HEIGHT) {
         next_y = vbounds.first();
     } else if (next_y < vbounds.second() + Constants::GAME_VIEW_HEIGHT) {
         next_y = vbounds.second() + Constants::GAME_VIEW_HEIGHT;

@@ -149,8 +149,8 @@ void parse_item(InPacket& recv,
     recv.read_byte(); // 'type' byte
     std::int32_t iid = recv.read_int();
 
-    if (invtype == InventoryType::EQUIP ||
-        invtype == InventoryType::EQUIPPED) {
+    if (invtype == InventoryType::EQUIP
+        || invtype == InventoryType::EQUIPPED) {
         // Parse an equip.
         add_equip(recv, invtype, slot, iid, inventory);
     } else if (iid >= 5000000 && iid <= 5000102) {

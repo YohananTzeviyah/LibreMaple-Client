@@ -99,8 +99,8 @@ AttackResult MapMobs::send_attack(const Attack& attack)
 {
     Point<std::int16_t> origin = attack.origin;
     Rectangle<std::int16_t> range = attack.range;
-    std::int16_t h_range =
-        static_cast<std::int16_t>(range.l() * attack.h_range);
+    std::int16_t h_range
+        = static_cast<std::int16_t>(range.l() * attack.h_range);
     if (attack.to_left) {
         range = {origin.x() + h_range,
                  origin.x() + range.r(),
@@ -185,8 +185,8 @@ MapMobs::find_closest(Rectangle<std::int16_t> range,
         auto mob = static_cast<const Mob*>(mmo.second.get());
         if (mob && mob->is_alive() && mob->is_in_range(range)) {
             std::int32_t oid = mob->get_oid();
-            auto distance =
-                static_cast<std::uint16_t>(mob->get_position().disp(origin));
+            auto distance
+                = static_cast<std::uint16_t>(mob->get_position().disp(origin));
             targets.emplace(distance, oid);
 
             if (targets.size() > mob_count) {
@@ -211,15 +211,15 @@ std::int32_t MapMobs::find_colliding(const MovingObject& moveobj) const
     Range<std::int16_t> vertical{moveobj.get_last_y(), moveobj.get_y()};
     Rectangle<std::int16_t> player_rect{horizontal.smaller(),
                                         horizontal.greater(),
-                                        vertical.smaller() -
-                                            static_cast<std::int16_t>(50),
+                                        vertical.smaller()
+                                            - static_cast<std::int16_t>(50),
                                         vertical.greater()};
 
-    auto iter =
-        std::find_if(mobs.begin(), mobs.end(), [player_rect](auto& mmo) {
-            nullable_ptr<Mob> mob = mmo.second.get();
-            return mob && mob->is_alive() && mob->is_in_range(player_rect);
-        });
+    auto iter
+        = std::find_if(mobs.begin(), mobs.end(), [player_rect](auto& mmo) {
+              nullable_ptr<Mob> mob = mmo.second.get();
+              return mob && mob->is_alive() && mob->is_in_range(player_rect);
+          });
 
     if (iter == mobs.end()) {
         return 0;

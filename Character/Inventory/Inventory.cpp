@@ -178,8 +178,8 @@ void Inventory::swap(InventoryType::Id first_type,
                      std::int16_t second_slot)
 {
     Slot first = std::move(inventories[first_type][first_slot]);
-    inventories[first_type][first_slot] =
-        std::move(inventories[second_type][second_slot]);
+    inventories[first_type][first_slot]
+        = std::move(inventories[second_type][second_slot]);
     inventories[second_type][second_slot] = std::move(first);
 
     if (!inventories[first_type][first_slot].item_id) {

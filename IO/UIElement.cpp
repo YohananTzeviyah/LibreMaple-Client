@@ -123,8 +123,8 @@ Cursor::State UIElement::send_cursor(bool down, Point<std::int16_t> cursor_pos)
     Cursor::State ret = down ? Cursor::CLICKING : Cursor::IDLE;
 
     for (auto& [button_id, button] : buttons) {
-        if (button->is_active() &&
-            button->bounds(position).contains(cursor_pos)) {
+        if (button->is_active()
+            && button->bounds(position).contains(cursor_pos)) {
             if (button->get_state() == Button::NORMAL) {
                 Sound{Sound::BUTTON_OVER}.play();
 

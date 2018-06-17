@@ -140,15 +140,16 @@ UISkillbook::UISkillbook(const CharStats& in_stats,
 
     for (std::uint16_t i = BT_TAB0; i <= BT_TAB4; ++i) {
         std::uint16_t tab_id = i - BT_TAB0;
-        buttons[i] =
-            std::make_unique<TwoSpriteButton>(tab_d[tab_id], tab_e[tab_id]);
+        buttons[i]
+            = std::make_unique<TwoSpriteButton>(tab_d[tab_id], tab_e[tab_id]);
     }
     for (std::uint16_t i = BT_SPUP0; i <= BT_SPUP3; ++i) {
         std::uint16_t spup_id = i - BT_SPUP0;
-        Point<std::int16_t> spup_position =
-            SKILL_OFFSET + Point<std::int16_t>{124, 20 + spup_id * ROW_HEIGHT};
-        buttons[i] =
-            std::make_unique<MapleButton>(main["BtSpUp"], spup_position);
+        Point<std::int16_t> spup_position
+            = SKILL_OFFSET
+              + Point<std::int16_t>{124, 20 + spup_id * ROW_HEIGHT};
+        buttons[i]
+            = std::make_unique<MapleButton>(main["BtSpUp"], spup_position);
     }
 
     book_text = {Text::A12M, Text::CENTER, Text::WHITE, "", 100};
@@ -255,8 +256,8 @@ Cursor::State UISkillbook::send_cursor(bool clicked,
 
     Point<std::int16_t> cursor_relative = cursorpos - position;
     if (slider.is_enabled()) {
-        if (Cursor::State new_state =
-                slider.send_cursor(cursor_relative, clicked)) {
+        if (Cursor::State new_state
+            = slider.send_cursor(cursor_relative, clicked)) {
             clear_tooltip();
             return new_state;
         }
@@ -274,8 +275,8 @@ Cursor::State UISkillbook::send_cursor(bool clicked,
 
     Point<std::int16_t> skill_position = position + SKILL_OFFSET;
     for (auto iter = begin; iter != end; ++iter) {
-        if (Cursor::State state =
-                iter->send_cursor(cursorpos - skill_position, clicked);
+        if (Cursor::State state
+            = iter->send_cursor(cursorpos - skill_position, clicked);
             state) {
             switch (state) {
             case Cursor::GRABBING:

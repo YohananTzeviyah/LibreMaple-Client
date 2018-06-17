@@ -57,9 +57,9 @@ void UINpcTalk::draw(float inter) const
     speaker.draw({position + Point<std::int16_t>(80, 100), true});
     nametag.draw(position + Point<std::int16_t>(25, 100));
     name.draw(position + Point<std::int16_t>(80, 99));
-    text.draw(position +
-              Point<std::int16_t>(
-                  156, 16 + ((vtile * fill.height() - text.height()) / 2)));
+    text.draw(position
+              + Point<std::int16_t>(
+                    156, 16 + ((vtile * fill.height() - text.height()) / 2)));
 }
 
 Button::State UINpcTalk::button_pressed(std::uint16_t buttonid)

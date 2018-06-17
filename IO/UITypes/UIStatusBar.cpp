@@ -65,21 +65,21 @@ UIStatusbar::UIStatusbar(const CharStats& st)
     buttons[BT_WHISPER] = std::make_unique<MapleButton>(mainbar["BtChat"]);
     buttons[BT_CALLGM] = std::make_unique<MapleButton>(mainbar["BtClaim"]);
 
-    buttons[BT_CASHSHOP] =
-        std::make_unique<MapleButton>(mainbar["BtCashShop"]);
+    buttons[BT_CASHSHOP]
+        = std::make_unique<MapleButton>(mainbar["BtCashShop"]);
     buttons[BT_TRADE] = std::make_unique<MapleButton>(mainbar["BtMTS"]);
     buttons[BT_MENU] = std::make_unique<MapleButton>(mainbar["BtMenu"]);
     buttons[BT_OPTIONS] = std::make_unique<MapleButton>(mainbar["BtSystem"]);
 
-    buttons[BT_CHARACTER] =
-        std::make_unique<MapleButton>(mainbar["BtCharacter"]);
+    buttons[BT_CHARACTER]
+        = std::make_unique<MapleButton>(mainbar["BtCharacter"]);
     buttons[BT_STATS] = std::make_unique<MapleButton>(mainbar["BtStat"]);
     buttons[BT_QUEST] = std::make_unique<MapleButton>(mainbar["BtQuest"]);
     buttons[BT_INVENTORY] = std::make_unique<MapleButton>(mainbar["BtInven"]);
     buttons[BT_EQUIPS] = std::make_unique<MapleButton>(mainbar["BtEquip"]);
     buttons[BT_SKILL] = std::make_unique<MapleButton>(mainbar["BtSkill"]);
-    buttons[BT_KEYSETTING] =
-        std::make_unique<MapleButton>(mainbar["BtKeysetting"]);
+    buttons[BT_KEYSETTING]
+        = std::make_unique<MapleButton>(mainbar["BtKeysetting"]);
 }
 
 void UIStatusbar::draw(float alpha) const
@@ -164,8 +164,8 @@ Button::State UIStatusbar::button_pressed(std::uint16_t id)
 bool UIStatusbar::is_in_range(Point<std::int16_t> cursorpos) const
 {
     Rectangle<std::int16_t> bounds(position - Point<std::int16_t>{512, 84},
-                                   position - Point<std::int16_t>{512, 84} +
-                                       dimension);
+                                   position - Point<std::int16_t>{512, 84}
+                                       + dimension);
 
     return bounds.contains(cursorpos) || chatbar.is_in_range(cursorpos);
 }
@@ -216,8 +216,8 @@ float UIStatusbar::get_exp_percent() const
     }
 
     std::int64_t exp = stats.get_exp();
-    return static_cast<float>(exp) /
-           static_cast<float>(ExpTable::values[level]);
+    return static_cast<float>(exp)
+           / static_cast<float>(ExpTable::values[level]);
 }
 
 float UIStatusbar::get_hp_percent() const

@@ -162,8 +162,8 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
         } else {
             scrolling = false;
         }
-    } else if (relative.x() < 0 || relative.y() < 0 || relative.x() > 8 ||
-               relative.y() > vertical.second()) {
+    } else if (relative.x() < 0 || relative.y() < 0 || relative.x() > 8
+               || relative.y() > vertical.second()) {
         thumb.set_state(Button::NORMAL);
         next.set_state(Button::NORMAL);
         prev.set_state(Button::NORMAL);
@@ -220,8 +220,8 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
 
     if (pressed) {
         auto yoffset = static_cast<double>(relative.y() - button_height * 2);
-        auto cursorrow =
-            static_cast<std::int16_t>(std::round(yoffset / row_height));
+        auto cursorrow
+            = static_cast<std::int16_t>(std::round(yoffset / row_height));
         if (cursorrow < 0)
             cursorrow = 0;
         else if (cursorrow > row_max)

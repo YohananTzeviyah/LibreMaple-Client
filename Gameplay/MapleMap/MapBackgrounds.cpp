@@ -27,8 +27,8 @@ Background::Background(nl::node src)
 {
     nl::node backsrc = nl::nx::map["Back"];
     animated = src["ani"].get_bool();
-    animation =
-        backsrc[src["bS"] + ".img"][animated ? "ani" : "back"][src["no"]];
+    animation
+        = backsrc[src["bS"] + ".img"][animated ? "ani" : "back"][src["no"]];
     opacity = src["a"];
     flipped = src["f"].get_bool();
     cx = src["cx"];

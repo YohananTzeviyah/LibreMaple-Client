@@ -55,8 +55,8 @@ void Textfield::draw(Point<std::int16_t> parent) const
     }
 
     if (state == FOCUSED && show_marker) {
-        Point<std::int16_t> mpos =
-            absp + Point<std::int16_t>{text_label.advance(marker_pos), -1};
+        Point<std::int16_t> mpos
+            = absp + Point<std::int16_t>{text_label.advance(marker_pos), -1};
         marker.draw(mpos);
     }
 }
@@ -238,8 +238,8 @@ bool Textfield::below_limit() const noexcept
     if (limit > 0) {
         return text.size() < limit;
     } else {
-        return text_label.advance(text.size()) + 50 <
-               bounds.get_horizontal().length();
+        return text_label.advance(text.size()) + 50
+               < bounds.get_horizontal().length();
     }
 }
 

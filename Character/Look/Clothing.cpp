@@ -63,8 +63,8 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : item_id(id)
     auto index = (item_id / 10000) - 100;
     if (index < NON_WEAPON_TYPES) {
         chlayer = layers[index];
-    } else if (index >= WEAPON_OFFSET &&
-               index < WEAPON_OFFSET + WEAPON_TYPES) {
+    } else if (index >= WEAPON_OFFSET
+               && index < WEAPON_OFFSET + WEAPON_TYPES) {
         chlayer = Layer::WEAPON;
     } else {
         chlayer = Layer::CAPE;
@@ -73,8 +73,8 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : item_id(id)
     std::string str_id = std::to_string(item_id);
     str_id.insert(0, "0", 1);
     str_id += ".img";
-    nl::node src =
-        nl::nx::character[equipdata.get_item_data().get_category()][str_id];
+    nl::node src
+        = nl::nx::character[equipdata.get_item_data().get_category()][str_id];
     nl::node info = src["info"];
 
     vslot = info["vslot"].get_string();
@@ -116,8 +116,8 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : item_id(id)
              ++frame) {
             for (nl::node partnode : framenode) {
                 std::string part = partnode.name();
-                if (!partnode ||
-                    partnode.data_type() != nl::node::type::bitmap) {
+                if (!partnode
+                    || partnode.data_type() != nl::node::type::bitmap) {
                     continue;
                 }
 
@@ -236,8 +236,8 @@ std::string_view Clothing::get_vslot() const noexcept
     return vslot;
 }
 
-const std::unordered_map<std::string, Clothing::Layer>
-    Clothing::sublayernames = {
+const std::unordered_map<std::string, Clothing::Layer> Clothing::sublayernames
+    = {
         // WEAPON
         {"weaponOverHand"s, Layer::WEAPON_OVER_HAND},
         {"weaponOverGlove"s, Layer::WEAPON_OVER_GLOVE},

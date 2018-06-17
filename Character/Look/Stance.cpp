@@ -28,8 +28,8 @@ Stance::Id Stance::by_state(std::int8_t state)
         return WALK1;
     }
 
-    static constexpr Id state_values[10] = {
-        WALK1, STAND1, JUMP, ALERT, PRONE, FLY, LADDER, ROPE, DEAD, SIT};
+    static constexpr Id state_values[10]
+        = {WALK1, STAND1, JUMP, ALERT, PRONE, FLY, LADDER, ROPE, DEAD, SIT};
     return state_values[index];
 }
 
@@ -83,11 +83,11 @@ Stance::Id Stance::second_of(Id value)
     }
 }
 
-const EnumMap<Stance::Id, std::string> Stance::names = {
-    "",        "alert",   "dead",      "fly",     "heal",    "jump",
-    "ladder",  "prone",   "proneStab", "rope",    "shot",    "shoot1",
-    "shoot2",  "shootF",  "sit",       "stabO1",  "stabO2",  "stabOF",
-    "stabT1",  "stabT2",  "stabTF",    "stand1",  "stand2",  "swingO1",
-    "swingO2", "swingO3", "swingOF",   "swingP1", "swingP2", "swingPF",
-    "swingT1", "swingT2", "swingT3",   "swingTF", "walk1",   "walk2"};
+const EnumMap<Stance::Id, std::string> Stance::names
+    = {"",        "alert",   "dead",      "fly",     "heal",    "jump",
+       "ladder",  "prone",   "proneStab", "rope",    "shot",    "shoot1",
+       "shoot2",  "shootF",  "sit",       "stabO1",  "stabO2",  "stabOF",
+       "stabT1",  "stabT2",  "stabTF",    "stand1",  "stand2",  "swingO1",
+       "swingO2", "swingO3", "swingOF",   "swingP1", "swingP2", "swingPF",
+       "swingT1", "swingT2", "swingT3",   "swingTF", "walk1",   "walk2"};
 } // namespace jrc

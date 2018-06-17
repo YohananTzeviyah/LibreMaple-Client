@@ -25,9 +25,8 @@ namespace jrc
 {
 Hair::Hair(std::int32_t hairid, const BodyDrawinfo& drawinfo)
 {
-    nl::node hairnode =
-        nl::nx::character["Hair"]
-                         [str::concat("000", std::to_string(hairid), ".img")];
+    nl::node hairnode = nl::nx::character["Hair"][str::concat(
+        "000", std::to_string(hairid), ".img")];
 
     for (const auto& s : Stance::names) {
         auto stance = s.first;
@@ -51,8 +50,8 @@ Hair::Hair(std::int32_t hairid, const BodyDrawinfo& drawinfo)
                 Layer layer = layer_iter->second;
 
                 Point<std::int16_t> brow = layernode["map"]["brow"];
-                Point<std::int16_t> shift =
-                    drawinfo.get_hair_pos(stance, frame) - brow;
+                Point<std::int16_t> shift
+                    = drawinfo.get_hair_pos(stance, frame) - brow;
 
                 stances[stance][layer]
                     .emplace(frame, layernode)
@@ -101,11 +100,11 @@ std::string_view Hair::get_color() const noexcept
     return color;
 }
 
-const std::unordered_map<std::string, Hair::Layer> Hair::layers_by_name = {
-    {"hair", Hair::DEFAULT},
-    {"hairBelowBody", Hair::BELOWBODY},
-    {"hairOverHead", Hair::OVERHEAD},
-    {"hairShade", Hair::SHADE},
-    {"backHair", Hair::BACK},
-    {"backHairBelowCap", Hair::BELOWCAP}};
+const std::unordered_map<std::string, Hair::Layer> Hair::layers_by_name
+    = {{"hair", Hair::DEFAULT},
+       {"hairBelowBody", Hair::BELOWBODY},
+       {"hairOverHead", Hair::OVERHEAD},
+       {"hairShade", Hair::SHADE},
+       {"backHair", Hair::BACK},
+       {"backHairBelowCap", Hair::BELOWCAP}};
 } // namespace jrc

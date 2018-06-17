@@ -34,8 +34,8 @@ void BodyDrawinfo::init()
         std::uint16_t attack_delay = 0;
         for (std::uint8_t frame = 0; nl::node frame_node = stance_node[frame];
              ++frame) {
-            bool is_action =
-                frame_node["action"].data_type() == nl::node::type::string;
+            bool is_action
+                = frame_node["action"].data_type() == nl::node::type::string;
             if (is_action) {
                 BodyAction action = frame_node;
                 body_actions[st_str][frame] = action;
@@ -50,8 +50,8 @@ void BodyDrawinfo::init()
                 if (delay <= 0) {
                     delay = 100;
                 }
-                stance_delays[stance][frame] =
-                    static_cast<std::uint16_t>(delay);
+                stance_delays[stance][frame]
+                    = static_cast<std::uint16_t>(delay);
 
                 std::unordered_map<
                     Body::Layer,
@@ -76,29 +76,29 @@ void BodyDrawinfo::init()
                                                        map_node);
                 }
 
-                body_positions[stance][frame] =
-                    body_shift_map[Body::BODY]["navel"];
-                arm_positions[stance][frame] =
-                    body_shift_map.count(Body::ARM)
-                        ? (body_shift_map[Body::ARM]["hand"] -
-                           body_shift_map[Body::ARM]["navel"] +
-                           body_shift_map[Body::BODY]["navel"])
-                        : (body_shift_map[Body::ARM_OVER_HAIR]["hand"] -
-                           body_shift_map[Body::ARM_OVER_HAIR]["navel"] +
-                           body_shift_map[Body::BODY]["navel"]);
-                hand_positions[stance][frame] =
-                    body_shift_map[Body::HAND_BELOW_WEAPON]["handMove"];
-                head_positions[stance][frame] =
-                    body_shift_map[Body::BODY]["neck"] -
-                    body_shift_map[Body::HEAD]["neck"];
-                face_positions[stance][frame] =
-                    body_shift_map[Body::BODY]["neck"] -
-                    body_shift_map[Body::HEAD]["neck"] +
-                    body_shift_map[Body::HEAD]["brow"];
-                hair_positions[stance][frame] =
-                    body_shift_map[Body::HEAD]["brow"] -
-                    body_shift_map[Body::HEAD]["neck"] +
-                    body_shift_map[Body::BODY]["neck"];
+                body_positions[stance][frame]
+                    = body_shift_map[Body::BODY]["navel"];
+                arm_positions[stance][frame]
+                    = body_shift_map.count(Body::ARM)
+                          ? (body_shift_map[Body::ARM]["hand"]
+                             - body_shift_map[Body::ARM]["navel"]
+                             + body_shift_map[Body::BODY]["navel"])
+                          : (body_shift_map[Body::ARM_OVER_HAIR]["hand"]
+                             - body_shift_map[Body::ARM_OVER_HAIR]["navel"]
+                             + body_shift_map[Body::BODY]["navel"]);
+                hand_positions[stance][frame]
+                    = body_shift_map[Body::HAND_BELOW_WEAPON]["handMove"];
+                head_positions[stance][frame]
+                    = body_shift_map[Body::BODY]["neck"]
+                      - body_shift_map[Body::HEAD]["neck"];
+                face_positions[stance][frame]
+                    = body_shift_map[Body::BODY]["neck"]
+                      - body_shift_map[Body::HEAD]["neck"]
+                      + body_shift_map[Body::HEAD]["brow"];
+                hair_positions[stance][frame]
+                    = body_shift_map[Body::HEAD]["brow"]
+                      - body_shift_map[Body::HEAD]["neck"]
+                      + body_shift_map[Body::BODY]["neck"];
             }
         }
     }

@@ -77,16 +77,16 @@ public:
 
     constexpr bool contains(const Point<T>& v) const
     {
-        return !straight() && v.x() >= lt.x() && v.x() <= rb.x() &&
-               v.y() >= lt.y() && v.y() <= rb.y();
+        return !straight() && v.x() >= lt.x() && v.x() <= rb.x()
+               && v.y() >= lt.y() && v.y() <= rb.y();
     }
 
     constexpr bool overlaps(const Rectangle<T>& ar) const
     {
         return Range<T>(lt.x(), rb.x())
-                   .overlaps(Range<T>(ar.lt.x(), ar.rb.x())) &&
-               Range<T>(lt.y(), rb.y())
-                   .overlaps(Range<T>(ar.lt.y(), ar.rb.y()));
+                   .overlaps(Range<T>(ar.lt.x(), ar.rb.x()))
+               && Range<T>(lt.y(), rb.y())
+                      .overlaps(Range<T>(ar.lt.y(), ar.rb.y()));
     }
 
     constexpr bool straight() const
@@ -119,7 +119,7 @@ public:
         return {lt.y(), rb.y()};
     }
 
-    void shift(const Point<T>& v)
+    constexpr void shift(const Point<T>& v)
     {
         lt = lt + v;
         rb = rb + v;

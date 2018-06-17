@@ -49,8 +49,8 @@ public:
 
     static std::string_view name_of(Stance stance) noexcept
     {
-        static constexpr const std::string_view stance_names[NUM_STANCES] = {
-            "move", "stand", "jump", "hit1", "die1", "fly"};
+        static constexpr const std::string_view stance_names[NUM_STANCES]
+            = {"move", "stand", "jump", "hit1", "die1", "fly"};
 
         return stance_names[(stance - 1) / 2];
     }

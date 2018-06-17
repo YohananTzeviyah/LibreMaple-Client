@@ -87,8 +87,8 @@ std::int8_t Drop::update(const Physics& physics)
 
         if (looter) {
             double hdelta = looter->x - ph_obj.x;
-            ph_obj.hspeed =
-                looter->hspeed / 2.0 + (hdelta - 16.0) / PICKUPTIME;
+            ph_obj.hspeed
+                = looter->hspeed / 2.0 + (hdelta - 16.0) / PICKUPTIME;
         }
 
         opacity -= OPCSTEP;

@@ -50,8 +50,8 @@ Rectangle<std::int16_t>
 TwoSpriteButton::bounds(Point<std::int16_t> parentpos) const
 {
     bool selected = state == MOUSE_OVER || state == PRESSED;
-    Point<std::int16_t> absp =
-        parentpos + position - textures[selected].get_origin();
+    Point<std::int16_t> absp
+        = parentpos + position - textures[selected].get_origin();
     Point<std::int16_t> dim = textures[selected].get_dimensions();
     return {absp, absp + dim};
 }

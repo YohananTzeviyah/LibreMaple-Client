@@ -69,10 +69,10 @@ void CharLook::draw(const DrawArgument& args,
                     std::uint8_t inter_frame,
                     std::uint8_t inter_exp_frame) const
 {
-    Point<std::int16_t> face_shift =
-        draw_info.get_face_pos(inter_stance, inter_frame);
-    DrawArgument faceargs =
-        args + DrawArgument{face_shift, false, Point<std::int16_t>{}};
+    Point<std::int16_t> face_shift
+        = draw_info.get_face_pos(inter_stance, inter_frame);
+    DrawArgument faceargs
+        = args + DrawArgument{face_shift, false, Point<std::int16_t>{}};
 
     if (Stance::is_climbing(inter_stance)) {
         body->draw(inter_stance, Body::BODY, inter_frame, args);
@@ -412,8 +412,8 @@ bool CharLook::update(std::uint16_t timestep)
         if (timestep >= delta) {
             st_elapsed = timestep - delta;
 
-            std::uint8_t nextframe =
-                get_next_frame(stance.get(), st_frame.get());
+            std::uint8_t nextframe
+                = get_next_frame(stance.get(), st_frame.get());
             float threshold = static_cast<float>(delta) / timestep;
             st_frame.next(nextframe, threshold);
 
@@ -459,8 +459,8 @@ bool CharLook::update(std::uint16_t timestep)
     if (timestep >= exp_delta) {
         exp_elapsed = timestep - exp_delta;
 
-        std::uint8_t next_exp_frame =
-            face->next_frame(expression.get(), exp_frame.get());
+        std::uint8_t next_exp_frame
+            = face->next_frame(expression.get(), exp_frame.get());
         float fc_threshold = static_cast<float>(exp_delta) / timestep;
         exp_frame.next(next_exp_frame, fc_threshold);
 
@@ -643,8 +643,8 @@ Stance::Id CharLook::get_attack_stance(std::uint8_t attack,
         return Stance::STAND1;
     }
 
-    const auto& stances =
-        degenerate ? degen_stances[attack] : attack_stances[attack];
+    const auto& stances
+        = degenerate ? degen_stances[attack] : attack_stances[attack];
     if (stances.empty()) {
         return Stance::STAND1;
     }

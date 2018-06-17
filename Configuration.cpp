@@ -117,8 +117,8 @@ Point<std::int16_t> Configuration::PointEntry::load() const
 {
     auto comma_loc = value.find(',');
     std::string x_str = value.substr(1, comma_loc - 1);
-    std::string y_str =
-        value.substr(comma_loc + 1, value.find(')') - comma_loc - 1);
+    std::string y_str
+        = value.substr(comma_loc + 1, value.find(')') - comma_loc - 1);
 
     return {string_conversion::or_zero<std::int16_t>(x_str),
             string_conversion::or_zero<std::int16_t>(y_str)};

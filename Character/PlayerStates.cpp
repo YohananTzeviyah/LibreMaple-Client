@@ -145,8 +145,8 @@ void PlayerWalkState::send_action(Player& player,
 
 bool PlayerWalkState::haswalkinput(const Player& player) const
 {
-    return player.is_key_down(KeyAction::LEFT) ||
-           player.is_key_down(KeyAction::RIGHT);
+    return player.is_key_down(KeyAction::LEFT)
+           || player.is_key_down(KeyAction::RIGHT);
 }
 
 void PlayerWalkState::update(Player& player) const
@@ -238,8 +238,8 @@ void PlayerProneState::send_action(Player& player,
     if (down) {
         switch (ka) {
         case KeyAction::JUMP:
-            if (player.get_phobj().enable_jd &&
-                player.is_key_down(KeyAction::DOWN)) {
+            if (player.get_phobj().enable_jd
+                && player.is_key_down(KeyAction::DOWN)) {
                 play_jumpsound();
                 player.get_phobj().y = player.get_phobj().ground_below;
                 player.set_state(Char::FALL);

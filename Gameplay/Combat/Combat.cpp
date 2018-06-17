@@ -56,11 +56,11 @@ void Combat::update()
         std::remove_if(bullets.begin(),
                        bullets.end(),
                        [this](BulletEffect& mb) {
-                           std::int32_t target_oid =
-                               mb.damage_effect.target_oid;
+                           std::int32_t target_oid
+                               = mb.damage_effect.target_oid;
                            if (mobs.contains(target_oid)) {
-                               mb.target =
-                                   mobs.get_mob_head_position(target_oid);
+                               mb.target
+                                   = mobs.get_mob_head_position(target_oid);
                                bool apply = mb.bullet.update(mb.target);
                                if (apply) {
                                    apply_damage_effect(mb.damage_effect);
@@ -174,8 +174,8 @@ void Combat::apply_bullet_effect(const BulletEffect& effect)
 
 void Combat::apply_damage_effect(const DamageEffect& effect)
 {
-    Point<std::int16_t> head_position =
-        mobs.get_mob_head_position(effect.target_oid);
+    Point<std::int16_t> head_position
+        = mobs.get_mob_head_position(effect.target_oid);
     damage_numbers.push_back(effect.number);
     damage_numbers.back().set_x(head_position.x());
 
@@ -227,8 +227,8 @@ void Combat::extract_effects(const Char& user,
         for (auto& line : result.damage_lines) {
             std::int32_t oid = line.first;
             if (mobs.contains(oid)) {
-                std::vector<DamageNumber> numbers =
-                    place_numbers(oid, line.second);
+                std::vector<DamageNumber> numbers
+                    = place_numbers(oid, line.second);
                 Point<std::int16_t> head = mobs.get_mob_head_position(oid);
 
                 std::size_t i = 0;
@@ -250,8 +250,8 @@ void Combat::extract_effects(const Char& user,
 
         if (result.damage_lines.empty()) {
             std::int16_t xshift = result.to_left ? -400 : 400;
-            Point<std::int16_t> target =
-                user.get_position() + Point<std::int16_t>(xshift, -26);
+            Point<std::int16_t> target
+                = user.get_position() + Point<std::int16_t>(xshift, -26);
             for (std::uint8_t i = 0; i < result.hit_count; ++i) {
                 DamageEffect effect{attackuser, {}, 0, false, 0, 0};
                 bullet_effects.emplace(user.get_attack_delay(i),
@@ -264,8 +264,8 @@ void Combat::extract_effects(const Char& user,
         for (auto& line : result.damage_lines) {
             std::int32_t oid = line.first;
             if (mobs.contains(oid)) {
-                std::vector<DamageNumber> numbers =
-                    place_numbers(oid, line.second);
+                std::vector<DamageNumber> numbers
+                    = place_numbers(oid, line.second);
 
                 std::size_t i = 0;
                 for (auto& number : numbers) {
@@ -293,8 +293,8 @@ std::vector<DamageNumber> Combat::place_numbers(
     for (auto& line : damage_lines) {
         std::int32_t amount = line.first;
         bool critical = line.second;
-        DamageNumber::Type type =
-            critical ? DamageNumber::CRITICAL : DamageNumber::NORMAL;
+        DamageNumber::Type type
+            = critical ? DamageNumber::CRITICAL : DamageNumber::NORMAL;
         numbers.emplace_back(type, amount, head);
 
         head -= DamageNumber::row_height(critical);

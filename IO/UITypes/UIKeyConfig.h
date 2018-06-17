@@ -25,7 +25,7 @@
 #include "../UIDragElement.h"
 #include "UINotice.h"
 
-#include <unordered_map>
+#include <algorithm>
 
 namespace jrc
 {
@@ -55,16 +55,23 @@ private:
     void reset_to_default() noexcept;
     void clear_mappings() noexcept;
     bool commit_mappings() noexcept;
-    void update_key_slot(std::uint8_t key_slot,
-                         KeyAction::Id action_id) noexcept;
-    std::uint8_t slot_by_position(Point<std::int16_t> position) const noexcept;
+    void clear() noexcept;
+    void refresh_palette() noexcept;
+    void adjust_mapping(std::pair<std::uint8_t, bool> slot,
+                        KeyAction::Id action) noexcept;
+    std::optional<std::pair<std::uint8_t, bool>>
+    slot_by_position(Point<std::int16_t> p) const noexcept;
+    static Point<std::int16_t>
+    slot_pos(std::pair<std::uint8_t, bool> slot) noexcept;
 
     class KeyIcon : public Icon::Type
     {
     public:
         KeyIcon(KeyAction::Id action_id) noexcept;
 
-        void drop_on_stage() const override{};
+        void drop_on_stage() const override
+        {
+        }
         void drop_on_equips(Equipslot::Id) const override
         {
         }
@@ -89,7 +96,11 @@ private:
     };
 
     bimap::unordered_bimap<std::uint8_t, KeyAction::Id> slot_mappings;
-    std::unordered_map<KeyAction::Id, std::unique_ptr<Icon>> icons{70};
+    EnumMap<KeyAction::Id, std::unique_ptr<Icon>> icons;
+    bimap::unordered_bimap<std::uint8_t, KeyAction::Id> palette_slots;
+    //! The `bool` is `true` when the slot is a key slot, and `false` when it
+    //! is a palette slot.
+    std::pair<std::uint8_t, bool> dragged_from;
     bool dirty;
 
     class UIKeyConfigNotice : public UIElement
@@ -144,6 +155,19 @@ private:
          {0, 0},     {0, 0},     {0, 0},     {0, 0},     {545, 99},
          {0, 0},     {579, 99},  {511, 65},  {511, 99},  {0, 0},
          {0, 0},     {0, 0},     {0, 0},     {0, 0},     {0, 0}}};
+
+    static constexpr const std::int16_t PALETTE_ROWS = 3, PALETTE_COLS = 18;
+    //! The position (relative to the position of the `UIKeyConfig`) of the
+    //! upper-left-most palette slot.
+    static constexpr const Point<std::int16_t> PALETTE_POSITION{5, 267};
+    //! x-axis and y-axis spacing (i.e., square) between palette slots.
+    static constexpr const std::int16_t PALETTE_STRIDE = 34;
+    //! Full area that the palette takes up.
+    static constexpr const Rectangle<std::int16_t> PALETTE_AREA{
+        PALETTE_POSITION,
+        PALETTE_POSITION
+            + Point<std::int16_t>{PALETTE_STRIDE * PALETTE_COLS,
+                                  PALETTE_STRIDE* PALETTE_ROWS}};
 
     //! Each element of this array represents a mapping from key ID (on the
     //! left) to action ID (on the right). This particular set of mappings

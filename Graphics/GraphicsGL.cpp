@@ -49,22 +49,22 @@ Error GraphicsGL::init()
     GLint result = GL_FALSE;
 
     GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-    const char* vs_source =
-        "#version 120\n"
-        "attribute vec4 coord;"
-        "attribute vec4 color;"
-        "varying vec2 texpos;"
-        "varying vec4 colormod;"
-        "uniform vec2 screensize;"
-        "uniform int yoffset;"
+    const char* vs_source
+        = "#version 120\n"
+          "attribute vec4 coord;"
+          "attribute vec4 color;"
+          "varying vec2 texpos;"
+          "varying vec4 colormod;"
+          "uniform vec2 screensize;"
+          "uniform int yoffset;"
 
-        "void main(void) {"
-        "    float x = -1.0 + coord.x * 2.0 / screensize.x;"
-        "    float y = 1.0 - (coord.y + yoffset) * 2.0 / screensize.y;"
-        "    gl_Position = vec4(x, y, 0.0, 1.0);"
-        "    texpos = coord.zw;"
-        "    colormod = color;"
-        "}";
+          "void main(void) {"
+          "    float x = -1.0 + coord.x * 2.0 / screensize.x;"
+          "    float y = 1.0 - (coord.y + yoffset) * 2.0 / screensize.y;"
+          "    gl_Position = vec4(x, y, 0.0, 1.0);"
+          "    texpos = coord.zw;"
+          "    colormod = color;"
+          "}";
     glShaderSource(vs, 1, &vs_source, NULL);
     glCompileShader(vs);
     glGetShaderiv(vs, GL_COMPILE_STATUS, &result);
@@ -73,25 +73,25 @@ Error GraphicsGL::init()
     }
 
     GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-    const char* fs_source =
-        "#version 120\n"
-        "varying vec2 texpos;"
-        "varying vec4 colormod;"
-        "uniform sampler2D texture;"
-        "uniform vec2 atlassize;"
-        "uniform int fontregion;"
+    const char* fs_source
+        = "#version 120\n"
+          "varying vec2 texpos;"
+          "varying vec4 colormod;"
+          "uniform sampler2D texture;"
+          "uniform vec2 atlassize;"
+          "uniform int fontregion;"
 
-        "void main(void) {"
-        "    if (texpos.y == 0) {"
-        "        gl_FragColor = colormod;"
-        "    } else if (texpos.y <= fontregion) {"
-        "        gl_FragColor = vec4(1, 1, 1, texture2D(texture, texpos / "
-        "atlassize).r) * colormod;"
-        "    } else {"
-        "        gl_FragColor = texture2D(texture, texpos / atlassize) * "
-        "colormod;"
-        "    }"
-        "}";
+          "void main(void) {"
+          "    if (texpos.y == 0) {"
+          "        gl_FragColor = colormod;"
+          "    } else if (texpos.y <= fontregion) {"
+          "        gl_FragColor = vec4(1, 1, 1, texture2D(texture, texpos / "
+          "atlassize).r) * colormod;"
+          "    } else {"
+          "        gl_FragColor = texture2D(texture, texpos / atlassize) * "
+          "colormod;"
+          "    }"
+          "}";
     glShaderSource(fs, 1, &fs_source, NULL);
     glCompileShader(fs);
     glGetShaderiv(fs, GL_COMPILE_STATUS, &result);
@@ -115,9 +115,9 @@ Error GraphicsGL::init()
     uniform_screen_size = glGetUniformLocation(program, "screensize");
     uniform_y_offset = glGetUniformLocation(program, "yoffset");
     uniform_font_region = glGetUniformLocation(program, "fontregion");
-    if (attribute_coord == -1 || attribute_color == -1 ||
-        uniform_texture == -1 || uniform_atlas_size == -1 ||
-        uniform_y_offset == -1 || uniform_screen_size == -1) {
+    if (attribute_coord == -1 || attribute_color == -1 || uniform_texture == -1
+        || uniform_atlas_size == -1 || uniform_y_offset == -1
+        || uniform_screen_size == -1) {
         return Error::SHADER_VARS;
     }
 
@@ -342,8 +342,8 @@ const GraphicsGL::Offset& GraphicsGL::get_offset(const nl::bitmap& bmp)
     auto value = Leftover(x, y, w, h);
     std::size_t lid = leftovers.find_node(
         value, [](const Leftover& val, const Leftover& leaf) {
-            return val.width() <= leaf.width() &&
-                   val.height() <= leaf.height();
+            return val.width() <= leaf.width()
+                   && val.height() <= leaf.height();
         });
 
     if (lid > 0) {
@@ -727,8 +727,9 @@ void GraphicsGL::draw_text(const DrawArgument& args,
             } else {
                 wordcolor = colors[colorid];
             }
-            Color abscolor =
-                color * Color{wordcolor[0], wordcolor[1], wordcolor[2], 1.0f};
+            Color abscolor
+                = color
+                  * Color{wordcolor[0], wordcolor[1], wordcolor[2], 1.0f};
 
             for (std::size_t pos = word.first; pos < word.last; ++pos) {
                 const char c = text[pos];

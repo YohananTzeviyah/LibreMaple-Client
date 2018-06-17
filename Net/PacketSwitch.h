@@ -47,8 +47,8 @@ private:
     //! received.
     static constexpr const char* MSG_OUT_OF_BOUNDS = "Large opcode detected";
     //! Message when a handler is registered more than once.
-    static constexpr const char* MSG_REREGISTER =
-        "Handler was registered twice";
+    static constexpr const char* MSG_REREGISTER
+        = "Handler was registered twice";
     //! Maximum number of handlers needed.
     static constexpr const std::size_t NUM_HANDLERS = 500;
 

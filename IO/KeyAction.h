@@ -86,7 +86,8 @@ enum Id : std::int32_t {
     FACE_4 = 103,
     FACE_5 = 104,
     FACE_6 = 105,
-    FACE_7 = 106
+    FACE_7 = 106,
+    LENGTH
 };
 
 inline Id action_by_id(std::int32_t id) noexcept

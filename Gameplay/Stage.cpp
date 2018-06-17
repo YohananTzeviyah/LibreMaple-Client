@@ -78,9 +78,9 @@ void Stage::load_map(std::int32_t map_id)
     std::string str_id = string_format::extend_id(map_id, 9);
     str_id += ".img";
 
-    nl::node src =
-        nl::nx::map["Map"]["Map" + std::to_string(map_id / 100'000'000)]
-                   [str_id];
+    nl::node src
+        = nl::nx::map["Map"]["Map" + std::to_string(map_id / 100'000'000)]
+                     [str_id];
 
     tiles_objs = MapTilesObjs(src);
     backgrounds = MapBackgrounds(src["back"]);
@@ -96,8 +96,8 @@ void Stage::respawn(std::int8_t portal_id)
         Console::get().print("Error playing music " + map_info.get_bgm());
     }
 
-    Point<std::int16_t> spawn_point =
-        portals.get_portal_by_id(static_cast<std::uint8_t>(portal_id));
+    Point<std::int16_t> spawn_point
+        = portals.get_portal_by_id(static_cast<std::uint8_t>(portal_id));
     Point<std::int16_t> start_pos = physics.get_y_below(spawn_point);
 
     player.respawn(start_pos, map_info.is_underwater());
@@ -179,8 +179,8 @@ void Stage::check_portals()
     Point<std::int16_t> playerpos = player.get_position();
     Portal::WarpInfo warpinfo = portals.find_warp_at(playerpos);
     if (warpinfo.intramap) {
-        Point<std::int16_t> spawnpoint =
-            portals.get_portal_by_name(warpinfo.to_name);
+        Point<std::int16_t> spawnpoint
+            = portals.get_portal_by_name(warpinfo.to_name);
         Point<std::int16_t> startpos = physics.get_y_below(spawnpoint);
         player.respawn(startpos, map_info.is_underwater());
     } else if (warpinfo.valid) {
@@ -205,8 +205,8 @@ void Stage::check_ladders(bool up)
         return;
     }
 
-    nullable_ptr<const Ladder> ladder =
-        map_info.find_ladder(player.get_position(), up);
+    nullable_ptr<const Ladder> ladder
+        = map_info.find_ladder(player.get_position(), up);
     player.set_ladder(ladder);
 }
 

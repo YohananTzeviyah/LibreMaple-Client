@@ -84,8 +84,8 @@ void Physics::move_normal(PhysicsObject& phobj) const
             } else if (slopef < -0.5) {
                 slopef = -0.5;
             }
-            phobj.h_acc -=
-                (FRICTION + SLOPEFACTOR * (1.0 + slopef * -inertia)) * inertia;
+            phobj.h_acc -= (FRICTION + SLOPEFACTOR * (1.0 + slopef * -inertia))
+                           * inertia;
         }
     } else if (phobj.is_flag_not_set(PhysicsObject::NO_GRAVITY)) {
         phobj.v_acc += GRAVFORCE;

@@ -26,15 +26,15 @@ class nullable_ptr
 {
 public:
     template<typename R,
-             typename = std::enable_if_t<std::is_base_of<R, T>::value ||
-                                         std::is_base_of<T, R>::value>>
+             typename = std::enable_if_t<std::is_base_of<R, T>::value
+                                         || std::is_base_of<T, R>::value>>
     constexpr nullable_ptr(R* r_val) : val(static_cast<T*>(r_val))
     {
     }
 
     template<typename R,
-             typename = std::enable_if_t<std::is_base_of<R, T>::value ||
-                                         std::is_base_of<T, R>::value>>
+             typename = std::enable_if_t<std::is_base_of<R, T>::value
+                                         || std::is_base_of<T, R>::value>>
     constexpr nullable_ptr(nullable_ptr<R> r_opt) : nullable_ptr(r_opt.get())
     {
     }

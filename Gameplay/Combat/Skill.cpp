@@ -37,8 +37,8 @@ Skill::Skill(std::int32_t id) : skillid(id)
     char img_str_buf[7];
     std::memcpy(img_str_buf, str_id.data(), 3);
     std::memcpy(img_str_buf + 3, ".img", 4);
-    nl::node src =
-        nl::nx::skill[std::string_view{img_str_buf, 7}]["skill"][str_id];
+    nl::node src
+        = nl::nx::skill[std::string_view{img_str_buf, 7}]["skill"][str_id];
 
     projectile = true;
     overregular = false;
@@ -52,8 +52,8 @@ Skill::Skill(std::int32_t id) : skillid(id)
     } else if (multi_effect) {
         useeffect = std::make_unique<MultiUseEffect>(src);
     } else {
-        bool is_animation =
-            src["effect"]["0"].data_type() == nl::node::type::bitmap;
+        bool is_animation
+            = src["effect"]["0"].data_type() == nl::node::type::bitmap;
         bool has_effect1 = src["effect"]["1"].size() > 0;
         if (is_animation) {
             useeffect = std::make_unique<SingleUseEffect>(src);
@@ -98,8 +98,8 @@ Skill::Skill(std::int32_t id) : skillid(id)
     } else if (hasaction0) {
         action = std::make_unique<SingleAction>(src);
     } else if (data.is_attack()) {
-        bool bylevel =
-            src["level"]["1"]["action"].data_type() == nl::node::type::string;
+        bool bylevel = src["level"]["1"]["action"].data_type()
+                       == nl::node::type::string;
         if (bylevel) {
             action = std::make_unique<ByLevelAction>(src, skillid);
         } else {

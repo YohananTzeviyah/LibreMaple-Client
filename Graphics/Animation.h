@@ -20,6 +20,7 @@
 #include "../Template/Rectangle.h"
 #include "Texture.h"
 
+#include <algorithm>
 #include <vector>
 
 namespace jrc
@@ -34,7 +35,9 @@ public:
     void draw(const DrawArgument& args) const;
 
     std::uint8_t start_opacity() const;
+    std::uint8_t end_opacity() const;
     std::uint16_t start_scale() const;
+    std::uint16_t end_scale() const;
     std::uint16_t get_delay() const;
     Point<std::int16_t> get_origin() const;
     Point<std::int16_t> get_dimensions() const;
@@ -86,5 +89,8 @@ private:
     std::uint16_t delay;
     std::int16_t frame_step;
     float opcstep;
+
+    std::int16_t repeat;
+    bool finished;
 };
 } // namespace jrc

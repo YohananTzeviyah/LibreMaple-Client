@@ -97,8 +97,8 @@ public:
     // Check if the ranges overlap.
     constexpr bool overlaps(const Range<T>& v) const
     {
-        return contains(v.a) || contains(v.b) || v.contains(a) ||
-               v.contains(b);
+        return contains(v.a) || contains(v.b) || v.contains(a)
+               || v.contains(b);
     }
 
     // Check wether the range is equivalent to another range.

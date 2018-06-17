@@ -55,13 +55,13 @@ SkillData::SkillData(std::int32_t id)
         std::int32_t matk = sub["mad"];
         std::int32_t fixdamage = sub["fix_damage"];
         std::int32_t mastery = sub["mastery"];
-        std::uint8_t attackcount =
-            (std::uint8_t)sub["attackCount"].get_integer(1);
+        std::uint8_t attackcount
+            = (std::uint8_t)sub["attackCount"].get_integer(1);
         std::uint8_t mobcount = (std::uint8_t)sub["mobCount"].get_integer(1);
-        std::uint8_t bulletcount =
-            (std::uint8_t)sub["bulletCount"].get_integer(1);
-        std::int16_t bulletcost =
-            (std::int16_t)sub["bulletConsume"].get_integer(bulletcount);
+        std::uint8_t bulletcount
+            = (std::uint8_t)sub["bulletCount"].get_integer(1);
+        std::int16_t bulletcost
+            = (std::int16_t)sub["bulletConsume"].get_integer(bulletcount);
         std::int32_t hpcost = sub["hpCon"];
         std::int32_t mpcost = sub["mpCon"];
         float chance = (float)sub["prop"].get_real(100.0) / 100;
@@ -69,8 +69,8 @@ SkillData::SkillData(std::int32_t id)
         float ignoredef = 0.0f;
         float hrange = (float)sub["range"].get_real(100.0) / 100;
         Rectangle<std::int16_t> range = sub;
-        std::int32_t level =
-            string_conversion::or_default<std::int32_t>(sub.name(), -1);
+        std::int32_t level
+            = string_conversion::or_default<std::int32_t>(sub.name(), -1);
         stats.emplace(std::piecewise_construct,
                       std::forward_as_tuple(level),
                       std::forward_as_tuple(damage,
@@ -100,55 +100,55 @@ SkillData::SkillData(std::int32_t id)
 
 std::int32_t SkillData::flags_of(std::int32_t id) const noexcept
 {
-    static const std::unordered_map<std::int32_t, std::int32_t> skill_flags = {
-        // Beginner
-        {SkillId::THREE_SNAILS, ATTACK},
-        // Warrior
-        {SkillId::POWER_STRIKE, ATTACK},
-        {SkillId::SLASH_BLAST, ATTACK},
-        // Fighter
-        // Page
-        // Crusader
-        {SkillId::SWORD_PANIC, ATTACK},
-        {SkillId::AXE_PANIC, ATTACK},
-        {SkillId::SWORD_COMA, ATTACK},
-        {SkillId::AXE_COMA, ATTACK},
-        // Hero
-        {SkillId::RUSH_HERO, ATTACK},
-        {SkillId::BRANDISH, ATTACK},
-        // Page
-        // White Knight
-        {SkillId::CHARGE, ATTACK},
-        // Paladin
-        {SkillId::RUSH_PALADIN, ATTACK},
-        {SkillId::BLAST, ATTACK},
-        {SkillId::HEAVENS_HAMMER, ATTACK},
-        // Spearman
-        // Dragon Knight
-        {SkillId::DRAGON_BUSTER, ATTACK},
-        {SkillId::DRAGON_FURY, ATTACK},
-        {SkillId::PA_BUSTER, ATTACK},
-        {SkillId::PA_FURY, ATTACK},
-        {SkillId::SACRIFICE, ATTACK},
-        {SkillId::DRAGONS_ROAR, ATTACK},
-        // Dark Knight
-        {SkillId::RUSH_DK, ATTACK},
-        // Mage
-        {SkillId::ENERGY_BOLT, ATTACK | RANGED},
-        {SkillId::MAGIC_CLAW, ATTACK | RANGED},
-        // F/P Mage
-        {SkillId::SLOW_FP, ATTACK},
-        {SkillId::FIRE_ARROW, ATTACK | RANGED},
-        {SkillId::POISON_BREATH, ATTACK | RANGED},
-        // F/P ArchMage
-        {SkillId::EXPLOSION, ATTACK},
-        {SkillId::POISON_BREATH, ATTACK},
-        {SkillId::SEAL_FP, ATTACK},
-        {SkillId::ELEMENT_COMPOSITION_FP, ATTACK | RANGED},
-        //
-        {SkillId::FIRE_DEMON, ATTACK},
-        {SkillId::PARALYZE, ATTACK | RANGED},
-        {SkillId::METEOR_SHOWER, ATTACK}};
+    static const std::unordered_map<std::int32_t, std::int32_t> skill_flags
+        = {// Beginner
+           {SkillId::THREE_SNAILS, ATTACK},
+           // Warrior
+           {SkillId::POWER_STRIKE, ATTACK},
+           {SkillId::SLASH_BLAST, ATTACK},
+           // Fighter
+           // Page
+           // Crusader
+           {SkillId::SWORD_PANIC, ATTACK},
+           {SkillId::AXE_PANIC, ATTACK},
+           {SkillId::SWORD_COMA, ATTACK},
+           {SkillId::AXE_COMA, ATTACK},
+           // Hero
+           {SkillId::RUSH_HERO, ATTACK},
+           {SkillId::BRANDISH, ATTACK},
+           // Page
+           // White Knight
+           {SkillId::CHARGE, ATTACK},
+           // Paladin
+           {SkillId::RUSH_PALADIN, ATTACK},
+           {SkillId::BLAST, ATTACK},
+           {SkillId::HEAVENS_HAMMER, ATTACK},
+           // Spearman
+           // Dragon Knight
+           {SkillId::DRAGON_BUSTER, ATTACK},
+           {SkillId::DRAGON_FURY, ATTACK},
+           {SkillId::PA_BUSTER, ATTACK},
+           {SkillId::PA_FURY, ATTACK},
+           {SkillId::SACRIFICE, ATTACK},
+           {SkillId::DRAGONS_ROAR, ATTACK},
+           // Dark Knight
+           {SkillId::RUSH_DK, ATTACK},
+           // Mage
+           {SkillId::ENERGY_BOLT, ATTACK | RANGED},
+           {SkillId::MAGIC_CLAW, ATTACK | RANGED},
+           // F/P Mage
+           {SkillId::SLOW_FP, ATTACK},
+           {SkillId::FIRE_ARROW, ATTACK | RANGED},
+           {SkillId::POISON_BREATH, ATTACK | RANGED},
+           // F/P ArchMage
+           {SkillId::EXPLOSION, ATTACK},
+           {SkillId::POISON_BREATH, ATTACK},
+           {SkillId::SEAL_FP, ATTACK},
+           {SkillId::ELEMENT_COMPOSITION_FP, ATTACK | RANGED},
+           //
+           {SkillId::FIRE_DEMON, ATTACK},
+           {SkillId::PARALYZE, ATTACK | RANGED},
+           {SkillId::METEOR_SHOWER, ATTACK}};
 
     auto iter = skill_flags.find(id);
     if (iter == skill_flags.end()) {
@@ -208,8 +208,8 @@ std::string_view SkillData::get_level_desc(std::int32_t level) const noexcept
 {
     auto iter = levels.find(level);
     if (iter == levels.end()) {
-        static constexpr std::string_view null_level =
-            "Missing level description.";
+        static constexpr std::string_view null_level
+            = "Missing level description.";
         return null_level;
     } else {
         return iter->second;

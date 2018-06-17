@@ -40,8 +40,8 @@ public:
     //! Initialize with a varargs initialization list.
     constexpr EnumMap(Args&&... args) noexcept : m_values{}
     {
-        ((m_values[static_cast<array_size_t>(args.first)] =
-              std::forward<V>(args.second)),
+        ((m_values[static_cast<array_size_t>(args.first)]
+          = std::forward<V>(args.second)),
          ...);
     }
     template<typename... Args>
@@ -77,8 +77,8 @@ public:
     template<typename... Args>
     constexpr void emplace(K key, Args&&... args) noexcept
     {
-        m_values[static_cast<array_size_t>(key)] = {
-            std::forward<Args>(args)...};
+        m_values[static_cast<array_size_t>(key)]
+            = {std::forward<Args>(args)...};
     }
 
     constexpr V& operator[](K key) noexcept

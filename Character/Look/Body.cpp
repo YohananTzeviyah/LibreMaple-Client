@@ -26,8 +26,8 @@ namespace jrc
 {
 Body::Body(std::int32_t skin, const BodyDrawinfo& draw_info)
 {
-    std::string str_img =
-        str::concat("000020", string_format::extend_id(skin, 2), ".img");
+    std::string str_img
+        = str::concat("000020", string_format::extend_id(skin, 2), ".img");
     nl::node bodynode = nl::nx::character[str_img];
     str_img[3] = '1';
     nl::node head_node = nl::nx::character[str_img];
@@ -70,10 +70,10 @@ Body::Body(std::int32_t skin, const BodyDrawinfo& draw_info)
                 }
             }
 
-            if (nl::node head_s_f_node =
-                    head_node[stance_name][frame]["head"]) {
-                Point<std::int16_t> shift =
-                    draw_info.get_head_pos(stance, frame);
+            if (nl::node head_s_f_node
+                = head_node[stance_name][frame]["head"]) {
+                Point<std::int16_t> shift
+                    = draw_info.get_head_pos(stance, frame);
 
                 stances[stance][Layer::HEAD]
                     .emplace(frame, head_s_f_node)
@@ -128,16 +128,16 @@ Body::Layer Body::layer_by_name(const std::string& name)
     return layer_iter->second;
 }
 
-const std::unordered_map<std::string, Body::Layer> Body::layers_by_name = {
-    {"body", Body::BODY},
-    {"backBody", Body::BODY},
-    {"arm", Body::ARM},
-    {"armBelowHead", Body::ARM_BELOW_HEAD},
-    {"armBelowHeadOverMailChest", Body::ARM_BELOW_HEAD_OVER_MAIL},
-    {"armOverHair", Body::ARM_OVER_HAIR},
-    {"armOverHairBelowWeapon", Body::ARM_OVER_HAIR_BELOW_WEAPON},
-    {"handBelowWeapon", Body::HAND_BELOW_WEAPON},
-    {"handOverHair", Body::HAND_OVER_HAIR},
-    {"handOverWeapon", Body::HAND_OVER_WEAPON},
-    {"head", Body::HEAD}};
+const std::unordered_map<std::string, Body::Layer> Body::layers_by_name
+    = {{"body", Body::BODY},
+       {"backBody", Body::BODY},
+       {"arm", Body::ARM},
+       {"armBelowHead", Body::ARM_BELOW_HEAD},
+       {"armBelowHeadOverMailChest", Body::ARM_BELOW_HEAD_OVER_MAIL},
+       {"armOverHair", Body::ARM_OVER_HAIR},
+       {"armOverHairBelowWeapon", Body::ARM_OVER_HAIR_BELOW_WEAPON},
+       {"handBelowWeapon", Body::HAND_BELOW_WEAPON},
+       {"handOverHair", Body::HAND_OVER_HAIR},
+       {"handOverWeapon", Body::HAND_OVER_WEAPON},
+       {"head", Body::HEAD}};
 } // namespace jrc

@@ -47,12 +47,12 @@ Footholdtree::Footholdtree(nl::node src)
                     continue;
                 }
 
-                const Foothold& foothold =
-                    footholds
-                        .emplace(std::piecewise_construct,
-                                 std::forward_as_tuple(id),
-                                 std::forward_as_tuple(lastf, id, layer))
-                        .first->second;
+                const Foothold& foothold
+                    = footholds
+                          .emplace(std::piecewise_construct,
+                                   std::forward_as_tuple(id),
+                                   std::forward_as_tuple(lastf, id, layer))
+                          .first->second;
 
                 if (foothold.l() < leftw) {
                     leftw = foothold.l();
@@ -116,9 +116,9 @@ void Footholdtree::limit_movement(PhysicsObject& phobj) const
         double crnt_y = phobj.crnt_y();
         double next_y = phobj.next_y();
 
-        auto ground =
-            Range<double>(get_fh(phobj.fh_id).ground_below(phobj.crnt_x()),
-                          get_fh(phobj.fh_id).ground_below(phobj.next_x()));
+        auto ground
+            = Range<double>(get_fh(phobj.fh_id).ground_below(phobj.crnt_x()),
+                            get_fh(phobj.fh_id).ground_below(phobj.next_x()));
         bool collision = crnt_y <= ground.first() && next_y >= ground.second();
         if (collision) {
             phobj.limit_y(ground.second());
@@ -185,8 +185,8 @@ void Footholdtree::update_fh(PhysicsObject& phobj) const
     phobj.on_ground = phobj.y == ground;
 
     if (phobj.enable_jd || phobj.is_flag_set(PhysicsObject::CHECK_BELOW)) {
-        std::uint16_t belowid =
-            get_fhid_below(x, nextfh.ground_below(x) + 1.0);
+        std::uint16_t belowid
+            = get_fhid_below(x, nextfh.ground_below(x) + 1.0);
         if (belowid > 0) {
             double nextground = get_fh(belowid).ground_below(x);
             phobj.enable_jd = (nextground - ground) < 600.0;

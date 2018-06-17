@@ -38,13 +38,13 @@ UIChatbar::UIChatbar(Point<std::int16_t> pos)
     nl::node mainbar = nl::nx::ui["StatusBar2.img"]["mainBar"];
 
     buttons[BT_OPENCHAT] = std::make_unique<MapleButton>(mainbar["chatOpen"]);
-    buttons[BT_CLOSECHAT] =
-        std::make_unique<MapleButton>(mainbar["chatClose"]);
+    buttons[BT_CLOSECHAT]
+        = std::make_unique<MapleButton>(mainbar["chatClose"]);
     buttons[BT_SCROLLUP] = std::make_unique<MapleButton>(mainbar["scrollUp"]);
-    buttons[BT_SCROLLDOWN] =
-        std::make_unique<MapleButton>(mainbar["scrollDown"]);
-    buttons[BT_CHATTARGETS] =
-        std::make_unique<MapleButton>(mainbar["chatTarget"]["base"]);
+    buttons[BT_SCROLLDOWN]
+        = std::make_unique<MapleButton>(mainbar["scrollDown"]);
+    buttons[BT_CHATTARGETS]
+        = std::make_unique<MapleButton>(mainbar["chatTarget"]["base"]);
 
     buttons[chatopen ? BT_OPENCHAT : BT_CLOSECHAT]->set_active(false);
     buttons[BT_CHATTARGETS]->set_active(chatopen);
@@ -70,8 +70,8 @@ UIChatbar::UIChatbar(Point<std::int16_t> pos)
 
     chat_box = {502, 1 + chat_rows * CHAT_ROW_HEIGHT, Geometry::BLACK, 0.6f};
 
-    chat_field = {
-        Text::A11M, Text::LEFT, Text::BLACK, {{-435, -58}, {-40, -35}}, 0};
+    chat_field
+        = {Text::A11M, Text::LEFT, Text::BLACK, {{-435, -58}, {-40, -35}}, 0};
     chat_field.set_state(chatopen ? Textfield::NORMAL : Textfield::DISABLED);
     chat_field.set_enter_callback([this](const std::string& msg) {
         auto last = msg.find_last_not_of(' ');
@@ -128,8 +128,8 @@ void UIChatbar::draw(float inter) const
                 break;
             }
 
-            std::int16_t textheight =
-                row_texts.at(rowid).height() / CHAT_ROW_HEIGHT;
+            std::int16_t textheight
+                = row_texts.at(rowid).height() / CHAT_ROW_HEIGHT;
             while (textheight > 0) {
                 yshift += CHAT_ROW_HEIGHT;
                 --textheight;
@@ -197,8 +197,9 @@ Cursor::State UIChatbar::send_cursor(bool clicking,
                                      Point<std::int16_t> cursorpos)
 {
     if (slider.is_enabled()) {
-        auto cursoroffset =
-            cursorpos - Point<std::int16_t>(position.x(), get_chat_top() + 5);
+        auto cursoroffset
+            = cursorpos
+              - Point<std::int16_t>(position.x(), get_chat_top() + 5);
         Cursor::State sstate = slider.send_cursor(cursoroffset, clicking);
         if (sstate != Cursor::IDLE) {
             return sstate;
@@ -212,8 +213,8 @@ Cursor::State UIChatbar::send_cursor(bool clicking,
         }
     }
 
-    auto chattop =
-        Rectangle<std::int16_t>(0, 502, get_chat_top(), get_chat_top() + 6);
+    auto chattop
+        = Rectangle<std::int16_t>(0, 502, get_chat_top(), get_chat_top() + 6);
     bool contains = chattop.contains(cursorpos);
     if (drag_chat_top) {
         if (clicking) {

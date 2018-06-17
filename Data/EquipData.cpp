@@ -59,64 +59,64 @@ EquipData::EquipData(std::int32_t id) : itemdata(ItemData::get(id))
     static constexpr std::size_t WEAPON_TYPES = 20;
     auto index = static_cast<std::size_t>(id / 10000 - 100);
     if (index < NON_WEAPON_TYPES) {
-        static constexpr const char* const types[NON_WEAPON_TYPES] = {
-            "HAT",
-            "FACE ACCESSORY",
-            "EYE ACCESSORY",
-            "EARRINGS",
-            "TOP",
-            "OVERALL",
-            "BOTTOM",
-            "SHOES",
-            "GLOVES",
-            "SHIELD",
-            "CAPE",
-            "RING",
-            "PENDANT",
-            "BELT",
-            "MEDAL"};
-        static constexpr Equipslot::Id equipslots[NON_WEAPON_TYPES] = {
-            Equipslot::CAP,
-            Equipslot::FACEACC,
-            Equipslot::EYEACC,
-            Equipslot::EARRINGS,
-            Equipslot::TOP,
-            Equipslot::TOP,
-            Equipslot::PANTS,
-            Equipslot::SHOES,
-            Equipslot::GLOVES,
-            Equipslot::SHIELD,
-            Equipslot::CAPE,
-            Equipslot::RING,
-            Equipslot::PENDANT,
-            Equipslot::BELT,
-            Equipslot::MEDAL};
+        static constexpr const char* const types[NON_WEAPON_TYPES]
+            = {"HAT",
+               "FACE ACCESSORY",
+               "EYE ACCESSORY",
+               "EARRINGS",
+               "TOP",
+               "OVERALL",
+               "BOTTOM",
+               "SHOES",
+               "GLOVES",
+               "SHIELD",
+               "CAPE",
+               "RING",
+               "PENDANT",
+               "BELT",
+               "MEDAL"};
+        static constexpr Equipslot::Id equipslots[NON_WEAPON_TYPES]
+            = {Equipslot::CAP,
+               Equipslot::FACEACC,
+               Equipslot::EYEACC,
+               Equipslot::EARRINGS,
+               Equipslot::TOP,
+               Equipslot::TOP,
+               Equipslot::PANTS,
+               Equipslot::SHOES,
+               Equipslot::GLOVES,
+               Equipslot::SHIELD,
+               Equipslot::CAPE,
+               Equipslot::RING,
+               Equipslot::PENDANT,
+               Equipslot::BELT,
+               Equipslot::MEDAL};
 
         type = types[index];
         eqslot = equipslots[index];
-    } else if (index >= WEAPON_OFFSET &&
-               index < WEAPON_OFFSET + WEAPON_TYPES) {
-        static constexpr const char* const types[WEAPON_TYPES] = {
-            "ONE-HANDED SWORD",
-            "ONE-HANDED AXE",
-            "ONE-HANDED MACE",
-            "DAGGER",
-            "",
-            "",
-            "",
-            "WAND",
-            "STAFF",
-            "",
-            "TWO-HANDED SWORD",
-            "TWO-HANDED AXE",
-            "TWO-HANDED MACE",
-            "SPEAR",
-            "POLEARM",
-            "BOW",
-            "CROSSBOW",
-            "CLAW",
-            "KNUCKLE",
-            "GUN"};
+    } else if (index >= WEAPON_OFFSET
+               && index < WEAPON_OFFSET + WEAPON_TYPES) {
+        static constexpr const char* const types[WEAPON_TYPES]
+            = {"ONE-HANDED SWORD",
+               "ONE-HANDED AXE",
+               "ONE-HANDED MACE",
+               "DAGGER",
+               "",
+               "",
+               "",
+               "WAND",
+               "STAFF",
+               "",
+               "TWO-HANDED SWORD",
+               "TWO-HANDED AXE",
+               "TWO-HANDED MACE",
+               "SPEAR",
+               "POLEARM",
+               "BOW",
+               "CROSSBOW",
+               "CLAW",
+               "KNUCKLE",
+               "GUN"};
 
         std::size_t weaponindex = index - WEAPON_OFFSET;
         type = types[weaponindex];

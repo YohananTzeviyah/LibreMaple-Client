@@ -284,8 +284,8 @@ void ShowMobHpHandler::handle(InPacket& recv) const
 {
     std::int32_t oid = recv.read_int();
     std::int8_t hppercent = recv.read_byte();
-    std::uint16_t playerlevel =
-        Stage::get().get_player().get_stats().get_stat(Maplestat::LEVEL);
+    std::uint16_t playerlevel
+        = Stage::get().get_player().get_stats().get_stat(Maplestat::LEVEL);
 
     Stage::get().get_mobs().send_mobhp(oid, hppercent, playerlevel);
 }

@@ -28,9 +28,9 @@ WeaponData::WeaponData(std::int32_t equip_id)
 {
     std::int32_t prefix = equip_id / 10000;
     type = Weapon::by_value(prefix);
-    two_handed = prefix == Weapon::STAFF ||
-                 (prefix >= Weapon::SWORD_2H && prefix <= Weapon::POLEARM) ||
-                 prefix == Weapon::CROSSBOW;
+    two_handed = prefix == Weapon::STAFF
+                 || (prefix >= Weapon::SWORD_2H && prefix <= Weapon::POLEARM)
+                 || prefix == Weapon::CROSSBOW;
 
     nl::node src = nl::nx::character["Weapon"][str::concat(
         '0', std::to_string(equip_id), ".img")]["info"];
