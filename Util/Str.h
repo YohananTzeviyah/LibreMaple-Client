@@ -13,7 +13,7 @@ namespace jrc::str
 template<typename T>
 [[nodiscard]] std::string::size_type get_len(const T& t) noexcept
 {
-    typedef std::remove_cv_t<T> no_cv_t;
+    using no_cv_t = std::remove_cv_t<T>;
 
     static_assert(
         !std::is_same_v<no_cv_t,

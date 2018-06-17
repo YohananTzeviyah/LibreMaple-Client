@@ -84,7 +84,7 @@ public:
     std::string to_string() const noexcept
     {
         return str::concat(
-            '(', std::to_string(a), ',', std::to_string(b), ')');
+            '[', std::to_string(a), ", ", std::to_string(b), ']');
     }
 
     //! Return the displacement from another point.
@@ -251,5 +251,14 @@ public:
 private:
     T a;
     T b;
+};
+
+//! `constexpr` way of determining if something is a specialization of `Point`.
+template<typename T>
+struct is_point : std::false_type {
+};
+//! `constexpr` way of determining if something is a specialization of `Point`.
+template<typename T>
+struct is_point<Point<T>> : std::true_type {
 };
 } // namespace jrc

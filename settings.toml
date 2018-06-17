@@ -1,0 +1,36 @@
+# Settings for the LibreMaple client.
+#
+# LibreMaple client code is © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple
+# Team, licensed under the GNU Affero General Public License version 3 or
+# higher.
+
+[network]
+server_ip = "127.0.0.1"
+
+[video]
+fullscreen = false
+vsync = true
+
+[fonts]
+normal = "../fonts/Roboto/Roboto-Regular.ttf"
+bold = "../fonts/Roboto/Roboto-Bold.ttf"
+
+[audio]
+    [audio.volume] # Volumes are in percentages.
+    sound_effects = 50
+    music = 50
+
+[account]
+save_login = false
+account_name = ""
+world = 0
+channel = 0
+character = 0
+
+[ui]
+    [ui.position]
+    key_config = [150, 150]
+    stats = [100, 150]
+    inventory = [300, 150]
+    equip_inventory = [250, 150]
+    skillbook = [50, 150]

@@ -128,7 +128,7 @@ void start()
         const char* args = error.get_args();
         const bool can_retry = error.can_retry();
 
-        std::cerr << "Error: " << message << args << '\n';
+        std::cout << "Error: " << message << args << '\n';
 
         std::string command;
         std::cin >> command;

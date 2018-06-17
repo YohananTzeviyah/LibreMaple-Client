@@ -26,8 +26,8 @@
 
 namespace jrc
 {
-// A frame of animation for a skill or similiar 'meta-stance'.
-// This simply redirects to a different stance and frame to use.
+//! A frame of animation for a skill or similiar 'meta-stance'.
+//! This simply redirects to a different stance and frame to use.
 class BodyAction
 {
 public:
@@ -50,9 +50,7 @@ public:
         }
     }
 
-    BodyAction()
-    {
-    }
+    BodyAction() noexcept = default;
 
     bool is_attack_frame() const
     {

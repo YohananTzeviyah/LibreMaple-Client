@@ -37,7 +37,7 @@ public:
     //! Add the settings which will be used and load them.
     Configuration();
     //! Save.
-    ~Configuration();
+    ~Configuration() override;
 
     //! Load all settings. If something is missing, set the default value. Can
     //! be used for reloading.

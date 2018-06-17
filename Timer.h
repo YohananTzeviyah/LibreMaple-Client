@@ -32,8 +32,6 @@ public:
         start();
     }
 
-    ~Timer() noexcept = default;
-
     //! Start the timer by setting the last measurement to now.
     void start() noexcept
     {

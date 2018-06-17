@@ -121,13 +121,13 @@ public:
                            float ys,
                            float opc,
                            float ang)
-        : pos(p),
+        : color(1.0f, 1.0f, 1.0f, opc),
+          pos(p),
           center(c),
           stretch(s),
           xscale(xs),
           yscale(ys),
-          angle(ang),
-          color(1.0f, 1.0f, 1.0f, opc)
+          angle(ang)
     {
     }
 
@@ -138,13 +138,13 @@ public:
                            float ys,
                            Color color,
                            float ang)
-        : pos(p),
+        : color(color),
+          pos(p),
           center(c),
           stretch(s),
           xscale(xs),
           yscale(ys),
-          angle(ang),
-          color(color)
+          angle(ang)
     {
     }
 
@@ -221,12 +221,14 @@ public:
                                           Point<std::int16_t> dimensions) const
     {
         std::int16_t w = stretch.x();
-        if (w == 0)
+        if (w == 0) {
             w = dimensions.x();
+        }
 
         std::int16_t h = stretch.y();
-        if (h == 0)
+        if (h == 0) {
             h = dimensions.y();
+        }
 
         Point<std::int16_t> rlt = pos - center - origin;
         std::int16_t rl = rlt.x();
@@ -243,12 +245,12 @@ public:
     }
 
 private:
+    Color color;
     Point<std::int16_t> pos;
     Point<std::int16_t> center;
     Point<std::int16_t> stretch;
     float xscale;
     float yscale;
     float angle;
-    Color color;
 };
 } // namespace jrc

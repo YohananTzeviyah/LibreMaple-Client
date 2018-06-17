@@ -67,19 +67,12 @@ struct MobAttack {
     MobAttack(std::int32_t watk,
               Point<std::int16_t> origin,
               std::int32_t mobid,
-              std::int32_t oid)
-        : type(Attack::CLOSE),
-          watk(watk),
-          mob_id(mobid),
-          oid(oid),
-          origin(origin),
-          valid(true)
+              std::int32_t oid) noexcept
+        : watk(watk), mob_id(mobid), oid(oid), origin(origin), valid(true)
     {
     }
 
-    MobAttack() : valid(false)
-    {
-    }
+    MobAttack() noexcept = default;
 
     explicit operator bool() const
     {

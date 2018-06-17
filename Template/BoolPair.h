@@ -16,7 +16,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include <stdexcept>
+#include <utility>
 
 namespace jrc
 {
@@ -25,9 +25,9 @@ class BoolPair
 {
 public:
     template<typename... Args>
-    BoolPair(Args&&... argsf, Args&&... argss)
-        : first(std::forward<Args>(argsf)...),
-          second(std::forward<Args>(argss)...)
+    BoolPair(Args&&... args_f, Args&&... args_s)
+        : first(std::forward<Args>(args_f)...),
+          second(std::forward<Args>(args_s)...)
     {
     }
 
@@ -35,9 +35,7 @@ public:
     {
     }
 
-    BoolPair()
-    {
-    }
+    BoolPair() = default;
 
     template<typename... Args>
     void set(bool b, Args&&... args)

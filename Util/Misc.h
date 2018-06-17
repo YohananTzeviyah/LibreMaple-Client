@@ -146,16 +146,16 @@ bool assign(unordered_bimap<L, R>& bm, L&& l, R&& r) noexcept
     using val_type = typename unordered_bimap<L, R>::value_type;
 
     if (auto left_iter = bm.left.find(l); left_iter != bm.left.end()) {
-        bm.left.replace_data(left_iter, std::move(r));
+        bm.left.replace_data(left_iter, std::forward<R>(r));
         return false;
     }
 
     if (auto right_iter = bm.right.find(r); right_iter != bm.right.end()) {
-        bm.right.replace_data(right_iter, std::move(l));
+        bm.right.replace_data(right_iter, std::forward<L>(l));
         return false;
     }
 
-    bm.insert(std::move(val_type{std::move(l), std::move(r)}));
+    bm.insert(std::move(val_type{std::forward<L>(l), std::forward<R>(r)}));
     return true;
 }
 
@@ -178,11 +178,11 @@ bool left_assign(unordered_bimap<L, R>& bm, L&& l, R&& r) noexcept
     using val_type = typename unordered_bimap<L, R>::value_type;
 
     if (auto left_iter = bm.left.find(l); left_iter != bm.left.end()) {
-        bm.left.replace_data(left_iter, std::move(r));
+        bm.left.replace_data(left_iter, std::forward<R>(r));
         return false;
     }
 
-    bm.insert(std::move(val_type{std::move(l), std::move(r)}));
+    bm.insert(std::move(val_type{std::forward<L>(l), std::forward<R>(r)}));
     return true;
 }
 
@@ -205,11 +205,11 @@ bool right_assign(unordered_bimap<L, R>& bm, R&& r, L&& l) noexcept
     using val_type = typename unordered_bimap<L, R>::value_type;
 
     if (auto right_iter = bm.right.find(r); right_iter != bm.right.end()) {
-        bm.right.replace_data(right_iter, std::move(l));
+        bm.right.replace_data(right_iter, std::forward<L>(l));
         return false;
     }
 
-    bm.insert(std::move(val_type{std::move(l), std::move(r)}));
+    bm.insert(std::move(val_type{std::forward<L>(l), std::forward<R>(r)}));
     return true;
 }
 } // namespace bimap

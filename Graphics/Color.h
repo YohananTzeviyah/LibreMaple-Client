@@ -21,14 +21,14 @@
 
 namespace jrc
 {
-/// Simple color class which stores r-g-b-a components.
+//! Simple color class which stores RGBA components.
 class Color
 {
 public:
-    static constexpr std::size_t LENGTH = 4;
+    static constexpr const std::size_t LENGTH = 4;
     using underlying_t = std::array<float, LENGTH>;
 
-    /// Codes of predefined colors.
+    //! Codes of predefined colors.
     enum Code : std::uint32_t {
         NONE = 0x00000000,
         WHITE = 0xFFFFFFFF,
@@ -41,21 +41,21 @@ public:
         PURPLE = 0xFF00FFFF
     };
 
-    /// Create a color by an array of real numbers [0.0f, 1.0f]
+    //! Create a color by an array of real numbers [0.0f, 1.0f].
     constexpr Color(underlying_t comps) : rgba(comps)
     {
     }
-    /// Create a color by real numbers [0.0f, 1.0f]
+    //! Create a color by four real numbers [0.0f, 1.0f].
     constexpr Color(float red, float green, float blue, float alpha)
         : Color(underlying_t{{red, green, blue, alpha}})
     {
     }
-    /// Create a color by an array of natural numbers [0, 255]
+    //! Create a color by an array of natural numbers [0, 255].
     constexpr Color(const std::array<std::uint8_t, Color::LENGTH> comps)
         : Color(comps[0], comps[1], comps[2], comps[3])
     {
     }
-    /// Create a color by natural numbers [0, 255]
+    //! Create a color by four natural numbers [0, 255].
     constexpr Color(std::uint8_t red,
                     std::uint8_t green,
                     std::uint8_t blue,
@@ -66,7 +66,7 @@ public:
                 static_cast<float>(alpha) / 255)
     {
     }
-    /// Create a color by code.
+    //! Create a color by code.
     constexpr Color(std::uint32_t code)
         : Color(static_cast<std::uint8_t>(code >> 24),
                 static_cast<std::uint8_t>(code >> 16),
@@ -74,7 +74,7 @@ public:
                 static_cast<std::uint8_t>(code))
     {
     }
-    /// Create a color by named code.
+    //! Create a color by named code.
     constexpr Color(Code code) : Color((std::uint32_t)code)
     {
     }
@@ -82,55 +82,55 @@ public:
     {
     }
 
-    /// Check wether the color is completely invisble.
+    //! Check whether the color is completely invisble.
     constexpr bool invisible() const
     {
         return rgba[3] <= 0.0f;
     }
 
-    /// Return the red component.
+    //! Return the red component.
     constexpr float r() const
     {
         return rgba[0];
     }
 
-    /// Return the green component.
+    //! Return the green component.
     constexpr float g() const
     {
         return rgba[1];
     }
 
-    /// Return the blue component.
+    //! Return the blue component.
     constexpr float b() const
     {
         return rgba[2];
     }
 
-    /// Return the alpha (opacity) component.
+    //! Return the alpha (opacity) component.
     constexpr float a() const
     {
         return rgba[3];
     }
 
-    /// Return all components.
+    //! Return all components.
     const float* data() const;
 
-    /// Return a begin iterator.
+    //! Return a begin iterator.
     underlying_t::const_iterator begin() const;
 
-    /// Return an end iterator.
+    //! Return an end iterator.
     underlying_t::const_iterator end() const;
 
-    /// Blend the second color into the first.
+    //! Blend the second color into the first.
     Color blend(const Color& other, float alpha) const;
 
-    /// Combine two colors.
+    //! Combine two colors.
     constexpr Color operator*(const Color& o) const
     {
         return {r() * o.r(), g() * o.g(), b() * o.b(), a() * o.a()};
     }
 
-    /// Combine two colors.
+    //! Combine two colors.
     constexpr Color operator/(const Color& o) const
     {
         return {r() / o.r(), g() / o.g(), b() / o.b(), a() / o.a()};
