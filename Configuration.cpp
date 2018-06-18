@@ -22,6 +22,7 @@
 
 #include <exception>
 #include <fstream>
+#include <iomanip>
 #include <string_view>
 #include <type_traits>
 
@@ -363,9 +364,8 @@ character = $
         using x_type = std::decay_t<decltype(x)>;
 
         if constexpr (std::is_same_v<x_type, std::string>) {
-            settings.put('"');
-            settings << x; // TODO: Escape special characters.
-            settings.put('"');
+            // TODO: Escape special characters.
+            settings << std::quoted(x);
         } else if constexpr (std::is_same_v<x_type, bool>) {
             if (x) {
                 settings << "true";

@@ -33,9 +33,9 @@ namespace jrc
 class UIStatusbar : public UIElement
 {
 public:
-    static constexpr Type TYPE = STATUS_BAR;
-    static constexpr bool FOCUSED = false;
-    static constexpr bool TOGGLED = true;
+    static constexpr const Type TYPE = STATUS_BAR;
+    static constexpr const bool FOCUSED = false;
+    static constexpr const bool TOGGLED = true;
 
     UIStatusbar(const CharStats& stats);
 
@@ -60,7 +60,9 @@ private:
 
     enum Buttons : std::uint16_t {
         BT_WHISPER,
-        BT_CALLGM,
+        BT_CALL_GM,
+        BT_NOTICE,
+        BT_MAPLE_TALK,
         BT_CASHSHOP,
         BT_TRADE,
         BT_MENU,
@@ -71,12 +73,15 @@ private:
         BT_INVENTORY,
         BT_EQUIPS,
         BT_SKILL,
-        BT_KEYSETTING
+        BT_KEYSETTING,
+        BT_CHANNEL,
+        BT_HOME
     };
 
-    static constexpr Point<std::int16_t> POSITION = {512, 758}; // {512, 590}
-    static constexpr Point<std::int16_t> DIMENSION = {1366, 80};
-    static constexpr time_t MESSAGE_COOLDOWN = 1'000;
+    static constexpr const Point<std::int16_t> POSITION
+        = {512, 758}; // {512, 590}
+    static constexpr const Point<std::int16_t> DIMENSION = {1366, 80};
+    static constexpr const time_t MESSAGE_COOLDOWN = 1'000;
 
     const CharStats& stats;
 

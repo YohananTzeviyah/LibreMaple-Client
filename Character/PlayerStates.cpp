@@ -21,13 +21,13 @@
 
 namespace jrc
 {
-// Base class
+//! Base class.
 void PlayerState::play_jumpsound() const
 {
     Sound(Sound::JUMP).play();
 }
 
-// Null state
+//! Null state.
 void PlayerNullState::update_state(Player& player) const
 {
     Char::State state;
@@ -57,7 +57,7 @@ void PlayerNullState::update_state(Player& player) const
     player.set_state(state);
 }
 
-// Standing
+//! Standing.
 void PlayerStandState::initialize(Player& player) const
 {
     player.get_phobj().type = PhysicsObject::NORMAL;
@@ -108,7 +108,7 @@ void PlayerStandState::update_state(Player& player) const
     }
 }
 
-// Walking
+//! Walking.
 void PlayerWalkState::initialize(Player& player) const
 {
     player.get_phobj().type = PhysicsObject::NORMAL;
@@ -173,7 +173,7 @@ void PlayerWalkState::update_state(Player& player) const
     }
 }
 
-// Falling
+//! Falling.
 void PlayerFallState::initialize(Player& player) const
 {
     player.get_phobj().type = PhysicsObject::NORMAL;
@@ -230,7 +230,7 @@ void PlayerFallState::update_state(Player& player) const
     }
 }
 
-// Prone
+//! Prone.
 void PlayerProneState::send_action(Player& player,
                                    KeyAction::Id ka,
                                    bool down) const
@@ -269,7 +269,7 @@ void PlayerProneState::update(Player& player) const
     }
 }
 
-// Sitting
+//! Sitting.
 void PlayerSitState::send_action(Player& player,
                                  KeyAction::Id ka,
                                  bool down) const
@@ -297,7 +297,7 @@ void PlayerSitState::send_action(Player& player,
     }
 }
 
-// Flying
+//! Flying.
 void PlayerFlyState::initialize(Player& player) const
 {
     player.get_phobj().type = player.is_underwater() ? PhysicsObject::SWIMMING
@@ -360,7 +360,7 @@ void PlayerFlyState::update_state(Player& player) const
     }
 }
 
-// Climbing
+//! Climbing.
 void PlayerClimbState::initialize(Player& player) const
 {
     player.get_phobj().type = PhysicsObject::FIXATED;

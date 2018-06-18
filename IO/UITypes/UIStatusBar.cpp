@@ -40,30 +40,26 @@ UIStatusbar::UIStatusbar(const CharStats& st)
     sprites.emplace_back(mainbar["lvBacktrnd"]);
     sprites.emplace_back(mainbar["lvCover"]);
 
-    expbar = {mainbar.resolve("gauge/exp/0"),
-              mainbar.resolve("gauge/exp/1"),
-              mainbar.resolve("gauge/exp/2"),
-              308,
-              0.0f};
-    hpbar = {mainbar.resolve("gauge/hp/0"),
-             mainbar.resolve("gauge/hp/1"),
-             mainbar.resolve("gauge/hp/2"),
-             137,
-             0.0f};
-    mpbar = {mainbar.resolve("gauge/mp/0"),
-             mainbar.resolve("gauge/mp/1"),
-             mainbar.resolve("gauge/mp/2"),
-             137,
-             0.0f};
+    auto gauge_src = mainbar["gauge"];
 
-    statset = {mainbar["gauge"]["number"], Charset::RIGHT};
+    auto exp_bar_src = gauge_src["exp"];
+    expbar = {exp_bar_src["0"], exp_bar_src["1"], exp_bar_src["2"], 308, 0.0f};
+    auto hp_bar_src = gauge_src["hp"];
+    hpbar = {hp_bar_src["0"], hp_bar_src["1"], hp_bar_src["2"], 137, 0.0f};
+    auto mp_bar_src = gauge_src["mp"];
+    mpbar = {mp_bar_src["0"], mp_bar_src["1"], mp_bar_src["2"], 137, 0.0f};
+
+    statset = {gauge_src["number"], Charset::RIGHT};
     levelset = {mainbar["lvNumber"], Charset::LEFT};
 
     joblabel = {Text::A11M, Text::LEFT, Text::YELLOW};
     namelabel = {Text::A13M, Text::LEFT, Text::WHITE};
 
     buttons[BT_WHISPER] = std::make_unique<MapleButton>(mainbar["BtChat"]);
-    buttons[BT_CALLGM] = std::make_unique<MapleButton>(mainbar["BtClaim"]);
+    buttons[BT_CALL_GM] = std::make_unique<MapleButton>(mainbar["BtClaim"]);
+    buttons[BT_NOTICE] = std::make_unique<MapleButton>(mainbar["BtNotice"]);
+    buttons[BT_MAPLE_TALK]
+        = std::make_unique<MapleButton>(mainbar["BtMapleTalk"]);
 
     buttons[BT_CASHSHOP]
         = std::make_unique<MapleButton>(mainbar["BtCashShop"]);
@@ -78,8 +74,11 @@ UIStatusbar::UIStatusbar(const CharStats& st)
     buttons[BT_INVENTORY] = std::make_unique<MapleButton>(mainbar["BtInven"]);
     buttons[BT_EQUIPS] = std::make_unique<MapleButton>(mainbar["BtEquip"]);
     buttons[BT_SKILL] = std::make_unique<MapleButton>(mainbar["BtSkill"]);
+
     buttons[BT_KEYSETTING]
         = std::make_unique<MapleButton>(mainbar["BtKeysetting"]);
+    buttons[BT_CHANNEL] = std::make_unique<MapleButton>(mainbar["BtChannel"]);
+    buttons[BT_HOME] = std::make_unique<MapleButton>(mainbar["BtFarm"]);
 }
 
 void UIStatusbar::draw(float alpha) const

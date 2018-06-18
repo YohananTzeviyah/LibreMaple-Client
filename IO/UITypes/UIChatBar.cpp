@@ -36,15 +36,17 @@ UIChatbar::UIChatbar(Point<std::int16_t> pos)
     lastpos = 0;
 
     nl::node mainbar = nl::nx::ui["StatusBar2.img"]["mainBar"];
+    nl::node chat_target_src = mainbar["chatTarget"];
 
     buttons[BT_OPENCHAT] = std::make_unique<MapleButton>(mainbar["chatOpen"]);
     buttons[BT_CLOSECHAT]
         = std::make_unique<MapleButton>(mainbar["chatClose"]);
-    buttons[BT_SCROLLUP] = std::make_unique<MapleButton>(mainbar["scrollUp"]);
-    buttons[BT_SCROLLDOWN]
-        = std::make_unique<MapleButton>(mainbar["scrollDown"]);
+    buttons[BT_SCROLLUP] = std::make_unique<MapleButton>(
+        mainbar["scrollUp"], Point<std::int16_t>{-23, 0});
+    buttons[BT_SCROLLDOWN] = std::make_unique<MapleButton>(
+        mainbar["scrollDown"], Point<std::int16_t>{-23, 0});
     buttons[BT_CHATTARGETS]
-        = std::make_unique<MapleButton>(mainbar["chatTarget"]["base"]);
+        = std::make_unique<MapleButton>(chat_target_src["base"]);
 
     buttons[chatopen ? BT_OPENCHAT : BT_CLOSECHAT]->set_active(false);
     buttons[BT_CHATTARGETS]->set_active(chatopen);
@@ -54,12 +56,12 @@ UIChatbar::UIChatbar(Point<std::int16_t> pos)
     chatenter = mainbar["chatSpace2"];
     chatcover = mainbar["chatCover"];
 
-    chattargets[CHT_ALL] = mainbar["chatTarget"]["all"];
-    chattargets[CHT_BUDDY] = mainbar["chatTarget"]["friend"];
-    chattargets[CHT_GUILD] = mainbar["chatTarget"]["guild"];
-    chattargets[CHT_ALLIANCE] = mainbar["chatTarget"]["association"];
-    chattargets[CHT_PARTY] = mainbar["chatTarget"]["party"];
-    chattargets[CHT_SQUAD] = mainbar["chatTarget"]["expedition"];
+    chattargets[CHT_ALL] = chat_target_src["all"];
+    chattargets[CHT_BUDDY] = chat_target_src["friend"];
+    chattargets[CHT_GUILD] = chat_target_src["guild"];
+    chattargets[CHT_ALLIANCE] = chat_target_src["association"];
+    chattargets[CHT_PARTY] = chat_target_src["party"];
+    chattargets[CHT_SQUAD] = chat_target_src["expedition"];
 
     chattarget = CHT_ALL; // Default chat target
 
@@ -84,13 +86,13 @@ UIChatbar::UIChatbar(Point<std::int16_t> pos)
             lastpos = last_entered.size();
         }
     });
-    chat_field.set_key_callback(KeyAction::UP, [&]() {
+    chat_field.set_key_callback(KeyAction::UP, [this] {
         if (lastpos > 0) {
             --lastpos;
             chat_field.change_text(std::string{last_entered[lastpos]});
         }
     });
-    chat_field.set_key_callback(KeyAction::DOWN, [&]() {
+    chat_field.set_key_callback(KeyAction::DOWN, [this] {
         if (last_entered.size() > 0 && lastpos < last_entered.size() - 1) {
             ++lastpos;
             chat_field.change_text(std::string{last_entered[lastpos]});
@@ -102,10 +104,11 @@ UIChatbar::UIChatbar(Point<std::int16_t> pos)
               -22,
               chat_rows,
               1,
-              [&](bool up) {
+              [this](bool up) {
                   std::int16_t next = up ? row_pos - 1 : row_pos + 1;
-                  if (next >= 0 && next <= row_max)
+                  if (next >= 0 && next <= row_max) {
                       row_pos = next;
+                  }
               }};
 }
 
@@ -214,7 +217,7 @@ Cursor::State UIChatbar::send_cursor(bool clicking,
     }
 
     auto chattop
-        = Rectangle<std::int16_t>(0, 502, get_chat_top(), get_chat_top() + 6);
+        = Rectangle<std::int16_t>{0, 502, get_chat_top(), get_chat_top() + 6};
     bool contains = chattop.contains(cursorpos);
     if (drag_chat_top) {
         if (clicking) {
