@@ -26,7 +26,8 @@
 
 namespace jrc
 {
-UIKeyConfig::UIKeyConfig() noexcept : UIDragElement<PosKEYCONFIG>({622, 20})
+UIKeyConfig::UIKeyConfig() noexcept
+    : UIDragElement<Configuration::PositionOf::KEY_CONFIG>({622, 20})
 {
     const auto source = nl::nx::ui["UIWindow2.img"]["KeyConfig"];
 

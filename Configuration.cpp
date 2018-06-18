@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 // This file is part of the LibreMaple MMORPG client                        //
-// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
+// Copyright © 2018-2019 LibreMaple Team                                    //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -17,110 +17,489 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "Configuration.h"
 
+#include "Console.h"
+#include "Util/Str.h"
+
+#include <exception>
 #include <fstream>
+#include <string_view>
+#include <type_traits>
 
 namespace jrc
 {
-Configuration::Configuration()
+Configuration::Configuration() noexcept
 {
-    settings.emplace<ServerIP>();
-    settings.emplace<Fullscreen>();
-    settings.emplace<VSync>();
-    settings.emplace<FontPathNormal>();
-    settings.emplace<FontPathBold>();
-    settings.emplace<BGMVolume>();
-    settings.emplace<SFXVolume>();
-    settings.emplace<SaveLogin>();
-    settings.emplace<DefaultAccount>();
-    settings.emplace<DefaultWorld>();
-    settings.emplace<DefaultChannel>();
-    settings.emplace<DefaultCharacter>();
-    settings.emplace<PosSTATS>();
-    settings.emplace<PosEQINV>();
-    settings.emplace<PosINV>();
-    settings.emplace<PosSKILL>();
-    settings.emplace<PosKEYCONFIG>();
-
-    load();
+    try {
+        load();
+    } catch (const std::exception& ex) {
+        Console::get().print(str::concat(
+            "[settings.toml parse error] ", std::string_view{ex.what()}, '.'));
+    }
 }
 
-Configuration::~Configuration()
+Configuration::~Configuration() noexcept
 {
     save();
 }
 
-void Configuration::load()
+void Configuration::load() noexcept(false)
 {
-    std::unordered_map<std::string, std::string> raw_settings;
+    auto settings = cpptoml::parse_file("settings.toml");
 
-    std::ifstream file{FILENAME};
-    if (file.is_open()) {
-        // Go through the file line for line.
-        std::string line;
-        while (getline(file, line)) {
-            // If the setting is not empty, load the value.
-            std::size_t split = line.find('=');
-            if (split != std::string::npos && split + 2 < line.size()) {
-                raw_settings.emplace(line.substr(0, split - 1),
-                                     line.substr(split + 2));
+    auto network_table = settings->get_table("network");
+    auto video_table = settings->get_table("video");
+    auto fonts_table = settings->get_table("fonts");
+    auto audio_table = settings->get_table("audio");
+    auto account_table = settings->get_table("account");
+    auto ui_table = settings->get_table("ui");
+
+    if (network_table) {
+        if (auto server_ip = network_table->get_as<std::string>("server_ip");
+            server_ip) {
+            network.server_ip = *server_ip;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:network.server_ip\" "
+                "found; using default.");
+        }
+    } else {
+        Console::get().print(
+            "No valid table \"settings.toml:network\" found; using default.");
+    }
+
+    if (video_table) {
+        if (auto fullscreen = video_table->get_as<bool>("fullscreen");
+            fullscreen) {
+            video.fullscreen = *fullscreen;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:video.fullscreen\" found; "
+                "using default.");
+        }
+
+        if (auto vsync = video_table->get_as<bool>("vsync"); vsync) {
+            video.vsync = *vsync;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:video.vsync\" found; "
+                "using default.");
+        }
+    } else {
+        Console::get().print(
+            "No valid table \"settings.toml:video\" found; using default.");
+    }
+
+    if (fonts_table) {
+        if (auto normal = fonts_table->get_as<std::string>("normal"); normal) {
+            fonts.normal = *normal;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:fonts.normal\" found; "
+                "using default.");
+        }
+
+        if (auto bold = fonts_table->get_as<std::string>("bold"); bold) {
+            fonts.bold = *bold;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:fonts.bold\" found; "
+                "using default.");
+        }
+    } else {
+        Console::get().print(
+            "No valid table \"settings.toml:fonts\" found; using default.");
+    }
+
+    if (audio_table) {
+        auto volume = audio_table->get_table("volume");
+
+        if (volume) {
+            if (auto sound_effects
+                = volume->get_as<std::uint8_t>("sound_effects");
+                sound_effects) {
+                audio.volume.sound_effects = *sound_effects;
+            } else {
+                Console::get().print(
+                    "No valid value for "
+                    "\"settings.toml:audio.volume.sound_effects\" found; "
+                    "using default.");
             }
+
+            if (auto music = volume->get_as<std::uint8_t>("music"); music) {
+                audio.volume.music = *music;
+            } else {
+                Console::get().print(
+                    "No valid value for \"settings.toml:audio.volume.music\" "
+                    "found; using default.");
+            }
+        } else {
+            Console::get().print(
+                "No valid table \"settings.toml:audio.volume\" found; using "
+                "default.");
         }
+    } else {
+        Console::get().print(
+            "No valid table \"settings.toml:audio\" found; using default.");
     }
 
-    // Replace default values with loaded values.
-    for (auto& [_, setting] : settings) {
-        auto rs_iter = raw_settings.find(setting->name);
-        if (rs_iter != raw_settings.end()) {
-            setting->value = rs_iter->second;
+    if (account_table) {
+        if (auto save_login = account_table->get_as<bool>("save_login");
+            save_login) {
+            account.save_login = *save_login;
+        } else {
+            Console::get().print("No valid value for "
+                                 "\"settings.toml:account.save_login\" found; "
+                                 "using default.");
         }
+
+        if (auto account_name
+            = account_table->get_as<std::string>("account_name");
+            account_name) {
+            account.account_name = *account_name;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:account.account_name\" "
+                "found; using default.");
+        }
+
+        if (auto world = account_table->get_as<std::uint8_t>("world"); world) {
+            account.world = *world;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:account.world\" found; "
+                "using default.");
+        }
+
+        if (auto channel = account_table->get_as<std::uint8_t>("channel");
+            channel) {
+            account.channel = *channel;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:account.channel\" found; "
+                "using default.");
+        }
+
+        if (auto character = account_table->get_as<std::uint8_t>("character");
+            character) {
+            account.character = *character;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:account.character\" "
+                "found; using default.");
+        }
+    } else {
+        Console::get().print(
+            "No valid table \"settings.toml:account\" found; using default.");
+    }
+
+    if (ui_table) {
+        auto position = ui_table->get_table("position");
+
+        if (position) {
+            if (auto key_config
+                = position->get_array_of<std::int64_t>("key_config");
+                key_config) {
+                if (auto key_config_point
+                    = vec_to_point<std::int16_t>(*key_config);
+                    key_config_point) {
+                    ui.position.key_config = *key_config_point;
+                } else {
+                    Console::get().print("No valid value for "
+                                         "\"settings.toml:ui.position.key_"
+                                         "config\" found; using default.");
+                }
+            } else {
+                Console::get().print(
+                    "No valid value for "
+                    "\"settings.toml:ui.position.key_config\" "
+                    "found; using default.");
+            }
+
+            if (auto stats = position->get_array_of<std::int64_t>("stats");
+                stats) {
+                if (auto stats_point = vec_to_point<std::int16_t>(*stats);
+                    stats_point) {
+                    ui.position.stats = *stats_point;
+                } else {
+                    Console::get().print("No valid value for "
+                                         "\"settings.toml:ui.position.stats\" "
+                                         "found; using default.");
+                }
+            } else {
+                Console::get().print(
+                    "No valid value for \"settings.toml:ui.position.stats\" "
+                    "found; using default.");
+            }
+
+            if (auto inventory
+                = position->get_array_of<std::int64_t>("inventory");
+                inventory) {
+                if (auto inventory_point
+                    = vec_to_point<std::int16_t>(*inventory);
+                    inventory_point) {
+                    ui.position.inventory = *inventory_point;
+                } else {
+                    Console::get().print(
+                        "No valid value for "
+                        "\"settings.toml:ui.position.inventory\" "
+                        "found; using default.");
+                }
+            } else {
+                Console::get().print("No valid value for "
+                                     "\"settings.toml:ui.position.inventory\" "
+                                     "found; using default.");
+            }
+
+            if (auto equip_inventory
+                = position->get_array_of<std::int64_t>("equip_inventory");
+                equip_inventory) {
+                if (auto equip_inventory_point
+                    = vec_to_point<std::int16_t>(*equip_inventory);
+                    equip_inventory_point) {
+                    ui.position.equip_inventory = *equip_inventory_point;
+                } else {
+                    Console::get().print(
+                        "No valid value for "
+                        "\"settings.toml:ui.position.equip_inventory\" "
+                        "found; using default.");
+                }
+            } else {
+                Console::get().print(
+                    "No valid value for "
+                    "\"settings.toml:ui.position.equip_inventory\" "
+                    "found; using default.");
+            }
+
+            if (auto skillbook
+                = position->get_array_of<std::int64_t>("skillbook");
+                skillbook) {
+                if (auto skillbook_point
+                    = vec_to_point<std::int16_t>(*skillbook);
+                    skillbook_point) {
+                    ui.position.skillbook = *skillbook_point;
+                } else {
+                    Console::get().print(
+                        "No valid value for "
+                        "\"settings.toml:ui.position.skillbook\" "
+                        "found; using default.");
+                }
+            } else {
+                Console::get().print("No valid value for "
+                                     "\"settings.toml:ui.position.skillbook\" "
+                                     "found; using default.");
+            }
+        } else {
+            Console::get().print(
+                "No valid table \"settings.toml:ui.position\" found; using "
+                "default.");
+        }
+    } else {
+        Console::get().print(
+            "No valid table \"settings.toml:ui\" found; using default.");
     }
 }
 
-void Configuration::save() const
+void Configuration::save() const noexcept
 {
-    // Open the settings file.
-    std::ofstream config{FILENAME};
-    if (config.is_open()) {
-        // Save settings line by line.
-        for (const auto& [_, setting] : settings) {
-            config << setting->to_string() << '\n';
+    using namespace std::literals;
+
+    static constexpr const std::string_view OUTPUT_TEMPLATE = u8R"(
+# Settings for the LibreMaple client.
+#
+# LibreMaple client code is © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple
+# Team, licensed under the GNU Affero General Public License version 3 or
+# higher.
+
+[network]
+server_ip = $
+
+[video]
+fullscreen = $
+vsync = $
+
+[fonts]
+normal = $
+bold = $
+
+[audio]
+    [audio.volume] # Volumes are in percentages.
+    sound_effects = $
+    music = $
+
+[account]
+save_login = $
+account_name = $
+world = $
+channel = $
+character = $
+
+[ui]
+    [ui.position]
+    key_config = $
+    stats = $
+    inventory = $
+    equip_inventory = $
+    skillbook = $
+)"sv.substr(1);
+
+    std::ofstream settings{"settings.toml"};
+    if (!settings || !settings.is_open()) {
+        Console::get().print("[settings.toml write error] Could not open "
+                             "\"settings.toml\" for writing.");
+    }
+
+    std::size_t last_ix = 0;
+    std::size_t template_ix = 0;
+    std::size_t entry_ix = 0;
+    auto write = [&settings](const auto& x) {
+        using x_type = std::decay_t<decltype(x)>;
+
+        if constexpr (std::is_same_v<x_type, std::string>) {
+            settings.put('"');
+            settings << x; // TODO: Escape special characters.
+            settings.put('"');
+        } else if constexpr (std::is_same_v<x_type, bool>) {
+            if (x) {
+                settings << "true";
+            } else {
+                settings << "false";
+            }
+        } else if constexpr (is_point<x_type>::value) {
+            settings.put('[');
+            settings << x.x() << ", " << x.y();
+            settings.put(']');
+        } else if constexpr (
+            std::is_same_v<
+                x_type,
+                std::uint8_t> || std::is_same_v<x_type, std::int8_t>) {
+            settings << static_cast<int>(x);
+        } else {
+            settings << x;
         }
+    };
+    while (template_ix < OUTPUT_TEMPLATE.length()) {
+        if (OUTPUT_TEMPLATE[template_ix] == '$') {
+            settings << OUTPUT_TEMPLATE.substr(last_ix, template_ix - last_ix);
+            ++template_ix;
+            last_ix = template_ix;
+
+            switch (entry_ix) {
+            case 0:
+                write(network.server_ip);
+                break;
+            case 1:
+                write(video.fullscreen);
+                break;
+            case 2:
+                write(video.vsync);
+                break;
+            case 3:
+                write(fonts.normal);
+                break;
+            case 4:
+                write(fonts.bold);
+                break;
+            case 5:
+                write(audio.volume.sound_effects);
+                break;
+            case 6:
+                write(audio.volume.music);
+                break;
+            case 7:
+                write(account.save_login);
+                break;
+            case 8:
+                write(account.account_name);
+                break;
+            case 9:
+                write(account.world);
+                break;
+            case 10:
+                write(account.channel);
+                break;
+            case 11:
+                write(account.character);
+                break;
+            case 12:
+                write(ui.position.key_config);
+                break;
+            case 13:
+                write(ui.position.stats);
+                break;
+            case 14:
+                write(ui.position.inventory);
+                break;
+            case 15:
+                write(ui.position.equip_inventory);
+                break;
+            case 16:
+                write(ui.position.skillbook);
+                break;
+            default:
+                Console::get().print(
+                    "[logic error] Number of `case` statements in "
+                    "`Configuration::save()` is incorrect.");
+                break;
+            }
+
+            ++entry_ix;
+        } else {
+            ++template_ix;
+        }
+    }
+    settings << OUTPUT_TEMPLATE.substr(last_ix);
+
+    settings.flush();
+}
+
+Point<std::int16_t> Configuration::get_position_of(PositionOf po) const
+    noexcept
+{
+    switch (po) {
+    case PositionOf::KEY_CONFIG:
+        return ui.position.key_config;
+    case PositionOf::STATS:
+        return ui.position.stats;
+    case PositionOf::INVENTORY:
+        return ui.position.inventory;
+    case PositionOf::EQUIP_INVENTORY:
+        return ui.position.equip_inventory;
+    case PositionOf::SKILLBOOK:
+        return ui.position.skillbook;
+    }
+
+    return {};
+}
+
+void Configuration::set_position_of(PositionOf po,
+                                    Point<std::int16_t> pos) noexcept
+{
+    switch (po) {
+    case PositionOf::KEY_CONFIG:
+        ui.position.key_config = pos;
+        break;
+    case PositionOf::STATS:
+        ui.position.stats = pos;
+        break;
+    case PositionOf::INVENTORY:
+        ui.position.inventory = pos;
+        break;
+    case PositionOf::EQUIP_INVENTORY:
+        ui.position.equip_inventory = pos;
+        break;
+    case PositionOf::SKILLBOOK:
+        ui.position.skillbook = pos;
+        break;
     }
 }
 
-void Configuration::BoolEntry::save(bool b)
+template<typename T>
+std::optional<Point<T>>
+Configuration::vec_to_point(const std::vector<std::int64_t>& vec) noexcept
 {
-    value = b ? "true" : "false";
-}
-
-bool Configuration::BoolEntry::load() const
-{
-    return value == "true";
-}
-
-void Configuration::StringEntry::save(std::string&& str)
-{
-    value = std::move(str);
-}
-
-const std::string& Configuration::StringEntry::load() const
-{
-    return value;
-}
-
-void Configuration::PointEntry::save(Point<std::int16_t> vec)
-{
-    value = vec.to_string();
-}
-
-Point<std::int16_t> Configuration::PointEntry::load() const
-{
-    auto comma_loc = value.find(',');
-    std::string x_str = value.substr(1, comma_loc - 1);
-    std::string y_str
-        = value.substr(comma_loc + 1, value.find(')') - comma_loc - 1);
-
-    return {string_conversion::or_zero<std::int16_t>(x_str),
-            string_conversion::or_zero<std::int16_t>(y_str)};
+    if (vec.size() != 2) {
+        return {};
+    }
+    return {{static_cast<T>(vec[0]), static_cast<T>(vec[1])}};
 }
 } // namespace jrc

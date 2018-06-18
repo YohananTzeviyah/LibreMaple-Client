@@ -28,7 +28,9 @@
 namespace jrc
 {
 UIItemInventory::UIItemInventory(const Inventory& invent)
-    : UIDragElement<PosINV>{Point<std::int16_t>{172, 20}}, inventory(invent)
+    : UIDragElement<Configuration::PositionOf::INVENTORY>{Point<std::int16_t>{
+          172, 20}},
+      inventory{invent}
 {
     nl::node src = nl::nx::ui["UIWindow2.img"]["Item"];
 

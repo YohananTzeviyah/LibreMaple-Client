@@ -94,7 +94,7 @@ void cursor_callback(GLFWwindow*, double xpos, double ypos)
 
 Error Window::init()
 {
-    full_screen = Setting<Fullscreen>::get().load();
+    full_screen = Configuration::get().video.fullscreen;
 
     if (!glfwInit()) {
         return Error::GLFW;
@@ -132,7 +132,7 @@ Error Window::init_window()
 
     glfwMakeContextCurrent(glwnd);
 
-    const bool vsync = Setting<VSync>::get().load();
+    const bool vsync = Configuration::get().video.vsync;
     glfwSwapInterval(vsync ? 1 : 0);
 
     glViewport(0, 0, Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT);

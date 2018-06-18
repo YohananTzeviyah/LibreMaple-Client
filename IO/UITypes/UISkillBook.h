@@ -52,7 +52,7 @@ private:
     bool enabled;
 };
 
-class UISkillbook : public UIDragElement<PosSKILL>
+class UISkillbook : public UIDragElement<Configuration::PositionOf::SKILLBOOK>
 {
 public:
     static constexpr const Type TYPE = SKILLBOOK;

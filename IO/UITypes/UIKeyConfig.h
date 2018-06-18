@@ -30,7 +30,7 @@
 namespace jrc
 {
 //! The in-game keybinding configuration UI.
-class UIKeyConfig : public UIDragElement<PosKEYCONFIG>
+class UIKeyConfig : public UIDragElement<Configuration::PositionOf::KEY_CONFIG>
 {
 public:
     static constexpr const Type TYPE = KEY_CONFIG;

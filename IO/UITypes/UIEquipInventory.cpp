@@ -26,7 +26,8 @@
 namespace jrc
 {
 UIEquipInventory::UIEquipInventory(const Inventory& invent)
-    : UIDragElement<PosEQINV>({184, 20}), inventory(invent)
+    : UIDragElement<Configuration::PositionOf::EQUIP_INVENTORY>({184, 20}),
+      inventory(invent)
 {
     icon_positions[Equipslot::CAP] = {43, 25};
     icon_positions[Equipslot::FACEACC] = {43, 91};

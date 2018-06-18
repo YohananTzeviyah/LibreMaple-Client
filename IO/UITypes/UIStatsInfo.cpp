@@ -27,7 +27,9 @@
 namespace jrc
 {
 UIStatsinfo::UIStatsinfo(const CharStats& st)
-    : UIDragElement<PosSTATS>(Point<std::int16_t>(212, 20)), stats(st)
+    : UIDragElement<Configuration::PositionOf::STATS>(
+          Point<std::int16_t>(212, 20)),
+      stats(st)
 {
     nl::node src = nl::nx::ui["UIWindow4.img"]["Stat"]["main"];
     nl::node detail = nl::nx::ui["UIWindow4.img"]["Stat"]["detail"];

@@ -27,7 +27,8 @@
 namespace jrc
 {
 //! The Item inventory.
-class UIItemInventory : public UIDragElement<PosINV>
+class UIItemInventory
+    : public UIDragElement<Configuration::PositionOf::INVENTORY>
 {
 public:
     static constexpr const Type TYPE = ITEM_INVENTORY;

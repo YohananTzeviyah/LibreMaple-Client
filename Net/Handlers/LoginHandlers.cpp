@@ -38,7 +38,7 @@ void LoginResultHandler::handle(InPacket& recv) const
 
     // The packet should contain a 'reason' integer which can signify various
     // things.
-    if (std::int32_t reason = recv.read_int()) {
+    if (std::int32_t reason = recv.read_int(); reason) {
         // Login unsuccessful. The LoginNotice displayed will contain the
         // specific information.
         switch (reason) {
@@ -69,8 +69,9 @@ void LoginResultHandler::handle(InPacket& recv) const
         Account account = LoginParser::parse_account(recv);
 
         // Save the Login ID if the box for it on the login panel is checked.
-        if (Setting<SaveLogin>::get().load()) {
-            Setting<DefaultAccount>::get().save(std::move(account.name));
+        if (Configuration::get().account.save_login) {
+            Configuration::get().account.account_name
+                = std::move(account.name);
         }
 
         // Request the list of worlds and channels online.

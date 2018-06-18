@@ -21,50 +21,52 @@
 
 namespace jrc
 {
-template<typename T>
+template<Configuration::PositionOf P>
 //! Base class for UI windows which can be moved with the mouse cursor.
 class UIDragElement : public UIElement
 {
 public:
-    bool remove_cursor(bool clicked, Point<std::int16_t> cursorpos) override
+    bool remove_cursor(bool clicked, Point<std::int16_t> cursor_pos) override
     {
         if (dragged) {
             if (clicked) {
-                position = cursorpos - cursoroffset;
+                position = cursor_pos - cursoroffset;
                 return true;
             } else {
                 dragged = false;
-                Setting<T>::get().save(position);
+                Configuration::get().set_position_of(P, position);
             }
         }
+
         return false;
     }
 
     Cursor::State send_cursor(bool clicked,
-                              Point<std::int16_t> cursorpos) override
+                              Point<std::int16_t> cursor_pos) override
     {
         if (clicked) {
             if (dragged) {
-                position = cursorpos - cursoroffset;
+                position = cursor_pos - cursoroffset;
                 return Cursor::CLICKING;
-            } else if (in_drag_range(cursorpos)) {
-                cursoroffset = cursorpos - position;
+            } else if (in_drag_range(cursor_pos)) {
+                cursoroffset = cursor_pos - position;
                 dragged = true;
                 return Cursor::CLICKING;
             }
         } else {
             if (dragged) {
                 dragged = false;
-                Setting<T>::get().save(position);
+                Configuration::get().set_position_of(P, position);
             }
         }
-        return UIElement::send_cursor(clicked, cursorpos);
+
+        return UIElement::send_cursor(clicked, cursor_pos);
     }
 
 protected:
     UIDragElement(Point<std::int16_t> d) : dragged(false), dragarea(d)
     {
-        position = Setting<T>::get().load();
+        position = Configuration::get().get_position_of(P);
     }
 
     bool dragged;

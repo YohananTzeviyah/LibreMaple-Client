@@ -140,8 +140,8 @@ Error GraphicsGL::init()
 
     font_border.set_y(1);
 
-    const std::string& FONT_NORMAL = Setting<FontPathNormal>().get().load();
-    const std::string& FONT_BOLD = Setting<FontPathBold>().get().load();
+    const std::string& FONT_NORMAL = Configuration::get().fonts.normal;
+    const std::string& FONT_BOLD = Configuration::get().fonts.bold;
     if (FONT_NORMAL.empty() || FONT_BOLD.empty()) {
         Console::get().print(
             "[Warning] A font path is empty, check your settings file.");

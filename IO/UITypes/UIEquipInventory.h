@@ -25,7 +25,8 @@
 namespace jrc
 {
 //! The Equip inventory UI.
-class UIEquipInventory : public UIDragElement<PosEQINV>
+class UIEquipInventory
+    : public UIDragElement<Configuration::PositionOf::EQUIP_INVENTORY>
 {
 public:
     static constexpr Type TYPE = EQUIP_INVENTORY;

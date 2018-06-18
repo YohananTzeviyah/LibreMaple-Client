@@ -80,7 +80,7 @@ Error Sound::init()
     add_sound(Sound::PORTAL, game_src["Portal"]);
     add_sound(Sound::LEVEL_UP, game_src["LevelUp"]);
 
-    set_sfx_volume(Setting<SFXVolume>::get().load());
+    set_sfx_volume(Configuration::get().audio.volume.sound_effects);
 
     return Error::NONE;
 }
@@ -171,7 +171,7 @@ Error Music::play(std::string&& bgm_path)
 void Music::init() noexcept
 {
     stream = nullptr;
-    set_bgm_volume(Setting<BGMVolume>::get().load());
+    set_bgm_volume(Configuration::get().audio.volume.music);
 }
 
 void Music::set_bgm_volume(std::uint8_t vol) noexcept

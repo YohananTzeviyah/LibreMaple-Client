@@ -92,10 +92,10 @@ UILogin::UILogin()
     password.set_crypt_char('*');
     password_bg = title["PW"];
 
-    save_id = Setting<SaveLogin>::get().load();
+    save_id = Configuration::get().account.save_login;
     if (save_id) {
         account.change_text(
-            std::string{Setting<DefaultAccount>::get().load()});
+            std::string{Configuration::get().account.account_name});
         password.set_state(Textfield::FOCUSED);
     } else {
         account.set_state(Textfield::FOCUSED);
@@ -154,7 +154,7 @@ Button::State UILogin::button_pressed(std::uint16_t id)
         return Button::PRESSED;
     case BT_SAVE_ID:
         save_id = !save_id;
-        Setting<SaveLogin>::get().save(save_id);
+        Configuration::get().account.save_login = save_id;
         return Button::MOUSE_OVER;
     default:
         return Button::PRESSED;

@@ -22,12 +22,12 @@
 
 namespace jrc
 {
-class UIStatsinfo : public UIDragElement<PosSTATS>
+class UIStatsinfo : public UIDragElement<Configuration::PositionOf::STATS>
 {
 public:
-    static constexpr Type TYPE = STATS_INFO;
-    static constexpr bool FOCUSED = false;
-    static constexpr bool TOGGLED = true;
+    static constexpr const Type TYPE = STATS_INFO;
+    static constexpr const bool FOCUSED = false;
+    static constexpr const bool TOGGLED = true;
 
     UIStatsinfo(const CharStats& stats);
 
@@ -40,9 +40,10 @@ protected:
     Button::State button_pressed(std::uint16_t buttonid) override;
 
 private:
-    static const std::size_t NUMLABELS = 27;
-    static const std::size_t NUMNORMAL = 12;
-    static const std::size_t NUMDETAIL = 15;
+    static constexpr const std::size_t NUMLABELS = 27;
+    static constexpr const std::size_t NUMNORMAL = 12;
+    static constexpr const std::size_t NUMDETAIL = 15;
+
     enum StatLabel {
         // Normal
         NAME,

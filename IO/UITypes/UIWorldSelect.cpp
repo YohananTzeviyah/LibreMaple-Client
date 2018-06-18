@@ -32,8 +32,8 @@ UIWorldSelect::UIWorldSelect(std::vector<World> worlds,
                              std::uint8_t world_count)
     : UIElement({0, 0}, {Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT})
 {
-    world_id = Setting<DefaultWorld>::get().load();
-    channel_id = Setting<DefaultChannel>::get().load();
+    world_id = Configuration::get().account.world;
+    channel_id = Configuration::get().account.channel;
 
     nl::node back = nl::nx::map["Back"]["login.img"]["back"];
     nl::node world_src

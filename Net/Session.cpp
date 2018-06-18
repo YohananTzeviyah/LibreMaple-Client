@@ -47,14 +47,14 @@ bool Session::init(const char* host, const char* port)
 
 Error Session::init()
 {
-    const std::string& HOST = Setting<ServerIP>::get().load();
-    if (HOST.empty()) {
+    const std::string& host = Configuration::get().network.server_ip;
+    if (host.empty()) {
         Console::get().print("No host IP was found in the settings file.");
         return Error::CONNECTION;
     }
     static constexpr const char* const PORT = "8484";
 
-    if (!init(HOST.data(), PORT)) {
+    if (!init(host.data(), PORT)) {
         return Error::CONNECTION;
     }
 

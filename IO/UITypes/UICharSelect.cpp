@@ -40,7 +40,7 @@ UICharSelect::UICharSelect(std::vector<CharEntry> cs,
                            std::int8_t p)
     : characters(cs), require_pic(p), char_count_absolute(c), slots_absolute(s)
 {
-    selected_absolute = Setting<DefaultCharacter>::get().load();
+    selected_absolute = Configuration::get().account.character;
     selected_relative = selected_absolute % PAGE_SIZE;
     page = selected_absolute / PAGE_SIZE;
 
@@ -284,7 +284,7 @@ void UICharSelect::send_selection()
         return;
     }
 
-    Setting<DefaultCharacter>::get().save(selected_absolute);
+    Configuration::get().account.character = selected_absolute;
     std::int32_t cid = characters[selected_absolute].cid;
     switch (require_pic) {
     case 0:

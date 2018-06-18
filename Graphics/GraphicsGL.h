@@ -34,7 +34,7 @@
 
 namespace jrc
 {
-// Graphics engine which uses OpenGL.
+//! Graphics engine which uses OpenGL.
 class GraphicsGL : public Singleton<GraphicsGL>
 {
 public:
