@@ -111,6 +111,8 @@ $ tar xf boost*
 $ rm boost*.tar.gz
 $ mv boost*/ boost/
 
+$ git clone https://github.com/skystrife/cpptoml.git
+
 $ export CC='/usr/bin/clang'
 $ export CXX='/usr/bin/clang++'
 
@@ -209,6 +211,8 @@ $ tar xf boost*
 $ rm boost*.tar.gz
 $ mv boost*/ boost/
 
+$ git clone https://github.com/skystrife/cpptoml.git
+
 $ export CC='clang'
 $ export CXX='clang++'
 
@@ -282,6 +286,8 @@ $ git clone https://github.com/Libre-Maple/LibreMaple-Client.git
 $ git clone https://github.com/NoLifeDev/NoLifeNx.git nlnx
 
 $ git clone https://github.com/ubawurinna/freetype-windows-binaries.git freetype
+
+$ git clone https://github.com/skystrife/cpptoml.git
 ```
 
 Navigate to
@@ -421,6 +427,7 @@ LibreMaple uses crypto (`JOURNEY_USE_CRYPTO`), and also uses ASIO
 | Graphics          | [FreeType](http://www.freetype.org/)                       | FreeType            | -              | No               | No            |
 | Audio             | [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/)   | zlib/libpng         | SDL2           | No               | No            |
 | Networking        | [Asio](http://think-async.com/) (standalone; no Boost)     | Boost               | -              | Yes              | No            |
+| Config            | [cpptoml](https://github.com/skystrife/cpptoml)            | MIT                 | -              | Yes              | No            |
 | General           | [Boost](https://www.boost.org/) (Bimap, Container)         | Boost               | -              | Yes              | No            |
 
 \*NoLifeNx does not provide a license, but it is used for NoLifeStory (AGPL

@@ -64,7 +64,8 @@ struct Configuration : public Singleton<Configuration> {
     //////////////// Data layout ////////////////
 
     struct Network {
-        std::string server_ip = "127.0.0.1";
+        std::string ip = "127.0.0.1";
+        std::uint16_t port = 8484;
     };
 
     struct Video {

@@ -54,13 +54,20 @@ void Configuration::load() noexcept(false)
     auto ui_table = settings->get_table("ui");
 
     if (network_table) {
-        if (auto server_ip = network_table->get_as<std::string>("server_ip");
-            server_ip) {
-            network.server_ip = *server_ip;
+        if (auto ip = network_table->get_as<std::string>("ip"); ip) {
+            network.ip = *ip;
         } else {
             Console::get().print(
-                "No valid value for \"settings.toml:network.server_ip\" "
-                "found; using default.");
+                "No valid value for \"settings.toml:network.ip\" found; using "
+                "default.");
+        }
+
+        if (auto port = network_table->get_as<std::uint16_t>("port"); port) {
+            network.port = *port;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:network.port\" found; "
+                "using default.");
         }
     } else {
         Console::get().print(
@@ -311,7 +318,8 @@ void Configuration::save() const noexcept
 # higher.
 
 [network]
-server_ip = $
+ip = $
+port = $
 
 [video]
 fullscreen = $
@@ -385,54 +393,57 @@ character = $
 
             switch (entry_ix) {
             case 0:
-                write(network.server_ip);
+                write(network.ip);
                 break;
             case 1:
-                write(video.fullscreen);
+                write(network.port);
                 break;
             case 2:
-                write(video.vsync);
+                write(video.fullscreen);
                 break;
             case 3:
-                write(fonts.normal);
+                write(video.vsync);
                 break;
             case 4:
-                write(fonts.bold);
+                write(fonts.normal);
                 break;
             case 5:
-                write(audio.volume.sound_effects);
+                write(fonts.bold);
                 break;
             case 6:
-                write(audio.volume.music);
+                write(audio.volume.sound_effects);
                 break;
             case 7:
-                write(account.save_login);
+                write(audio.volume.music);
                 break;
             case 8:
-                write(account.account_name);
+                write(account.save_login);
                 break;
             case 9:
-                write(account.world);
+                write(account.account_name);
                 break;
             case 10:
-                write(account.channel);
+                write(account.world);
                 break;
             case 11:
-                write(account.character);
+                write(account.channel);
                 break;
             case 12:
-                write(ui.position.key_config);
+                write(account.character);
                 break;
             case 13:
-                write(ui.position.stats);
+                write(ui.position.key_config);
                 break;
             case 14:
-                write(ui.position.inventory);
+                write(ui.position.stats);
                 break;
             case 15:
-                write(ui.position.equip_inventory);
+                write(ui.position.inventory);
                 break;
             case 16:
+                write(ui.position.equip_inventory);
+                break;
+            case 17:
                 write(ui.position.skillbook);
                 break;
             default:
