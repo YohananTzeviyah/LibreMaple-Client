@@ -436,3 +436,33 @@ LibreMaple uses crypto (`JOURNEY_USE_CRYPTO`), and also uses ASIO
 | Networking        | [Asio](http://think-async.com/) (standalone; no Boost)     | Boost               | -              | Yes              | No            |
 | Config            | [cpptoml](https://github.com/skystrife/cpptoml)            | MIT                 | -              | Yes              | No            |
 | General           | [Boost](https://www.boost.org/) (Bimap, Container)         | Boost               | -              | Yes              | No            |
+
+## Licensing
+
+[![GNU AGPL v3+](https://www.gnu.org/graphics/agplv3-155x51.png)](https://www.gnu.org/licenses/agpl-3.0.en.html)
+
+All LibreMaple/JourneyClient code is © 2015-2016 Daniel Allendorf, 2018-2019
+LibreMaple Team, licensed under the
+[GNU Affero General Public License version 3 or higher](https://www.gnu.org/licenses/agpl-3.0.en.html)
+(GNU AGPL). See "LICENSE" for the full text.
+
+That implies a few things. For one, that makes this work a work of **free**
+**software**, including both the source code *and any binaries created from*
+*it*. According to the Free Software Foundation:
+
+> A program is free software if the program's users have the four essential
+> freedoms:
+>
+> * The freedom to run the program as you wish, for any purpose (freedom 0).
+> * The freedom to study how the program works, and change it so it does your
+>   computing as you wish (freedom 1). Access to the source code is a
+>   precondition for this.
+> * The freedom to redistribute copies so you can help others (freedom 2).
+> * The freedom to distribute copies of your modified versions to others
+>   (freedom 3). By doing this you can give the whole community a chance to
+>   benefit from your changes. Access to the source code is a precondition for
+>   this.
+
+As the above text implies, *derived/modified works are encouraged*, and due to
+the nature of the GNU AGPL, all such works are free software as well (also
+licensed under the GNU AGPL).
