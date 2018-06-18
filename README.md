@@ -62,6 +62,7 @@ The client is currently compatible with GMS version 83 servers. For the UI file
   have it)
 * xorg / xorg-dev / xorg-server-devel (Xorg development libraries)
 * build-essential (for users of Debian-based distibutions only)
+* [ccache](https://ccache.samba.org/) (optional, for faster build times)
 
 (**Note for [Solus](https://solus-project.com/) users:**
 `sudo eopkg it -c system.devel`)
@@ -141,9 +142,11 @@ $ cd LibreMaple-Client
 $ mkdir build
 $ cd build
 # Build type may also be `Release`, `RelWithDebInfo`, or `MinSizeRel`.
-# Additionally,pass in the argument `-D NATIVE_BUILD=true` if you desire a
-# native-only build (`-march=native`).
-$ cmake -D CMAKE_BUILD_TYPE=Debug ..
+# Additionally, pass in the argument `-DNATIVE_BUILD=1` if you desire a native-
+# only build (`-march=native`).
+#
+# Specify `-DCMAKE_CXX_COMPILER_LAUNCHER=ccache` if you are using ccache.
+$ cmake -DCMAKE_BUILD_TYPE=Debug ..
 # Or `make -jN` with N being the number of CPU cores you wish to utilize.
 $ make
 # For `Release` and `MinSizeRel` builds only:
@@ -176,6 +179,8 @@ directory (`LibreMaple-Client/build`).
   require you to separately install XQuartz, one way to do this is
   `brew cask install xquartz`)
 * [freetype](https://www.freetype.org/) (`brew install freetype`)
+* [ccache](https://ccache.samba.org/) (optional, for faster build times;
+  `brew install ccache`)
 
 #### Instructions
 
@@ -235,8 +240,10 @@ $ cd LibreMaple-Client
 $ mkdir build
 $ cd build
 # Build type may also be `Release`, `RelWithDebInfo`, or `MinSizeRel`.
-# Additionally,pass in the argument `-D NATIVE_BUILD=true` if you desire a
-# native-only build (`-march=native`).
+# Additionally, pass in the argument `-DNATIVE_BUILD=1` if you desire a native-
+# only build (`-march=native`).
+#
+# Specify `-DCMAKE_CXX_COMPILER_LAUNCHER=ccache` if you are using ccache.
 $ cmake -D CMAKE_BUILD_TYPE=Debug ..
 # Or `make -jN` with N being the number of CPU cores you wish to utilize.
 $ make
