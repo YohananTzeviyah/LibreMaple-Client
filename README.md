@@ -426,9 +426,9 @@ LibreMaple uses crypto (`JOURNEY_USE_CRYPTO`), and also uses ASIO
 
 | **Category**      | **Dependency**                                             | **License**         | **Depends on** | **Header only?** | **Optional?** |
 |-------------------|------------------------------------------------------------|---------------------|----------------|------------------|---------------|
-| (De)compression   | [LZ4](https://github.com/lz4/lz4)                          | BSD 2-Clause/GPL v2 | -              | No               | No            |
+| (De)compression   | [LZ4](https://github.com/lz4/lz4)                          | BSD 2-Clause        | -              | No               | No            |
 | Error checking    | [xxHash](https://github.com/Cyan4973/xxHash)               | BSD 2-Clause        | -              | No               | Yes           |
-| NX library        | [NoLifeNX](https://github.com/NoLifeDev/NoLifeNx)          | ???\*               | LZ4            | No               | No            |
+| NX library        | [NoLifeNX](https://github.com/NoLifeDev/NoLifeNx)          | AGPL v3+            | LZ4            | No               | No            |
 | Graphics          | [GLFW3](http://www.glfw.org/download.html)                 | zlib/libpng         | OpenGL support | No               | No            |
 | Graphics          | [GLEW](http://glew.sourceforge.net/)                       | Modified BSD/MIT    | OpenGL support | No               | No            |
 | Graphics          | [FreeType](http://www.freetype.org/)                       | FreeType            | -              | No               | No            |
@@ -436,7 +436,3 @@ LibreMaple uses crypto (`JOURNEY_USE_CRYPTO`), and also uses ASIO
 | Networking        | [Asio](http://think-async.com/) (standalone; no Boost)     | Boost               | -              | Yes              | No            |
 | Config            | [cpptoml](https://github.com/skystrife/cpptoml)            | MIT                 | -              | Yes              | No            |
 | General           | [Boost](https://www.boost.org/) (Bimap, Container)         | Boost               | -              | Yes              | No            |
-
-\*NoLifeNx does not provide a license, but it is used for NoLifeStory (AGPL
-v3), so it must be compatible with the AGPL v3 (likely BSD 3-Clause like nx-rs,
-or even AGPL v3 itself).
