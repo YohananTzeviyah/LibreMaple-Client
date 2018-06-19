@@ -27,14 +27,14 @@ namespace jrc
 class UINotice : public UIElement
 {
 public:
-    static constexpr Type TYPE = NOTICE;
-    static constexpr bool FOCUSED = true;
-    static constexpr bool TOGGLED = false;
+    static constexpr const Type TYPE = NOTICE;
+    static constexpr const bool FOCUSED = true;
+    static constexpr const bool TOGGLED = false;
 
 protected:
     UINotice(std::string&& question);
 
-    void draw_notice(bool textfield) const;
+    void draw_notice(bool text_field) const;
 
     std::int16_t box2offset() const;
 

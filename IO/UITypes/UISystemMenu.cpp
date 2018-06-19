@@ -18,6 +18,7 @@
 #include "UISystemMenu.h"
 
 #include "../UI.h"
+#include "UINotice.h"
 #include "nlnx/nx.hpp"
 
 namespace jrc
@@ -71,7 +72,12 @@ Button::State UISystemMenu::button_pressed(std::uint16_t button_id)
     case BT_SYSTEM_OPTION:
         break;
     case BT_QUIT:
-        UI::get().quit();
+        UI::get().emplace<UIYesNo>("Are you sure you want to exit the game?",
+                                   [](bool yes) {
+                                       if (yes) {
+                                           UI::get().quit();
+                                       }
+                                   });
         break;
     }
 

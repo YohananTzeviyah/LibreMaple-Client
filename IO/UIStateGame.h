@@ -45,11 +45,11 @@ public:
     void drag_icon(Icon* drg_ic) override;
     void clear_tooltip(Tooltip::Parent parent) override;
     void show_equip(Tooltip::Parent parent, std::int16_t slot) override;
-    void show_item(Tooltip::Parent parent, std::int32_t itemid) override;
+    void show_item(Tooltip::Parent parent, std::int32_t item_id) override;
     void show_skill(Tooltip::Parent parent,
                     std::int32_t skill_id,
                     std::int32_t level,
-                    std::int32_t masterlevel,
+                    std::int32_t master_level,
                     std::int64_t expiration) override;
 
     Iterator
@@ -69,7 +69,7 @@ private:
 
     EquipTooltip eq_tooltip;
     ItemTooltip it_tooltip;
-    SkillTooltip sktooltip;
+    SkillTooltip skill_tooltip;
     nullable_ptr<Tooltip> tooltip;
     Tooltip::Parent tooltip_parent;
 

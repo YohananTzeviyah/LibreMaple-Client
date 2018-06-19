@@ -228,11 +228,11 @@ void UIStateGame::show_equip(Tooltip::Parent parent, std::int16_t slot)
     }
 }
 
-void UIStateGame::show_item(Tooltip::Parent parent, std::int32_t itemid)
+void UIStateGame::show_item(Tooltip::Parent parent, std::int32_t item_id)
 {
-    it_tooltip.set_item(itemid);
+    it_tooltip.set_item(item_id);
 
-    if (itemid) {
+    if (item_id) {
         tooltip = it_tooltip;
         tooltip_parent = parent;
     }
@@ -241,13 +241,13 @@ void UIStateGame::show_item(Tooltip::Parent parent, std::int32_t itemid)
 void UIStateGame::show_skill(Tooltip::Parent parent,
                              std::int32_t skill_id,
                              std::int32_t level,
-                             std::int32_t masterlevel,
+                             std::int32_t master_level,
                              std::int64_t expiration)
 {
-    sktooltip.set_skill(skill_id, level, masterlevel, expiration);
+    skill_tooltip.set_skill(skill_id, level, master_level, expiration);
 
     if (skill_id) {
-        tooltip = sktooltip;
+        tooltip = skill_tooltip;
         tooltip_parent = parent;
     }
 }

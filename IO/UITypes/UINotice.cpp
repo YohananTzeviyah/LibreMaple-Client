@@ -40,10 +40,11 @@ UINotice::UINotice(std::string&& q)
 
     height = question.height();
     dimension = {top.width(), top.height() + height + bottom.height()};
-    position = {400 - dimension.x() / 2, 240 - dimension.y() / 2};
+    position = {Constants::GAME_VIEW_WIDTH / 2 - dimension.x() / 2,
+                Constants::GAME_VIEW_HEIGHT / 2 - dimension.y() / 2};
 }
 
-void UINotice::draw_notice(bool textfield) const
+void UINotice::draw_notice(bool text_field) const
 {
     Point<std::int16_t> start = position;
 
@@ -53,13 +54,13 @@ void UINotice::draw_notice(bool textfield) const
     start.shift_y(center_box.height());
 
     Point<std::int16_t> text_pos = start;
-    box.draw(DrawArgument(text_pos, Point<std::int16_t>(0, height)));
+    box.draw(DrawArgument(text_pos, Point<std::int16_t>{0, height}));
     start.shift_y(box.height() * (height / box.height()));
     box.draw(start);
     start.shift_y(box.height());
-    question.draw(text_pos + Point<std::int16_t>(130, -3));
+    question.draw(text_pos + Point<std::int16_t>{130, -3});
 
-    if (textfield) {
+    if (text_field) {
         box2.draw(start);
         start.shift_y(box2.height());
     }
@@ -77,10 +78,8 @@ std::int16_t UINotice::box2offset() const
 }
 
 UIYesNo::UIYesNo(std::string&& q, std::function<void(bool)> yh)
-    : UINotice(std::move(q))
+    : UINotice{std::move(q)}, yes_no_handler{yh}
 {
-    yes_no_handler = yh;
-
     std::int16_t below_text = UINotice::box2offset();
 
     nl::node src = nl::nx::ui["Basic.img"];
@@ -93,7 +92,7 @@ UIYesNo::UIYesNo(std::string&& q, std::function<void(bool)> yh)
 
 void UIYesNo::draw(float alpha) const
 {
-    UINotice::draw(false);
+    UINotice::draw_notice(false);
     UIElement::draw(alpha);
 }
 
@@ -134,7 +133,7 @@ UIEnterNumber::UIEnterNumber(std::string&& q,
         src["BtCancel4"], Point<std::int16_t>{132, below_text + 21});
 
     Rectangle<std::int16_t> area{26, 232, below_text, below_text + 20};
-    num_field = Textfield(Text::A11M, Text::LEFT, Text::LIGHTGREY, area, 9);
+    num_field = {Text::A11M, Text::LEFT, Text::LIGHTGREY, area, 9};
     num_field.set_state(Textfield::FOCUSED);
     num_field.change_text(std::to_string(de));
     num_field.set_enter_callback(
@@ -143,7 +142,7 @@ UIEnterNumber::UIEnterNumber(std::string&& q,
 
 void UIEnterNumber::draw(float alpha) const
 {
-    UINotice::draw(true);
+    UINotice::draw_notice(true);
     UIElement::draw(alpha);
 
     num_field.draw(position);
@@ -160,9 +159,9 @@ Cursor::State UIEnterNumber::send_cursor(bool clicked,
                                          Point<std::int16_t> cursor_pos)
 {
     if (num_field.get_state() == Textfield::NORMAL) {
-        Cursor::State nstate = num_field.send_cursor(cursor_pos, clicked);
-        if (nstate != Cursor::IDLE) {
-            return nstate;
+        Cursor::State n_state = num_field.send_cursor(cursor_pos, clicked);
+        if (n_state != Cursor::IDLE) {
+            return n_state;
         }
     }
     return UIElement::send_cursor(clicked, cursor_pos);
@@ -187,7 +186,7 @@ void UIEnterNumber::handle_string(const std::string& num_str)
         const auto num = [&num_str] {
             try {
                 return std::stoi(num_str);
-            } catch (const std::exception&) {
+            } catch (const std::logic_error&) {
             }
             return std::numeric_limits<std::int32_t>::lowest();
         }();

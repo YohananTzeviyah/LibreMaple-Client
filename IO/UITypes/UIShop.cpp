@@ -447,7 +447,7 @@ void UIShop::BuyState::reset()
     selection = -1;
 }
 
-void UIShop::BuyState::draw(Point<std::int16_t> parentpos,
+void UIShop::BuyState::draw(Point<std::int16_t> parent_pos,
                             const Texture& selected) const
 {
     for (std::int16_t i = 0; i < 5; ++i) {
@@ -458,20 +458,20 @@ void UIShop::BuyState::draw(Point<std::int16_t> parentpos,
 
         auto itempos = Point<std::int16_t>{12, 116 + 42 * i};
         if (slot == selection) {
-            selected.draw(parentpos + itempos + Point<std::int16_t>{35, -1});
+            selected.draw(parent_pos + itempos + Point<std::int16_t>{35, -1});
         }
-        items[slot].draw(parentpos + itempos);
+        items[slot].draw(parent_pos + itempos);
     }
 }
 
 void UIShop::BuyState::show_item(std::int16_t slot)
 {
-    std::int16_t absslot = slot + offset;
-    if (absslot < 0 || absslot >= last_slot) {
+    std::int16_t abs_slot = slot + offset;
+    if (abs_slot < 0 || abs_slot >= last_slot) {
         return;
     }
 
-    std::int32_t itemid = items[absslot].get_id();
+    std::int32_t itemid = items[abs_slot].get_id();
     UI::get().show_item(Tooltip::SHOP, itemid);
 }
 
@@ -554,7 +554,7 @@ void UIShop::SellState::change_tab(const Inventory& inv,
     last_slot = static_cast<std::int16_t>(items.size());
 }
 
-void UIShop::SellState::draw(Point<std::int16_t> parentpos,
+void UIShop::SellState::draw(Point<std::int16_t> parent_pos,
                              const Texture& selected) const
 {
     for (std::int16_t i = 0; i < 5; ++i) {
@@ -565,24 +565,24 @@ void UIShop::SellState::draw(Point<std::int16_t> parentpos,
 
         Point<std::int16_t> itempos(243, 116 + 42 * i);
         if (slot == selection) {
-            selected.draw(parentpos + itempos + Point<std::int16_t>{35, -1});
+            selected.draw(parent_pos + itempos + Point<std::int16_t>{35, -1});
         }
-        items[slot].draw(parentpos + itempos);
+        items[slot].draw(parent_pos + itempos);
     }
 }
 
 void UIShop::SellState::show_item(std::int16_t slot)
 {
-    std::int16_t absslot = slot + offset;
-    if (absslot < 0 || absslot >= last_slot) {
+    std::int16_t abs_slot = slot + offset;
+    if (abs_slot < 0 || abs_slot >= last_slot) {
         return;
     }
 
     if (tab == InventoryType::EQUIP) {
-        std::int16_t realslot = items[absslot].get_slot();
+        std::int16_t realslot = items[abs_slot].get_slot();
         UI::get().show_equip(Tooltip::SHOP, realslot);
     } else {
-        std::int32_t itemid = items[absslot].get_id();
+        std::int32_t itemid = items[abs_slot].get_id();
         UI::get().show_item(Tooltip::SHOP, itemid);
     }
 }
@@ -598,21 +598,23 @@ void UIShop::SellState::sell() const
     std::int16_t sellable = item.get_sellable();
     std::int16_t slot = item.get_slot();
     if (sellable > 1) {
-        constexpr auto question = "How many would you like to sell?";
-        auto on_enter = [item_id, slot](std::int32_t qty) {
-            auto short_qty = static_cast<std::int16_t>(qty);
-
-            NpcShopActionPacket(slot, item_id, short_qty, false).dispatch();
-        };
-        UI::get().emplace<UIEnterNumber>(question, on_enter, 1, sellable, 1);
+        UI::get().emplace<UIEnterNumber>(
+            "How many would you like to sell?",
+            [item_id, slot](std::int32_t qty) {
+                NpcShopActionPacket{
+                    slot, item_id, static_cast<std::int16_t>(qty), false}
+                    .dispatch();
+            },
+            1,
+            sellable,
+            1);
     } else if (sellable > 0) {
-        constexpr auto question = "Would you like to sell the item?";
-        auto on_decide = [item_id, slot](bool yes) {
-            if (yes) {
-                NpcShopActionPacket(slot, item_id, 1, false).dispatch();
-            }
-        };
-        UI::get().emplace<UIYesNo>(question, on_decide);
+        UI::get().emplace<UIYesNo>(
+            "Would you like to sell the item?", [item_id, slot](bool yes) {
+                if (yes) {
+                    NpcShopActionPacket{slot, item_id, 1, false}.dispatch();
+                }
+            });
     }
 }
 
