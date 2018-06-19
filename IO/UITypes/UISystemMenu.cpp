@@ -17,6 +17,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "UISystemMenu.h"
 
+#include "../UI.h"
 #include "nlnx/nx.hpp"
 
 namespace jrc
@@ -59,13 +60,23 @@ Button::State UISystemMenu::button_pressed(std::uint16_t button_id)
 {
     switch (button_id) {
     case BT_CHANNEL:
+        break;
     case BT_FARM:
+        break;
     case BT_KEY_SETTING:
+        UI::get().send_menu(KeyAction::KEY_CONFIG);
+        break;
     case BT_GAME_OPTION:
+        break;
     case BT_SYSTEM_OPTION:
+        break;
     case BT_QUIT:
-    default:
-        return Button::NORMAL;
+        UI::get().quit();
+        break;
     }
+
+    active = false;
+
+    return Button::NORMAL;
 }
 } // namespace jrc

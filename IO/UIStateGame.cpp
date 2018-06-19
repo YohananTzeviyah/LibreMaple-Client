@@ -151,9 +151,9 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst,
         }
     } else {
         bool clicked = mst == Cursor::CLICKING;
-        if (UIElement* focusedelement = get(focused)) {
-            if (focusedelement->is_active()) {
-                return focusedelement->send_cursor(clicked, pos);
+        if (UIElement* focused_element = get(focused); focused_element) {
+            if (focused_element->is_active()) {
+                return focused_element->send_cursor(clicked, pos);
             } else {
                 focused = UIElement::NONE;
                 return mst;
@@ -170,7 +170,7 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst,
                                      : element->remove_cursor(clicked, pos);
                     if (found) {
                         if (front) {
-                            element->remove_cursor(false, pos);
+                            front->remove_cursor(false, pos);
                         }
 
                         front = element.get();
@@ -191,8 +191,10 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst,
                             element_order.end(),
                             [front_type](auto t) { return t == front_type; }),
                         element_order.end());
+
                     element_order.push_back(front_type);
                 }
+
                 return front->send_cursor(clicked, pos);
             } else {
                 return Stage::get().send_cursor(clicked, pos);

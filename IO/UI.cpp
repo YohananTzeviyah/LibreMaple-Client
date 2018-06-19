@@ -84,19 +84,20 @@ bool UI::not_quitted() const
     return !quitted;
 }
 
-void UI::send_cursor(Point<std::int16_t> cursorpos, Cursor::State cursorstate)
+void UI::send_cursor(Point<std::int16_t> cursor_pos,
+                     Cursor::State cursor_state)
 {
-    Cursor::State nextstate = state->send_cursor(cursorstate, cursorpos);
-    cursor.set_state(nextstate);
-    cursor.set_position(cursorpos);
+    Cursor::State next_state = state->send_cursor(cursor_state, cursor_pos);
+    cursor.set_state(next_state);
+    cursor.set_position(cursor_pos);
 }
 
 void UI::send_cursor(bool pressed)
 {
-    Cursor::State cursorstate
+    Cursor::State cursor_state
         = pressed && enabled ? Cursor::CLICKING : Cursor::IDLE;
     Point<std::int16_t> cursor_pos = cursor.get_position();
-    send_cursor(cursor_pos, cursorstate);
+    send_cursor(cursor_pos, cursor_state);
 
     if (focused_text_field && pressed) {
         Cursor::State tstate

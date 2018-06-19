@@ -64,15 +64,17 @@ private:
     static constexpr const std::int16_t WIDTH = 79;
     static constexpr const std::int16_t BUTTON_PADDING_HORIZ = 8;
 
-    static constexpr const std::int16_t PADDING_TOP = 22;
+    static constexpr const std::int16_t PADDING_TOP = 20;
     static constexpr const std::int16_t STRIDE_VERT = 27;
     static constexpr const std::int16_t PADDING_BOTTOM = 12;
     static constexpr const std::int16_t HEIGHT
         = PADDING_TOP + STRIDE_VERT * NUM_BUTTONS + PADDING_BOTTOM;
 
-    static constexpr const Point<std::int16_t> POSITION{729, 525};
+    static constexpr const Point<std::int16_t> POSITION{729, 527};
 
+    /*
     static constexpr const Rectangle<std::int16_t> AREA{
         POSITION, POSITION + Point<std::int16_t>{WIDTH, HEIGHT}};
+    */
 };
 } // namespace jrc
