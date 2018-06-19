@@ -20,7 +20,7 @@
 
 namespace jrc
 {
-// An invisible button which is only defined by it's area.
+//! An invisible button which is only defined by its area.
 class AreaButton : public Button
 {
 public:

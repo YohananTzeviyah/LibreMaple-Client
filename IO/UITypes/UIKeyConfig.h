@@ -37,7 +37,7 @@ public:
     static constexpr const bool FOCUSED = false;
     static constexpr const bool TOGGLED = true;
 
-    UIKeyConfig() noexcept;
+    UIKeyConfig();
 
     void draw(float inter) const override;
 

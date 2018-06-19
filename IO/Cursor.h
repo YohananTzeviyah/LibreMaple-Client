@@ -21,11 +21,11 @@
 
 namespace jrc
 {
-// Class that represents the mouse cursor.
+//! Class that represents the mouse cursor.
 class Cursor
 {
 public:
-    // Maple-cursorstates, linked to the cursor's animation.
+    //! Maple-cursor states, linked to the cursor's animation.
     enum State {
         IDLE,
         CAN_CLICK,
@@ -62,6 +62,6 @@ private:
     Point<std::int16_t> position;
     std::int32_t hide_counter;
 
-    static constexpr std::int64_t HIDE_TIME = 15'000;
+    static constexpr const std::int64_t HIDE_TIME = 15'000;
 };
 } // namespace jrc

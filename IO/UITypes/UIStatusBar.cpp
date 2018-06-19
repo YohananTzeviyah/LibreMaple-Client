@@ -155,6 +155,9 @@ Button::State UIStatusbar::button_pressed(std::uint16_t id)
     case BT_KEYSETTING:
         UI::get().send_menu(KeyAction::KEY_CONFIG);
         return Button::NORMAL;
+    case BT_OPTIONS:
+        UI::get().send_menu(KeyAction::MAIN_MENU);
+        return Button::NORMAL;
     default:
         return Button::PRESSED;
     }

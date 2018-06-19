@@ -26,10 +26,10 @@
 
 namespace jrc
 {
-UIKeyConfig::UIKeyConfig() noexcept
+UIKeyConfig::UIKeyConfig()
     : UIDragElement<Configuration::PositionOf::KEY_CONFIG>({622, 20})
 {
-    const auto source = nl::nx::ui["UIWindow2.img"]["KeyConfig"];
+    nl::node source = nl::nx::ui["UIWindow2.img"]["KeyConfig"];
 
     sprites.emplace_back(source["backgrnd"]);
     sprites.emplace_back(source["backgrnd2"]);
@@ -43,7 +43,7 @@ UIKeyConfig::UIKeyConfig() noexcept
     buttons[BT_QUICKSLOT]
         = std::make_unique<MapleButton>(source["BtQuickSlot"]);
 
-    const auto icon_data = source["icon"];
+    nl::node icon_data = source["icon"];
 
     icons[KeyAction::Id::EQUIPMENT_TAB] = std::make_unique<Icon>(
         std::make_unique<KeyIcon>(KeyAction::Id::EQUIPMENT_TAB),

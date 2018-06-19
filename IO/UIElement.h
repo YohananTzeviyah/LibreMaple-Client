@@ -53,6 +53,7 @@ public:
         EQUIP_INVENTORY,
         SKILLBOOK,
         KEY_CONFIG,
+        SYSTEM_MENU,
         NUM_TYPES
     };
 

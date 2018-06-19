@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 // This file is part of the LibreMaple MMORPG client                        //
-// Copyright © 2015-2016 Daniel Allendorf, 2018-2019 LibreMaple Team        //
+// Copyright © 2018-2019 LibreMaple Team                                    //
 //                                                                          //
 // This program is free software: you can redistribute it and/or modify     //
 // it under the terms of the GNU Affero General Public License as           //
@@ -15,54 +15,57 @@
 // You should have received a copy of the GNU Affero General Public License //
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
-#include "Gauge.h"
+#include "UISystemMenu.h"
+
+#include "nlnx/nx.hpp"
 
 namespace jrc
 {
-Gauge::Gauge(Texture front,
-             Texture mid,
-             Texture end,
-             std::int16_t max,
-             float percent) noexcept
-    : bar_front{front},
-      bar_mid{mid},
-      bar_end{end},
-      maximum{max},
-      percentage{percent},
-      target{percent}
+UISystemMenu::UISystemMenu() : UIElement{POSITION, {WIDTH, HEIGHT}, true}
 {
-}
+    nl::node source = nl::nx::ui["StatusBar2.img"]["mainBar"]["System"];
 
-Gauge::Gauge() = default;
+    nl::node background = source["backgrnd"];
+    top = background["0"];
+    mid = background["1"];
+    bottom = background["2"];
 
-void Gauge::draw(const DrawArgument& args) const
-{
-    auto length = static_cast<std::int16_t>(percentage * maximum);
-    if (length > 0) {
-        bar_front.draw(args);
-        bar_mid.draw(args + DrawArgument{{1, 0}, {length, 0}});
-        bar_end.draw(args + DrawArgument{length + 1, 0});
+    std::int16_t y_offset = PADDING_TOP;
+    for (std::uint16_t i = 0; i < NUM_BUTTONS; ++i) {
+        buttons[i] = std::make_unique<MapleButton>(
+            source[BUTTON_SRC_NAMES[i]],
+            Point<std::int16_t>{BUTTON_PADDING_HORIZ, y_offset});
+        y_offset += STRIDE_VERT;
     }
 }
 
-void Gauge::update(float t)
+void UISystemMenu::draw(float inter) const
 {
-    if (target != t) {
-        target = t;
-        step = (target - percentage) / 24.0f;
-    }
+    Point<std::int16_t> bg_pos{POSITION};
 
-    if (percentage != target) {
-        percentage += step;
-        if (step < 0.0f) {
-            if (target - percentage >= step) {
-                percentage = target;
-            }
-        } else if (step > 0.0f) {
-            if (target - percentage <= step) {
-                percentage = target;
-            }
-        }
+    top.draw({bg_pos});
+    bg_pos += {0, top.height()};
+
+    std::int16_t mid_height = HEIGHT - top.height() - bottom.height();
+    mid.draw({bg_pos, {0, mid_height}});
+    bg_pos += {0, mid_height};
+
+    bottom.draw({bg_pos});
+
+    UIElement::draw_buttons(inter);
+}
+
+Button::State UISystemMenu::button_pressed(std::uint16_t button_id)
+{
+    switch (button_id) {
+    case BT_CHANNEL:
+    case BT_FARM:
+    case BT_KEY_SETTING:
+    case BT_GAME_OPTION:
+    case BT_SYSTEM_OPTION:
+    case BT_QUIT:
+    default:
+        return Button::NORMAL;
     }
 }
 } // namespace jrc

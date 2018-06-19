@@ -24,52 +24,56 @@ namespace jrc
 class DrawArgument
 {
 public:
-    constexpr DrawArgument() : DrawArgument(0, 0)
+    constexpr DrawArgument() noexcept : DrawArgument(0, 0)
     {
     }
 
-    constexpr DrawArgument(std::int16_t x, std::int16_t y)
+    constexpr DrawArgument(std::int16_t x, std::int16_t y) noexcept
         : DrawArgument(Point<std::int16_t>{x, y})
     {
     }
 
-    constexpr DrawArgument(Point<std::int16_t> p) : DrawArgument(p, 1.0f)
+    constexpr DrawArgument(Point<std::int16_t> p) noexcept
+        : DrawArgument(p, 1.0f)
     {
     }
 
-    constexpr DrawArgument(Point<std::int16_t> p, float xs, float ys)
+    constexpr DrawArgument(Point<std::int16_t> p, float xs, float ys) noexcept
         : DrawArgument(p, p, xs, ys, 1.0f)
     {
     }
 
-    constexpr DrawArgument(Point<std::int16_t> p, Point<std::int16_t> s)
+    constexpr DrawArgument(Point<std::int16_t> p,
+                           Point<std::int16_t> s) noexcept
         : DrawArgument(p, p, s, 1.0f, 1.0f, 1.0f, 0.0f)
     {
     }
 
-    constexpr DrawArgument(Point<std::int16_t> p, bool flip)
+    constexpr DrawArgument(Point<std::int16_t> p, bool flip) noexcept
         : DrawArgument(p, flip, 1.0f)
     {
     }
 
-    constexpr DrawArgument(float ang, Point<std::int16_t> p, float opc)
+    constexpr DrawArgument(float ang,
+                           Point<std::int16_t> p,
+                           float opc) noexcept
         : DrawArgument(ang, p, false, opc)
     {
     }
 
-    constexpr DrawArgument(Point<std::int16_t> p, float opc)
+    constexpr DrawArgument(Point<std::int16_t> p, float opc) noexcept
         : DrawArgument(p, false, opc)
     {
     }
 
-    constexpr DrawArgument(Point<std::int16_t> p, Color color)
+    constexpr DrawArgument(Point<std::int16_t> p, Color color) noexcept
         : DrawArgument(p, p, {}, 1.0f, 1.0f, color, 0.0f)
     {
     }
 
     constexpr DrawArgument(Point<std::int16_t> p,
                            bool flip,
-                           Point<std::int16_t> c)
+                           Point<std::int16_t> c) noexcept
         : DrawArgument(p, c, flip ? -1.0f : 1.0f, 1.0f, 1.0f)
     {
     }
@@ -78,17 +82,17 @@ public:
                            Point<std::int16_t> c,
                            float xs,
                            float ys,
-                           float opc)
+                           float opc) noexcept
         : DrawArgument(p, c, {}, xs, ys, opc, 0.0f)
     {
     }
 
-    constexpr DrawArgument(bool flip)
+    constexpr DrawArgument(bool flip) noexcept
         : DrawArgument(flip ? -1.0f : 1.0f, 1.0f, 1.0f)
     {
     }
 
-    constexpr DrawArgument(float xs, float ys, float opc)
+    constexpr DrawArgument(float xs, float ys, float opc) noexcept
         : DrawArgument({}, xs, ys, opc)
     {
     }
@@ -96,12 +100,14 @@ public:
     constexpr DrawArgument(Point<std::int16_t> p,
                            float xs,
                            float ys,
-                           float opc)
+                           float opc) noexcept
         : DrawArgument(p, p, xs, ys, opc)
     {
     }
 
-    constexpr DrawArgument(Point<std::int16_t> p, bool flip, float opc)
+    constexpr DrawArgument(Point<std::int16_t> p,
+                           bool flip,
+                           float opc) noexcept
         : DrawArgument(p, p, flip ? -1.0f : 1.0f, 1.0f, opc)
     {
     }
@@ -109,7 +115,7 @@ public:
     constexpr DrawArgument(float ang,
                            Point<std::int16_t> p,
                            bool flip,
-                           float opc)
+                           float opc) noexcept
         : DrawArgument(p, p, {}, flip ? -1.0f : 1.0f, 1.0f, opc, ang)
     {
     }
@@ -120,7 +126,7 @@ public:
                            float xs,
                            float ys,
                            float opc,
-                           float ang)
+                           float ang) noexcept
         : color(1.0f, 1.0f, 1.0f, opc),
           pos(p),
           center(c),
@@ -137,7 +143,7 @@ public:
                            float xs,
                            float ys,
                            Color color,
-                           float ang)
+                           float ang) noexcept
         : color(color),
           pos(p),
           center(c),
@@ -148,37 +154,37 @@ public:
     {
     }
 
-    constexpr Point<std::int16_t> getpos() const
+    constexpr Point<std::int16_t> getpos() const noexcept
     {
         return pos;
     }
 
-    constexpr Point<std::int16_t> getstretch() const
+    constexpr Point<std::int16_t> getstretch() const noexcept
     {
         return stretch;
     }
 
-    constexpr float get_xscale() const
+    constexpr float get_xscale() const noexcept
     {
         return xscale;
     }
 
-    constexpr float get_yscale() const
+    constexpr float get_yscale() const noexcept
     {
         return yscale;
     }
 
-    constexpr const Color& get_color() const
+    constexpr const Color& get_color() const noexcept
     {
         return color;
     }
 
-    constexpr float get_angle() const
+    constexpr float get_angle() const noexcept
     {
         return angle;
     }
 
-    constexpr DrawArgument operator+(Point<std::int16_t> argpos) const
+    constexpr DrawArgument operator+(Point<std::int16_t> argpos) const noexcept
     {
         return {pos + argpos,
                 center + argpos,
@@ -189,13 +195,13 @@ public:
                 angle};
     }
 
-    constexpr DrawArgument operator+(float argopc) const
+    constexpr DrawArgument operator+(float argopc) const noexcept
     {
         return {
             pos, center, stretch, xscale, yscale, color.a() * argopc, angle};
     }
 
-    constexpr DrawArgument operator+(const DrawArgument& o) const
+    constexpr DrawArgument operator+(const DrawArgument& o) const noexcept
     {
         return {pos + o.pos,
                 center + o.center,
@@ -206,7 +212,7 @@ public:
                 angle + o.angle};
     }
 
-    constexpr DrawArgument operator-(const DrawArgument& o) const
+    constexpr DrawArgument operator-(const DrawArgument& o) const noexcept
     {
         return {pos - o.pos,
                 center - o.center,
@@ -217,8 +223,9 @@ public:
                 angle - o.angle};
     }
 
-    Rectangle<std::int16_t> get_rectangle(Point<std::int16_t> origin,
-                                          Point<std::int16_t> dimensions) const
+    constexpr Rectangle<std::int16_t>
+    get_rectangle(Point<std::int16_t> origin,
+                  Point<std::int16_t> dimensions) const noexcept
     {
         std::int16_t w = stretch.x();
         if (w == 0) {

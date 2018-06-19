@@ -28,6 +28,7 @@
 #include "UITypes/UIStatsInfo.h"
 #include "UITypes/UIStatusBar.h"
 #include "UITypes/UIStatusMessenger.h"
+#include "UITypes/UISystemMenu.h"
 #include "Window.h"
 
 #include <IO/UITypes/UIKeyConfig.h>
@@ -115,6 +116,9 @@ void UIStateGame::send_key(KeyType::Id type, std::int32_t action, bool pressed)
                 break;
             case KeyAction::KEY_CONFIG:
                 emplace<UIKeyConfig>();
+                break;
+            case KeyAction::MAIN_MENU:
+                emplace<UISystemMenu>();
                 break;
             default:
                 break;

@@ -68,10 +68,10 @@ private:
         BT_CHATTARGETS
     };
 
-    static constexpr std::int16_t CHAT_Y_OFFSET = 65;
-    static constexpr std::int16_t CHAT_ROW_HEIGHT = 16;
-    static constexpr std::int16_t MAXCHATROWS = 16;
-    static constexpr std::int16_t MINCHATROWS = 1;
+    static constexpr const std::int16_t CHAT_Y_OFFSET = 65;
+    static constexpr const std::int16_t CHAT_ROW_HEIGHT = 16;
+    static constexpr const std::int16_t MAXCHATROWS = 16;
+    static constexpr const std::int16_t MINCHATROWS = 1;
 
     Textfield chat_field;
     Texture chatspace[2];
