@@ -51,8 +51,8 @@ void UIElement::draw_sprites(float alpha) const
 
 void UIElement::draw_buttons(float) const
 {
-    for (auto& iter : buttons) {
-        if (const Button* button = iter.second.get(); button) {
+    for (const auto& [_, button] : buttons) {
+        if (button) {
             button->draw(position);
         }
     }

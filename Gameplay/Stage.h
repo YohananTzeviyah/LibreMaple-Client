@@ -43,47 +43,62 @@ public:
 
     void init();
 
-    // Loads the map to display.
+    //! Loads the map to be displayed.
     void load(std::int32_t map_id, std::int8_t portal_id);
-    // Remove all map objects and graphics.
+    //! Removes all map objects and graphics.
     void clear();
 
-    // Contruct the player from a character entry.
+    //! Contructs the player from a character entry.
     void loadplayer(const CharEntry& entry);
 
-    // Call 'draw()' of all objects on stage.
+    //! Calls `draw(float)` on all objects that are on this `Stage`.
     void draw(float alpha) const;
-    // Calls 'update()' of all objects on stage.
+    //! Calls `update()` on all objects that are on this `Stage`.
     void update();
 
-    // Show a character effect.
+    //! Show a character effect.
     void show_character_effect(std::int32_t cid, CharEffect::Id effect);
 
-    // Send key input to the stage.
+    //! Send key input to the stage.
     void send_key(KeyType::Id keytype, std::int32_t keycode, bool pressed);
-    // Send mouse input to the stage.
+    //! Send mouse input to the stage.
     Cursor::State send_cursor(bool pressed, Point<std::int16_t> position);
 
-    // Check if the specified id is the player's id.
+    //! Check if the specified ID is the player's ID.
     bool is_player(std::int32_t cid) const;
 
-    // Returns a reference to the npcs on the current map.
+    //! Returns a reference to the NPCs on the current map.
     MapNpcs& get_npcs();
-    // Returns a reference to the other characters on the current map.
+    //! Returns a reference to the other characters on the current map.
     MapChars& get_chars();
-    // Returns a reference to the mobs on the current map.
+    //! Returns a reference to the mobs on the current map.
     MapMobs& get_mobs();
-    // Returns a reference to the reactors on the current map.
+    //! Returns a reference to the reactors on the current map.
     MapReactors& get_reactors();
-    // Returns a reference to the drops on the current map.
+    //! Returns a reference to the drops on the current map.
     MapDrops& get_drops();
-    // Returns a reference to the Player.
+    //! Returns a reference to the Player.
     Player& get_player();
-    // Return a reference to the attack and buff component.
+    //! Return a reference to the attack and buff component.
     Combat& get_combat();
 
-    // Return a pointer to a character, possibly the player.
+    //! Return a pointer to a character, possibly the player.
     nullable_ptr<Char> get_character(std::int32_t cid);
+
+    //! Getter for the ID of the current world.
+    [[nodiscard]] std::uint8_t get_world() const noexcept;
+    //! Setter for the ID of the current world.
+    void set_world(std::uint8_t world_id) noexcept;
+
+    //! Getter for the ID of the current world.
+    [[nodiscard]] std::uint8_t get_channel() const noexcept;
+    //! Setter for the ID of the current world.
+    void set_channel(std::uint8_t chan) noexcept;
+
+    //! Getter for the number of channels in the current world.
+    [[nodiscard]] std::uint8_t get_channel_count() const noexcept;
+    //! Setter for the number of channels in the current world.
+    void set_channel_count(std::uint8_t ch_count) noexcept;
 
 private:
     void load_map(std::int32_t map_id);
@@ -100,7 +115,6 @@ private:
     Player player;
 
     nullable_ptr<Playable> playable;
-    State state;
 
     MapInfo map_info;
     MapTilesObjs tiles_objs;
@@ -113,5 +127,10 @@ private:
     MapDrops drops;
 
     Combat combat;
+
+    State state;
+    std::uint8_t world;
+    std::uint8_t channel;
+    std::uint8_t channel_count;
 };
 } // namespace jrc

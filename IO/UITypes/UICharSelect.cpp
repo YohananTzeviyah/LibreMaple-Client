@@ -301,8 +301,8 @@ void UICharSelect::send_selection()
         break;
     case 2:
         UI::get().disable();
-        Sound(Sound::SELECT_CHAR).play();
-        SelectCharPacket(cid).dispatch();
+        Sound{Sound::SELECT_CHAR}.play();
+        SelectCharPacket{cid}.dispatch();
         break;
     default:
         Console::get().print("require_pic = " + std::to_string(require_pic));
@@ -320,7 +320,7 @@ void UICharSelect::send_deletion()
     std::int32_t cid = characters[selected_absolute].cid;
     UI::get().emplace<UISoftkey>([cid](std::string_view pic) {
         UI::get().disable();
-        DeleteCharPacket(pic, cid).dispatch();
+        DeleteCharPacket{pic, cid}.dispatch();
     });
 }
 
@@ -374,7 +374,7 @@ const CharEntry& UICharSelect::get_character(std::int32_t cid)
 
     Console::get().print(
         __func__,
-        str::concat("Warning: Invalid cid (", std::to_string(cid), ')'));
+        str::concat("Warning: Invalid CID (", std::to_string(cid), ')'));
 
     static const CharEntry null_entry{{}, {}, 0};
     return null_entry;
@@ -427,8 +427,8 @@ Point<std::int16_t> UICharSelect::get_label_pos(std::size_t label) const
 
 Point<std::int16_t> UICharSelect::get_char_pos(std::size_t i) const
 {
-    std::int16_t x = 130 + (120 * (i % 4));
-    std::int16_t y = 250 + (200 * (i > 3));
+    std::int16_t x = 130 + 120 * (i % 4);
+    std::int16_t y = 250 + 200 * (i > 3);
     return {x, y};
 }
 } // namespace jrc

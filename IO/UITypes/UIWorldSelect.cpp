@@ -19,6 +19,7 @@
 
 #include "../../Configuration.h"
 #include "../../Constants.h"
+#include "../../Gameplay/Stage.h"
 #include "../../Graphics/Sprite.h"
 #include "../../IO/Components/MapleButton.h"
 #include "../../IO/Components/TwoSpriteButton.h"
@@ -28,9 +29,9 @@
 
 namespace jrc
 {
-UIWorldSelect::UIWorldSelect(std::vector<World> worlds,
-                             std::uint8_t world_count)
-    : UIElement({0, 0}, {Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT})
+UIWorldSelect::UIWorldSelect(std::vector<World>&& worlds_)
+    : UIElement({0, 0}, {Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT}),
+      worlds(std::move(worlds_))
 {
     world_id = Configuration::get().account.world;
     channel_id = Configuration::get().account.channel;
@@ -48,7 +49,7 @@ UIWorldSelect::UIWorldSelect(std::vector<World> worlds,
     buttons[BT_ENTERWORLD] = std::make_unique<MapleButton>(
         channel_src["button:GoWorld"], Point<std::int16_t>{200, 170});
 
-    if (world_count <= 0) {
+    if (worlds.size() <= 0) {
         return;
     }
 
@@ -99,7 +100,10 @@ Button::State UIWorldSelect::button_pressed(std::uint16_t id)
     if (id == BT_ENTERWORLD) {
         UI::get().disable();
 
-        CharlistRequestPacket(world_id, channel_id).dispatch();
+        Stage::get().set_world(world_id);
+        Stage::get().set_channel(channel_id);
+        Stage::get().set_channel_count(worlds.at(world_id).channel_count);
+        CharlistRequestPacket{world_id, channel_id}.dispatch();
 
         return Button::PRESSED;
     } else if (id >= BT_WORLD0 && id < BT_CHANNEL0) {

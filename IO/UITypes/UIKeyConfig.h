@@ -16,10 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
-#include "../../Character/Inventory/Inventory.h"
 #include "../../Template/EnumMap.h"
 #include "../../Util/Misc.h"
-#include "../Components/EquipTooltip.h"
 #include "../Components/Icon.h"
 #include "../Keyboard.h"
 #include "../UIDragElement.h"

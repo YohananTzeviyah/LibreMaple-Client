@@ -34,7 +34,7 @@ class UI : public Singleton<UI>
 public:
     enum State { LOGIN, GAME };
 
-    UI();
+    UI() noexcept;
 
     void init();
     void draw(float alpha) const;

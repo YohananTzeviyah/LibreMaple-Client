@@ -54,7 +54,8 @@ struct Configuration : public Singleton<Configuration> {
         STATS,
         INVENTORY,
         EQUIP_INVENTORY,
-        SKILLBOOK
+        SKILLBOOK,
+        CHANGE_CHANNEL
     };
 
     [[nodiscard]] Point<std::int16_t> get_position_of(PositionOf po) const
@@ -103,6 +104,7 @@ struct Configuration : public Singleton<Configuration> {
             Point<std::int16_t> inventory = {300, 150};
             Point<std::int16_t> equip_inventory = {250, 150};
             Point<std::int16_t> skillbook = {50, 150};
+            Point<std::int16_t> change_channel = {350, 300};
         };
 
         Position position;

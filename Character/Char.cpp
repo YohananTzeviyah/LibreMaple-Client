@@ -64,7 +64,7 @@ void Char::draw(double viewx, double viewy, float alpha) const
         look.draw({absp, scale, scale, opacity}, alpha);
     }
 
-    for (auto& pet : pets) {
+    for (const auto& pet : pets) {
         if (pet.get_item_id()) {
             pet.draw(viewx, viewy, alpha);
         }
@@ -75,7 +75,7 @@ void Char::draw(double viewx, double viewy, float alpha) const
 
     effects.draw_above(absp, alpha);
 
-    for (auto& number : damage_numbers) {
+    for (const auto& number : damage_numbers) {
         number.draw(viewx, viewy, alpha);
     }
 }
@@ -107,22 +107,25 @@ bool Char::update(const Physics& physics, float speed)
                     pet.set_stance(PetLook::STAND);
                 }
             }
+
             pet.update(physics, get_position());
         }
     }
 
-    std::uint16_t stancespeed = 0;
+    std::uint16_t stance_speed = 0;
     if (speed >= 1.0f / Constants::TIMESTEP) {
-        stancespeed = static_cast<std::uint16_t>(Constants::TIMESTEP * speed);
+        stance_speed = static_cast<std::uint16_t>(Constants::TIMESTEP * speed);
     }
-    afterimage.update(look.get_frame(), stancespeed);
-    return look.update(stancespeed);
+
+    afterimage.update(look.get_frame(), stance_speed);
+    return look.update(stance_speed);
 }
 
 float Char::get_stance_speed() const
 {
-    if (attacking)
+    if (attacking) {
         return get_real_attack_speed();
+    }
 
     switch (state) {
     case WALK:
@@ -162,8 +165,7 @@ std::int8_t Char::get_layer() const
 
 void Char::show_attack_effect(Animation to_show, std::int8_t z)
 {
-    float attackspeed = get_real_attack_speed();
-    effects.add(to_show, {flip}, z, attackspeed);
+    effects.add(to_show, {flip}, z, get_real_attack_speed());
 }
 
 void Char::show_effect_id(CharEffect::Id to_show)
@@ -217,8 +219,8 @@ void Char::set_state(std::uint8_t state_byte)
         set_direction(true);
     }
 
-    Char::State newstate = by_value(state_byte);
-    set_state(newstate);
+    Char::State new_state = by_value(state_byte);
+    set_state(new_state);
 }
 
 void Char::set_expression(std::int32_t exp_id)

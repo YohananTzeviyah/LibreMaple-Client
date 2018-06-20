@@ -20,11 +20,12 @@
 #include "../Graphics/GraphicsGL.h"
 #include "UIStateGame.h"
 #include "UIStateLogin.h"
+#include "UITypes/UIChangeChannel.h"
 #include "Window.h"
 
 namespace jrc
 {
-UI::UI() : state{std::make_unique<UIStateNull>()}, enabled{true}
+UI::UI() noexcept : state{std::make_unique<UIStateNull>()}, enabled{true}
 {
 }
 
@@ -153,6 +154,33 @@ void UI::send_key(std::int32_t keycode, bool pressed)
                 mapping.type, mapping.action, pressed);
         }
     } else {
+        if (auto cc_ui = get_element<UIChangeChannel>();
+            cc_ui && cc_ui->is_active()) {
+            auto cc_ui_key = [keycode] {
+                switch (keycode) {
+                case GLFW_KEY_UP:
+                    return UIChangeChannel::SentKey::UP;
+                case GLFW_KEY_DOWN:
+                    return UIChangeChannel::SentKey::DOWN;
+                case GLFW_KEY_LEFT:
+                    return UIChangeChannel::SentKey::LEFT;
+                case GLFW_KEY_RIGHT:
+                    return UIChangeChannel::SentKey::RIGHT;
+                case GLFW_KEY_ENTER:
+                    return UIChangeChannel::SentKey::ENTER;
+                default:
+                    return UIChangeChannel::SentKey::NONE;
+                }
+            }();
+            if (cc_ui_key != UIChangeChannel::SentKey::NONE) {
+                if (!pressed) {
+                    cc_ui->send_key(cc_ui_key);
+                }
+                is_key_down[keycode] = pressed;
+                return;
+            }
+        }
+
         Keyboard::Mapping mapping = keyboard.get_mapping(keycode);
         if (mapping.type) {
             state->send_key(mapping.type, mapping.action, pressed);

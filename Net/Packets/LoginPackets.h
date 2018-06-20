@@ -23,7 +23,7 @@
 namespace jrc
 {
 //! Accept the Terms of Service.
-//! Opcode: ACCEPT_TOS(7)
+//! Opcode: ACCEPT_TOS(0x07)
 class TOSPacket : public OutPacket
 {
 public:
@@ -34,7 +34,7 @@ public:
 };
 
 //! Request to be logged-in to an account.
-//! Opcode: LOGIN(1) [LOGIN_PASSWORD(1) for OdinMS-based sources]
+//! Opcode: LOGIN(0x01) [LOGIN_PASSWORD(0x01) for OdinMS-based sources]
 class LoginPacket : public OutPacket
 {
 public:
@@ -46,7 +46,7 @@ public:
 };
 
 //! Requests the list of worlds and channels.
-//! Opcode: SERVERLIST_REQUEST(11)
+//! Opcode: SERVERLIST_REQUEST(0x0B)
 class ServerRequestPacket : public OutPacket
 {
 public:
@@ -56,7 +56,7 @@ public:
 };
 
 //! Requests the list of characters on a world.
-//! Opcode: CHARLIST_REQUEST(5)
+//! Opcode: CHARLIST_REQUEST(0x05)
 class CharlistRequestPacket : public OutPacket
 {
 public:
@@ -70,7 +70,7 @@ public:
 };
 
 //! Requests being logged-in to a channel server with the specified character.
-//! Opcode: PLAYER_LOGIN(20) [PLAYER_LOGGEDIN(20) for OdinMS-based sources]
+//! Opcode: PLAYER_LOGIN(0x14) [PLAYER_LOGGEDIN(0x14) for OdinMS-based sources]
 class PlayerLoginPacket : public OutPacket
 {
 public:

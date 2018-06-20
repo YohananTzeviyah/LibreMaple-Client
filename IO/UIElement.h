@@ -54,6 +54,8 @@ public:
         SKILLBOOK,
         KEY_CONFIG,
         SYSTEM_MENU,
+        CHANGE_CHANNEL,
+
         NUM_TYPES
     };
 

@@ -43,6 +43,9 @@
 # Qt Creator
 *.user
 
+## Documentation stuff ##
+doxygen/
+
 ## CMake stuff ##
 build/
 build-*/

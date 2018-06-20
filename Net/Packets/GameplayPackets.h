@@ -24,21 +24,34 @@
 namespace jrc
 {
 //! Requests the server to warp the player to a different map.
-//! Opcode: CHANGE_MAP(38)
+//! Opcode: CHANGE_MAP(0x26)
 class ChangeMapPacket : public OutPacket
 {
 public:
     ChangeMapPacket(bool died,
-                    std::int32_t targetid,
-                    std::string_view targetp,
-                    bool usewheel)
-        : OutPacket(CHANGEMAP)
+                    std::int32_t target_id,
+                    std::string_view target_p,
+                    bool use_wheel)
+        : OutPacket(CHANGE_MAP)
     {
         write_byte(died);
-        write_int(targetid);
-        write_string(targetp);
+        write_int(target_id);
+        write_string(target_p);
         skip(1);
-        write_short(static_cast<std::int16_t>(usewheel ? 1 : 0));
+        write_short(static_cast<std::int16_t>(use_wheel ? 1 : 0));
+    }
+};
+
+//! Requests a channel change from the server.
+//! `channel` is 0-indexed.
+//! Opcode: CHANGE_CHANNEL(0x27)
+class ChangeChannelPacket : public OutPacket
+{
+public:
+    ChangeChannelPacket(std::uint8_t channel) : OutPacket(CHANGE_CHANNEL)
+    {
+        write_byte(channel);
+        write_time();
     }
 };
 

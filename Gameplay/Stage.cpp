@@ -319,4 +319,34 @@ nullable_ptr<Char> Stage::get_character(std::int32_t cid)
         return chars.get_char(cid);
     }
 }
+
+std::uint8_t Stage::get_world() const noexcept
+{
+    return world;
+}
+
+void Stage::set_world(std::uint8_t world_id) noexcept
+{
+    world = world_id;
+}
+
+std::uint8_t Stage::get_channel() const noexcept
+{
+    return channel;
+}
+
+void Stage::set_channel(std::uint8_t chan) noexcept
+{
+    channel = chan;
+}
+
+std::uint8_t Stage::get_channel_count() const noexcept
+{
+    return channel_count;
+}
+
+void Stage::set_channel_count(std::uint8_t ch_count) noexcept
+{
+    channel_count = ch_count;
+}
 } // namespace jrc

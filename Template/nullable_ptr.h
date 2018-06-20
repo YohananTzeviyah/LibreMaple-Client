@@ -22,6 +22,9 @@
 namespace jrc
 {
 template<typename T>
+//! Wrapper for a nullable, **non-owning** pointer, i.e. `nullable_ptr<T>` is
+//! very similar to `T*`. If you need an owning pointer, use
+//! `std::unique_ptr<T>` instead.
 class nullable_ptr
 {
 public:

@@ -26,6 +26,8 @@ namespace jrc
 Texture::Texture(nl::node src)
 {
     if (src.data_type() == nl::node::type::bitmap) {
+        Point<std::int16_t> original_origin = src["origin"];
+
         std::string link = src["source"];
         if (!link.empty()) {
             nl::node src_file = src;
@@ -36,7 +38,7 @@ Texture::Texture(nl::node src)
         }
 
         bitmap = src;
-        origin = src["origin"];
+        origin = original_origin ? original_origin : src["origin"];
         dimensions = {bitmap.width(), bitmap.height()};
 
         GraphicsGL::get().add_bitmap(bitmap);

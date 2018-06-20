@@ -41,7 +41,7 @@ if(NOT WIN32)
     elseif(CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
         SET(CMAKE_CXX_FLAGS "-Oz -ffast-math -DNDEBUG ${REQUIRED_FLAGS}") # LTO doesn't work with "-Os" nor "-Oz" on clang :(
     elseif(CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
-        SET(CMAKE_CXX_FLAGS "-O2 -g -ffast-math -fno-omit-frame-pointer -fno-optimize-sibling-calls ${REQUIRED_FLAGS}")
+        SET(CMAKE_CXX_FLAGS "-O3 -g -ffast-math -fno-omit-frame-pointer -fno-optimize-sibling-calls ${REQUIRED_FLAGS}")
     else()
         SET(CMAKE_CXX_FLAGS "-O0 -g -fno-omit-frame-pointer -fno-optimize-sibling-calls -fsanitize=undefined ${REQUIRED_FLAGS}")
         SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fsanitize=undefined")

@@ -28,7 +28,7 @@ public:
     static constexpr const bool FOCUSED = false;
     static constexpr const bool TOGGLED = false;
 
-    UIWorldSelect(std::vector<World> worlds, std::uint8_t world_count);
+    UIWorldSelect(std::vector<World>&& worlds_);
 
     void draw(float alpha) const override;
 
@@ -41,6 +41,7 @@ protected:
 private:
     enum Buttons { BT_ENTERWORLD = 0, BT_WORLD0 = 1, BT_CHANNEL0 = 17 };
 
+    std::vector<World> worlds;
     std::uint8_t world_id;
     std::uint8_t channel_id;
 };

@@ -35,108 +35,109 @@ namespace jrc
 //! Opcodes for InPackets.
 enum PacketSwitch::Opcode : std::uint16_t {
     // Login 1
-    LOGIN_RESULT = 0,
-    SERVERLIST = 10,
-    CHARLIST = 11,
-    SERVER_IP = 12,
-    CHARNAME_RESPONSE = 13,
-    ADD_NEWCHAR_ENTRY = 14,
-    DELCHAR_RESPONSE = 15,
-    PING = 17,
+    LOGIN_RESULT = 0x00,
+    SERVERLIST = 0x0A,
+    CHARLIST = 0x0B,
+    SERVER_IP = 0x0C,
+    CHARNAME_RESPONSE = 0x0D,
+    ADD_NEWCHAR_ENTRY = 0x0E,
+    DELCHAR_RESPONSE = 0x0F,
+    CHANNEL_CHANGE = 0x10,
+    PING = 0x11,
 
     // Player 1
-    APPLY_BUFF = 20,
+    APPLY_BUFF = 0x14,
 
     // Login 2
-    SELECT_WORLD = 26,
-    RECOMMENDED_WORLDS = 27,
+    SELECT_WORLD = 0x1A,
+    RECOMMENDED_WORLDS = 0x1B,
 
     // Inventory 1
-    MODIFY_INVENTORY = 29,
+    MODIFY_INVENTORY = 0x1D,
 
     // Player 2
-    CHANGE_STATS = 31,
-    GIVE_BUFF = 32,
-    CANCEL_BUFF = 33,
-    RECALCULATE_STATS = 35,
-    UPDATE_SKILL = 36,
+    CHANGE_STATS = 0x1F,
+    GIVE_BUFF = 0x20,
+    CANCEL_BUFF = 0x21,
+    RECALCULATE_STATS = 0x23,
+    UPDATE_SKILL = 0x24,
 
     // Messaging 1
-    SHOW_STATUS_INFO = 39,
-    MEMO_RESULT = 41,
-    ENABLE_REPORT = 47,
+    SHOW_STATUS_INFO = 0x27,
+    MEMO_RESULT = 0x29,
+    ENABLE_REPORT = 0x2F,
 
     // Inventory 2
-    GATHER_RESULT = 52,
-    SORT_RESULT = 53,
+    GATHER_RESULT = 0x34,
+    SORT_RESULT = 0x35,
 
     // Player 3
-    UPDATE_GENDER = 58,
-    BUDDY_LIST = 63,
-    GUILD_OPERATION = 65,
+    UPDATE_GENDER = 0x3A,
+    BUDDY_LIST = 0x3F,
+    GUILD_OPERATION = 0x41,
 
     // Messaging 2
-    SERVER_MESSAGE = 68,
-    WEEK_EVENT_MESSAGE = 77,
+    SERVER_MESSAGE = 0x44,
+    WEEK_EVENT_MESSAGE = 0x4D,
 
-    FIELD_SET_VARIABLE = 92,
-    FAMILY_PRIV_LIST = 100,
-    CANCEL_RENAME_BY_OTHER = 120,
-    SCRIPT_PROGRESS_MESSAGE = 122,
-    RECEIVE_POLICE = 123,
-    SKILL_MACROS = 124,
-    SET_FIELD = 125,
-    FIELD_EFFECT = 138,
-    CLOCK = 147,
+    FIELD_SET_VARIABLE = 0x5C,
+    FAMILY_PRIV_LIST = 0x64,
+    CANCEL_RENAME_BY_OTHER = 0x78,
+    SCRIPT_PROGRESS_MESSAGE = 0x7A,
+    RECEIVE_POLICE = 0x7B,
+    SKILL_MACROS = 0x7C,
+    SET_FIELD = 0x7D,
+    FIELD_EFFECT = 0x8A,
+    CLOCK = 0x93,
 
     // Mapobject
-    SPAWN_CHAR = 160,
-    REMOVE_CHAR = 161,
+    SPAWN_CHAR = 0xA0,
+    REMOVE_CHAR = 0xA1,
 
     // Messaging
-    CHAT_RECEIVED = 162,
-    SCROLL_RESULT = 167,
+    CHAT_RECEIVED = 0xA2,
+    SCROLL_RESULT = 0xA7,
 
     // Mapobject
-    SPAWN_PET = 168,
-    CHAR_MOVED = 185,
+    SPAWN_PET = 0xA8,
+    CHAR_MOVED = 0xB9,
 
     // Attack
-    ATTACKED_CLOSE = 186,
-    ATTACKED_RANGED = 187,
-    ATTACKED_MAGIC = 188,
+    ATTACKED_CLOSE = 0xBA,
+    ATTACKED_RANGED = 0xBB,
+    ATTACKED_MAGIC = 0xBC,
 
-    SHOW_ITEM_EFFECT = 194,
-    SHOW_CHAIR = 196,
-    UPDATE_CHARLOOK = 197,
-    SHOW_FOREIGN_EFFECT = 198,
-    SHOW_ITEM_GAIN_INCHAT = 206, // this is terribly named
-    LOCK_UI = 221,
-    TOGGLE_UI = 222,
+    SHOW_ITEM_EFFECT = 0xC2,
+    SHOW_CHAIR = 0xC4,
+    UPDATE_CHARLOOK = 0xC5,
+    SHOW_FOREIGN_EFFECT = 0xC6,
+    SHOW_ITEM_GAIN_INCHAT = 0xCE, // This is terribly named.
+    LOCK_UI = 0xDD,
+    TOGGLE_UI = 0xDE,
 
     // Player
-    ADD_COOLDOWN = 234,
+    ADD_COOLDOWN = 0xEA,
 
     // Mapobject
-    SPAWN_MOB = 236,
-    KILL_MOB = 237,
-    SPAWN_MOB_C = 238,
-    MOB_MOVED = 239,
-    MOVE_MOB_RESPONSE = 240,
-    SHOW_MOB_HP = 250,
-    SPAWN_NPC = 257,
-    SPAWN_NPC_C = 259,
-    MAKE_NPC_SCRIPTED = 263,
-    DROP_LOOT = 268,
-    REMOVE_LOOT = 269,
-    SPAWN_REACTOR = 279,
-    REMOVE_REACTOR = 280,
+    SPAWN_MOB = 0xEC,
+    KILL_MOB = 0xED,
+    SPAWN_MOB_C = 0xEE,
+    MOB_MOVED = 0xEF,
+    MOVE_MOB_RESPONSE = 0xF0,
+    SHOW_MOB_HP = 0xFA,
+    SPAWN_NPC = 0x0101,
+    SPAWN_NPC_C = 0x0103,
+    MAKE_NPC_SCRIPTED = 0x0107,
+    DROP_LOOT = 0x010C,
+    REMOVE_LOOT = 0x010D,
+    SPAWN_REACTOR = 0x0117,
+    REMOVE_REACTOR = 0x0118,
 
     // NPC Interaction
-    NPC_DIALOGUE = 304,
-    OPEN_NPC_SHOP = 305,
+    NPC_DIALOGUE = 0x0130,
+    OPEN_NPC_SHOP = 0x0131,
 
-    KEYMAP = 335
+    KEYMAP = 0x014F
 };
 
 PacketSwitch::PacketSwitch()
@@ -151,6 +152,7 @@ PacketSwitch::PacketSwitch()
     emplace<CHARNAME_RESPONSE, CharnameResponseHandler>();
     emplace<ADD_NEWCHAR_ENTRY, AddNewCharEntryHandler>();
     emplace<DELCHAR_RESPONSE, DeleteCharResponseHandler>();
+    emplace<CHANNEL_CHANGE, ChannelChangeHandler>();
     emplace<SERVER_IP, ServerIPHandler>();
 
     // 'Setfield' handlers
@@ -254,6 +256,6 @@ void PacketSwitch::warn(std::string_view message, std::size_t opcode) const
     noexcept
 {
     Console::get().print(
-        str::concat(message, ", Opcode: ", std::to_string(opcode)));
+        str::concat(message, ", Opcode: ", str::to_hex(opcode)));
 }
 } // namespace jrc

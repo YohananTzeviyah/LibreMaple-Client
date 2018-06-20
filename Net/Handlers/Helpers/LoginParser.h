@@ -19,14 +19,11 @@
 #include "../../InPacket.h"
 #include "../../Login.h"
 
-namespace jrc
-{
-namespace LoginParser
+namespace jrc::LoginParser
 {
 Account parse_account(InPacket& recv);
 World parse_world(InPacket& recv);
 CharEntry parse_charentry(InPacket& recv);
 StatsEntry parse_stats(InPacket& recv);
 LookEntry parse_look(InPacket& recv);
-} // namespace LoginParser
-} // namespace jrc
+} // namespace jrc::LoginParser

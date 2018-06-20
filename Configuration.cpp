@@ -296,6 +296,26 @@ void Configuration::load() noexcept(false)
                                      "\"settings.toml:ui.position.skillbook\" "
                                      "found; using default.");
             }
+
+            if (auto change_channel
+                = position->get_array_of<std::int64_t>("change_channel");
+                change_channel) {
+                if (auto change_channel_point
+                    = vec_to_point<std::int16_t>(*change_channel);
+                    change_channel_point) {
+                    ui.position.change_channel = *change_channel_point;
+                } else {
+                    Console::get().print(
+                        "No valid value for "
+                        "\"settings.toml:ui.position.change_channel\" "
+                        "found; using default.");
+                }
+            } else {
+                Console::get().print(
+                    "No valid value for "
+                    "\"settings.toml:ui.position.change_channel\" "
+                    "found; using default.");
+            }
         } else {
             Console::get().print(
                 "No valid table \"settings.toml:ui.position\" found; using "
@@ -349,6 +369,7 @@ character = $
     inventory = $
     equip_inventory = $
     skillbook = $
+    change_channel = $
 )"sv.substr(1);
 
     std::ofstream settings{"settings.toml"};
@@ -446,6 +467,9 @@ character = $
             case 17:
                 write(ui.position.skillbook);
                 break;
+            case 18:
+                write(ui.position.change_channel);
+                break;
             default:
                 Console::get().print(
                     "[logic error] Number of `case` statements in "
@@ -477,6 +501,8 @@ Point<std::int16_t> Configuration::get_position_of(PositionOf po) const
         return ui.position.equip_inventory;
     case PositionOf::SKILLBOOK:
         return ui.position.skillbook;
+    case PositionOf::CHANGE_CHANNEL:
+        return ui.position.change_channel;
     }
 
     return {};
@@ -500,6 +526,9 @@ void Configuration::set_position_of(PositionOf po,
         break;
     case PositionOf::SKILLBOOK:
         ui.position.skillbook = pos;
+        break;
+    case PositionOf::CHANGE_CHANNEL:
+        ui.position.change_channel = pos;
         break;
     }
 }

@@ -25,20 +25,22 @@ class BoolPair
 {
 public:
     template<typename... Args>
-    BoolPair(Args&&... args_f, Args&&... args_s)
+    BoolPair(Args&&... args_f, Args&&... args_s) noexcept(
+        noexcept(T(std::forward<Args>(args_f)...)))
         : first(std::forward<Args>(args_f)...),
           second(std::forward<Args>(args_s)...)
     {
     }
 
-    BoolPair(T f, T s) : first(f), second(s)
+    BoolPair(T f, T s) noexcept(noexcept(T(f))) : first(f), second(s)
     {
     }
 
     BoolPair() = default;
 
     template<typename... Args>
-    void set(bool b, Args&&... args)
+    void set(bool b,
+             Args&&... args) noexcept(noexcept(T(std::forward<Args>(args)...)))
     {
         if (b) {
             first = T(std::forward<Args>(args)...);
@@ -47,12 +49,12 @@ public:
         }
     }
 
-    T& operator[](bool b)
+    T& operator[](bool b) noexcept
     {
         return b ? first : second;
     }
 
-    const T& operator[](bool b) const
+    const T& operator[](bool b) const noexcept
     {
         return b ? first : second;
     }

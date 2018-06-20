@@ -4,12 +4,46 @@
 //          https://www.boost.org/LICENSE_1_0.txt)
 #pragma once
 
+#include <cstdio>
 #include <string>
 #include <type_traits>
 #include <utility>
 
 namespace jrc::str
 {
+template<typename N, typename = std::enable_if_t<std::is_integral_v<N>>>
+[[nodiscard]] std::string to_hex(N n) noexcept
+{
+    static_assert(sizeof(N) == sizeof(unsigned char)
+                      || sizeof(N) == sizeof(unsigned short)
+                      || sizeof(N) == sizeof(unsigned)
+                      || sizeof(N) == sizeof(unsigned long)
+                      || sizeof(N) == sizeof(unsigned long long),
+                  "Unrecognized integral type.");
+
+    char ch_buf[19];
+    int len;
+
+    if constexpr (sizeof(N) == sizeof(unsigned char)) {
+        len = std::snprintf(
+            ch_buf, 19, "0x%.2hhX", reinterpret_cast<unsigned char>(n));
+    } else if constexpr (sizeof(N) == sizeof(unsigned short)) {
+        len = std::snprintf(
+            ch_buf, 19, "0x%.2hX", reinterpret_cast<unsigned short>(n));
+    } else if constexpr (sizeof(N) == sizeof(unsigned)) {
+        len = std::snprintf(
+            ch_buf, 19, "0x%.2X", reinterpret_cast<unsigned>(n));
+    } else if constexpr (sizeof(N) == sizeof(unsigned long)) {
+        len = std::snprintf(
+            ch_buf, 19, "0x%.2lX", reinterpret_cast<unsigned long>(n));
+    } else {
+        len = std::snprintf(
+            ch_buf, 19, "0x%.2llX", reinterpret_cast<unsigned long long>(n));
+    }
+
+    return std::string(ch_buf, static_cast<std::string::size_type>(len));
+}
+
 template<typename T>
 [[nodiscard]] std::string::size_type get_len(const T& t) noexcept
 {
@@ -23,13 +57,12 @@ template<typename T>
         "`std::string_view`. `char` arrays with compile-time size "
         "work fine.");
 
-    if constexpr (std::is_same_v<no_cv_t, char>) {
+    if constexpr (std::is_same_v<std::remove_reference_t<no_cv_t>, char>) {
         return 1;
     } else if constexpr (std::is_array_v<T> && std::rank_v<T> == 1
                          && std::extent_v<T>> 0) {
         static_assert(
-            std::is_same_v<std::remove_cv_t<std::remove_extent_t<no_cv_t>>,
-                           char>,
+            std::is_same_v<std::decay_t<std::remove_extent_t<no_cv_t>>, char>,
             "Got an array, expected it to be of `char`.");
 
         return std::extent_v<T> - 1;
@@ -38,6 +71,7 @@ template<typename T>
     }
 }
 
+/*
 template<typename... Args>
 [[nodiscard]] std::string concat(const Args&... args) noexcept
 {
@@ -49,6 +83,7 @@ template<typename... Args>
     ((s += args), ...);
     return s;
 }
+*/
 template<typename... Args>
 [[nodiscard]] std::string concat(Args&&... args) noexcept
 {
@@ -57,7 +92,7 @@ template<typename... Args>
     std::string s;
     s.reserve(total_len);
 
-    ((s += std::move(args)), ...);
+    ((s += std::forward<Args>(args)), ...);
     return s;
 }
 } // namespace jrc::str

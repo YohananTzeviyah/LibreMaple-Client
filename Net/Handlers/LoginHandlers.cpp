@@ -18,6 +18,7 @@
 #include "LoginHandlers.h"
 
 #include "../../Configuration.h"
+#include "../../Gameplay/Stage.h"
 #include "../../IO/UI.h"
 #include "../../IO/UITypes/UICharCreation.h"
 #include "../../IO/UITypes/UICharSelect.h"
@@ -75,7 +76,7 @@ void LoginResultHandler::handle(InPacket& recv) const
         }
 
         // Request the list of worlds and channels online.
-        ServerRequestPacket().dispatch();
+        ServerRequestPacket{}.dispatch();
     }
 }
 
@@ -83,12 +84,9 @@ void ServerlistHandler::handle(InPacket& recv) const
 {
     // Parse all worlds.
     std::vector<World> worlds;
-    std::uint8_t worldcount = 0;
     while (recv.available()) {
-        World world = LoginParser::parse_world(recv);
-        if (world.wid != -1) {
-            worlds.emplace_back(std::move(world));
-            ++worldcount;
+        if (World world = LoginParser::parse_world(recv); world.wid != -1) {
+            worlds.push_back(std::move(world));
         } else {
             // "End of serverlist" packet.
             return;
@@ -99,8 +97,8 @@ void ServerlistHandler::handle(InPacket& recv) const
     UI::get().remove(UIElement::LOGIN);
     UI::get().remove(UIElement::CHAR_SELECT);
 
-    // Add the world selection screen to the ui.
-    UI::get().emplace<UIWorldSelect>(worlds, worldcount);
+    // Add the world selection screen to the UI.
+    UI::get().emplace<UIWorldSelect>(std::move(worlds));
     UI::get().enable();
 }
 
@@ -155,10 +153,11 @@ void AddNewCharEntryHandler::handle(InPacket& recv) const
     // Remove the character creation ui.
     UI::get().remove(UIElement::CHAR_CREATION);
 
-    // Readd the updated character selection.
-    if (auto charselect = UI::get().get_element<UICharSelect>()) {
-        charselect->add_character(std::move(character));
-        charselect->make_active();
+    // Read the updated character selection.
+    if (auto char_select = UI::get().get_element<UICharSelect>();
+        char_select) {
+        char_select->add_character(std::move(character));
+        char_select->make_active();
     }
 
     UI::get().enable();
@@ -166,7 +165,7 @@ void AddNewCharEntryHandler::handle(InPacket& recv) const
 
 void DeleteCharResponseHandler::handle(InPacket& recv) const
 {
-    // Read the character id and if deletion was successfull (pic was correct).
+    // Read the character ID and if deletion was successful (PIC was correct).
     std::int32_t cid = recv.read_int();
     auto state = static_cast<std::uint8_t>(recv.read_byte());
 
@@ -186,37 +185,68 @@ void DeleteCharResponseHandler::handle(InPacket& recv) const
 
         UI::get().emplace<UILoginNotice>(message);
     } else {
-        if (auto charselect = UI::get().get_element<UICharSelect>()) {
-            charselect->remove_char(cid);
+        if (auto char_select = UI::get().get_element<UICharSelect>();
+            char_select) {
+            char_select->remove_char(cid);
         }
     }
 
     UI::get().enable();
 }
 
+void ChannelChangeHandler::handle(InPacket& recv) const
+{
+    recv.skip(1);
+
+    // Read the IPv4 address into a character buffer.
+    std::uint8_t addr_buf[4];
+    for (auto i = 0; i < 4; ++i) {
+        addr_buf[i] = static_cast<std::uint8_t>(recv.read_byte());
+    }
+    char addr_str[16];
+    std::snprintf(addr_str,
+                  16,
+                  "%hhu.%hhu.%hhu.%hhu",
+                  addr_buf[0],
+                  addr_buf[1],
+                  addr_buf[2],
+                  addr_buf[3]);
+
+    // Read the port number in a string.
+    const auto port_str = std::to_string(recv.read_short());
+
+    // Attempt to reconnect to the server, and if successful, relog into the
+    // game in the new channel.
+    Session::get().reconnect(addr_str, port_str.c_str());
+    PlayerLoginPacket{Stage::get().get_player().get_oid()}.dispatch();
+}
+
 void ServerIPHandler::handle(InPacket& recv) const
 {
     recv.skip(2);
 
-    // Read the ipv4 adress in a string.
-    std::string addrstr;
-    addrstr.reserve(15);
-    for (int i = 0; i < 4; ++i) {
-        auto num = static_cast<std::uint8_t>(recv.read_byte());
-        addrstr.append(std::to_string(num));
-        if (i < 3) {
-            addrstr.push_back('.');
-        }
+    // Read the IPv4 address into a character buffer.
+    std::uint8_t addr_buf[4];
+    for (auto i = 0; i < 4; ++i) {
+        addr_buf[i] = static_cast<std::uint8_t>(recv.read_byte());
     }
+    char addr_str[16];
+    std::snprintf(addr_str,
+                  16,
+                  "%hhu.%hhu.%hhu.%hhu",
+                  addr_buf[0],
+                  addr_buf[1],
+                  addr_buf[2],
+                  addr_buf[3]);
 
-    // Read the port adress in a string.
-    const std::string portstr = std::to_string(recv.read_short());
+    // Read the port number in a string.
+    const auto port_str = std::to_string(recv.read_short());
 
-    const std::int32_t cid = recv.read_int();
+    auto cid = recv.read_int();
 
-    // Attempt to reconnect to the server, and if successful, login to the
+    // Attempt to reconnect to the server, and if successful, log into the
     // game.
-    Session::get().reconnect(addrstr.c_str(), portstr.c_str());
-    PlayerLoginPacket(cid).dispatch();
+    Session::get().reconnect(addr_str, port_str.c_str());
+    PlayerLoginPacket{cid}.dispatch();
 }
 } // namespace jrc

@@ -145,6 +145,12 @@ public:
         return !(*this == v);
     }
 
+    //! `false` if equal to the origin, `true` otherwise.
+    constexpr explicit operator bool() const noexcept
+    {
+        return a != 0 || b != 0;
+    }
+
     //! Shift this point by the amounts defined by another point.
     constexpr void operator+=(Point<T> v) noexcept
     {

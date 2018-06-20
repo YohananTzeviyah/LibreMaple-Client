@@ -17,8 +17,6 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "UIKeyConfig.h"
 
-#include "../../Data/ItemData.h"
-#include "../../Net/Packets/InventoryPackets.h"
 #include "../Components/MapleButton.h"
 #include "../KeyAction.h"
 #include "../UI.h"
@@ -35,8 +33,7 @@ UIKeyConfig::UIKeyConfig()
     sprites.emplace_back(source["backgrnd2"]);
     sprites.emplace_back(source["backgrnd3"]);
 
-    buttons[BT_CANCEL] = std::make_unique<MapleButton>(
-        source["BtCancel"], Point<std::int16_t>{422, 58});
+    buttons[BT_CANCEL] = std::make_unique<MapleButton>(source["BtCancel"]);
     buttons[BT_DEFAULT] = std::make_unique<MapleButton>(source["BtDefault"]);
     buttons[BT_DELETE] = std::make_unique<MapleButton>(source["BtDelete"]);
     buttons[BT_OK] = std::make_unique<MapleButton>(source["BtOK"]);

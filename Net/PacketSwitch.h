@@ -18,6 +18,7 @@
 #pragma once
 #include "PacketHandler.h"
 
+#include <array>
 #include <memory>
 #include <type_traits>
 
@@ -52,7 +53,7 @@ private:
     //! Maximum number of handlers needed.
     static constexpr const std::size_t NUM_HANDLERS = 500;
 
-    std::unique_ptr<PacketHandler> handlers[NUM_HANDLERS];
+    std::array<std::unique_ptr<PacketHandler>, NUM_HANDLERS> handlers;
 
     //! Register a handler for the specified opcode.
     template<std::size_t O, typename T, typename... Args>

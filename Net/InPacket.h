@@ -95,7 +95,7 @@ private:
     //! Throws a `PacketError` on stack underflow.
     T read() noexcept(false)
     {
-        constexpr std::size_t count = sizeof(T) / sizeof(std::int8_t);
+        constexpr const std::size_t count = sizeof(T);
         T all = 0;
         for (std::size_t i = 0; i < count; ++i) {
             T val = static_cast<std::uint8_t>(bytes[pos]);

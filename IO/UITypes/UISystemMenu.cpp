@@ -18,6 +18,7 @@
 #include "UISystemMenu.h"
 
 #include "../UI.h"
+#include "UIChangeChannel.h"
 #include "UINotice.h"
 #include "nlnx/nx.hpp"
 
@@ -61,6 +62,7 @@ Button::State UISystemMenu::button_pressed(std::uint16_t button_id)
 {
     switch (button_id) {
     case BT_CHANNEL:
+        UI::get().emplace<UIChangeChannel>();
         break;
     case BT_FARM:
         break;

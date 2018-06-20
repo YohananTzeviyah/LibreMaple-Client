@@ -87,6 +87,7 @@ enum Id : std::int32_t {
     FACE_5 = 104,
     FACE_6 = 105,
     FACE_7 = 106,
+
     LENGTH
 };
 

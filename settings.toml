@@ -35,3 +35,4 @@ character = 0
     inventory = [300, 150]
     equip_inventory = [250, 150]
     skillbook = [50, 150]
+    change_channel = [350, 300]

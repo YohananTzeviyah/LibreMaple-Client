@@ -82,7 +82,8 @@ enum OutPacket::Opcode : std::uint16_t {
     SELECT_CHAR_PIC = 0x1E,
 
     // Gameplay 1
-    CHANGEMAP = 0x26,
+    CHANGE_MAP = 0x26,
+    CHANGE_CHANNEL = 0x27,
     MOVE_PLAYER = 0x29,
     CLOSE_ATTACK = 0x2C,
     RANGED_ATTACK = 0x2D,

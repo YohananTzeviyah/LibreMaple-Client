@@ -30,7 +30,7 @@ public:
     {
         if (dragged) {
             if (clicked) {
-                position = cursor_pos - cursoroffset;
+                position = cursor_pos - cursor_offset;
                 return true;
             } else {
                 dragged = false;
@@ -46,10 +46,10 @@ public:
     {
         if (clicked) {
             if (dragged) {
-                position = cursor_pos - cursoroffset;
+                position = cursor_pos - cursor_offset;
                 return Cursor::CLICKING;
             } else if (in_drag_range(cursor_pos)) {
-                cursoroffset = cursor_pos - position;
+                cursor_offset = cursor_pos - position;
                 dragged = true;
                 return Cursor::CLICKING;
             }
@@ -64,19 +64,19 @@ public:
     }
 
 protected:
-    UIDragElement(Point<std::int16_t> d) : dragged(false), dragarea(d)
+    UIDragElement(Point<std::int16_t> d) : dragged{false}, drag_area{d}
     {
         position = Configuration::get().get_position_of(P);
     }
 
     bool dragged;
-    Point<std::int16_t> dragarea;
-    Point<std::int16_t> cursoroffset;
+    Point<std::int16_t> drag_area;
+    Point<std::int16_t> cursor_offset;
 
 private:
     bool in_drag_range(Point<std::int16_t> cursor_pos) const
     {
-        const Rectangle<std::int16_t> bounds{position, position + dragarea};
+        const Rectangle<std::int16_t> bounds{position, position + drag_area};
         return bounds.contains(cursor_pos);
     }
 };

@@ -47,6 +47,7 @@ public:
         PICK_UP,
         PORTAL,
         LEVEL_UP,
+
         LENGTH
     };
 

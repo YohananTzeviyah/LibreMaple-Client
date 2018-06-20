@@ -25,9 +25,9 @@ namespace jrc
 class UILoginNotice : public UIElement
 {
 public:
-    static constexpr Type TYPE = LOGIN_NOTICE;
-    static constexpr bool FOCUSED = true;
-    static constexpr bool TOGGLED = false;
+    static constexpr const Type TYPE = LOGIN_NOTICE;
+    static constexpr const bool FOCUSED = true;
+    static constexpr const bool TOGGLED = false;
 
     enum Message : std::int8_t {
         VULGAR_NAME,
