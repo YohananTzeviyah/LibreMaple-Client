@@ -33,13 +33,14 @@
 
 namespace jrc
 {
-void SetfieldHandler::transition(std::int32_t mapid,
-                                 std::uint8_t portalid) const
+void SetfieldHandler::transition(std::int32_t map_id,
+                                 std::uint8_t portal_id) const
 {
-    float fadestep = 0.025f;
-    Window::get().fadeout(fadestep, [mapid, portalid]() {
+    static constexpr const float fade_step = 0.025f;
+
+    Window::get().fadeout(fade_step, [map_id, portal_id] {
         GraphicsGL::get().clear();
-        Stage::get().load(mapid, portalid);
+        Stage::get().load(map_id, portal_id);
         UI::get().enable();
         Timer::get().start();
         GraphicsGL::get().unlock();
@@ -53,6 +54,7 @@ void SetfieldHandler::transition(std::int32_t mapid,
 void SetfieldHandler::handle(InPacket& recv) const
 {
     std::int32_t channel = recv.read_int();
+    Stage::get().set_channel(static_cast<std::uint8_t>(channel));
     std::int8_t mode1 = recv.read_byte();
     std::int8_t mode2 = recv.read_byte();
     if (mode1 == 0 && mode2 == 0) {
@@ -66,12 +68,12 @@ void SetfieldHandler::change_map(InPacket& recv, std::int32_t) const
 {
     recv.skip(3);
 
-    std::int32_t mapid = recv.read_int();
-    auto portalid = static_cast<std::uint8_t>(recv.read_byte());
+    std::int32_t map_id = recv.read_int();
+    auto portal_id = static_cast<std::uint8_t>(recv.read_byte());
 
-    transition(mapid, portalid);
+    transition(map_id, portal_id);
 
-    PlayerUpdatePacket().dispatch();
+    PlayerUpdatePacket{}.dispatch();
 }
 
 void SetfieldHandler::set_field(InPacket& recv) const
@@ -81,16 +83,14 @@ void SetfieldHandler::set_field(InPacket& recv) const
     std::int32_t cid = recv.read_int();
 
     auto charselect = UI::get().get_element<UICharSelect>();
-    if (!charselect) {
-        return;
-    }
+    if (charselect) {
+        const CharEntry& player_entry = charselect->get_character(cid);
+        if (player_entry.cid != cid) {
+            return;
+        }
 
-    const CharEntry& playerentry = charselect->get_character(cid);
-    if (playerentry.cid != cid) {
-        return;
+        Stage::get().loadplayer(player_entry);
     }
-
-    Stage::get().loadplayer(playerentry);
 
     LoginParser::parse_stats(recv);
 
@@ -116,14 +116,14 @@ void SetfieldHandler::set_field(InPacket& recv) const
 
     player.recalc_stats(true);
 
-    std::uint8_t portalid = player.get_stats().get_portal();
-    std::int32_t mapid = player.get_stats().get_map_id();
+    std::uint8_t portal_id = player.get_stats().get_portal();
+    std::int32_t map_id = player.get_stats().get_map_id();
 
-    transition(mapid, portalid);
+    transition(map_id, portal_id);
 
-    PlayerUpdatePacket().dispatch();
+    PlayerUpdatePacket{}.dispatch();
 
-    Sound(Sound::GAME_START).play();
+    Sound{Sound::GAME_START}.play();
 
     UI::get().change_state(UI::GAME);
 }

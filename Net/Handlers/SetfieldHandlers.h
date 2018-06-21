@@ -31,7 +31,7 @@ public:
     void handle(InPacket& recv) const override;
 
 private:
-    void transition(std::int32_t mapid, std::uint8_t portalid) const;
+    void transition(std::int32_t map_id, std::uint8_t portal_id) const;
     void change_map(InPacket& recv, std::int32_t map_id) const;
     void set_field(InPacket& recv) const;
 

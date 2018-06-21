@@ -90,9 +90,9 @@ public:
     //! Setter for the ID of the current world.
     void set_world(std::uint8_t world_id) noexcept;
 
-    //! Getter for the ID of the current world.
+    //! Getter for the ID of the current channel.
     [[nodiscard]] std::uint8_t get_channel() const noexcept;
-    //! Setter for the ID of the current world.
+    //! Setter for the ID of the current channel.
     void set_channel(std::uint8_t chan) noexcept;
 
     //! Getter for the number of channels in the current world.

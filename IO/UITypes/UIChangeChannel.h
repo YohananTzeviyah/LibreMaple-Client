@@ -54,7 +54,7 @@ private:
     std::optional<std::uint8_t>
     channel_by_pos(Point<std::int16_t> cursor_pos) const noexcept;
 
-    void change_channel();
+    void change_channel() noexcept;
 
     enum Buttons : std::uint16_t { BT_CANCEL, BT_CHANGE };
 

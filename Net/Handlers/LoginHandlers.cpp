@@ -181,6 +181,7 @@ void DeleteCharResponseHandler::handle(InPacket& recv) const
             break;
         default:
             message = UILoginNotice::UNKNOWN_ERROR;
+            break;
         }
 
         UI::get().emplace<UILoginNotice>(message);
@@ -218,7 +219,8 @@ void ChannelChangeHandler::handle(InPacket& recv) const
     // Attempt to reconnect to the server, and if successful, relog into the
     // game in the new channel.
     Session::get().reconnect(addr_str, port_str.c_str());
-    PlayerLoginPacket{Stage::get().get_player().get_oid()}.dispatch();
+    auto cid = Stage::get().get_player().get_oid();
+    PlayerLoginPacket{cid}.dispatch();
 }
 
 void ServerIPHandler::handle(InPacket& recv) const

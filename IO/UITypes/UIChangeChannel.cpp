@@ -120,6 +120,13 @@ Cursor::State UIChangeChannel::send_cursor(bool pressed,
 
 void UIChangeChannel::double_click(Point<std::int16_t> cursor_pos)
 {
+    UIDragElement::double_click(cursor_pos);
+
+    if (auto clicked_ch = channel_by_pos(cursor_pos);
+        clicked_ch && *clicked_ch < ch_sprites.size()) {
+        selected_channel = *clicked_ch;
+        change_channel();
+    }
 }
 
 void UIChangeChannel::send_key(SentKey key) noexcept
@@ -159,7 +166,7 @@ void UIChangeChannel::send_key(SentKey key) noexcept
         }
         break;
     case SentKey::ENTER:
-        // TODO
+        change_channel();
         break;
     default:
         break;
@@ -172,6 +179,9 @@ Button::State UIChangeChannel::button_pressed(std::uint16_t button_id)
     case BT_CANCEL:
         active = false;
         return Button::NORMAL;
+    case BT_CHANGE:
+        change_channel();
+        return Button::PRESSED;
     default:
         return Button::PRESSED;
     }
@@ -192,11 +202,12 @@ UIChangeChannel::channel_by_pos(Point<std::int16_t> cursor_pos) const noexcept
     return {row * COLS + col};
 }
 
-void UIChangeChannel::change_channel()
+void UIChangeChannel::change_channel() noexcept
 {
     active = false;
 
     if (selected_channel != Stage::get().get_channel()) {
+        UI::get().disable();
         ChangeChannelPacket{selected_channel}.dispatch();
     }
 }
