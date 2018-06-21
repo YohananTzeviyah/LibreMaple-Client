@@ -404,11 +404,11 @@ JourneyClient was originally developed under
 **[the C++17 standard](https://en.wikipedia.org/wiki/C%2B%2B17) and makes use**
 **of C++17 features**.
 
-In addition, **this project follows**
-**[the ISO C++ Core Guidelines](https://github.com/isocpp/CppCoreGuidelines)**,
-so any code that does not comply with said guidelines can be considered a bug,
-unless of course the transgression has been justified and thoroughly commented.
+In addition, this project (sort of) follows
+[the ISO C++ Core Guidelines](https://github.com/isocpp/CppCoreGuidelines).
 [A complete copy of the guidelines is available here](https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md).
+
+More specific guidelines can be found in "code-guidelines.md".
 
 ## Configuration
 
