@@ -27,6 +27,7 @@ class Texture
 {
 public:
     Texture(nl::node source);
+    Texture(nl::bitmap bm, Point<std::int16_t> orig);
     Texture();
     ~Texture();
 

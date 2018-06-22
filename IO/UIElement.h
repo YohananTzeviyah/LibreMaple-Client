@@ -55,6 +55,7 @@ public:
         KEY_CONFIG,
         SYSTEM_MENU,
         CHANGE_CHANNEL,
+        GAME_SETTINGS,
 
         NUM_TYPES
     };

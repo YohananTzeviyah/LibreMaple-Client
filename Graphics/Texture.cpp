@@ -26,7 +26,10 @@ namespace jrc
 Texture::Texture(nl::node src)
 {
     if (src.data_type() == nl::node::type::bitmap) {
-        Point<std::int16_t> original_origin = src["origin"];
+        nl::node src_origin = src["origin"];
+        Point<std::int16_t> original_origin = src_origin;
+        bool use_original_origin
+            = src_origin.data_type() == nl::node::type::vector;
 
         std::string link = src["source"];
         if (!link.empty()) {
@@ -38,11 +41,18 @@ Texture::Texture(nl::node src)
         }
 
         bitmap = src;
-        origin = original_origin ? original_origin : src["origin"];
+        origin = use_original_origin ? original_origin : src["origin"];
         dimensions = {bitmap.width(), bitmap.height()};
 
         GraphicsGL::get().add_bitmap(bitmap);
     }
+}
+
+Texture::Texture(nl::bitmap bm, Point<std::int16_t> orig)
+    : bitmap{bm},
+      origin{orig},
+      dimensions{Point<std::int16_t>{bm.width(), bm.height()}}
+{
 }
 
 Texture::Texture() = default;

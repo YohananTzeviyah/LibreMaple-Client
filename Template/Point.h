@@ -60,6 +60,21 @@ public:
         return b;
     }
 
+    //! For structured bindings.
+    template<int I>
+    constexpr T get() const noexcept
+    {
+        static_assert(
+            I == 0 || I == 1,
+            "Cannot `jrc::Point<_>::get<I>()` for `I != 0 && I != 1`");
+
+        if constexpr (I == 0) {
+            return a;
+        } else {
+            return b;
+        }
+    }
+
     //! Return the quadrance, i.e. the squared norm.
     //!
     //! Satisifies `static_cast<T>(std::sqrt(p.quadrance())) == p.norm()`.
@@ -268,3 +283,20 @@ template<typename T>
 struct is_point<Point<T>> : std::true_type {
 };
 } // namespace jrc
+
+namespace std
+{
+template<typename T>
+struct tuple_size<jrc::Point<T>> : std::integral_constant<std::size_t, 2> {
+};
+
+template<typename T>
+struct tuple_element<0, jrc::Point<T>> {
+    using type = T;
+};
+
+template<typename T>
+struct tuple_element<1, jrc::Point<T>> {
+    using type = T;
+};
+} // namespace std

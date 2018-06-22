@@ -341,7 +341,7 @@ const GraphicsGL::Offset& GraphicsGL::get_offset(const nl::bitmap& bmp)
 
     auto value = Leftover(x, y, w, h);
     std::size_t lid = leftovers.find_node(
-        value, [](const Leftover& val, const Leftover& leaf) {
+        value, [](const Leftover& val, const Leftover& leaf) noexcept {
             return val.width() <= leaf.width()
                    && val.height() <= leaf.height();
         });

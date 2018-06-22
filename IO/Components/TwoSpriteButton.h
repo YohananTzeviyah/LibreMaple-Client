@@ -31,6 +31,10 @@ public:
                     nl::node ssrc,
                     Point<std::int16_t> position);
     TwoSpriteButton(nl::node nsrc, nl::node ssrc);
+    TwoSpriteButton(Texture neg,
+                    Texture selected,
+                    Point<std::int16_t> position);
+    TwoSpriteButton(Texture neg, Texture selected);
     TwoSpriteButton();
 
     void draw(Point<std::int16_t> position) const;

@@ -181,7 +181,7 @@ Button::State UIChangeChannel::button_pressed(std::uint16_t button_id)
         return Button::NORMAL;
     case BT_CHANGE:
         change_channel();
-        return Button::PRESSED;
+        return Button::NORMAL;
     default:
         return Button::PRESSED;
     }

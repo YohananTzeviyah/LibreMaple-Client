@@ -34,6 +34,21 @@ TwoSpriteButton::TwoSpriteButton(nl::node nsrc, nl::node ssrc)
 {
 }
 
+TwoSpriteButton::TwoSpriteButton(Texture neg,
+                                 Texture selected,
+                                 Point<std::int16_t> pos)
+    : textures(neg, selected)
+{
+    position = pos;
+    state = NORMAL;
+    active = true;
+}
+
+TwoSpriteButton::TwoSpriteButton(Texture neg, Texture selected)
+    : TwoSpriteButton(neg, selected, {})
+{
+}
+
 TwoSpriteButton::TwoSpriteButton() : textures({}, {})
 {
 }

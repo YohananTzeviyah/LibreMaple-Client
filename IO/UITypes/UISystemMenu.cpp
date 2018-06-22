@@ -19,6 +19,7 @@
 
 #include "../UI.h"
 #include "UIChangeChannel.h"
+#include "UIGameSettings.h"
 #include "UINotice.h"
 #include "nlnx/nx.hpp"
 
@@ -65,11 +66,13 @@ Button::State UISystemMenu::button_pressed(std::uint16_t button_id)
         UI::get().emplace<UIChangeChannel>();
         break;
     case BT_FARM:
+        // Domiciles???
         break;
     case BT_KEY_SETTING:
         UI::get().send_menu(KeyAction::KEY_CONFIG);
         break;
     case BT_GAME_OPTION:
+        UI::get().emplace<UIGameSettings>();
         break;
     case BT_SYSTEM_OPTION:
         break;

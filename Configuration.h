@@ -55,7 +55,8 @@ struct Configuration : public Singleton<Configuration> {
         INVENTORY,
         EQUIP_INVENTORY,
         SKILLBOOK,
-        CHANGE_CHANNEL
+        CHANGE_CHANNEL,
+        GAME_SETTINGS
     };
 
     [[nodiscard]] Point<std::int16_t> get_position_of(PositionOf po) const
@@ -90,11 +91,11 @@ struct Configuration : public Singleton<Configuration> {
     };
 
     struct Account {
-        bool save_login = false;
         std::string account_name = "";
         std::uint8_t world = 0;
         std::uint8_t channel = 0;
         std::uint8_t character = 0;
+        bool save_login = false;
     };
 
     struct Ui {
@@ -105,6 +106,7 @@ struct Configuration : public Singleton<Configuration> {
             Point<std::int16_t> equip_inventory = {250, 150};
             Point<std::int16_t> skillbook = {50, 150};
             Point<std::int16_t> change_channel = {350, 300};
+            Point<std::int16_t> game_settings = {450, 250};
         };
 
         Position position;

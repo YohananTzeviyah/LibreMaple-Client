@@ -305,16 +305,32 @@ void Configuration::load() noexcept(false)
                     change_channel_point) {
                     ui.position.change_channel = *change_channel_point;
                 } else {
-                    Console::get().print(
-                        "No valid value for "
-                        "\"settings.toml:ui.position.change_channel\" "
-                        "found; using default.");
+                    Console::get().print("No valid value for "
+                                         "\"settings.toml:ui.position.change_"
+                                         "channel\" found; using default.");
                 }
             } else {
-                Console::get().print(
-                    "No valid value for "
-                    "\"settings.toml:ui.position.change_channel\" "
-                    "found; using default.");
+                Console::get().print("No valid value for "
+                                     "\"settings.toml:ui.position.change_"
+                                     "channel\" found; using default.");
+            }
+
+            if (auto game_settings
+                = position->get_array_of<std::int64_t>("game_settings");
+                game_settings) {
+                if (auto game_settings_point
+                    = vec_to_point<std::int16_t>(*game_settings);
+                    game_settings_point) {
+                    ui.position.game_settings = *game_settings_point;
+                } else {
+                    Console::get().print("No valid value for "
+                                         "\"settings.toml:ui.position.game_"
+                                         "settings\" found; using default.");
+                }
+            } else {
+                Console::get().print("No valid value for "
+                                     "\"settings.toml:ui.position.game_"
+                                     "settings\" found; using default.");
             }
         } else {
             Console::get().print(
@@ -370,6 +386,7 @@ character = $
     equip_inventory = $
     skillbook = $
     change_channel = $
+    game_settings = $
 )"sv.substr(1);
 
     std::ofstream settings{"settings.toml"};
@@ -470,6 +487,9 @@ character = $
             case 18:
                 write(ui.position.change_channel);
                 break;
+            case 19:
+                write(ui.position.game_settings);
+                break;
             default:
                 Console::get().print(
                     "[logic error] Number of `case` statements in "
@@ -503,6 +523,8 @@ Point<std::int16_t> Configuration::get_position_of(PositionOf po) const
         return ui.position.skillbook;
     case PositionOf::CHANGE_CHANNEL:
         return ui.position.change_channel;
+    case PositionOf::GAME_SETTINGS:
+        return ui.position.game_settings;
     }
 
     return {};
@@ -529,6 +551,9 @@ void Configuration::set_position_of(PositionOf po,
         break;
     case PositionOf::CHANGE_CHANNEL:
         ui.position.change_channel = pos;
+        break;
+    case PositionOf::GAME_SETTINGS:
+        ui.position.game_settings = pos;
         break;
     }
 }

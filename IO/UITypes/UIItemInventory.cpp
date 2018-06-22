@@ -174,7 +174,7 @@ void UIItemInventory::load_icons()
 
 Button::State UIItemInventory::button_pressed(std::uint16_t buttonid)
 {
-    InventoryType::Id oldtab = tab;
+    InventoryType::Id old_tab = tab;
     switch (buttonid) {
     case BT_TAB_EQUIP:
         tab = InventoryType::EQUIP;
@@ -192,21 +192,21 @@ Button::State UIItemInventory::button_pressed(std::uint16_t buttonid)
         tab = InventoryType::CASH;
         break;
     case BT_GATHER:
-        GatherItemsPacket(tab).dispatch();
+        GatherItemsPacket{tab}.dispatch();
         break;
     case BT_SORT:
-        SortItemsPacket(tab).dispatch();
+        SortItemsPacket{tab}.dispatch();
         break;
     }
 
-    if (tab != oldtab) {
+    if (tab != old_tab) {
         slot_range.first = 1;
         slot_range.second = 24;
 
         slider.set_rows(
             6, static_cast<std::int16_t>(1 + inventory.get_slotmax(tab) / 4));
 
-        buttons[button_by_tab(oldtab)]->set_state(Button::NORMAL);
+        buttons[button_by_tab(old_tab)]->set_state(Button::NORMAL);
 
         load_icons();
         enable_gather();
