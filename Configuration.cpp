@@ -18,6 +18,7 @@
 #include "Configuration.h"
 
 #include "Console.h"
+#include "IO/UITypes/UIGameSettings.h"
 #include "Util/Str.h"
 
 #include <exception>
@@ -341,6 +342,279 @@ void Configuration::load() noexcept(false)
         Console::get().print(
             "No valid table \"settings.toml:ui\" found; using default.");
     }
+
+    if (auto character_tables = settings->get_table_array("character");
+        character_tables) {
+        for (const auto& character_table : *character_tables) {
+            Character character;
+            std::string name;
+            if (auto name_ = character_table->get_as<std::string>("name");
+                name_) {
+                name = *name_;
+            } else {
+                Console::get().print("No valid name found for a "
+                                     "\"settings.toml:character\"; ignoring.");
+                continue;
+            }
+
+            if (auto game_settings
+                = character_table->get_table("game_settings");
+                game_settings) {
+                if (auto whispers = game_settings->get_as<bool>("whispers");
+                    whispers) {
+                    if (*whispers) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::WHISPERS;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::WHISPERS);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "whispers\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto friend_invites
+                    = game_settings->get_as<bool>("friend_invites");
+                    friend_invites) {
+                    if (*friend_invites) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::FRIEND_INVITES;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::FRIEND_INVITES);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "friend_invites\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto chat_invites
+                    = game_settings->get_as<bool>("chat_invites");
+                    chat_invites) {
+                    if (*chat_invites) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::CHAT_INVITES;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::CHAT_INVITES);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "chat_invites\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto trade_requests
+                    = game_settings->get_as<bool>("trade_requests");
+                    trade_requests) {
+                    if (*trade_requests) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::TRADE_REQUESTS;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::TRADE_REQUESTS);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "trade_requests\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto party_invites
+                    = game_settings->get_as<bool>("party_invites");
+                    party_invites) {
+                    if (*party_invites) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::PARTY_INVITES;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::PARTY_INVITES);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "party_invites\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto sidekick_invites
+                    = game_settings->get_as<bool>("sidekick_invites");
+                    sidekick_invites) {
+                    if (*sidekick_invites) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::SIDEKICK_INVITES;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::SIDEKICK_INVITES);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "sidekick_invites\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto expedition_invites
+                    = game_settings->get_as<bool>("expedition_invites");
+                    expedition_invites) {
+                    if (*expedition_invites) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::EXPEDITION_INVITES;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::EXPEDITION_INVITES);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "expedition_invites\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto guild_chat
+                    = game_settings->get_as<bool>("guild_chat");
+                    guild_chat) {
+                    if (*guild_chat) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::GUILD_CHAT;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::GUILD_CHAT);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "guild_chat\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto guild_invites
+                    = game_settings->get_as<bool>("guild_invites");
+                    guild_invites) {
+                    if (*guild_invites) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::GUILD_INVITES;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::GUILD_INVITES);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "guild_invites\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto alliance_chat
+                    = game_settings->get_as<bool>("alliance_chat");
+                    alliance_chat) {
+                    if (*alliance_chat) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::ALLIANCE_CHAT;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::ALLIANCE_CHAT);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "alliance_chat\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto alliance_invites
+                    = game_settings->get_as<bool>("alliance_invites");
+                    alliance_invites) {
+                    if (*alliance_invites) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::ALLIANCE_INVITES;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::ALLIANCE_INVITES);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "alliance_invites\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto family_invites
+                    = game_settings->get_as<bool>("family_invites");
+                    family_invites) {
+                    if (*family_invites) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::FAMILY_INVITES;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::FAMILY_INVITES);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "family_invites\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+
+                if (auto follow = game_settings->get_as<bool>("follow");
+                    follow) {
+                    if (*follow) {
+                        character.game_settings.flags
+                            |= 1 << UIGameSettings::FOLLOW;
+                    } else {
+                        character.game_settings.flags
+                            &= ~(1 << UIGameSettings::FOLLOW);
+                    }
+                } else {
+                    Console::get().print(
+                        str::concat("No valid value "
+                                    "\"settings.toml:character.game_settings."
+                                    "follow\" found for \"",
+                                    name,
+                                    "\"; using default."));
+                }
+            } else {
+                Console::get().print(str::concat(
+                    "No valid table \"settings.toml:character.game_settings\" "
+                    "found for \"",
+                    name,
+                    "\"; using default."));
+            }
+
+            characters.emplace(name, character);
+        }
+    }
 }
 
 void Configuration::save() const noexcept
@@ -355,39 +629,38 @@ void Configuration::save() const noexcept
 # higher.
 
 [network]
-ip = $
-port = $
+  ip = $
+  port = $
 
 [video]
-fullscreen = $
-vsync = $
+  fullscreen = $
+  vsync = $
 
 [fonts]
-normal = $
-bold = $
+  normal = $
+  bold = $
 
 [audio]
-    [audio.volume] # Volumes are in percentages.
+  [audio.volume] # Volumes are in percentages.
     sound_effects = $
     music = $
 
 [account]
-save_login = $
-account_name = $
-world = $
-channel = $
-character = $
+  save_login = $
+  account_name = $
+  world = $
+  channel = $
+  character = $
 
 [ui]
-    [ui.position]
+  [ui.position]
     key_config = $
     stats = $
     inventory = $
     equip_inventory = $
     skillbook = $
     change_channel = $
-    game_settings = $
-)"sv.substr(1);
+    game_settings = $)"sv.substr(1);
 
     std::ofstream settings{"settings.toml"};
     if (!settings || !settings.is_open()) {
@@ -504,6 +777,72 @@ character = $
     }
     settings << OUTPUT_TEMPLATE.substr(last_ix);
 
+    static constexpr const std::string_view CHARACTER_TEMPLATE = u8R"(
+
+[[character]]
+  name = $
+  [character.game_settings]
+    whispers = $
+    friend_invites = $
+    chat_invites = $
+    trade_requests = $
+    party_invites = $
+    sidekick_invites = $
+    expedition_invites = $
+    guild_chat = $
+    guild_invites = $
+    alliance_chat = $
+    alliance_invites = $
+    family_invites = $
+    follow = $)";
+
+    for (const auto& [name, ch] : characters) {
+        last_ix = 0;
+        template_ix = 0;
+        entry_ix = 0;
+        while (template_ix < CHARACTER_TEMPLATE.length()) {
+            if (CHARACTER_TEMPLATE[template_ix] == '$') {
+                settings << CHARACTER_TEMPLATE.substr(last_ix,
+                                                      template_ix - last_ix);
+                ++template_ix;
+                last_ix = template_ix;
+
+                switch (entry_ix) {
+                case 0:
+                    write(name);
+                    break;
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                    write(static_cast<bool>(ch.game_settings.flags
+                                            & 1 << (entry_ix - 1)));
+                    break;
+                default:
+                    Console::get().print(
+                        "[logic error] Number of `case` statements in "
+                        "`Configuration::save()` is incorrect.");
+                    break;
+                }
+
+                ++entry_ix;
+            } else {
+                ++template_ix;
+            }
+        }
+        settings << CHARACTER_TEMPLATE.substr(last_ix);
+    }
+
+    settings << '\n';
     settings.flush();
 }
 
@@ -558,13 +897,10 @@ void Configuration::set_position_of(PositionOf po,
     }
 }
 
-template<typename T>
-std::optional<Point<T>>
-Configuration::vec_to_point(const std::vector<std::int64_t>& vec) noexcept
+Configuration::Character&
+Configuration::get_character(const std::string& name) noexcept
 {
-    if (vec.size() != 2) {
-        return {};
-    }
-    return {{static_cast<T>(vec[0]), static_cast<T>(vec[1])}};
+    auto [iter, inserted] = characters.try_emplace(name);
+    return iter->second;
 }
 } // namespace jrc

@@ -62,6 +62,8 @@ The client is currently compatible with GMS version 83 servers. For the UI file
   have it)
 * xorg / xorg-dev / xorg-server-devel (Xorg development libraries)
 * build-essential (for users of Debian-based distibutions only)
+* [ninja](https://ninja-build.org/) (technically optional, you can simply *not*
+  pass `-G Ninja` to cmake to use Make instead)
 * [ccache](https://ccache.samba.org/) (optional, for faster build times)
 
 (**Note for [Solus](https://solus-project.com/) users:**
@@ -146,9 +148,9 @@ $ cd build
 # only build (`-march=native`).
 #
 # Specify `-DCMAKE_CXX_COMPILER_LAUNCHER=ccache` if you are using ccache.
-$ cmake -DCMAKE_BUILD_TYPE=Debug ..
-# Or `make -jN` with N being the number of CPU cores you wish to utilize.
-$ make
+$ cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+# Or `ninja -jN` with N being the number of CPU cores you wish to utilize.
+$ ninja
 # For `Release` and `MinSizeRel` builds only:
 $ strip JourneyClient
 ```
@@ -179,6 +181,8 @@ directory (`LibreMaple-Client/build`).
   require you to separately install XQuartz, one way to do this is
   `brew cask install xquartz`)
 * [freetype](https://www.freetype.org/) (`brew install freetype`)
+* [ninja](https://ninja-build.org/) (`brew install ninja`; technically
+  optional, you can simply *not* pass `-G Ninja` to cmake to use Make instead)
 * [ccache](https://ccache.samba.org/) (optional, for faster build times;
   `brew install ccache`)
 
@@ -244,9 +248,9 @@ $ cd build
 # only build (`-march=native`).
 #
 # Specify `-DCMAKE_CXX_COMPILER_LAUNCHER=ccache` if you are using ccache.
-$ cmake -D CMAKE_BUILD_TYPE=Debug ..
-# Or `make -jN` with N being the number of CPU cores you wish to utilize.
-$ make
+$ cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja..
+# Or `ninja -jN` with N being the number of CPU cores you wish to utilize.
+$ ninja
 # For `Release` and `MinSizeRel` builds only:
 $ strip JourneyClient
 ```

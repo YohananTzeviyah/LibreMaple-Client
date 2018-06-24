@@ -17,6 +17,8 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "UIGameSettings.h"
 
+#include "../../Configuration.h"
+#include "../../Gameplay/Stage.h"
 #include "../../Net/Packets/GameplayPackets.h"
 #include "../Components/MapleButton.h"
 #include "../UI.h"
@@ -101,12 +103,17 @@ Button::State UIGameSettings::button_pressed(std::uint16_t button_id)
 
 void UIGameSettings::load_settings() noexcept
 {
-    // TODO
-    checks_state = 0x11111111'11111111;
+    checks_state
+        = Configuration::get()
+              .get_character(std::string{Stage::get().get_player().get_name()})
+              .game_settings.flags;
 }
 
 void UIGameSettings::commit() const noexcept
 {
-    // TODO
+    Configuration::get()
+        .get_character(std::string{Stage::get().get_player().get_name()})
+        .game_settings.flags
+        = checks_state;
 }
 } // namespace jrc

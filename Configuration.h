@@ -112,13 +112,41 @@ struct Configuration : public Singleton<Configuration> {
         Position position;
     };
 
+    struct Character {
+        struct GameSettings {
+            //! whispers = true
+            //! friend_invites = true
+            //! chat_invites = true
+            //! trade_requests = true
+            //! party_invites = true
+            //! sidekick_invites = true
+            //! expedition_invites = true
+            //! guild_chat = true
+            //! guild_invites = true
+            //! alliance_chat = true
+            //! alliance_invites = true
+            //! family_invites = true
+            //! follow = true
+            std::uint16_t flags = 0b00011111'11111111;
+        };
+
+        GameSettings game_settings;
+    };
+
     // Data members are reordered here for compactness (blame the ABI).
     Network network;
     Fonts fonts;
     Account account;
+    std::unordered_map<std::string, Character> characters;
     Video video;
     Audio audio;
     Ui ui;
+
+    //! Gets a reference to the character-specific configuration for the
+    //! character identified by name. **Inserts a new character with the**
+    //! **default configuration if there isn't already one with the specified**
+    //! **name**.
+    [[nodiscard]] Character& get_character(const std::string& name) noexcept;
 
 private:
     //! Helper function for getting `Point`s out of TOML arrays. Converts the
@@ -126,6 +154,12 @@ private:
     //! `static_cast` on the elements.
     template<typename T>
     static std::optional<Point<T>>
-    vec_to_point(const std::vector<std::int64_t>& vec) noexcept;
+    vec_to_point(const std::vector<std::int64_t>& vec) noexcept
+    {
+        if (vec.size() != 2) {
+            return {};
+        }
+        return {{static_cast<T>(vec[0]), static_cast<T>(vec[1])}};
+    }
 };
 } // namespace jrc

@@ -36,17 +36,6 @@ public:
     Cursor::State send_cursor(bool clicked,
                               Point<std::int16_t> cursor_pos) override;
 
-protected:
-    Button::State button_pressed(std::uint16_t button_id) override;
-
-private:
-    void load_settings() noexcept;
-    void commit() const noexcept;
-
-    Texture check_texture;
-    std::uint16_t checks_state;
-
-    enum Buttons : std::uint16_t { BT_CANCEL, BT_OK };
     enum Checks : std::uint16_t {
         WHISPERS,
         FRIEND_INVITES,
@@ -64,6 +53,18 @@ private:
 
         NUM_CHECKS
     };
+
+protected:
+    Button::State button_pressed(std::uint16_t button_id) override;
+
+private:
+    void load_settings() noexcept;
+    void commit() const noexcept;
+
+    Texture check_texture;
+    std::uint16_t checks_state;
+
+    enum Buttons : std::uint16_t { BT_CANCEL, BT_OK };
 
     static constexpr const std::int16_t WIDTH = 119;
 
