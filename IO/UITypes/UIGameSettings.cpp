@@ -52,7 +52,7 @@ void UIGameSettings::draw(float inter) const
     UIElement::draw(inter);
 
     auto check_pos = position + CHECKS_OFFSET;
-    for (std::uint16_t check = WHISPERS; check < NUM_CHECKS; ++check) {
+    for (std::uint16_t check = 0; check < NUM_CHECKS; ++check) {
         bool checked = checks_state & static_cast<std::uint16_t>(1 << check);
         check_texture.draw({check_pos, checked ? 1.0f : 0.1f});
         check_pos += {0, STRIDE_VERT};

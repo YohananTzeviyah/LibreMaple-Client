@@ -32,8 +32,9 @@ void UIStateLogin::draw(float inter, Point<std::int16_t>) const
 {
     for (auto iter : elements) {
         UIElement* element = iter.second.get();
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             element->draw(inter);
+        }
     }
 }
 
@@ -41,8 +42,9 @@ void UIStateLogin::update()
 {
     for (auto iter : elements) {
         UIElement* element = iter.second.get();
-        if (element && element->is_active())
+        if (element && element->is_active()) {
             element->update();
+        }
     }
 }
 
@@ -57,9 +59,9 @@ void UIStateLogin::send_key(KeyType::Id, std::int32_t, bool)
 Cursor::State UIStateLogin::send_cursor(Cursor::State mst,
                                         Point<std::int16_t> pos)
 {
-    if (UIElement* focusedelement = get(focused)) {
-        if (focusedelement->is_active()) {
-            return focusedelement->send_cursor(mst == Cursor::CLICKING, pos);
+    if (UIElement* focused_element = get(focused); focused_element) {
+        if (focused_element->is_active()) {
+            return focused_element->send_cursor(mst == Cursor::CLICKING, pos);
         } else {
             focused = UIElement::NONE;
             return mst;
@@ -116,7 +118,7 @@ void UIStateLogin::show_skill(
 template<class T, typename... Args>
 void UIStateLogin::emplace(Args&&... args)
 {
-    if (auto iter = pre_add(T::TYPE, T::TOGGLED, T::FOCUSED)) {
+    if (auto iter = pre_add(T::TYPE, T::TOGGLED, T::FOCUSED); iter) {
         (*iter).second = std::make_unique<T>(std::forward<Args>(args)...);
     }
 }
@@ -126,16 +128,18 @@ UIStateLogin::pre_add(UIElement::Type type, bool, bool is_focused)
 {
     remove(type);
 
-    if (is_focused)
+    if (is_focused) {
         focused = type;
+    }
 
     return elements.find(type);
 }
 
 void UIStateLogin::remove(UIElement::Type type)
 {
-    if (focused == type)
+    if (focused == type) {
         focused = UIElement::NONE;
+    }
 
     if (auto& element = elements[type]) {
         element->deactivate();
@@ -154,8 +158,9 @@ UIElement* UIStateLogin::get_front(Point<std::int16_t> pos)
     auto end = elements.values().rend();
     for (auto iter = begin; iter != end; ++iter) {
         auto& element = *iter;
-        if (element && element->is_active() && element->is_in_range(pos))
+        if (element && element->is_active() && element->is_in_range(pos)) {
             return element.get();
+        }
     }
     return nullptr;
 }

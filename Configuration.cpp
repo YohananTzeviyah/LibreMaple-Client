@@ -120,6 +120,23 @@ void Configuration::load() noexcept(false)
     }
 
     if (audio_table) {
+        if (auto sound_effects = audio_table->get_as<bool>("sound_effects");
+            sound_effects) {
+            audio.sound_effects = *sound_effects;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:audio.sound_effects\" "
+                "found; using default.");
+        }
+
+        if (auto music = audio_table->get_as<bool>("music"); music) {
+            audio.music = *music;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:audio.music\" "
+                "found; using default.");
+        }
+
         auto volume = audio_table->get_table("volume");
 
         if (volume) {
@@ -202,6 +219,42 @@ void Configuration::load() noexcept(false)
     }
 
     if (ui_table) {
+        if (auto hp_alert = ui_table->get_as<std::uint8_t>("hp_alert");
+            hp_alert) {
+            ui.hp_alert = *hp_alert;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:ui.hp_alert\" found; "
+                "using default.");
+        }
+
+        if (auto mp_alert = ui_table->get_as<std::uint8_t>("mp_alert");
+            mp_alert) {
+            ui.mp_alert = *mp_alert;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:ui.mp_alert\" found; "
+                "using default.");
+        }
+
+        if (auto shake_screen = ui_table->get_as<bool>("shake_screen");
+            shake_screen) {
+            ui.shake_screen = *shake_screen;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:ui.shake_screen\" found; "
+                "using default.");
+        }
+
+        if (auto simple_minimap = ui_table->get_as<bool>("simple_minimap");
+            simple_minimap) {
+            ui.simple_minimap = *simple_minimap;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:ui.simple_minimap\" "
+                "found; using default.");
+        }
+
         auto position = ui_table->get_table("position");
 
         if (position) {
@@ -331,6 +384,24 @@ void Configuration::load() noexcept(false)
             } else {
                 Console::get().print("No valid value for "
                                      "\"settings.toml:ui.position.game_"
+                                     "settings\" found; using default.");
+            }
+
+            if (auto system_settings
+                = position->get_array_of<std::int64_t>("system_settings");
+                system_settings) {
+                if (auto system_settings_point
+                    = vec_to_point<std::int16_t>(*system_settings);
+                    system_settings_point) {
+                    ui.position.system_settings = *system_settings_point;
+                } else {
+                    Console::get().print("No valid value for "
+                                         "\"settings.toml:ui.position.system_"
+                                         "settings\" found; using default.");
+                }
+            } else {
+                Console::get().print("No valid value for "
+                                     "\"settings.toml:ui.position.system_"
                                      "settings\" found; using default.");
             }
         } else {
@@ -629,38 +700,46 @@ void Configuration::save() const noexcept
 # higher.
 
 [network]
-  ip = $
-  port = $
+ip = $
+port = $
 
 [video]
-  fullscreen = $
-  vsync = $
+fullscreen = $
+vsync = $
+low_quality = $
 
 [fonts]
-  normal = $
-  bold = $
+normal = $
+bold = $
 
 [audio]
-  [audio.volume] # Volumes are in percentages.
+sound_effects = $
+music = $
+    [audio.volume]  # Volumes are in percentages.
     sound_effects = $
     music = $
 
 [account]
-  save_login = $
-  account_name = $
-  world = $
-  channel = $
-  character = $
+save_login = $
+account_name = $
+world = $
+channel = $
+character = $
 
 [ui]
-  [ui.position]
+hp_alert = $
+mp_alert = $
+shake_screen = $
+simple_minimap = $
+    [ui.position]
     key_config = $
     stats = $
     inventory = $
     equip_inventory = $
     skillbook = $
     change_channel = $
-    game_settings = $)"sv.substr(1);
+    game_settings = $
+    system_settings = $)"sv.substr(1);
 
     std::ofstream settings{"settings.toml"};
     if (!settings || !settings.is_open()) {
@@ -716,57 +795,81 @@ void Configuration::save() const noexcept
                 write(video.vsync);
                 break;
             case 4:
-                write(fonts.normal);
+                write(video.low_quality);
                 break;
             case 5:
-                write(fonts.bold);
+                write(fonts.normal);
                 break;
             case 6:
-                write(audio.volume.sound_effects);
+                write(fonts.bold);
                 break;
             case 7:
-                write(audio.volume.music);
+                write(audio.sound_effects);
                 break;
             case 8:
-                write(account.save_login);
+                write(audio.music);
                 break;
             case 9:
-                write(account.account_name);
+                write(audio.volume.sound_effects);
                 break;
             case 10:
-                write(account.world);
+                write(audio.volume.music);
                 break;
             case 11:
-                write(account.channel);
+                write(account.save_login);
                 break;
             case 12:
-                write(account.character);
+                write(account.account_name);
                 break;
             case 13:
-                write(ui.position.key_config);
+                write(account.world);
                 break;
             case 14:
-                write(ui.position.stats);
+                write(account.channel);
                 break;
             case 15:
-                write(ui.position.inventory);
+                write(account.character);
                 break;
             case 16:
-                write(ui.position.equip_inventory);
+                write(ui.hp_alert);
                 break;
             case 17:
-                write(ui.position.skillbook);
+                write(ui.mp_alert);
                 break;
             case 18:
-                write(ui.position.change_channel);
+                write(ui.shake_screen);
                 break;
             case 19:
+                write(ui.simple_minimap);
+                break;
+            case 20:
+                write(ui.position.key_config);
+                break;
+            case 21:
+                write(ui.position.stats);
+                break;
+            case 22:
+                write(ui.position.inventory);
+                break;
+            case 23:
+                write(ui.position.equip_inventory);
+                break;
+            case 24:
+                write(ui.position.skillbook);
+                break;
+            case 25:
+                write(ui.position.change_channel);
+                break;
+            case 26:
                 write(ui.position.game_settings);
+                break;
+            case 27:
+                write(ui.position.system_settings);
                 break;
             default:
                 Console::get().print(
                     "[logic error] Number of `case` statements in "
-                    "`Configuration::save()` is incorrect.");
+                    "`Configuration::save()` is incorrect. [0]");
                 break;
             }
 
@@ -780,8 +883,8 @@ void Configuration::save() const noexcept
     static constexpr const std::string_view CHARACTER_TEMPLATE = u8R"(
 
 [[character]]
-  name = $
-  [character.game_settings]
+name = $
+    [character.game_settings]
     whispers = $
     friend_invites = $
     chat_invites = $
@@ -830,7 +933,7 @@ void Configuration::save() const noexcept
                 default:
                     Console::get().print(
                         "[logic error] Number of `case` statements in "
-                        "`Configuration::save()` is incorrect.");
+                        "`Configuration::save()` is incorrect. [1]");
                     break;
                 }
 
@@ -864,6 +967,8 @@ Point<std::int16_t> Configuration::get_position_of(PositionOf po) const
         return ui.position.change_channel;
     case PositionOf::GAME_SETTINGS:
         return ui.position.game_settings;
+    case PositionOf::SYSTEM_SETTINGS:
+        return ui.position.system_settings;
     }
 
     return {};
@@ -893,6 +998,9 @@ void Configuration::set_position_of(PositionOf po,
         break;
     case PositionOf::GAME_SETTINGS:
         ui.position.game_settings = pos;
+        break;
+    case PositionOf::SYSTEM_SETTINGS:
+        ui.position.system_settings = pos;
         break;
     }
 }

@@ -107,7 +107,7 @@ void Slider::set_vertical(Range<std::int16_t> ver)
 
 void Slider::draw(Point<std::int16_t> position) const
 {
-    Point<std::int16_t> fill(0, vertical.length() + button_height);
+    Point<std::int16_t> fill{0, vertical.length() + button_height};
 
     if (enabled) {
         base.draw({position + start, fill});
@@ -184,7 +184,7 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
         thumb.set_state(Button::NORMAL);
     }
 
-    if (prev.bounds(Point<std::int16_t>()).contains(cursor)) {
+    if (prev.bounds(Point<std::int16_t>{}).contains(cursor)) {
         if (pressed) {
             if (row > 0) {
                 --row;
@@ -201,7 +201,7 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
         prev.set_state(Button::NORMAL);
     }
 
-    if (next.bounds(Point<std::int16_t>()).contains(cursor)) {
+    if (next.bounds(Point<std::int16_t>{}).contains(cursor)) {
         if (pressed) {
             if (row < row_max) {
                 ++row;
@@ -219,14 +219,16 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
     }
 
     if (pressed) {
-        auto yoffset = static_cast<double>(relative.y() - button_height * 2);
-        auto cursorrow
-            = static_cast<std::int16_t>(std::round(yoffset / row_height));
-        if (cursorrow < 0)
-            cursorrow = 0;
-        else if (cursorrow > row_max)
-            cursorrow = row_max;
-        std::int16_t delta = row - cursorrow;
+        auto y_offset = static_cast<double>(relative.y() - button_height * 2);
+        auto cursor_row
+            = static_cast<std::int16_t>(std::round(y_offset / row_height));
+        if (cursor_row < 0) {
+            cursor_row = 0;
+        } else if (cursor_row > row_max) {
+            cursor_row = row_max;
+        }
+
+        std::int16_t delta = row - cursor_row;
         while (delta > 0) {
             --delta;
             on_moved(true);
@@ -235,7 +237,8 @@ Cursor::State Slider::send_cursor(Point<std::int16_t> cursor, bool pressed)
             ++delta;
             on_moved(false);
         }
-        row = cursorrow;
+
+        row = cursor_row;
     }
 
     return Cursor::IDLE;

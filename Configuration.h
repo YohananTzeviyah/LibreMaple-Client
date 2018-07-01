@@ -56,7 +56,8 @@ struct Configuration : public Singleton<Configuration> {
         EQUIP_INVENTORY,
         SKILLBOOK,
         CHANGE_CHANNEL,
-        GAME_SETTINGS
+        GAME_SETTINGS,
+        SYSTEM_SETTINGS
     };
 
     [[nodiscard]] Point<std::int16_t> get_position_of(PositionOf po) const
@@ -73,6 +74,7 @@ struct Configuration : public Singleton<Configuration> {
     struct Video {
         bool fullscreen = false;
         bool vsync = true;
+        bool low_quality = false;
     };
 
     struct Fonts {
@@ -87,6 +89,8 @@ struct Configuration : public Singleton<Configuration> {
             std::uint8_t music = 50;
         };
 
+        bool sound_effects = true;
+        bool music = true;
         Volume volume;
     };
 
@@ -107,8 +111,13 @@ struct Configuration : public Singleton<Configuration> {
             Point<std::int16_t> skillbook = {50, 150};
             Point<std::int16_t> change_channel = {350, 300};
             Point<std::int16_t> game_settings = {450, 250};
+            Point<std::int16_t> system_settings = {350, 150};
         };
 
+        std::uint8_t hp_alert = 20;
+        std::uint8_t mp_alert = 20;
+        bool shake_screen = true;
+        bool simple_minimap = false;
         Position position;
     };
 

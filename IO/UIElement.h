@@ -56,6 +56,7 @@ public:
         SYSTEM_MENU,
         CHANGE_CHANNEL,
         GAME_SETTINGS,
+        SYSTEM_SETTINGS,
 
         NUM_TYPES
     };

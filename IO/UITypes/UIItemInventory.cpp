@@ -408,7 +408,7 @@ UIItemInventory::slot_by_position(Point<std::int16_t> cursor_pos) const
         return 0;
     }
 
-    auto slot = slot_range.first + (xoff / 36) + 4 * (yoff / 35);
+    auto slot = slot_range.first + xoff / 36 + 4 * (yoff / 35);
     return is_visible(slot) ? slot : 0;
 }
 

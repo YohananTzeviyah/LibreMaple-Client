@@ -21,6 +21,7 @@
 #include "UIChangeChannel.h"
 #include "UIGameSettings.h"
 #include "UINotice.h"
+#include "UISystemSettings.h"
 #include "nlnx/nx.hpp"
 
 namespace jrc
@@ -75,6 +76,7 @@ Button::State UISystemMenu::button_pressed(std::uint16_t button_id)
         UI::get().emplace<UIGameSettings>();
         break;
     case BT_SYSTEM_OPTION:
+        UI::get().emplace<UISystemSettings>();
         break;
     case BT_QUIT:
         UI::get().emplace<UIYesNo>("Are you sure you want to exit the game?",

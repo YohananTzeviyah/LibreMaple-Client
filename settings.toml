@@ -5,31 +5,38 @@
 # higher.
 
 [network]
-  ip = "127.0.0.1"
-  port = 8484
+ip = "127.0.0.1"
+port = 8484
 
 [video]
-  fullscreen = false
-  vsync = true
+fullscreen = false
+vsync = true
+low_quality = false
 
 [fonts]
-  normal = "../fonts/Roboto/Roboto-Regular.ttf"
-  bold = "../fonts/Roboto/Roboto-Bold.ttf"
+normal = "../fonts/Roboto/Roboto-Regular.ttf"
+bold = "../fonts/Roboto/Roboto-Bold.ttf"
 
 [audio]
-  [audio.volume] # Volumes are in percentages.
+sound_effects = true
+music = true
+    [audio.volume]  # Volumes are in percentages.
     sound_effects = 50
     music = 50
 
 [account]
-  save_login = false
-  account_name = ""
-  world = 0
-  channel = 0
-  character = 0
+save_login = false
+account_name = ""
+world = 0
+channel = 0
+character = 0
 
 [ui]
-  [ui.position]
+hp_alert = 20
+mp_alert = 20
+shake_screen = true
+simple_minimap = false
+    [ui.position]
     key_config = [150, 150]
     stats = [100, 150]
     inventory = [300, 150]
@@ -37,20 +44,21 @@
     skillbook = [50, 150]
     change_channel = [350, 300]
     game_settings = [450, 250]
+    system_settings = [350, 150]
 
 [[character]]
-  name = ""
+name = ""
     [character.game_settings]
-      whispers = true
-      friend_invites = true
-      chat_invites = true
-      trade_requests = true
-      party_invites = true
-      sidekick_invites = true
-      expedition_invites = true
-      guild_chat = true
-      guild_invites = true
-      alliance_chat = true
-      alliance_invites = true
-      family_invites = true
-      follow = true
+    whispers = true
+    friend_invites = true
+    chat_invites = true
+    trade_requests = true
+    party_invites = true
+    sidekick_invites = true
+    expedition_invites = true
+    guild_chat = true
+    guild_invites = true
+    alliance_chat = true
+    alliance_invites = true
+    family_invites = true
+    follow = true

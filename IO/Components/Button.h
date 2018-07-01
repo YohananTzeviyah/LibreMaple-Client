@@ -24,7 +24,7 @@
 
 namespace jrc
 {
-// Base class for different button types.
+//! Base class for different button types.
 class Button
 {
 public:
