@@ -93,6 +93,15 @@ void Configuration::load() noexcept(false)
                 "No valid value for \"settings.toml:video.vsync\" found; "
                 "using default.");
         }
+
+        if (auto low_quality = video_table->get_as<bool>("low_quality");
+            low_quality) {
+            video.low_quality = *low_quality;
+        } else {
+            Console::get().print(
+                "No valid value for \"settings.toml:video.low_quality\" "
+                "found; using default.");
+        }
     } else {
         Console::get().print(
             "No valid table \"settings.toml:video\" found; using default.");

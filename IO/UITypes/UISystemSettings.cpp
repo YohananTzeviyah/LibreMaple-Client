@@ -44,37 +44,37 @@ UISystemSettings::UISystemSettings()
                             SLIDER_Y_OFFSET,
                             0,
                             1,
-                            [](bool rightwards) {}};
+                            [](bool) {}};
     sliders[BGM_VOL] = {scroll_src,
                         {SLIDER_LEFT, SLIDER_RIGHT_SHORT},
                         SLIDER_Y_OFFSET + SLIDER_STRIDE * 2,
                         0,
-                        100,
+                        50,
                         [](bool rightwards) {}};
     sliders[SFX_VOL] = {scroll_src,
                         {SLIDER_LEFT, SLIDER_RIGHT_SHORT},
                         SLIDER_Y_OFFSET + SLIDER_STRIDE * 3,
                         0,
-                        100,
+                        50,
                         [](bool rightwards) {}};
     sliders[CURSOR_SPEED] = {scroll_src,
                              {SLIDER_LEFT, SLIDER_RIGHT},
                              SLIDER_Y_OFFSET + SLIDER_STRIDE * 5,
                              0,
                              2,
-                             [](bool rightwards) {}};
+                             [](bool) {}};
     sliders[HP_ALERT] = {scroll_src,
                          {SLIDER_LEFT, SLIDER_RIGHT},
                          SLIDER_Y_OFFSET + SLIDER_STRIDE * 6,
                          0,
-                         100,
-                         [](bool rightwards) {}};
+                         50,
+                         [](bool) {}};
     sliders[MP_ALERT] = {scroll_src,
                          {SLIDER_LEFT, SLIDER_RIGHT},
                          SLIDER_Y_OFFSET + SLIDER_STRIDE * 7,
                          0,
-                         100,
-                         [](bool rightwards) {}};
+                         50,
+                         [](bool) {}};
 
     check_texture = source["check"];
 
@@ -118,7 +118,43 @@ Cursor::State UISystemSettings::send_cursor(bool pressed,
 
     if (auto check = check_by_pos(normalized); check) {
         if (pressed) {
-            checks_state ^= static_cast<std::uint16_t>(1 << *check);
+            switch (auto c = *check; c) {
+            case RESOLUTION_800_600:
+                checks_state
+                    |= static_cast<std::uint16_t>(1 << RESOLUTION_800_600);
+                checks_state
+                    &= ~static_cast<std::uint16_t>(1 << RESOLUTION_1024_768);
+                break;
+            case RESOLUTION_1024_768:
+                checks_state
+                    |= static_cast<std::uint16_t>(1 << RESOLUTION_1024_768);
+                checks_state
+                    &= ~static_cast<std::uint16_t>(1 << RESOLUTION_800_600);
+                break;
+            case WINDOWED:
+                checks_state |= static_cast<std::uint16_t>(1 << WINDOWED);
+                checks_state &= ~static_cast<std::uint16_t>(1 << FULL_SCREEN);
+                break;
+            case FULL_SCREEN:
+                checks_state |= static_cast<std::uint16_t>(1 << FULL_SCREEN);
+                checks_state &= ~static_cast<std::uint16_t>(1 << WINDOWED);
+                break;
+            case MINIMAP_NORMAL:
+                checks_state
+                    |= static_cast<std::uint16_t>(1 << MINIMAP_NORMAL);
+                checks_state
+                    &= ~static_cast<std::uint16_t>(1 << MINIMAP_SIMPLE);
+                break;
+            case MINIMAP_SIMPLE:
+                checks_state
+                    |= static_cast<std::uint16_t>(1 << MINIMAP_SIMPLE);
+                checks_state
+                    &= ~static_cast<std::uint16_t>(1 << MINIMAP_NORMAL);
+                break;
+            default:
+                checks_state ^= static_cast<std::uint16_t>(1 << c);
+                break;
+            }
         }
         return Cursor::CAN_CLICK;
     }
@@ -149,18 +185,20 @@ void UISystemSettings::load_settings() noexcept
     sliders[PIC_QUALITY].set_cols(
         Configuration::get().video.low_quality ? 0 : 1, 0, 1);
     checks_state |= 1 << RESOLUTION_1024_768;
-    sliders[BGM_VOL].set_cols(Configuration::get().audio.volume.music, 0, 10);
+    sliders[BGM_VOL].set_cols(
+        Configuration::get().audio.volume.music / 2, 0, 50);
     if (!Configuration::get().audio.music) {
         checks_state |= 1 << BGM_MUTE;
     }
     sliders[SFX_VOL].set_cols(
-        Configuration::get().audio.volume.sound_effects, 0, 10);
+        Configuration::get().audio.volume.sound_effects / 2, 0, 50);
     if (!Configuration::get().audio.sound_effects) {
         checks_state |= 1 << SFX_MUTE;
     }
     sliders[CURSOR_SPEED].set_cols(1, 0, 2);
-    sliders[HP_ALERT].set_cols(Configuration::get().ui.hp_alert, 0, 10);
-    sliders[MP_ALERT].set_cols(Configuration::get().ui.mp_alert, 0, 10);
+    sliders[CURSOR_SPEED].set_enabled(false);
+    sliders[HP_ALERT].set_cols(Configuration::get().ui.hp_alert / 2, 0, 50);
+    sliders[MP_ALERT].set_cols(Configuration::get().ui.mp_alert / 2, 0, 50);
     if (Configuration::get().ui.shake_screen) {
         checks_state |= 1 << SHAKE_SCREEN;
     }
@@ -180,14 +218,14 @@ void UISystemSettings::commit() const noexcept
 {
     Configuration::get().video.low_quality
         = sliders[PIC_QUALITY].get_col() == 0;
-    Configuration::get().audio.volume.music = sliders[BGM_VOL].get_col();
+    Configuration::get().audio.volume.music = sliders[BGM_VOL].get_col() * 2;
     Configuration::get().audio.music = !(checks_state & (1 << BGM_MUTE));
     Configuration::get().audio.volume.sound_effects
-        = sliders[SFX_VOL].get_col();
+        = sliders[SFX_VOL].get_col() * 2;
     Configuration::get().audio.sound_effects
         = !(checks_state & (1 << SFX_MUTE));
-    Configuration::get().ui.hp_alert = sliders[HP_ALERT].get_col();
-    Configuration::get().ui.mp_alert = sliders[MP_ALERT].get_col();
+    Configuration::get().ui.hp_alert = sliders[HP_ALERT].get_col() * 2;
+    Configuration::get().ui.mp_alert = sliders[MP_ALERT].get_col() * 2;
     Configuration::get().ui.shake_screen = checks_state & (1 << SHAKE_SCREEN);
     Configuration::get().video.fullscreen = checks_state & (1 << FULL_SCREEN);
     Configuration::get().ui.simple_minimap

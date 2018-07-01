@@ -16,6 +16,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.    //
 //////////////////////////////////////////////////////////////////////////////
 #pragma once
+#include "pcg_random.hpp"
+
 #include <cstdint>
 #include <random>
 
@@ -54,7 +56,7 @@ public:
         }
 
         std::uniform_real_distribution<T> range{from, to};
-        return range(state.mersenne_twister);
+        return range(state.rng);
     }
 
     template<class T>
@@ -71,7 +73,7 @@ public:
         }
 
         std::uniform_int_distribution<T> range{from, to - 1};
-        return range(state.mersenne_twister);
+        return range(state.rng);
     }
 
     template<class E>
@@ -88,7 +90,8 @@ public:
 
 private:
     struct RandomizerState {
-        RandomizerState() : mersenne_twister{std::random_device{}()}
+        RandomizerState()
+            : rng{pcg_extras::seed_seq_from<std::random_device>{}}
         {
         }
         RandomizerState(const RandomizerState&) = delete;
@@ -99,7 +102,7 @@ private:
         RandomizerState& operator=(const RandomizerState&) = delete;
         RandomizerState& operator=(RandomizerState&&) = delete;
 
-        std::mt19937_64 mersenne_twister;
+        pcg64 rng;
     };
 
     inline static thread_local RandomizerState state;

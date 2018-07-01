@@ -122,7 +122,8 @@ bool SliderHoriz::remove_cursor(bool clicked) noexcept
 
 Point<std::int16_t> SliderHoriz::get_thumb_pos() const noexcept
 {
-    std::int16_t x = col < col_max ? horizontal.first() + col * col_width
+    std::int16_t x = col < col_max ? horizontal.first()
+                                         + col * horizontal.length() / col_max
                                    : horizontal.second();
     return {x, y};
 }
@@ -137,7 +138,8 @@ Cursor::State SliderHoriz::send_cursor(Point<std::int16_t> cursor,
     Point<std::int16_t> relative = cursor - start;
     if (scrolling) {
         if (cursor_pressed) {
-            std::int16_t thumb_x = col * col_width + button_width / 2;
+            std::int16_t thumb_x
+                = col * horizontal.length() / col_max + button_width / 2;
             std::int16_t delta = relative.x() - thumb_x;
             if (delta > col_width / 2 && col < col_max) {
                 ++col;
@@ -155,7 +157,8 @@ Cursor::State SliderHoriz::send_cursor(Point<std::int16_t> cursor,
     }
 
     if (relative.x() < 0 || relative.y() < 0
-        || relative.x() > horizontal.second()
+        || relative.x()
+               > horizontal.second() - button_width * 2 - button_width / 2
         || relative.y() > normal.get_dimensions().y()) {
         state = NORMAL;
         return Cursor::IDLE;
@@ -163,8 +166,8 @@ Cursor::State SliderHoriz::send_cursor(Point<std::int16_t> cursor,
 
     if (cursor_pressed) {
         auto x_offset = static_cast<double>(relative.x() - button_width / 2);
-        auto cursor_col
-            = static_cast<std::int16_t>(std::round(x_offset / col_width));
+        auto cursor_col = static_cast<std::int16_t>(
+            std::round(x_offset * col_max / horizontal.length()));
         if (cursor_col < 0) {
             cursor_col = 0;
         } else if (cursor_col > col_max) {

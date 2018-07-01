@@ -175,7 +175,8 @@ SET(SOURCE_FILES ${Root_CPP}
                  "../boost/boost/container/flat_map.hpp"
                  "../boost/boost/container/flat_set.hpp"
                  "../boost/boost/container/static_vector.hpp"
-                 "../cpptoml/include/cpptoml.h")
+                 "../cpptoml/include/cpptoml.h"
+                 "../pcg-cpp/include/pcg_random.hpp")
 
 # Adding file globs created above as libraries
 add_library(Audio         ${Audio_CPP})
@@ -288,3 +289,4 @@ include_directories("../boost")
 include_directories("/usr/include")
 include_directories("/usr/include/SDL2")
 include_directories("../cpptoml/include")
+include_directories("../pcg-cpp/include")
