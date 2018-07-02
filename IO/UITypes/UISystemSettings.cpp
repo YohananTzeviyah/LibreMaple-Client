@@ -44,37 +44,41 @@ UISystemSettings::UISystemSettings()
                             SLIDER_Y_OFFSET,
                             0,
                             1,
-                            [](bool) {}};
+                            [](std::int16_t, bool) {}};
     sliders[BGM_VOL] = {scroll_src,
                         {SLIDER_LEFT, SLIDER_RIGHT_SHORT},
                         SLIDER_Y_OFFSET + SLIDER_STRIDE * 2,
                         0,
                         50,
-                        [](bool rightwards) {}};
+                        [](std::int16_t new_col, bool) {
+                            Music::set_bgm_volume(new_col * 2);
+                        }};
     sliders[SFX_VOL] = {scroll_src,
                         {SLIDER_LEFT, SLIDER_RIGHT_SHORT},
                         SLIDER_Y_OFFSET + SLIDER_STRIDE * 3,
                         0,
                         50,
-                        [](bool rightwards) {}};
+                        [](std::int16_t new_col, bool) {
+                            Sound::set_sfx_volume(new_col * 2);
+                        }};
     sliders[CURSOR_SPEED] = {scroll_src,
                              {SLIDER_LEFT, SLIDER_RIGHT},
                              SLIDER_Y_OFFSET + SLIDER_STRIDE * 5,
                              0,
                              2,
-                             [](bool) {}};
+                             [](std::int16_t, bool) {}};
     sliders[HP_ALERT] = {scroll_src,
                          {SLIDER_LEFT, SLIDER_RIGHT},
                          SLIDER_Y_OFFSET + SLIDER_STRIDE * 6,
                          0,
                          50,
-                         [](bool) {}};
+                         [](std::int16_t, bool) {}};
     sliders[MP_ALERT] = {scroll_src,
                          {SLIDER_LEFT, SLIDER_RIGHT},
                          SLIDER_Y_OFFSET + SLIDER_STRIDE * 7,
                          0,
                          50,
-                         [](bool) {}};
+                         [](std::int16_t, bool) {}};
 
     check_texture = source["check"];
 
@@ -187,11 +191,13 @@ void UISystemSettings::load_settings() noexcept
     checks_state |= 1 << RESOLUTION_1024_768;
     sliders[BGM_VOL].set_cols(
         Configuration::get().audio.volume.music / 2, 0, 50);
+    Music::set_bgm_volume(Configuration::get().audio.volume.music);
     if (!Configuration::get().audio.music) {
         checks_state |= 1 << BGM_MUTE;
     }
     sliders[SFX_VOL].set_cols(
         Configuration::get().audio.volume.sound_effects / 2, 0, 50);
+    Sound::set_sfx_volume(Configuration::get().audio.volume.sound_effects);
     if (!Configuration::get().audio.sound_effects) {
         checks_state |= 1 << SFX_MUTE;
     }
@@ -219,9 +225,11 @@ void UISystemSettings::commit() const noexcept
     Configuration::get().video.low_quality
         = sliders[PIC_QUALITY].get_col() == 0;
     Configuration::get().audio.volume.music = sliders[BGM_VOL].get_col() * 2;
+    Music::set_bgm_volume(Configuration::get().audio.volume.music);
     Configuration::get().audio.music = !(checks_state & (1 << BGM_MUTE));
     Configuration::get().audio.volume.sound_effects
         = sliders[SFX_VOL].get_col() * 2;
+    Sound::set_sfx_volume(Configuration::get().audio.volume.sound_effects);
     Configuration::get().audio.sound_effects
         = !(checks_state & (1 << SFX_MUTE));
     Configuration::get().ui.hp_alert = sliders[HP_ALERT].get_col() * 2;

@@ -29,12 +29,13 @@ class SliderHoriz
 public:
     enum State : std::uint8_t { NORMAL, PRESSED, DISABLED, MOUSE_OVER };
 
-    SliderHoriz(nl::node src,
-                Range<std::int16_t> horiz,
-                std::int16_t y_pos,
-                std::int16_t unit_cols,
-                std::int16_t col_max_,
-                std::function<void(bool rightwards)> on_moved_);
+    SliderHoriz(
+        nl::node src,
+        Range<std::int16_t> horiz,
+        std::int16_t y_pos,
+        std::int16_t unit_cols,
+        std::int16_t col_max_,
+        std::function<void(std::int16_t new_col, bool rightwards)> on_moved_);
     SliderHoriz() = default;
 
     bool is_enabled() const noexcept;
@@ -56,7 +57,7 @@ public:
 private:
     Point<std::int16_t> get_thumb_pos() const noexcept;
 
-    std::function<void(bool rightwards)> on_moved;
+    std::function<void(std::int16_t new_col, bool rightwards)> on_moved;
 
     Range<std::int16_t> horizontal;
     Point<std::int16_t> start;

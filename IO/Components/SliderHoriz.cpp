@@ -24,7 +24,7 @@ SliderHoriz::SliderHoriz(nl::node src,
                          std::int16_t y_pos,
                          std::int16_t unit_cols,
                          std::int16_t col_max_,
-                         std::function<void(bool)> on_moved_)
+                         std::function<void(std::int16_t, bool)> on_moved_)
     : on_moved{on_moved_},
       horizontal{horiz},
       start{horizontal.first(), y_pos},
@@ -143,10 +143,10 @@ Cursor::State SliderHoriz::send_cursor(Point<std::int16_t> cursor,
             std::int16_t delta = relative.x() - thumb_x;
             if (delta > col_width / 2 && col < col_max) {
                 ++col;
-                on_moved(false);
+                on_moved(col, false);
             } else if (delta < -col_width / 2 && col > 0) {
                 --col;
-                on_moved(true);
+                on_moved(col, true);
             }
 
             state = PRESSED;
@@ -174,17 +174,14 @@ Cursor::State SliderHoriz::send_cursor(Point<std::int16_t> cursor,
             cursor_col = col_max;
         }
 
-        std::int16_t delta = col - cursor_col;
-        while (delta > 0) {
-            --delta;
-            on_moved(true);
-        }
-        while (delta < 0) {
-            ++delta;
-            on_moved(false);
+        std::int16_t old_col = col;
+        col = cursor_col;
+        if (col > old_col) {
+            on_moved(col, true);
+        } else if (old_col > col) {
+            on_moved(col, false);
         }
 
-        col = cursor_col;
         scrolling = true;
         state = PRESSED;
 
