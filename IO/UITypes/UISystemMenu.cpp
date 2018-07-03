@@ -60,6 +60,15 @@ void UISystemMenu::draw(float inter) const
     UIElement::draw_buttons(inter);
 }
 
+bool UISystemMenu::remove_cursor(bool clicked, Point<std::int16_t> cursor_pos)
+{
+    if (clicked) {
+        active = false;
+    }
+
+    return UIElement::remove_cursor(clicked, cursor_pos);
+}
+
 Button::State UISystemMenu::button_pressed(std::uint16_t button_id)
 {
     switch (button_id) {

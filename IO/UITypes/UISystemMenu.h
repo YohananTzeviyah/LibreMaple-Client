@@ -34,6 +34,7 @@ public:
     UISystemMenu();
 
     void draw(float inter) const override;
+    bool remove_cursor(bool clicked, Point<std::int16_t> cursor_pos) override;
 
 protected:
     Button::State button_pressed(std::uint16_t button_id) override;

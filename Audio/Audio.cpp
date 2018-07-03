@@ -127,7 +127,7 @@ void Sound::set_sfx_volume(std::uint8_t vol) noexcept
         return;
     }
 
-    Mix_Volume(-1, MIX_MAX_VOLUME * vol / 100u);
+    Mix_Volume(-1, MIX_MAX_VOLUME * static_cast<int>(vol) / 100);
 }
 
 std::size_t Sound::add_sound(nl::node src) noexcept
@@ -210,8 +210,8 @@ Error Music::play(const std::string& bgm_path)
 void Music::init() noexcept
 {
     stream = nullptr;
-    set_bgm_volume(Configuration::get().audio.volume.music);
     initialized = true;
+    set_bgm_volume(Configuration::get().audio.volume.music);
 }
 
 void Music::set_bgm_volume(std::uint8_t vol) noexcept
@@ -220,7 +220,7 @@ void Music::set_bgm_volume(std::uint8_t vol) noexcept
         return;
     }
 
-    Mix_VolumeMusic(MIX_MAX_VOLUME * vol / 100u);
+    Mix_VolumeMusic(MIX_MAX_VOLUME * static_cast<int>(vol) / 100);
 }
 
 bool Music::is_initialized() noexcept

@@ -26,8 +26,8 @@
 namespace jrc
 {
 UIEquipInventory::UIEquipInventory(const Inventory& invent)
-    : UIDragElement<Configuration::PositionOf::EQUIP_INVENTORY>({184, 20}),
-      inventory(invent)
+    : UIDragElement<Configuration::PositionOf::EQUIP_INVENTORY>{{184, 20}},
+      inventory{invent}
 {
     icon_positions[Equipslot::CAP] = {43, 25};
     icon_positions[Equipslot::FACEACC] = {43, 91};
@@ -50,8 +50,9 @@ UIEquipInventory::UIEquipInventory(const Inventory& invent)
     icon_positions[Equipslot::MEDAL] = {10, 58};
     icon_positions[Equipslot::BELT] = {76, 157};
 
-    nl::node source = nl::nx::ui["UIWindow2.img"]["Equip"]["character"];
-    nl::node petsource = nl::nx::ui["UIWindow2.img"]["Equip"]["pet"];
+    nl::node base_source = nl::nx::ui["UIWindow2.img"]["Equip"];
+    nl::node source = base_source["character"];
+    nl::node pet_source = base_source["pet"];
 
     sprites.emplace_back(source["backgrnd"]);
     sprites.emplace_back(source["backgrnd2"]);
@@ -62,9 +63,9 @@ UIEquipInventory::UIEquipInventory(const Inventory& invent)
 
     buttons[BT_TOGGLEPETS] = std::make_unique<MapleButton>(source["BtPet"]);
 
-    textures_pet.emplace_back(petsource["backgrnd"]);
-    textures_pet.emplace_back(petsource["backgrnd2"]);
-    textures_pet.emplace_back(petsource["backgrnd3"]);
+    textures_pet.emplace_back(pet_source["backgrnd"]);
+    textures_pet.emplace_back(pet_source["backgrnd2"]);
+    textures_pet.emplace_back(pet_source["backgrnd3"]);
 
     load_icons();
 
@@ -120,8 +121,8 @@ void UIEquipInventory::load_icons()
 {
     icons.clear();
 
-    for (auto iter : Equipslot::values) {
-        update_slot(iter);
+    for (auto slot_id : Equipslot::values) {
+        update_slot(slot_id);
     }
 }
 
@@ -156,9 +157,9 @@ void UIEquipInventory::double_click(Point<std::int16_t> cursorpos)
 {
     Equipslot::Id slot = slot_by_position(cursorpos);
     if (icons[slot]) {
-        if (std::int16_t freeslot
+        if (std::int16_t free_slot
             = inventory.find_free_slot(InventoryType::EQUIP)) {
-            UnequipItemPacket(slot, freeslot).dispatch();
+            UnequipItemPacket{slot, free_slot}.dispatch();
         }
     }
 }
@@ -181,16 +182,16 @@ void UIEquipInventory::modify(std::int16_t pos,
                               std::int8_t mode,
                               std::int16_t arg)
 {
-    Equipslot::Id eqpos = Equipslot::by_id(pos);
-    Equipslot::Id eqarg = Equipslot::by_id(arg);
+    Equipslot::Id eq_pos = Equipslot::by_id(pos);
+    Equipslot::Id eq_arg = Equipslot::by_id(arg);
     switch (mode) {
     case 0:
     case 3:
-        update_slot(eqpos);
+        update_slot(eq_pos);
         break;
     case 2:
-        update_slot(eqpos);
-        update_slot(eqarg);
+        update_slot(eq_pos);
+        update_slot(eq_arg);
         break;
     }
 }
@@ -210,8 +211,7 @@ UIEquipInventory::slot_by_position(Point<std::int16_t> cursor_pos) const
 {
     for (auto [slot, slot_pos] : icon_positions) {
         Rectangle<std::int16_t> icon_rect{position + slot_pos,
-                                          position + slot_pos
-                                              + Point<std::int16_t>{32, 32}};
+                                          position + slot_pos + 32};
         if (icon_rect.contains(cursor_pos)) {
             return slot;
         }
@@ -225,7 +225,7 @@ UIEquipInventory::EquipIcon::EquipIcon(std::int16_t s) noexcept : source(s)
 
 void UIEquipInventory::EquipIcon::drop_on_stage() const
 {
-    UnequipItemPacket(source, 0).dispatch();
+    UnequipItemPacket{source, 0}.dispatch();
 }
 
 void UIEquipInventory::EquipIcon::drop_on_items(InventoryType::Id tab,
@@ -239,10 +239,10 @@ void UIEquipInventory::EquipIcon::drop_on_items(InventoryType::Id tab,
 
     if (equip) {
         if (eqslot == source) {
-            EquipItemPacket(slot, eqslot).dispatch();
+            EquipItemPacket{slot, eqslot}.dispatch();
         }
     } else {
-        UnequipItemPacket(source, slot).dispatch();
+        UnequipItemPacket{source, slot}.dispatch();
     }
 }
 } // namespace jrc

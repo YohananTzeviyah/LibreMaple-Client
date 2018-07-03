@@ -101,9 +101,9 @@ void UI::send_cursor(bool pressed)
     send_cursor(cursor_pos, cursor_state);
 
     if (focused_text_field && pressed) {
-        Cursor::State tstate
+        Cursor::State t_state
             = focused_text_field->send_cursor(cursor_pos, pressed);
-        switch (tstate) {
+        switch (t_state) {
         case Cursor::IDLE:
             focused_text_field = {};
             break;

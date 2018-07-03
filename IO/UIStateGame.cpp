@@ -152,6 +152,13 @@ Cursor::State UIStateGame::send_cursor(Cursor::State mst,
     } else {
         bool clicked = mst == Cursor::CLICKING;
         if (UIElement* focused_element = get(focused); focused_element) {
+            /*if (focused != UIElement::SYSTEM_MENU) {
+                if (UIElement* sys_menu = get(UIElement::SYSTEM_MENU);
+                    sys_menu) {
+                    sys_menu->deactivate();
+                }
+            }*/
+
             if (focused_element->is_active()) {
                 return focused_element->send_cursor(clicked, pos);
             } else {
