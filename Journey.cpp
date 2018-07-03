@@ -34,23 +34,31 @@ namespace jrc
 {
 Error init()
 {
-    if (Error error = Session::get().init()) {
+    if (Error error = Session::get().init(); error) {
         return error;
     }
 
-    if (Error error = NxFiles::init()) {
+    if (Error error = NxFiles::init(); error) {
         return error;
     }
 
-    if (Error error = Window::get().init()) {
+    if (Error error = Window::get().init(); error) {
         return error;
     }
 
-    if (Error error = Sound::init()) {
-        return error;
+    if (Configuration::get().audio.sound_effects
+        || Configuration::get().audio.music) {
+        if (Error error = Sound::init(); error) {
+            return error;
+        }
     }
 
-    Music::init();
+    if (Configuration::get().audio.sound_effects) {
+        Sound::init_sfx();
+    }
+    if (Configuration::get().audio.music) {
+        Music::init();
+    }
     Char::init();
     DamageNumber::init();
     MapPortals::init();

@@ -23,24 +23,30 @@
 #include "nlnx/audio.hpp"
 #include "nlnx/nx.hpp"
 
+#include <cstddef>
+
 namespace jrc
 {
 constexpr const char* Error::messages[];
 
-Sound::Sound() noexcept : id(0)
+Sound::Sound() noexcept : id{0}
 {
 }
 
-Sound::Sound(Name name) noexcept : id(sound_ids[name])
+Sound::Sound(Name name) noexcept : id{sound_ids[name]}
 {
 }
 
-Sound::Sound(nl::node src) noexcept : id(add_sound(src))
+Sound::Sound(nl::node src) noexcept : id{add_sound(src)}
 {
 }
 
 void Sound::play() const noexcept
 {
+    if (!initialized) {
+        return;
+    }
+
     if (auto sample_iter = samples.find(id); sample_iter != samples.end()) {
         Mix_PlayChannel(-1, sample_iter->second, 0);
     }
@@ -85,10 +91,19 @@ Error Sound::init()
     return Error::NONE;
 }
 
+void Sound::init_sfx() noexcept
+{
+    initialized = true;
+}
+
 Mix_Music* Music::stream;
 
 void Sound::close() noexcept
 {
+    if (!initialized) {
+        return;
+    }
+
     if (Music::stream) {
         Mix_HaltMusic();
         Mix_FreeMusic(Music::stream);
@@ -102,18 +117,28 @@ void Sound::close() noexcept
     Mix_CloseAudio();
     Mix_Quit();
     SDL_Quit();
+
+    initialized = false;
 }
 
 void Sound::set_sfx_volume(std::uint8_t vol) noexcept
 {
+    if (!initialized) {
+        return;
+    }
+
     Mix_Volume(-1, MIX_MAX_VOLUME * vol / 100u);
 }
 
-std::size_t Sound::add_sound(nl::node src)
+std::size_t Sound::add_sound(nl::node src) noexcept
 {
+    if (!initialized) {
+        return 0;
+    }
+
     nl::audio ad = src;
 
-    auto data = static_cast<const char*>(ad.data());
+    auto data = static_cast<const std::byte*>(ad.data());
 
     if (data) {
         std::size_t id = ad.id();
@@ -129,6 +154,10 @@ std::size_t Sound::add_sound(nl::node src)
 
 void Sound::add_sound(Name name, nl::node src) noexcept
 {
+    if (!initialized) {
+        return;
+    }
+
     std::size_t id = add_sound(src);
 
     if (id) {
@@ -136,11 +165,21 @@ void Sound::add_sound(Name name, nl::node src) noexcept
     }
 }
 
+bool Sound::is_initialized() noexcept
+{
+    return initialized;
+}
+
 std::unordered_map<std::size_t, Mix_Chunk*> Sound::samples;
 EnumMap<Sound::Name, std::size_t> Sound::sound_ids;
+bool Sound::initialized = false;
 
-Error Music::play(std::string&& bgm_path)
+Error Music::play(const std::string& bgm_path)
 {
+    if (!initialized) {
+        return Error::NONE;
+    }
+
     static std::string path;
 
     if (path == bgm_path) {
@@ -148,7 +187,7 @@ Error Music::play(std::string&& bgm_path)
     }
 
     nl::audio ad = nl::nx::sound.resolve(bgm_path);
-    auto data = static_cast<const char*>(ad.data());
+    auto data = static_cast<const std::byte*>(ad.data());
 
     if (data) {
         if (stream) {
@@ -162,7 +201,7 @@ Error Music::play(std::string&& bgm_path)
             return Error::AUDIO;
         }
 
-        path = std::move(bgm_path);
+        path = bgm_path;
     }
 
     return Error::NONE;
@@ -172,10 +211,22 @@ void Music::init() noexcept
 {
     stream = nullptr;
     set_bgm_volume(Configuration::get().audio.volume.music);
+    initialized = true;
 }
 
 void Music::set_bgm_volume(std::uint8_t vol) noexcept
 {
+    if (!initialized) {
+        return;
+    }
+
     Mix_VolumeMusic(MIX_MAX_VOLUME * vol / 100u);
 }
+
+bool Music::is_initialized() noexcept
+{
+    return initialized;
+}
+
+bool Music::initialized = false;
 } // namespace jrc

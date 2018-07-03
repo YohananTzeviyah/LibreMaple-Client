@@ -92,8 +92,9 @@ void Stage::load_map(std::int32_t map_id)
 
 void Stage::respawn(std::int8_t portal_id)
 {
-    if (auto mus_err = Music::play(map_info.get_bgm()); mus_err) {
-        Console::get().print("Error playing music " + map_info.get_bgm());
+    std::string bgm_path = map_info.get_bgm();
+    if (auto mus_err = Music::play(bgm_path); mus_err) {
+        Console::get().print("Error playing music " + bgm_path);
     }
 
     Point<std::int16_t> spawn_point

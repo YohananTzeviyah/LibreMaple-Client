@@ -281,15 +281,16 @@ bool Animation::update(std::uint16_t timestep)
 
 std::uint16_t Animation::get_delay(std::int16_t frame_id) const
 {
-    return frame_id < frames.size() ? frames[frame_id].get_delay()
-                                    : static_cast<std::uint16_t>(0);
+    return frame_id < static_cast<std::int16_t>(frames.size())
+               ? frames[frame_id].get_delay()
+               : 0u;
 }
 
 std::uint16_t Animation::get_delay_until(std::int16_t frame_id) const
 {
     std::uint16_t total = 0;
     for (std::int16_t i = 0; i < frame_id; ++i) {
-        if (i >= frames.size()) {
+        if (i >= static_cast<std::int16_t>(frames.size())) {
             break;
         }
 

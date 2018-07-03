@@ -58,29 +58,36 @@ public:
     void play() const noexcept;
 
     [[nodiscard]] static Error init();
+    static void init_sfx() noexcept;
     static void close() noexcept;
     static void set_sfx_volume(std::uint8_t volume) noexcept;
+
+    [[nodiscard]] static bool is_initialized() noexcept;
 
 private:
     std::size_t id;
 
-    static std::size_t add_sound(nl::node src);
+    static std::size_t add_sound(nl::node src) noexcept;
     static void add_sound(Sound::Name name, nl::node src) noexcept;
 
     static std::unordered_map<std::size_t, Mix_Chunk*> samples;
     static EnumMap<Name, std::size_t> sound_ids;
+    static bool initialized;
 };
 
 class Music
 {
 public:
-    [[nodiscard]] static Error play(std::string&& bgm_path);
+    [[nodiscard]] static Error play(const std::string& bgm_path);
 
     static void init() noexcept;
     static void set_bgm_volume(std::uint8_t volume) noexcept;
 
+    [[nodiscard]] static bool is_initialized() noexcept;
+
 private:
     static Mix_Music* stream;
+    static bool initialized;
 
     friend Sound;
 };

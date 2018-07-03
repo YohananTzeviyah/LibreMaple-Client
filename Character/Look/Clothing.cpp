@@ -60,7 +60,7 @@ Clothing::Clothing(std::int32_t id, const BodyDrawinfo& drawinfo) : item_id(id)
                                                 Layer::MEDAL};
 
     Layer chlayer;
-    auto index = (item_id / 10000) - 100;
+    std::size_t index = (static_cast<std::size_t>(item_id) / 10000ul) - 100ul;
     if (index < NON_WEAPON_TYPES) {
         chlayer = layers[index];
     } else if (index >= WEAPON_OFFSET

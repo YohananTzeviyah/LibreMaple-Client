@@ -557,7 +557,7 @@ GraphicsGL::LayoutBuilder::add(std::string_view text,
     if (!line_break) {
         for (std::string_view::size_type i = first; i < last; ++i) {
             char c = text[i];
-            word_width += font.chars[c].ax;
+            word_width += font.chars[static_cast<std::size_t>(c)].ax;
 
             if (word_width > max_width) {
                 if (last - first == 1) {
@@ -585,7 +585,7 @@ GraphicsGL::LayoutBuilder::add(std::string_view text,
 
     for (std::string_view::size_type pos = first; pos < last; ++pos) {
         char c = text[pos];
-        const Font::Char& ch = font.chars[c];
+        const Font::Char& ch = font.chars[static_cast<std::size_t>(c)];
 
         advances.push_back(ax);
 
@@ -699,7 +699,7 @@ void GraphicsGL::draw_text(const DrawArgument& args,
         break;
     }
 
-    constexpr GLfloat colors[Text::NUM_COLORS][3] = {
+    static constexpr const GLfloat colors[Text::NUM_COLORS][3] = {
         {0.0f, 0.0f, 0.0f},    // Black
         {1.0f, 1.0f, 1.0f},    // White
         {1.0f, 1.0f, 0.0f},    // Yellow
@@ -733,7 +733,7 @@ void GraphicsGL::draw_text(const DrawArgument& args,
 
             for (std::size_t pos = word.first; pos < word.last; ++pos) {
                 const char c = text[pos];
-                const Font::Char& ch = font.chars[c];
+                const Font::Char& ch = font.chars[static_cast<std::size_t>(c)];
 
                 GLshort chx = x + ax + ch.bl;
                 GLshort chy = y + ay - ch.bt;

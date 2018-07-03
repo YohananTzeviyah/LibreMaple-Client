@@ -212,13 +212,12 @@ void UIStatusbar::display_message(Messages::Type line,
 
 float UIStatusbar::get_exp_percent() const
 {
-    std::int16_t level = stats.get_stat(Maplestat::LEVEL);
+    std::size_t level = stats.get_stat(Maplestat::LEVEL);
     if (level >= ExpTable::LEVELCAP) {
         return 0.0f;
     }
 
-    std::int64_t exp = stats.get_exp();
-    return static_cast<float>(exp)
+    return static_cast<float>(stats.get_exp())
            / static_cast<float>(ExpTable::values[level]);
 }
 
