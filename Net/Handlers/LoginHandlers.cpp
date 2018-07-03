@@ -44,21 +44,22 @@ void LoginResultHandler::handle(InPacket& recv) const
         // specific information.
         switch (reason) {
         case 2:
-            UI::get().emplace<UILoginNotice>(16);
+            UI::get().emplace<UILoginNotice>(UILoginNotice::BLOCKED_ID);
             break;
         case 7:
-            UI::get().emplace<UILoginNotice>(17);
+            UI::get().emplace<UILoginNotice>(UILoginNotice::ALREADY_LOGGED_IN);
             break;
         case 23:
             // The server sends a request to accept the terms of service. For
             // convenience, just auto-accept.
-            TOSPacket().dispatch();
+            TOSPacket{}.dispatch();
             break;
         default:
             // Other reasons.
             if (reason > 0) {
-                auto reasonbyte = static_cast<std::int8_t>(reason - 1);
-                UI::get().emplace<UILoginNotice>(reasonbyte);
+                auto reason_byte = static_cast<std::int8_t>(reason - 1);
+                UI::get().emplace<UILoginNotice>(
+                    static_cast<UILoginNotice::Message>(reason_byte));
             }
         }
 

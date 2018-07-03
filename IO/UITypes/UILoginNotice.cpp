@@ -23,24 +23,26 @@
 
 namespace jrc
 {
-UILoginNotice::UILoginNotice(std::int8_t id)
+UILoginNotice::UILoginNotice(Message id)
 {
     nl::node notice = nl::nx::ui["Login.img"]["Notice"];
 
-    std::int8_t back = (id == 16) ? 1 : 0;
-    background = notice["backgrnd"][back];
+    background = notice["backgrnd"][id == BLOCKED_ID ? "1" : "0"];
     text = {notice["text"][id], {17, 13}};
 
     buttons[BT_OK] = std::make_unique<MapleButton>(
-        notice["BtYes"], Point<std::int16_t>(100, 100));
+        notice["BtYes"], Point<std::int16_t>{100, 100});
 
     position = {292, 200};
     dimension = {362, 219};
     active = true;
+
+    Console::get().print("conStructed");
 }
 
 void UILoginNotice::draw(float alpha) const
 {
+    Console::get().print("draWering");
     background.draw(position);
     text.draw(position, alpha);
 

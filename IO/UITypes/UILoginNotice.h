@@ -91,7 +91,7 @@ public:
         FAMILY_AND_CASH_ITEMS_CONFIRM_DELETION
     };
 
-    UILoginNotice(std::int8_t message);
+    UILoginNotice(Message message);
 
     void draw(float alpha) const override;
 

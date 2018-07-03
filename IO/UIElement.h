@@ -37,7 +37,6 @@ public:
         NONE,
         LOGIN,
         LOGIN_WAIT,
-        LOGIN_NOTICE,
         WORLD_SELECT,
         CHAR_SELECT,
         CHAR_CREATION,
@@ -57,6 +56,7 @@ public:
         CHANGE_CHANNEL,
         GAME_SETTINGS,
         SYSTEM_SETTINGS,
+        LOGIN_NOTICE,
 
         NUM_TYPES
     };

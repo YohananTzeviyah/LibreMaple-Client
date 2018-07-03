@@ -105,7 +105,7 @@ UICharCreation::UICharCreation()
         cr_src["BtRight"], Point<std::int16_t>{645, 348});
     buttons[BT_CHARC_GENDERL] = std::make_unique<MapleButton>(
         cr_src["BtLeft"], Point<std::int16_t>{521, 368});
-    buttons[BT_CHARC_GEMDERR] = std::make_unique<MapleButton>(
+    buttons[BT_CHARC_GENDERR] = std::make_unique<MapleButton>(
         cr_src["BtRight"], Point<std::int16_t>{645, 368});
 
     buttons[BT_CHARC_FACEL]->set_active(false);
@@ -125,7 +125,7 @@ UICharCreation::UICharCreation()
     buttons[BT_CHARC_WEPL]->set_active(false);
     buttons[BT_CHARC_WEPR]->set_active(false);
     buttons[BT_CHARC_GENDERL]->set_active(false);
-    buttons[BT_CHARC_GEMDERR]->set_active(false);
+    buttons[BT_CHARC_GENDERR]->set_active(false);
 
     name_char
         = {Text::A13M, Text::LEFT, Text::WHITE, {{490, 219}, {630, 243}}, 12};
@@ -187,6 +187,7 @@ UICharCreation::UICharCreation()
         }
     }
 
+    named = false;
     female = false;
     randomize_look();
 
@@ -244,7 +245,7 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
             std::int32_t cbot = bots[female][bottom];
             std::int32_t cshoe = shoes[female][shoe];
             std::int32_t cwep = weapons[female][weapon];
-            CreateCharPacket(cname,
+            CreateCharPacket{cname,
                              cjob,
                              cface,
                              chair,
@@ -254,7 +255,7 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
                              cbot,
                              cshoe,
                              cwep,
-                             female)
+                             female}
                 .dispatch();
             return Button::PRESSED;
         } else {
@@ -264,9 +265,10 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
 
                 UI::get().disable();
                 UI::get().focus_text_field(nullptr);
-                NameCharPacket(name).dispatch();
+                NameCharPacket{name}.dispatch();
                 return Button::PRESSED;
             } else {
+                Console::get().print("empLacing");
                 UI::get().emplace<UILoginNotice>(UILoginNotice::ILLEGAL_NAME);
                 return Button::NORMAL;
             }
@@ -292,23 +294,25 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
             buttons[BT_CHARC_WEPL]->set_active(false);
             buttons[BT_CHARC_WEPR]->set_active(false);
             buttons[BT_CHARC_GENDERL]->set_active(false);
-            buttons[BT_CHARC_GEMDERR]->set_active(false);
+            buttons[BT_CHARC_GENDERR]->set_active(false);
             buttons[BT_CHARC_CANCEL]->set_state(Button::NORMAL);
             name_char.set_state(Textfield::NORMAL);
             named = false;
             return Button::NORMAL;
         } else {
             active = false;
-            if (auto charselect = UI::get().get_element<UICharSelect>())
-                charselect->make_active();
+            if (auto char_select = UI::get().get_element<UICharSelect>();
+                char_select) {
+                char_select->make_active();
+            }
             return Button::PRESSED;
         }
     }
 
-    if (id >= BT_CHARC_FACEL && id <= BT_CHARC_GEMDERR) {
+    if (id >= BT_CHARC_FACEL && id <= BT_CHARC_GENDERR) {
         switch (id) {
         case BT_CHARC_FACEL:
-            face = (face > 0) ? face - 1 : faces[female].size() - 1;
+            face = face > 0 ? face - 1 : faces[female].size() - 1;
             new_char.set_face(faces[female][face]);
             face_name.change_text(
                 std::string{new_char.get_face()->get_name()});
@@ -409,7 +413,7 @@ Button::State UICharCreation::button_pressed(std::uint16_t id)
                 std::string{get_equip_name(Equipslot::WEAPON)});
             break;
         case BT_CHARC_GENDERL:
-        case BT_CHARC_GEMDERR:
+        case BT_CHARC_GENDERR:
             female = !female;
             randomize_look();
             break;
@@ -429,10 +433,10 @@ Cursor::State UICharCreation::send_cursor(bool clicked,
     return UIElement::send_cursor(clicked, cursorpos);
 }
 
-void UICharCreation::send_naming_result(bool nameused)
+void UICharCreation::send_naming_result(bool name_used)
 {
     if (!named) {
-        if (nameused) {
+        if (name_used) {
             name_char.change_text("");
         } else {
             named = true;
@@ -456,7 +460,7 @@ void UICharCreation::send_naming_result(bool nameused)
             buttons[BT_CHARC_WEPL]->set_active(true);
             buttons[BT_CHARC_WEPR]->set_active(true);
             buttons[BT_CHARC_GENDERL]->set_active(true);
-            buttons[BT_CHARC_GEMDERR]->set_active(true);
+            buttons[BT_CHARC_GENDERR]->set_active(true);
             name_char.set_state(Textfield::DISABLED);
         }
         buttons[BT_CHARC_OK]->set_state(Button::NORMAL);
@@ -468,15 +472,15 @@ void UICharCreation::draw(float alpha) const
     for (std::int16_t i = 0; i < 2; ++i) {
         for (std::int16_t k = 0; k < Constants::VIEW_WIDTH; k += sky.width()) {
             sky.draw(Point<std::int16_t>{
-                k, static_cast<std::int16_t>((400 * i) - 100)});
+                k, static_cast<std::int16_t>(400 * i - 100)});
         }
     }
 
     std::int16_t cloudx
         = static_cast<std::int16_t>(cloud_fx) % Constants::VIEW_WIDTH;
-    cloud.draw(Point<std::int16_t>(cloudx - cloud.width(), 300));
+    cloud.draw(Point<std::int16_t>{cloudx - cloud.width(), 300});
     cloud.draw(Point<std::int16_t>{cloudx, 300});
-    cloud.draw(Point<std::int16_t>(cloudx + cloud.width(), 300));
+    cloud.draw(Point<std::int16_t>{cloudx + cloud.width(), 300});
 
     if (!named) {
         name_board.draw(Point<std::int16_t>{455, 115});
@@ -523,11 +527,11 @@ void UICharCreation::update()
 std::string_view UICharCreation::get_equip_name(Equipslot::Id slot) const
     noexcept
 {
-    if (std::int32_t item_id = new_char.get_equips().get_equip(slot)) {
+    if (std::int32_t item_id = new_char.get_equips().get_equip(slot);
+        item_id) {
         return ItemData::get(item_id).get_name();
     } else {
-        static constexpr const std::string_view nullstr = "Missing name.";
-        return nullstr;
+        return "Missing name.";
     }
 }
 } // namespace jrc

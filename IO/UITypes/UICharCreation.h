@@ -30,9 +30,9 @@ namespace jrc
 class UICharCreation : public UIElement
 {
 public:
-    static constexpr Type TYPE = CHAR_CREATION;
-    static constexpr bool FOCUSED = false;
-    static constexpr bool TOGGLED = false;
+    static constexpr const Type TYPE = CHAR_CREATION;
+    static constexpr const bool FOCUSED = false;
+    static constexpr const bool TOGGLED = false;
 
     UICharCreation();
 
@@ -71,7 +71,7 @@ private:
         BT_CHARC_WEPL,
         BT_CHARC_WEPR,
         BT_CHARC_GENDERL,
-        BT_CHARC_GEMDERR,
+        BT_CHARC_GENDERR,
     };
 
     std::vector<Sprite> sprites_look_board;
