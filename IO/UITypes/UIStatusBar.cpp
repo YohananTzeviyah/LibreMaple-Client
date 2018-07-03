@@ -20,6 +20,8 @@
 #include "../../Character/ExpTable.h"
 #include "../Components/MapleButton.h"
 #include "../UI.h"
+#include "UIChangeChannel.h"
+#include "UISystemSettings.h"
 #include "nlnx/nx.hpp"
 
 #include <string_view>
@@ -92,8 +94,8 @@ void UIStatusbar::draw(float alpha) const
     std::int16_t level = stats.get_stat(Maplestat::LEVEL);
     std::int16_t hp = stats.get_stat(Maplestat::HP);
     std::int16_t mp = stats.get_stat(Maplestat::MP);
-    std::int32_t maxhp = stats.get_total(Equipstat::HP);
-    std::int32_t maxmp = stats.get_total(Equipstat::MP);
+    std::int32_t max_hp = stats.get_total(Equipstat::HP);
+    std::int32_t max_mp = stats.get_total(Equipstat::MP);
     std::int64_t exp = stats.get_exp();
 
     std::string exp_string = std::to_string(100 * get_exp_percent());
@@ -105,10 +107,10 @@ void UIStatusbar::draw(float alpha) const
             "%]"),
         position + Point<std::int16_t>{47, -13});
     statset.draw(
-        str::concat('[', std::to_string(hp), '/', std::to_string(maxhp), ']'),
+        str::concat('[', std::to_string(hp), '/', std::to_string(max_hp), ']'),
         position + Point<std::int16_t>{-124, -29});
     statset.draw(
-        str::concat('[', std::to_string(mp), '/', std::to_string(maxmp), ']'),
+        str::concat('[', std::to_string(mp), '/', std::to_string(max_mp), ']'),
         position + Point<std::int16_t>{47, -29});
     levelset.draw(std::to_string(level),
                   position + Point<std::int16_t>{-480, -24});
@@ -155,8 +157,14 @@ Button::State UIStatusbar::button_pressed(std::uint16_t id)
     case BT_KEYSETTING:
         UI::get().send_menu(KeyAction::KEY_CONFIG);
         return Button::NORMAL;
-    case BT_OPTIONS:
+    case BT_MENU:
         UI::get().send_menu(KeyAction::MAIN_MENU);
+        return Button::NORMAL;
+    case BT_OPTIONS:
+        UI::get().emplace<UISystemSettings>();
+        return Button::NORMAL;
+    case BT_CHANNEL:
+        UI::get().emplace<UIChangeChannel>();
         return Button::NORMAL;
     default:
         return Button::PRESSED;
@@ -224,16 +232,16 @@ float UIStatusbar::get_exp_percent() const
 float UIStatusbar::get_hp_percent() const
 {
     std::int16_t hp = stats.get_stat(Maplestat::HP);
-    std::int32_t maxhp = stats.get_total(Equipstat::HP);
+    std::int32_t max_hp = stats.get_total(Equipstat::HP);
 
-    return static_cast<float>(hp) / maxhp;
+    return static_cast<float>(hp) / max_hp;
 }
 
 float UIStatusbar::get_mp_percent() const
 {
     std::int16_t mp = stats.get_stat(Maplestat::MP);
-    std::int32_t maxmp = stats.get_total(Equipstat::MP);
+    std::int32_t max_mp = stats.get_total(Equipstat::MP);
 
-    return static_cast<float>(mp) / maxmp;
+    return static_cast<float>(mp) / max_mp;
 }
 } // namespace jrc

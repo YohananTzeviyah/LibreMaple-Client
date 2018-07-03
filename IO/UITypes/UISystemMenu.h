@@ -71,11 +71,15 @@ private:
     static constexpr const std::int16_t HEIGHT
         = PADDING_TOP + STRIDE_VERT * NUM_BUTTONS + PADDING_BOTTOM;
 
-    static constexpr const Point<std::int16_t> POSITION{729, 527};
+    static constexpr const Point<std::int16_t> POSITION{673, 527};
 
-    /*
-    static constexpr const Rectangle<std::int16_t> AREA{
-        POSITION, POSITION + Point<std::int16_t>{WIDTH, HEIGHT}};
-    */
+    static constexpr const std::int16_t ACTIVATION_BUTTON_WIDTH = 55;
+    static constexpr const std::int16_t ACTIVATION_BUTTON_HEIGHT = 35;
+    static constexpr const Rectangle<std::int16_t> ACTIVATION_BUTTON_AREA{
+        POSITION + Point<std::int16_t>{WIDTH / 2, HEIGHT}
+            + Point<std::int16_t>{-ACTIVATION_BUTTON_WIDTH / 2, 0},
+        POSITION + Point<std::int16_t>{WIDTH / 2, HEIGHT}
+            + Point<std::int16_t>{ACTIVATION_BUTTON_WIDTH / 2,
+                                  ACTIVATION_BUTTON_HEIGHT}};
 };
 } // namespace jrc

@@ -63,7 +63,9 @@ void UISystemMenu::draw(float inter) const
 bool UISystemMenu::remove_cursor(bool clicked, Point<std::int16_t> cursor_pos)
 {
     if (clicked) {
-        active = false;
+        if (!ACTIVATION_BUTTON_AREA.contains(cursor_pos)) {
+            active = false;
+        }
     }
 
     return UIElement::remove_cursor(clicked, cursor_pos);
