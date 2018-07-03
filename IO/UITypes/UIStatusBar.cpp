@@ -98,7 +98,7 @@ void UIStatusbar::draw(float alpha) const
     std::int32_t max_mp = stats.get_total(Equipstat::MP);
     std::int64_t exp = stats.get_exp();
 
-    std::string exp_string = std::to_string(100 * get_exp_percent());
+    std::string exp_string = std::to_string(100.0f * get_exp_percent());
     statset.draw(
         str::concat(
             std::to_string(exp),

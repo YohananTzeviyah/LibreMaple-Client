@@ -130,6 +130,10 @@ void loop()
 
 void start()
 {
+    // Unsynchronize `std::cout`/`std::cin`/etc. with C stdio for performance
+    // reasons.
+    std::ios::sync_with_stdio(false);
+
     // Initialize and check for errors.
     if (Error error = init()) {
         const char* message = error.get_message();
