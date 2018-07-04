@@ -34,16 +34,6 @@ Keyboard::Keyboard() noexcept
     textactions[GLFW_KEY_TAB] = KeyAction::TAB;
 }
 
-std::int32_t Keyboard::shift_code() const noexcept
-{
-    return GLFW_KEY_LEFT_SHIFT;
-}
-
-std::int32_t Keyboard::ctrl_code() const noexcept
-{
-    return GLFW_KEY_LEFT_CONTROL;
-}
-
 KeyAction::Id Keyboard::get_ctrl_action(std::int32_t keycode) const noexcept
 {
     switch (keycode) {

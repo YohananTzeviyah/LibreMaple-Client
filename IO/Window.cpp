@@ -52,11 +52,6 @@ void error_callback(int no, const char* description)
                                      ')'));
 }
 
-void key_callback(GLFWwindow*, int key, int, int action, int)
-{
-    UI::get().send_key(key, action != GLFW_RELEASE);
-}
-
 void mousekey_callback(GLFWwindow*, int button, int action, int)
 {
     switch (button) {
@@ -132,16 +127,17 @@ Error Window::init_window()
 
     glfwMakeContextCurrent(glwnd);
 
-    const bool vsync = Configuration::get().video.vsync;
-    glfwSwapInterval(vsync ? 1 : 0);
+    glfwSwapInterval(Configuration::get().video.vsync ? 1 : 0);
 
     glViewport(0, 0, Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
     glfwSetInputMode(glwnd, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-    glfwSetInputMode(glwnd, GLFW_STICKY_KEYS, 1);
-    glfwSetKeyCallback(glwnd, key_callback);
+    // glfwSetInputMode(glwnd, GLFW_STICKY_KEYS, 1);
+    glfwSetKeyCallback(glwnd, [](GLFWwindow*, int key, int, int action, int) {
+        UI::get().send_key(key, action != GLFW_RELEASE);
+    });
     glfwSetMouseButtonCallback(glwnd, mousekey_callback);
     glfwSetCursorPosCallback(glwnd, cursor_callback);
 

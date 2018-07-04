@@ -71,8 +71,16 @@ public:
     void
     assign(std::uint8_t key, std::uint8_t type, KeyAction::Id action) noexcept;
 
-    std::int32_t shift_code() const noexcept;
-    std::int32_t ctrl_code() const noexcept;
+    constexpr std::int32_t shift_code() const noexcept
+    {
+        return GLFW_KEY_LEFT_SHIFT;
+    }
+
+    constexpr std::int32_t ctrl_code() const noexcept
+    {
+        return GLFW_KEY_LEFT_CONTROL;
+    }
+
     KeyAction::Id get_ctrl_action(std::int32_t keycode) const noexcept;
     Mapping get_mapping(std::int32_t keycode) const noexcept;
     Mapping get_maple_mapping(std::uint8_t key_slot) const noexcept;

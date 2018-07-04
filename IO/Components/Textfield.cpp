@@ -96,13 +96,13 @@ void Textfield::set_enter_callback(
 }
 
 void Textfield::set_key_callback(KeyAction::Id key,
-                                 std::function<void(void)> action) noexcept
+                                 std::function<void()> action) noexcept
 {
     callbacks[key] = action;
 }
 
 void Textfield::send_key(KeyType::Id type,
-                         std::int32_t key,
+                         KeyAction::Id key,
                          bool pressed) noexcept
 {
     switch (type) {
@@ -123,7 +123,7 @@ void Textfield::send_key(KeyType::Id type,
                 if (text.size() > 0 && marker_pos > 0) {
                     text.erase(marker_pos - 1, 1);
                     --marker_pos;
-                    modify_text(std::string{text});
+                    text_modified();
                 }
                 break;
             case KeyAction::RETURN:
@@ -131,14 +131,14 @@ void Textfield::send_key(KeyType::Id type,
                     on_return(text);
                     text = "";
                     marker_pos = 0;
-                    modify_text(std::string{text});
+                    text_modified();
                 }
                 break;
             case KeyAction::SPACE:
                 if (marker_pos > 0 && below_limit()) {
                     text.insert(marker_pos, 1, ' ');
                     ++marker_pos;
-                    modify_text(std::string{text});
+                    text_modified();
                 }
                 break;
             default:
@@ -151,12 +151,12 @@ void Textfield::send_key(KeyType::Id type,
         break;
     case KeyType::LETTER:
     case KeyType::NUMBER:
-        if (!pressed) {
+        if (pressed) {
             auto c = static_cast<char>(key);
             if (below_limit()) {
                 text.insert(marker_pos, 1, c);
                 ++marker_pos;
-                modify_text(std::string{text});
+                text_modified();
             }
         }
         break;
@@ -171,15 +171,13 @@ void Textfield::add_string(std::string_view str) noexcept
         if (below_limit()) {
             text.insert(marker_pos, 1, c);
             ++marker_pos;
-            modify_text(std::string{text});
+            text_modified();
         }
     }
 }
 
-void Textfield::modify_text(std::string&& t) noexcept
+void Textfield::text_modified() noexcept
 {
-    text = std::move(t);
-
     if (crypt != '\0') {
         text_label.change_text(std::string(text.length(), crypt));
     } else {
@@ -224,7 +222,8 @@ Cursor::State Textfield::send_cursor(Point<std::int16_t> cursorpos,
 
 void Textfield::change_text(std::string&& t) noexcept
 {
-    modify_text(std::move(t));
+    text = std::move(t);
+    text_modified();
     marker_pos = text.size();
 }
 
