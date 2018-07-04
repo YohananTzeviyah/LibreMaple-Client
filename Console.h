@@ -62,7 +62,7 @@ public:
     void print(const std::string& str) noexcept
     {
         if (!printed.count(str)) {
-            std::cout << str << '\n';
+            std::cout << str << '\n' << std::flush;
             printed.insert(str);
         }
     }

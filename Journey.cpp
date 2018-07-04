@@ -140,7 +140,7 @@ void start()
         const char* args = error.get_args();
         const bool can_retry = error.can_retry();
 
-        std::cout << "Error: " << message << args << '\n';
+        std::cout << "Error: " << message << args << '\n' << std::flush;
 
         std::string command;
         std::cin >> command;
