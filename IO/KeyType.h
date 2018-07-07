@@ -49,7 +49,7 @@ inline Id type_by_id(std::uint8_t id) noexcept
 
 inline Id type_by_action(KeyAction::Id action) noexcept
 {
-    static constexpr const std::array<Id, 107> ACTIONS_TO_TYPES{
+    static constexpr const std::array<Id, KeyAction::LAST> ACTIONS_TO_TYPES{
         MENU,   MENU,   MENU,   MENU,   MENU,   MENU, MENU, MENU, MENU, MENU,
         MENU,   MENU,   MENU,   MENU,   MENU,   MENU, MENU, MENU, MENU, MENU,
         MENU,   MENU,   MENU,   MENU,   MENU,   MENU, MENU, MENU, NONE, NONE,
@@ -62,6 +62,11 @@ inline Id type_by_action(KeyAction::Id action) noexcept
         NONE,   NONE,   NONE,   NONE,   NONE,   NONE, NONE, NONE, NONE, NONE,
         FACE,   FACE,   FACE,   FACE,   FACE,   FACE, FACE};
 
+    if (KeyAction::is_skill(action)) {
+        return SKILL;
+    } else if (KeyAction::is_item(action)) {
+        return ITEM;
+    }
     return ACTIONS_TO_TYPES[action];
 }
 } // namespace jrc::KeyType

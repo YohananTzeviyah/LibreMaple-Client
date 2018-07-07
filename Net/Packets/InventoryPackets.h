@@ -21,8 +21,8 @@
 
 namespace jrc
 {
-// Packet which requests that the inventory is sorted.
-// Opcode: GATHER_ITEMS(69)
+//! Packet which requests that the inventory is sorted.
+//! Opcode: GATHER_ITEMS(69)
 class GatherItemsPacket : public OutPacket
 {
 public:
@@ -33,8 +33,8 @@ public:
     }
 };
 
-// Packet which requests that the inventory is sorted.
-// Opcode: SORT_ITEMS(70)
+//! Packet which requests that the inventory is sorted.
+//! Opcode: SORT_ITEMS(70)
 class SortItemsPacket : public OutPacket
 {
 public:
@@ -45,8 +45,8 @@ public:
     }
 };
 
-// Packet which requests that an item is moved.
-// Opcode: MOVE_ITEM(71)
+//! Packet which requests that an item is moved.
+//! Opcode: MOVE_ITEM(71)
 class MoveItemPacket : public OutPacket
 {
 public:
@@ -64,8 +64,8 @@ public:
     }
 };
 
-// Packet which requests that an item is equipped.
-// Opcode: MOVE_ITEM(71)
+//! Packet which requests that an item is equipped.
+//! Opcode: MOVE_ITEM(71)
 class EquipItemPacket : public MoveItemPacket
 {
 public:
@@ -75,8 +75,8 @@ public:
     }
 };
 
-// Packet which requests that an item is unequipped.
-// Opcode: MOVE_ITEM(71)
+//! Packet which requests that an item is unequipped.
+//! Opcode: MOVE_ITEM(71)
 class UnequipItemPacket : public MoveItemPacket
 {
 public:
@@ -86,8 +86,8 @@ public:
     }
 };
 
-// A packet which requests that an 'USE' item is used.
-// Opcode: USE_ITEM(72)
+//! A packet which requests that an 'USE' item is used.
+//! Opcode: USE_ITEM(72)
 class UseItemPacket : public OutPacket
 {
 public:
@@ -99,8 +99,8 @@ public:
     }
 };
 
-// Requests using a scroll on an equip.
-// Opcode: SCROLL_EQUIP(86)
+//! Requests using a scroll on an equip.
+//! Opcode: SCROLL_EQUIP(86)
 class ScrollEquipPacket : public OutPacket
 {
 public:

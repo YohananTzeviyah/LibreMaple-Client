@@ -17,6 +17,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "UIKeyConfig.h"
 
+#include "../../Data/SkillData.h"
 #include "../Components/MapleButton.h"
 #include "../KeyAction.h"
 #include "../UI.h"
@@ -25,7 +26,7 @@
 namespace jrc
 {
 UIKeyConfig::UIKeyConfig()
-    : UIDragElement<Configuration::PositionOf::KEY_CONFIG>({622, 20})
+    : UIDragElement<Configuration::PositionOf::KEY_CONFIG>{{622, 20}}
 {
     nl::node source = nl::nx::ui["UIWindow2.img"]["KeyConfig"];
 
@@ -204,14 +205,24 @@ void UIKeyConfig::draw(float alpha) const
     UIElement::draw(alpha);
 
     for (auto [slot_id, action_id] : slot_mappings.left) {
-        if (auto icons_iter = icons.find(action_id); icons_iter.second()) {
-            icons_iter.second()->draw(position + slot_pos({slot_id, true}));
+        if (KeyAction::is_skill(action_id)) {
+            SkillData::get(-action_id)
+                .get_icon(SkillData::NORMAL)
+                .draw(position + slot_pos({slot_id, true}));
+        } else if (KeyAction::is_item(action_id)) {
+            ItemData::get(action_id).get_icon(false).draw(
+                position + slot_pos({slot_id, true}));
+        } else if (auto icons_iter
+                   = icons.find(KeyAction::action_by_id(action_id));
+                   icons_iter != icons.end()) {
+            icons_iter->second->draw(position + slot_pos({slot_id, true}));
         }
     }
 
     for (auto [slot_id, action_id] : palette_slots.left) {
-        if (auto icons_iter = icons.find(action_id); icons_iter.second()) {
-            icons_iter.second()->draw(position + slot_pos({slot_id, false}));
+        if (auto icons_iter = icons.find(action_id);
+            icons_iter != icons.end()) {
+            icons_iter->second->draw(position + slot_pos({slot_id, false}));
         }
     }
 }
@@ -230,8 +241,12 @@ void UIKeyConfig::send_icon(const Icon& icon, Point<std::int16_t> cursor_pos)
     /* Console::get().print("sending icon at "
                          + (cursor_pos - position).to_string()); */
     if (auto slot = slot_by_position(cursor_pos); slot) {
+        std::cout << "icon.get_action_id(): " << icon.get_action_id() << '\n'
+                  << std::flush;
         adjust_mapping(*slot, icon.get_action_id());
     }
+
+    dragged_from = {0, SlotType::OTHER_SLOT};
 }
 
 Cursor::State UIKeyConfig::send_cursor(bool pressed,
@@ -252,11 +267,11 @@ Cursor::State UIKeyConfig::send_cursor(bool pressed,
     if (auto action_iter = map.left.find(slot.first);
         action_iter != map.left.end()) {
         if (auto icon_iter = icons.find(action_iter->second);
-            icon_iter.second()) {
+            icon_iter != icons.end()) {
             if (pressed) {
-                icon_iter.second()->start_drag(cursor_pos - position
-                                               - slot_pos(slot));
-                UI::get().drag_icon(icon_iter.second().get());
+                icon_iter->second->start_drag(cursor_pos - position
+                                              - slot_pos(slot));
+                UI::get().drag_icon(icon_iter->second.get());
 
                 dragged_from = slot;
 
@@ -342,7 +357,7 @@ void UIKeyConfig::reset_to_default() noexcept
     clear();
 
     for (auto [key_id, action_id] : DEFAULT_MAPPINGS) {
-        slot_mappings.insert({key_id, KeyAction::action_by_id(action_id)});
+        slot_mappings.insert({key_id, action_id});
     }
 
     refresh_palette();
@@ -354,7 +369,7 @@ void UIKeyConfig::clear_mappings() noexcept
 {
     std::uint8_t first_empty = 0;
     for (auto [_, action_id] : slot_mappings.left) {
-        if (icons[action_id]) {
+        if (icons.count(action_id)) {
             auto palette_iter = palette_slots.left.find(first_empty);
             while (first_empty < PALETTE_COLS * PALETTE_ROWS
                    && palette_iter != palette_slots.left.end()) {
@@ -398,19 +413,45 @@ void UIKeyConfig::clear() noexcept
 void UIKeyConfig::refresh_palette() noexcept
 {
     std::uint8_t i = 0;
-    for (const auto& icon_iter : icons) {
-        if (icon_iter.second && !slot_mappings.right.count(icon_iter.first)) {
-            bimap::assign(palette_slots, i, icon_iter.first);
+    for (const auto& [action_id, icon_ptr] : icons) {
+        if (!slot_mappings.right.count(action_id)) {
+            bimap::assign(palette_slots, i, action_id);
             ++i;
         }
     }
 }
 
-void UIKeyConfig::adjust_mapping(std::pair<std::uint8_t, bool> slot,
-                                 KeyAction::Id action) noexcept
+void UIKeyConfig::adjust_mapping(Slot slot, std::int32_t action) noexcept
 {
-    auto [from_slot, is_from_key] = dragged_from;
-    auto [to_slot, is_to_key] = slot;
+    auto [from_slot, from_type] = dragged_from;
+    auto [to_slot, to_type] = slot;
+
+    if (to_type == SlotType::OTHER_SLOT) {
+        return;
+    }
+
+    if (from_type == SlotType::OTHER_SLOT) {
+        if (to_type == SlotType::KEY_SLOT) {
+            if (auto to_iter = slot_mappings.left.find(to_slot);
+                to_iter != slot_mappings.left.end()) {
+                if (KeyAction::is_key_action(to_iter->second)) {
+                    if (auto empty_palette = empty_palette_slot();
+                        empty_palette) {
+                        bimap::assign(
+                            palette_slots, *empty_palette, to_iter->second);
+                    }
+                }
+
+                slot_mappings.left.replace_data(to_iter, action);
+            } else {
+                bimap::assign(slot_mappings, to_slot, action);
+            }
+
+            dirty = true;
+        }
+
+        return;
+    }
 
     auto& to_map = is_to_key ? slot_mappings : palette_slots;
     auto& from_map = is_from_key ? slot_mappings : palette_slots;
@@ -418,7 +459,7 @@ void UIKeyConfig::adjust_mapping(std::pair<std::uint8_t, bool> slot,
     if (is_from_key == is_to_key) {
         if (auto to_iter = to_map.left.find(to_slot);
             to_iter != to_map.left.end()) {
-            KeyAction::Id temp = to_iter->second;
+            std::int32_t temp = to_iter->second;
             to_map.left.replace_data(to_iter, action);
             bimap::assign(to_map, from_slot, temp);
         } else {
@@ -427,19 +468,29 @@ void UIKeyConfig::adjust_mapping(std::pair<std::uint8_t, bool> slot,
     } else {
         if (auto to_iter = to_map.left.find(to_slot);
             to_iter != to_map.left.end()) {
-            KeyAction::Id temp = to_iter->second;
-            to_map.left.replace_data(to_iter, action);
-            bimap::assign(from_map, from_slot, temp);
+            std::int32_t temp = to_iter->second;
+            if (is_to_key || KeyAction::is_key_action(action)) {
+                to_map.left.replace_data(to_iter, action);
+                dirty = true;
+            }
+            if (is_from_key || KeyAction::is_key_action(temp)) {
+                bimap::assign(from_map, from_slot, temp);
+                dirty = true;
+            }
+
+            return;
         } else {
             from_map.left.erase(from_slot);
-            bimap::assign(to_map, to_slot, action);
+            if (is_to_key || KeyAction::is_key_action(action)) {
+                bimap::assign(to_map, to_slot, action);
+            }
         }
     }
 
     dirty = true;
 }
 
-std::optional<std::pair<std::uint8_t, bool>>
+std::optional<Slot>
 UIKeyConfig::slot_by_position(Point<std::int16_t> cursor_pos_) const noexcept
 {
     auto cursor_pos = cursor_pos_ - position;
@@ -449,7 +500,7 @@ UIKeyConfig::slot_by_position(Point<std::int16_t> cursor_pos_) const noexcept
         auto col = normalized.x() / PALETTE_STRIDE;
         auto row = normalized.y() / PALETTE_STRIDE;
 
-        return {{row * PALETTE_COLS + col, false}};
+        return {{row * PALETTE_COLS + col, SlotType::PALETTE_SLOT}};
     }
 
     // Special-casing the top-left 32x32 rect since [0, 0] is the default
@@ -462,7 +513,7 @@ UIKeyConfig::slot_by_position(Point<std::int16_t> cursor_pos_) const noexcept
     for (auto slot_pos : SLOT_POSITIONS) {
         Rectangle<std::int16_t> slot_rect{slot_pos, slot_pos + 32};
         if (slot_rect.contains(cursor_pos)) {
-            return {{slot_ix, true}};
+            return {{slot_ix, SlotType::KEY_SLOT}};
         }
 
         ++slot_ix;
@@ -471,16 +522,34 @@ UIKeyConfig::slot_by_position(Point<std::int16_t> cursor_pos_) const noexcept
     return {};
 }
 
-Point<std::int16_t>
-UIKeyConfig::slot_pos(std::pair<std::uint8_t, bool> slot) noexcept
+std::optional<std::uint8_t> UIKeyConfig::empty_palette_slot() const noexcept
 {
-    auto [s, key_slot] = slot;
-    if (key_slot) {
-        return SLOT_POSITIONS[s];
+    std::uint8_t first_empty = 0;
+    auto palette_iter = palette_slots.left.find(first_empty);
+    while (first_empty < PALETTE_COLS * PALETTE_ROWS
+           && palette_iter != palette_slots.left.end()) {
+        ++first_empty;
+        palette_iter = palette_slots.left.find(first_empty);
+    }
+
+    if (first_empty < PALETTE_COLS * PALETTE_ROWS) {
+        return {first_empty};
     } else {
+        return {};
+    }
+}
+
+Point<std::int16_t> UIKeyConfig::slot_pos(Slot slot) noexcept
+{
+    switch (auto [s, key_slot] = slot; key_slot) {
+    case SlotType::KEY_SLOT:
+        return SLOT_POSITIONS[s];
+    case SlotType::PALETTE_SLOT:
         return PALETTE_POSITION
                + Point<std::int16_t>{s % PALETTE_COLS * PALETTE_STRIDE,
                                      s / PALETTE_COLS * PALETTE_STRIDE};
+    default:
+        return {};
     }
 }
 

@@ -35,6 +35,10 @@ public:
     static constexpr const bool FOCUSED = false;
     static constexpr const bool TOGGLED = true;
 
+    enum class SlotType : std::uint8_t { OTHER_SLOT, PALETTE_SLOT, KEY_SLOT };
+
+    using Slot = std::pair<std::uint8_t, SlotType>;
+
     UIKeyConfig();
 
     void draw(float inter) const override;
@@ -55,12 +59,10 @@ private:
     bool commit_mappings() noexcept;
     void clear() noexcept;
     void refresh_palette() noexcept;
-    void adjust_mapping(std::pair<std::uint8_t, bool> slot,
-                        KeyAction::Id action) noexcept;
-    std::optional<std::pair<std::uint8_t, bool>>
-    slot_by_position(Point<std::int16_t> p) const noexcept;
-    static Point<std::int16_t>
-    slot_pos(std::pair<std::uint8_t, bool> slot) noexcept;
+    void adjust_mapping(Slot slot, std::int32_t action) noexcept;
+    std::optional<Slot> slot_by_position(Point<std::int16_t> p) const noexcept;
+    std::optional<std::uint8_t> empty_palette_slot() const noexcept;
+    static Point<std::int16_t> slot_pos(Slot slot) noexcept;
 
     class KeyIcon : public Icon::Type
     {
@@ -79,7 +81,7 @@ private:
                            bool) const override
         {
         }
-        KeyAction::Id get_action_id() const noexcept override;
+        std::int32_t get_action_id() const noexcept override;
 
     private:
         KeyAction::Id action_id;
@@ -93,12 +95,11 @@ private:
         BT_QUICKSLOT
     };
 
-    bimap::unordered_bimap<std::uint8_t, KeyAction::Id> slot_mappings;
-    EnumMap<KeyAction::Id, std::unique_ptr<Icon>> icons;
+    bimap::unordered_bimap<std::uint8_t, std::int32_t> slot_mappings;
+    std::unordered_map<KeyAction::Id, std::unique_ptr<Icon>> icons;
+    // std::unordered_map<std::int32_t, std::unique_ptr<Icon>> misc_icons;
     bimap::unordered_bimap<std::uint8_t, KeyAction::Id> palette_slots;
-    //! The `bool` is `true` when the slot is a key slot, and `false` when it
-    //! is a palette slot.
-    std::pair<std::uint8_t, bool> dragged_from;
+    Slot dragged_from;
     bool dirty;
 
     class UIKeyConfigNotice : public UIElement

@@ -33,13 +33,13 @@ class Keyboard
 public:
     struct Mapping {
         KeyType::Id type;
-        KeyAction::Id action;
+        std::int32_t action;
 
         Mapping() noexcept : type(KeyType::NONE)
         {
         }
 
-        Mapping(KeyType::Id in_type, KeyAction::Id in_action) noexcept
+        Mapping(KeyType::Id in_type, std::int32_t in_action) noexcept
             : type(in_type), action(in_action)
         {
         }
@@ -69,7 +69,7 @@ public:
     Keyboard(Keyboard&&) = delete;
 
     void
-    assign(std::uint8_t key, std::uint8_t type, KeyAction::Id action) noexcept;
+    assign(std::uint8_t key, std::uint8_t type, std::int32_t action) noexcept;
 
     constexpr std::int32_t shift_code() const noexcept
     {

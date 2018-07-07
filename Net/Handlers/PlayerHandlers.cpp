@@ -34,7 +34,7 @@ void KeymapHandler::handle(InPacket& recv) const
 
     for (std::uint8_t i = 0; i < 90; ++i) {
         auto type = static_cast<std::uint8_t>(recv.read_byte());
-        auto action = static_cast<KeyAction::Id>(recv.read_int());
+        auto action = recv.read_int();
 
         UI::get().add_keymapping(i, type, action);
     }

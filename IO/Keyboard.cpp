@@ -48,7 +48,7 @@ KeyAction::Id Keyboard::get_ctrl_action(std::int32_t keycode) const noexcept
 
 void Keyboard::assign(std::uint8_t key,
                       std::uint8_t tid,
-                      KeyAction::Id action) noexcept
+                      std::int32_t action) noexcept
 {
     if (KeyType::Id type = KeyType::type_by_id(tid); type) {
         Mapping mapping{type, action};
@@ -64,10 +64,10 @@ Keyboard::Mapping Keyboard::get_text_mapping(std::int32_t keycode,
         return {KeyType::ACTION, textactions.at(keycode)};
     } else if (keycode >= 48 && keycode <= 64) {
         return {KeyType::NUMBER,
-                static_cast<KeyAction::Id>(keycode - (shift ? 15 : 0))};
+                KeyAction::action_by_id(keycode - (shift ? 15 : 0))};
     } else if (keycode >= 65 && keycode <= 90) {
         return {KeyType::LETTER,
-                static_cast<KeyAction::Id>(keycode + (shift ? 0 : 32))};
+                KeyAction::action_by_id(keycode + (shift ? 0 : 32))};
     } else {
         switch (keycode) {
         case GLFW_KEY_LEFT:

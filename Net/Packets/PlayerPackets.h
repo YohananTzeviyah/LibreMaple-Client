@@ -21,8 +21,8 @@
 
 namespace jrc
 {
-// Requests a stat increase by spending ap.
-// Opcode: SPEND_AP(87)
+//! Requests a stat increase by spending ap.
+//! Opcode: SPEND_AP(87)
 class SpendApPacket : public OutPacket
 {
 public:
@@ -33,8 +33,8 @@ public:
     }
 };
 
-// Requests a skill level increase by spending sp.
-// Opcode: SPEND_SP(90)
+//! Requests a skill level increase by spending sp.
+//! Opcode: SPEND_SP(90)
 class SpendSpPacket : public OutPacket
 {
 public:
