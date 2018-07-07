@@ -20,9 +20,7 @@
 
 #include <cstdint>
 
-namespace jrc
-{
-namespace Maplestat
+namespace jrc::Maplestat
 {
 enum Id {
     SKIN,
@@ -51,5 +49,4 @@ enum Id {
 Id by_id(std::size_t id);
 
 extern const EnumMap<Id, std::int32_t> codes;
-}; // namespace Maplestat
-} // namespace jrc
+} // namespace jrc::Maplestat

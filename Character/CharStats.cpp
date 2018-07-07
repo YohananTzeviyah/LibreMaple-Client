@@ -82,7 +82,7 @@ void CharStats::close_total_stats()
     std::int32_t primary = get_primary_stat();
     std::int32_t secondary = get_secondary_stat();
     std::int32_t attack = get_total(Equipstat::WATK);
-    float multiplier = damage_percent + static_cast<float>(attack) / 100;
+    float multiplier = damage_percent + static_cast<float>(attack) / 100.0f;
     max_damage = static_cast<std::int32_t>((primary + secondary) * multiplier);
     min_damage = static_cast<std::int32_t>(
         (primary * 0.9f * mastery + secondary) * multiplier);
@@ -215,9 +215,9 @@ std::int32_t CharStats::calculate_damage(std::int32_t mob_atk) const
 {
     // TODO: This is just random stuff, need to find the actual formula
     // somewhere.
-    std::int32_t reduceatk
+    std::int32_t reduce_atk
         = mob_atk / 2 + mob_atk / get_total(Equipstat::WDEF);
-    return reduceatk - static_cast<std::int32_t>(reduceatk * reduce_damage);
+    return reduce_atk - static_cast<std::int32_t>(reduce_atk * reduce_damage);
 }
 
 bool CharStats::is_damage_buffed() const

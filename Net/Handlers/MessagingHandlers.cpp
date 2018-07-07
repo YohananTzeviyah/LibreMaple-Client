@@ -204,11 +204,10 @@ void ScrollResultHandler::handle(InPacket& recv) const
 
 void ShowItemGainInChatHandler::handle(InPacket& recv) const
 {
-    std::int8_t mode1 = recv.read_byte();
-    if (mode1 == 3) {
-        std::int8_t mode2 = recv.read_byte();
-        if (mode2 == 1) // This is actually "item gain in chat".
-        {
+    switch (recv.read_byte()) {
+    case 3: {
+        std::int8_t mode = recv.read_byte();
+        if (mode == 1) { // This is _actually_ "item gain in chat".
             std::int32_t itemid = recv.read_int();
             std::int32_t qty = recv.read_int();
 
@@ -226,22 +225,68 @@ void ShowItemGainInChatHandler::handle(InPacket& recv) const
                                                      ')'),
                                          UIChatbar::BLUE);
             }
+        } else {
+            std::cout << "ShowItemGainInChatHandler: mode != 1\n"
+                      << std::flush;
         }
-    } else if (mode1 == 13) // card effect
-    {
+        break;
+    }
+    case 4: {             // pet levelup
+        recv.read_byte(); // dummy byte
+        auto pet_index = static_cast<std::size_t>(recv.read_byte());
+        std::cout << "ShowItemGainInChatHandler: pet levelup\n" << std::flush;
+        break;
+    }
+    case 7: // portal sound
+        std::cout << "ShowItemGainInChatHandler: portal sound\n" << std::flush;
+        break;
+    case 9: // quest complete effect
+        std::cout << "ShowItemGainInChatHandler: quest complete effect\n"
+                  << std::flush;
+        break;
+    case 10: { // "show own recovery", used for e.g. chairs
+        std::int8_t amount = recv.read_byte();
+        std::cout << "ShowItemGainInChatHandler: show own recovery\n"
+                  << std::flush;
+        break;
+    }
+    case 13: // card effect/"show gain card"
         Stage::get().get_player().show_effect_id(CharEffect::MONSTER_CARD);
-    } else if (mode1 == 18) // intro effect
-    {
+        break;
+    case 14: // monster book pickup effect
+        std::cout << "ShowItemGainInChatHandler: monster book pickup effect\n"
+                  << std::flush;
+        break;
+    case 15: // item/equip levelup effect
+        std::cout << "ShowItemGainInChatHandler: item/equip levelup effect\n"
+                  << std::flush;
+        break;
+    case 16: { // maker effect
+        bool success = recv.read_int() == 0;
+        std::cout << "ShowItemGainInChatHandler: maker effect\n" << std::flush;
+        break;
+    }
+    case 18:                // intro effect
         recv.read_string(); // path
-    } else if (mode1 == 23) // info
-    {
+        std::cout << "ShowItemGainInChatHandler: intro effect\n" << std::flush;
+        break;
+    case 21: { // "show wheels left"
+        auto wheels_left = recv.read_byte();
+        std::cout << "ShowItemGainInChatHandler: show wheels left\n"
+                  << std::flush;
+        break;
+    }
+    case 23:                // show info
         recv.read_string(); // path
-        recv.read_int();    // some int
-    } else                  // buff effect
-    {
+        recv.read_int();    // dummy int
+        std::cout << "ShowItemGainInChatHandler: show info\n" << std::flush;
+        break;
+    default: { // buff effect/"show own buff effect"
         std::int32_t skillid = recv.read_int();
         // More bytes, but we don't need them.
         Stage::get().get_combat().show_player_buff(skillid);
+        break;
+    }
     }
 }
 } // namespace jrc

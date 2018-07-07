@@ -21,9 +21,9 @@
 
 namespace jrc
 {
-// Notifies the server of an attack. The opcode is determined by the attack
-// type. Attack::CLOSE = CLOSE_ATTACK(44) Attack::RANGED = RANGED_ATTACK(45)
-// Attack::MAGIC = MAGIC_ATTACK(46)
+//! Notifies the server of an attack. The opcode is determined by the attack
+//! type. Attack::CLOSE = CLOSE_ATTACK(44) Attack::RANGED = RANGED_ATTACK(45)
+//! Attack::MAGIC = MAGIC_ATTACK(46)
 class AttackPacket : public OutPacket
 {
 public:
@@ -34,8 +34,9 @@ public:
 
         write_byte((attack.mob_count << 4) | attack.hit_count);
         write_int(attack.skill);
-        if (attack.charge > 0)
+        if (attack.charge > 0) {
             write_int(attack.charge);
+        }
 
         skip(8);
 
@@ -66,8 +67,9 @@ public:
                 // add critical here
             }
 
-            if (attack.skill != 5221004)
+            if (attack.skill != 5221004) {
                 skip(4);
+            }
         }
     }
 
@@ -85,8 +87,8 @@ private:
     }
 };
 
-// Tells the server that the player took damage.
-// Opcode: TAKE_DAMAGE(48)
+//! Tells the server that the player took damage.
+//! Opcode: TAKE_DAMAGE(48)
 class TakeDamagePacket : public OutPacket
 {
 public:
@@ -109,20 +111,20 @@ public:
         write_byte(direction);
     }
 
-    // From mob attack result.
+    //! From mob attack result.
     TakeDamagePacket(const MobAttackResult& result, From from)
-        : TakeDamagePacket(from,
+        : TakeDamagePacket{from,
                            0,
                            result.damage,
                            result.mob_id,
                            result.oid,
-                           result.direction)
+                           result.direction}
     {
     }
 };
 
-// Packet which notifies the server of a skill usage.
-// Opcode: USE_SKILL(91)
+//! Packet which notifies the server of a skill usage.
+//! Opcode: USE_SKILL(91)
 class UseSkillPacket : public OutPacket
 {
 public:
@@ -135,8 +137,9 @@ public:
 
         // if monster magnet : some more bytes
 
-        if (skillid % 10000000 == 1004)
+        if (skillid % 10000000 == 1004) {
             skip(2); // no idea what this could be
+        }
 
         // a point (4 bytes) could be added at the end
     }

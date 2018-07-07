@@ -72,9 +72,9 @@ public:
 
     //! Return if the player is attacking.
     bool is_attacking() const;
-    //! Return wether the player can attack or not.
+    //! Return whether the player can attack or not.
     bool can_attack() const;
-    //! Return wether the player can use a skill or not.
+    //! Return whether the player can use a skill or not.
     SpecialMove::ForbidReason can_use(const SpecialMove& move) const;
     //! Create an attack struct using the player's stats.
     Attack prepare_attack(bool skill) const;
@@ -82,7 +82,7 @@ public:
     //! Execute a rush movement.
     void rush(double target_x);
 
-    //! Check wether the player is invincible.
+    //! Check whether the player is invincible.
     bool is_invincible() const override;
     //! Handle an attack to the player.
     MobAttackResult damage(const MobAttack& attack);
@@ -91,7 +91,7 @@ public:
     void give_buff(Buff buff);
     //! Cancel a buff.
     void cancel_buff(Buffstat::Id stat);
-    //! Return wether the buff is active.
+    //! Return whether the buff is active.
     bool has_buff(Buffstat::Id stat) const;
 
     //! Change a skill.
@@ -127,7 +127,7 @@ public:
     //! Returns the flying force.
     float get_fly_force() const;
 
-    //! Return wether the player is underwater.
+    //! Return whether the player is underwater.
     bool is_underwater() const;
     //! Returns if a Keyaction is currently active.
     bool is_key_down(KeyAction::Id action) const;

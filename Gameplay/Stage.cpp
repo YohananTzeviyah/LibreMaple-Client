@@ -85,8 +85,8 @@ void Stage::load_map(std::int32_t map_id)
     tiles_objs = MapTilesObjs(src);
     backgrounds = MapBackgrounds(src["back"]);
     physics = Physics(src["foothold"]);
-    map_info = MapInfo(
-        src, physics.get_fht().get_walls(), physics.get_fht().get_borders());
+    map_info = {
+        src, physics.get_fht().get_walls(), physics.get_fht().get_borders()};
     portals = MapPortals(src["portal"], map_id);
 }
 
@@ -159,7 +159,7 @@ void Stage::update()
     if (std::int32_t oid_id = mobs.find_colliding(player.get_phobj())) {
         if (MobAttack attack = mobs.create_attack(oid_id)) {
             MobAttackResult result = player.damage(attack);
-            TakeDamagePacket(result, TakeDamagePacket::TOUCH).dispatch();
+            TakeDamagePacket{result, TakeDamagePacket::TOUCH}.dispatch();
         }
     }
 }
@@ -185,7 +185,7 @@ void Stage::check_portals()
         Point<std::int16_t> startpos = physics.get_y_below(spawnpoint);
         player.respawn(startpos, map_info.is_underwater());
     } else if (warpinfo.valid) {
-        ChangeMapPacket(false, warpinfo.mapid, warpinfo.name, false)
+        ChangeMapPacket{false, warpinfo.mapid, warpinfo.name, false}
             .dispatch();
     }
 }

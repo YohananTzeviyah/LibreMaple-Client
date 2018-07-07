@@ -105,15 +105,16 @@ bool ChangeStatsHandler::handle_stat(Maplestat::Id stat, InPacket& recv) const
 
     bool update_statsinfo = need_statsinfo_update(stat);
     if (update_statsinfo && !recalculate) {
-        if (auto statsinfo = UI::get().get_element<UIStatsinfo>()) {
-            statsinfo->update_stat(stat);
+        if (auto stats_info = UI::get().get_element<UIStatsinfo>();
+            stats_info) {
+            stats_info->update_stat(stat);
         }
     }
 
     bool update_skillbook = need_skillbook_update(stat);
     if (update_skillbook) {
         std::int16_t value = player.get_stats().get_stat(stat);
-        if (auto skillbook = UI::get().get_element<UISkillbook>()) {
+        if (auto skillbook = UI::get().get_element<UISkillbook>(); skillbook) {
             skillbook->update_stat(stat, value);
         }
     }
