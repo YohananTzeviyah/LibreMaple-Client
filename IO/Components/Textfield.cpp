@@ -95,14 +95,14 @@ void Textfield::set_enter_callback(
     on_return = on_ret;
 }
 
-void Textfield::set_key_callback(KeyAction::Id key,
+void Textfield::set_key_callback(std::int32_t key,
                                  std::function<void()> action) noexcept
 {
     callbacks[key] = action;
 }
 
 void Textfield::send_key(KeyType::Id type,
-                         KeyAction::Id key,
+                         std::int32_t key,
                          bool pressed) noexcept
 {
     switch (type) {

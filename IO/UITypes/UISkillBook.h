@@ -19,6 +19,7 @@
 #include "../../Character/CharStats.h"
 #include "../../Character/SkillBook.h"
 #include "../../Graphics/Text.h"
+#include "../Components/Icon.h"
 #include "../Components/Slider.h"
 #include "../UIDragElement.h"
 #include "../UIElement.h"
@@ -27,10 +28,21 @@
 
 namespace jrc
 {
-class SkillIcon
+class SkillIcon : public Icon::Type
 {
 public:
     SkillIcon(std::int32_t id, std::int32_t level);
+
+    void drop_on_stage() const override;
+    void drop_on_equips(Equipslot::Id) const override
+    {
+    }
+    void drop_on_items(InventoryType::Id tab,
+                       Equipslot::Id eqslot,
+                       std::int16_t slot,
+                       bool equip) const override;
+
+    std::int32_t get_action_id() const noexcept override;
 
     void draw(const DrawArgument& args) const;
 

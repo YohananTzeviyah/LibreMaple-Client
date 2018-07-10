@@ -38,7 +38,7 @@ enum Id : std::uint8_t {
     LENGTH
 };
 
-inline Id type_by_id(std::uint8_t id) noexcept
+constexpr Id type_by_id(std::uint8_t id) noexcept
 {
     if (id <= NONE || id >= LENGTH) {
         return NONE;
@@ -47,9 +47,9 @@ inline Id type_by_id(std::uint8_t id) noexcept
     return static_cast<Id>(id);
 }
 
-inline Id type_by_action(KeyAction::Id action) noexcept
+constexpr Id type_by_action(std::int32_t action) noexcept
 {
-    static constexpr const std::array<Id, KeyAction::LAST> ACTIONS_TO_TYPES{
+    constexpr const std::array<Id, KeyAction::LAST> ACTIONS_TO_TYPES{
         MENU,   MENU,   MENU,   MENU,   MENU,   MENU, MENU, MENU, MENU, MENU,
         MENU,   MENU,   MENU,   MENU,   MENU,   MENU, MENU, MENU, MENU, MENU,
         MENU,   MENU,   MENU,   MENU,   MENU,   MENU, MENU, MENU, NONE, NONE,
@@ -67,6 +67,7 @@ inline Id type_by_action(KeyAction::Id action) noexcept
     } else if (KeyAction::is_item(action)) {
         return ITEM;
     }
+
     return ACTIONS_TO_TYPES[action];
 }
 } // namespace jrc::KeyType

@@ -91,11 +91,13 @@ public:
 class UseItemPacket : public OutPacket
 {
 public:
-    UseItemPacket(std::int16_t slot, std::int32_t itemid) : OutPacket(USE_ITEM)
+    UseItemPacket(std::int16_t slot, std::int32_t item_id)
+        : OutPacket{USE_ITEM}
     {
-        write_time();
+        // write_time(); // HeavenMS does not read this int.
+        write_int(0);
         write_short(slot);
-        write_int(itemid);
+        write_int(item_id);
     }
 };
 
@@ -105,9 +107,9 @@ class ScrollEquipPacket : public OutPacket
 {
 public:
     enum Flag : std::uint8_t {
-        NONE = 0x00,
-        UNKNOWN = 0x01,
-        WHITESCROLL = 0x02
+        NONE = 0b00000000,
+        UNKNOWN = 0b00000001,
+        WHITESCROLL = 0b00000010
     };
 
     ScrollEquipPacket(std::int16_t source,

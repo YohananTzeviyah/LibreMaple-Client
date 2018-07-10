@@ -22,12 +22,12 @@ namespace jrc
 {
 namespace InventoryType
 {
-// Inventory types.
+//! Inventory types.
 enum Id : std::int8_t { NONE, EQUIP, USE, SETUP, ETC, CASH, EQUIPPED, LENGTH };
 
-// Return the inventory type by item id.
+//! Return the inventory type by item id.
 Id by_item_id(std::int32_t item_id);
-// Return the inventory type by value.
+//! Return the inventory type by value.
 Id by_value(std::int8_t value);
 } // namespace InventoryType
 

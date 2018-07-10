@@ -59,7 +59,7 @@ public:
     void drag_icon(Icon* icon);
 
     void
-    add_keymapping(std::uint8_t no, std::uint8_t type, KeyAction::Id action);
+    add_keymapping(std::uint8_t no, std::uint8_t type, std::int32_t action);
 
     void clear_tooltip(Tooltip::Parent parent);
     void show_equip(Tooltip::Parent parent, std::int16_t slot);

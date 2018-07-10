@@ -97,7 +97,7 @@ void UI::send_cursor(bool pressed)
 {
     Cursor::State cursor_state
         = pressed && enabled ? Cursor::CLICKING : Cursor::IDLE;
-    Point<std::int16_t> cursor_pos = cursor.get_position();
+    auto cursor_pos = cursor.get_position();
     send_cursor(cursor_pos, cursor_state);
 
     if (focused_text_field && pressed) {
@@ -120,7 +120,7 @@ void UI::send_cursor(Point<std::int16_t> pos)
 
 void UI::doubleclick()
 {
-    Point<std::int16_t> pos = cursor.get_position();
+    auto pos = cursor.get_position();
     state->double_click(pos);
 }
 
@@ -216,7 +216,7 @@ void UI::drag_icon(Icon* icon)
 
 void UI::add_keymapping(std::uint8_t no,
                         std::uint8_t type,
-                        KeyAction::Id action)
+                        std::int32_t action)
 {
     keyboard.assign(no, type, action);
 }

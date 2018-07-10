@@ -63,11 +63,9 @@ Keyboard::Mapping Keyboard::get_text_mapping(std::int32_t keycode,
     if (textactions.count(keycode)) {
         return {KeyType::ACTION, textactions.at(keycode)};
     } else if (keycode >= 48 && keycode <= 64) {
-        return {KeyType::NUMBER,
-                KeyAction::action_by_id(keycode - (shift ? 15 : 0))};
+        return {KeyType::NUMBER, keycode - (shift ? 15 : 0)};
     } else if (keycode >= 65 && keycode <= 90) {
-        return {KeyType::LETTER,
-                KeyAction::action_by_id(keycode + (shift ? 0 : 32))};
+        return {KeyType::LETTER, keycode + (shift ? 0 : 32)};
     } else {
         switch (keycode) {
         case GLFW_KEY_LEFT:

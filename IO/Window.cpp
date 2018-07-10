@@ -43,50 +43,6 @@ Window::~Window()
     glfwTerminate();
 }
 
-void error_callback(int no, const char* description)
-{
-    Console::get().print(str::concat("GLFW error: ",
-                                     std::string_view{description},
-                                     " (",
-                                     std::to_string(no),
-                                     ')'));
-}
-
-void mousekey_callback(GLFWwindow*, int button, int action, int)
-{
-    switch (button) {
-    case GLFW_MOUSE_BUTTON_LEFT:
-        switch (action) {
-        case GLFW_PRESS:
-            UI::get().send_cursor(true);
-            break;
-        case GLFW_RELEASE:
-            UI::get().send_cursor(false);
-            break;
-        default:
-            break;
-        }
-        break;
-    case GLFW_MOUSE_BUTTON_RIGHT:
-        switch (action) {
-        case GLFW_PRESS:
-            UI::get().doubleclick();
-            break;
-        default:
-            break;
-        }
-        break;
-    default:
-        break;
-    }
-}
-
-void cursor_callback(GLFWwindow*, double xpos, double ypos)
-{
-    UI::get().send_cursor(
-        {static_cast<std::int16_t>(xpos), static_cast<std::int16_t>(ypos)});
-}
-
 Error Window::init()
 {
     full_screen = Configuration::get().video.fullscreen;
@@ -98,7 +54,13 @@ Error Window::init()
     glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
     context = glfwCreateWindow(1, 1, "", nullptr, nullptr);
     glfwMakeContextCurrent(context);
-    glfwSetErrorCallback(error_callback);
+    glfwSetErrorCallback([](int no, const char* description) noexcept {
+        Console::get().print(str::concat("GLFW error: ",
+                                         std::string_view{description},
+                                         " (",
+                                         std::to_string(no),
+                                         ')'));
+    });
     glfwWindowHint(GLFW_VISIBLE, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
@@ -138,8 +100,38 @@ Error Window::init_window()
     glfwSetKeyCallback(glwnd, [](GLFWwindow*, int key, int, int action, int) {
         UI::get().send_key(key, action != GLFW_RELEASE);
     });
-    glfwSetMouseButtonCallback(glwnd, mousekey_callback);
-    glfwSetCursorPosCallback(glwnd, cursor_callback);
+    glfwSetMouseButtonCallback(glwnd,
+                               [](GLFWwindow*, int button, int action, int) {
+                                   switch (button) {
+                                   case GLFW_MOUSE_BUTTON_LEFT:
+                                       switch (action) {
+                                       case GLFW_PRESS:
+                                           UI::get().send_cursor(true);
+                                           break;
+                                       case GLFW_RELEASE:
+                                           UI::get().send_cursor(false);
+                                           break;
+                                       default:
+                                           break;
+                                       }
+                                       break;
+                                   case GLFW_MOUSE_BUTTON_RIGHT:
+                                       switch (action) {
+                                       case GLFW_PRESS:
+                                           UI::get().doubleclick();
+                                           break;
+                                       default:
+                                           break;
+                                       }
+                                       break;
+                                   default:
+                                       break;
+                                   }
+                               });
+    glfwSetCursorPosCallback(glwnd, [](GLFWwindow*, double xpos, double ypos) {
+        UI::get().send_cursor({static_cast<std::int16_t>(xpos),
+                               static_cast<std::int16_t>(ypos)});
+    });
 
     GraphicsGL::get().reinit();
 

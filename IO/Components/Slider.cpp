@@ -23,18 +23,18 @@ namespace jrc
 {
 Slider::Slider(std::int32_t type,
                Range<std::int16_t> ver,
-               std::int16_t xp,
+               std::int16_t x_,
                std::int16_t unit_rows,
                std::int16_t row_max,
-               std::function<void(bool)> on_moved)
+               std::function<void(bool)> on_moved_)
+    : on_moved{on_moved_},
+      vertical{ver},
+      start{x_, vertical.first()},
+      end{x_, vertical.second()},
+      x{x_},
+      scrolling{false},
+      enabled{true}
 {
-    vertical = ver;
-    x = xp;
-    on_moved = on_moved;
-
-    start = {x, vertical.first()};
-    end = {x, vertical.second()};
-
     nl::node src = nl::nx::ui["Basic.img"]["VScr" + std::to_string(type)];
 
     nl::node dsrc = src["disabled"];
@@ -54,12 +54,9 @@ Slider::Slider(std::int32_t type,
     button_height = d_next.get_dimensions().y();
 
     set_rows(unit_rows, row_max);
-
-    enabled = true;
-    scrolling = false;
 }
 
-Slider::Slider() : Slider(0, {}, 0, 0, 0, {})
+Slider::Slider() : Slider{0, {}, 0, 0, 0, {}}
 {
 }
 

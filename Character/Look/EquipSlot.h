@@ -21,9 +21,7 @@
 
 #include <cstdint>
 
-namespace jrc
-{
-namespace Equipslot
+namespace jrc::Equipslot
 {
 enum Id : std::int16_t {
     NONE = 0,
@@ -47,11 +45,11 @@ enum Id : std::int16_t {
     SADDLE = 19,
     MEDAL = 49,
     BELT = 50,
+
     LENGTH
 };
 
 [[nodiscard]] Id by_id(std::int16_t id) noexcept;
 
 constexpr Enumeration<Id> values;
-} // namespace Equipslot
-} // namespace jrc
+} // namespace jrc::Equipslot

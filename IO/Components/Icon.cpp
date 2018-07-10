@@ -73,7 +73,7 @@ void Icon::drop_on_items(InventoryType::Id tab,
     type->drop_on_items(tab, eqslot, slot, equip);
 }
 
-KeyAction::Id Icon::get_action_id() const noexcept
+std::int32_t Icon::get_action_id() const noexcept
 {
     return type->get_action_id();
 }

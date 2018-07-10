@@ -38,12 +38,14 @@ UIItemInventory::UIItemInventory(const Inventory& invent)
     sprites.emplace_back(src["backgrnd2"]);
     sprites.emplace_back(src["backgrnd3"]);
 
-    new_item_slot = src["New"]["inventory"];
-    new_item_tab = src["New"]["Tab0"];
+    auto new_src = src["New"];
+    new_item_slot = new_src["inventory"];
+    new_item_tab = new_src["Tab0"];
     projectile = src["activeIcon"];
 
-    nl::node tab_en = src["Tab"]["enabled"];
-    nl::node tab_dis = src["Tab"]["disabled"];
+    auto tab_src = src["Tab"];
+    nl::node tab_en = tab_src["enabled"];
+    nl::node tab_dis = tab_src["disabled"];
 
     buttons[BT_TAB_EQUIP] = std::make_unique<TwoSpriteButton>(
         tab_dis["0"], tab_en["0"], Point<std::int16_t>{-1, -4});
@@ -145,18 +147,17 @@ void UIItemInventory::update()
 
 void UIItemInventory::update_slot(std::int16_t slot)
 {
-    if (std::int32_t item_id = inventory.get_item_id(tab, slot)) {
-        std::int16_t count;
-        if (tab == InventoryType::EQUIP) {
-            count = -1;
-        } else {
-            count = inventory.get_item_count(tab, slot);
-        }
+    if (std::int32_t item_id = inventory.get_item_id(tab, slot); item_id) {
+        std::int16_t count = tab == InventoryType::EQUIP
+                                 ? -1
+                                 : inventory.get_item_count(tab, slot);
 
         const Texture& texture = ItemData::get(item_id).get_icon(false);
         Equipslot::Id eq_slot = inventory.find_equip_slot(item_id);
         icons[slot] = std::make_unique<Icon>(
-            std::make_unique<ItemIcon>(tab, eq_slot, slot), texture, count);
+            std::make_unique<ItemIcon>(item_id, tab, eq_slot, slot),
+            texture,
+            count);
     } else if (icons.count(slot)) {
         icons.erase(slot);
     }
@@ -172,10 +173,10 @@ void UIItemInventory::load_icons()
     }
 }
 
-Button::State UIItemInventory::button_pressed(std::uint16_t buttonid)
+Button::State UIItemInventory::button_pressed(std::uint16_t button_id)
 {
     InventoryType::Id old_tab = tab;
-    switch (buttonid) {
+    switch (button_id) {
     case BT_TAB_EQUIP:
         tab = InventoryType::EQUIP;
         break;
@@ -211,6 +212,7 @@ Button::State UIItemInventory::button_pressed(std::uint16_t buttonid)
         load_icons();
         enable_gather();
     }
+
     return Button::PRESSED;
 }
 
@@ -218,16 +220,16 @@ void UIItemInventory::double_click(Point<std::int16_t> cursor_pos)
 {
     std::int16_t slot = slot_by_position(cursor_pos - position);
     if (icons.count(slot) && is_visible(slot)) {
-        if (std::int32_t item_id = inventory.get_item_id(tab, slot)) {
+        if (std::int32_t item_id = inventory.get_item_id(tab, slot); item_id) {
             switch (tab) {
             case InventoryType::EQUIP:
-                EquipItemPacket(slot, inventory.find_equip_slot(item_id))
+                EquipItemPacket{slot, inventory.find_equip_slot(item_id)}
                     .dispatch();
                 break;
             case InventoryType::USE:
-                if (item_id / 10000 != 204 && item_id / 10000 != 206
-                    && item_id / 10000 != 207) {
-                    UseItemPacket(slot, item_id).dispatch();
+                if (item_id / 10'000 != 204 && item_id / 10'000 != 206
+                    && item_id / 10'000 != 207) {
+                    UseItemPacket{slot, item_id}.dispatch();
                 }
                 break;
             default:
@@ -312,8 +314,9 @@ void UIItemInventory::modify(InventoryType::Id type,
             break;
         case Inventory::CHANGE_COUNT:
         case Inventory::ADD_COUNT:
-            if (auto icon = get_icon(slot))
+            if (auto icon = get_icon(slot)) {
                 icon->set_count(arg);
+            }
             break;
         case Inventory::SWAP:
             if (arg != slot) {
@@ -454,21 +457,19 @@ std::uint16_t UIItemInventory::button_by_tab(InventoryType::Id tb) const
 
 Icon* UIItemInventory::get_icon(std::int16_t slot)
 {
-    auto iter = icons.find(slot);
-    if (iter != icons.end()) {
+    if (auto iter = icons.find(slot); iter != icons.end()) {
         return iter->second.get();
     } else {
         return nullptr;
     }
 }
 
-UIItemInventory::ItemIcon::ItemIcon(InventoryType::Id st,
+UIItemInventory::ItemIcon::ItemIcon(std::int32_t iid,
+                                    InventoryType::Id st,
                                     Equipslot::Id eqs,
-                                    std::int16_t s)
+                                    std::int16_t s) noexcept
+    : item_id{iid}, source_tab{st}, eq_source{eqs}, source{s}
 {
-    source_tab = st;
-    eq_source = eqs;
-    source = s;
 }
 
 void UIItemInventory::ItemIcon::drop_on_stage() const
@@ -481,11 +482,11 @@ void UIItemInventory::ItemIcon::drop_on_equips(Equipslot::Id eq_slot) const
     switch (source_tab) {
     case InventoryType::EQUIP:
         if (eq_source == eq_slot) {
-            EquipItemPacket(source, eq_slot).dispatch();
+            EquipItemPacket{source, eq_slot}.dispatch();
         }
         break;
     case InventoryType::USE:
-        ScrollEquipPacket(source, eq_slot).dispatch();
+        ScrollEquipPacket{source, eq_slot}.dispatch();
         break;
     default:
         break;
@@ -502,5 +503,10 @@ void UIItemInventory::ItemIcon::drop_on_items(InventoryType::Id tab_id,
     }
 
     MoveItemPacket{tab_id, source, slot, 1}.dispatch();
+}
+
+std::int32_t UIItemInventory::ItemIcon::get_action_id() const noexcept
+{
+    return item_id;
 }
 } // namespace jrc

@@ -17,10 +17,13 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "UIKeyConfig.h"
 
+#include "../../Character/Inventory/InventoryType.h"
+#include "../../Data/ItemData.h"
 #include "../../Data/SkillData.h"
 #include "../Components/MapleButton.h"
 #include "../KeyAction.h"
 #include "../UI.h"
+#include "UIItemInventory.h"
 #include "nlnx/nx.hpp"
 
 namespace jrc
@@ -205,24 +208,16 @@ void UIKeyConfig::draw(float alpha) const
     UIElement::draw(alpha);
 
     for (auto [slot_id, action_id] : slot_mappings.left) {
-        if (KeyAction::is_skill(action_id)) {
-            SkillData::get(-action_id)
-                .get_icon(SkillData::NORMAL)
-                .draw(position + slot_pos({slot_id, true}));
-        } else if (KeyAction::is_item(action_id)) {
-            ItemData::get(action_id).get_icon(false).draw(
-                position + slot_pos({slot_id, true}));
-        } else if (auto icons_iter
-                   = icons.find(KeyAction::action_by_id(action_id));
-                   icons_iter != icons.end()) {
-            icons_iter->second->draw(position + slot_pos({slot_id, true}));
+        if (auto icon_iter = icons.find(action_id); icon_iter != icons.end()) {
+            icon_iter->second->draw(position
+                                    + slot_pos({slot_id, SlotType::KEY_SLOT}));
         }
     }
 
     for (auto [slot_id, action_id] : palette_slots.left) {
-        if (auto icons_iter = icons.find(action_id);
-            icons_iter != icons.end()) {
-            icons_iter->second->draw(position + slot_pos({slot_id, false}));
+        if (auto icon_iter = icons.find(action_id); icon_iter != icons.end()) {
+            icon_iter->second->draw(
+                position + slot_pos({slot_id, SlotType::PALETTE_SLOT}));
         }
     }
 }
@@ -241,8 +236,10 @@ void UIKeyConfig::send_icon(const Icon& icon, Point<std::int16_t> cursor_pos)
     /* Console::get().print("sending icon at "
                          + (cursor_pos - position).to_string()); */
     if (auto slot = slot_by_position(cursor_pos); slot) {
+        /*
         std::cout << "icon.get_action_id(): " << icon.get_action_id() << '\n'
                   << std::flush;
+        */
         adjust_mapping(*slot, icon.get_action_id());
     }
 
@@ -263,21 +260,38 @@ Cursor::State UIKeyConfig::send_cursor(bool pressed,
     }
     auto slot = *slot_;
 
-    auto& map = slot.second ? slot_mappings : palette_slots;
-    if (auto action_iter = map.left.find(slot.first);
-        action_iter != map.left.end()) {
-        if (auto icon_iter = icons.find(action_iter->second);
-            icon_iter != icons.end()) {
-            if (pressed) {
-                icon_iter->second->start_drag(cursor_pos - position
-                                              - slot_pos(slot));
-                UI::get().drag_icon(icon_iter->second.get());
+    if (slot.second == SlotType::KEY_SLOT) {
+        if (auto action_iter = slot_mappings.left.find(slot.first);
+            action_iter != slot_mappings.left.end()) {
+            if (auto icon_ptr = get_icon(action_iter->second); icon_ptr) {
+                if (pressed) {
+                    icon_ptr->start_drag(cursor_pos - position
+                                         - slot_pos(slot));
+                    UI::get().drag_icon(icon_ptr.get());
 
-                dragged_from = slot;
+                    dragged_from = slot;
 
-                return Cursor::GRABBING;
-            } else {
-                return Cursor::CAN_GRAB;
+                    return Cursor::GRABBING;
+                } else {
+                    return Cursor::CAN_GRAB;
+                }
+            }
+        }
+    } else {
+        if (auto action_iter = palette_slots.left.find(slot.first);
+            action_iter != palette_slots.left.end()) {
+            if (auto icon_ptr = get_icon(action_iter->second); icon_ptr) {
+                if (pressed) {
+                    icon_ptr->start_drag(cursor_pos - position
+                                         - slot_pos(slot));
+                    UI::get().drag_icon(icon_ptr.get());
+
+                    dragged_from = slot;
+
+                    return Cursor::GRABBING;
+                } else {
+                    return Cursor::CAN_GRAB;
+                }
             }
         }
     }
@@ -344,7 +358,10 @@ void UIKeyConfig::reload_mappings() noexcept
     clear();
 
     for (auto [slot_id, mapping] : UI::get().get_keyboard().get_maplekeys()) {
-        slot_mappings.insert({slot_id, mapping.action});
+        std::int32_t action_id = mapping.action;
+
+        slot_mappings.insert({slot_id, action_id});
+        get_icon(action_id);
     }
 
     refresh_palette();
@@ -369,6 +386,10 @@ void UIKeyConfig::clear_mappings() noexcept
 {
     std::uint8_t first_empty = 0;
     for (auto [_, action_id] : slot_mappings.left) {
+        if (!KeyAction::is_key_action(action_id)) {
+            continue;
+        }
+
         if (icons.count(action_id)) {
             auto palette_iter = palette_slots.left.find(first_empty);
             while (first_empty < PALETTE_COLS * PALETTE_ROWS
@@ -413,8 +434,9 @@ void UIKeyConfig::clear() noexcept
 void UIKeyConfig::refresh_palette() noexcept
 {
     std::uint8_t i = 0;
-    for (const auto& [action_id, icon_ptr] : icons) {
-        if (!slot_mappings.right.count(action_id)) {
+    for (const auto& [action_id, _] : icons) {
+        if (KeyAction::is_key_action(action_id)
+            && !slot_mappings.right.count(action_id)) {
             bimap::assign(palette_slots, i, action_id);
             ++i;
         }
@@ -447,11 +469,15 @@ void UIKeyConfig::adjust_mapping(Slot slot, std::int32_t action) noexcept
                 bimap::assign(slot_mappings, to_slot, action);
             }
 
+            add_icon(action);
             dirty = true;
         }
 
         return;
     }
+
+    bool is_to_key = to_type == SlotType::KEY_SLOT;
+    bool is_from_key = from_type == SlotType::KEY_SLOT;
 
     auto& to_map = is_to_key ? slot_mappings : palette_slots;
     auto& from_map = is_from_key ? slot_mappings : palette_slots;
@@ -490,7 +516,7 @@ void UIKeyConfig::adjust_mapping(Slot slot, std::int32_t action) noexcept
     dirty = true;
 }
 
-std::optional<Slot>
+std::optional<UIKeyConfig::Slot>
 UIKeyConfig::slot_by_position(Point<std::int16_t> cursor_pos_) const noexcept
 {
     auto cursor_pos = cursor_pos_ - position;
@@ -539,6 +565,48 @@ std::optional<std::uint8_t> UIKeyConfig::empty_palette_slot() const noexcept
     }
 }
 
+nullable_ptr<Icon> UIKeyConfig::get_icon(KeyAction::Id action_id) noexcept
+{
+    if (auto icon_iter = icons.find(action_id); icon_iter != icons.end()) {
+        return icon_iter->second.get();
+    }
+
+    return nullptr;
+}
+
+nullable_ptr<Icon> UIKeyConfig::get_icon(std::int32_t action_id) noexcept
+{
+    if (auto icon_iter = icons.find(action_id); icon_iter != icons.end()) {
+        return icon_iter->second.get();
+    }
+
+    return add_icon(action_id);
+}
+
+nullable_ptr<Icon> UIKeyConfig::add_icon(std::int32_t action_id) noexcept
+{
+    if (KeyAction::is_skill(action_id)) {
+        // TODO: unimplemented
+        /*
+        return (icons[action_id]
+                = std::make_unique<Icon>(std::make_unique<>(), texture, -1))
+            .get();
+        */
+    } else if (KeyAction::is_item(action_id)) {
+        return (icons[action_id] = std::make_unique<Icon>(
+                    std::make_unique<UIItemInventory::ItemIcon>(
+                        action_id,
+                        InventoryType::by_item_id(action_id),
+                        Equipslot::Id::NONE,
+                        0),
+                    ItemData::get(action_id).get_icon(false),
+                    -1))
+            .get();
+    }
+
+    return nullptr;
+}
+
 Point<std::int16_t> UIKeyConfig::slot_pos(Slot slot) noexcept
 {
     switch (auto [s, key_slot] = slot; key_slot) {
@@ -558,7 +626,7 @@ UIKeyConfig::KeyIcon::KeyIcon(KeyAction::Id action_id) noexcept
 {
 }
 
-KeyAction::Id UIKeyConfig::KeyIcon::get_action_id() const noexcept
+std::int32_t UIKeyConfig::KeyIcon::get_action_id() const noexcept
 {
     return action_id;
 }

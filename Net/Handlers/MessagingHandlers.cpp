@@ -233,7 +233,8 @@ void ShowItemGainInChatHandler::handle(InPacket& recv) const
     }
     case 4: {             // pet levelup
         recv.read_byte(); // dummy byte
-        auto pet_index = static_cast<std::size_t>(recv.read_byte());
+        [[maybe_unused]] auto pet_index
+            = static_cast<std::size_t>(recv.read_byte());
         std::cout << "ShowItemGainInChatHandler: pet levelup\n" << std::flush;
         break;
     }
@@ -245,7 +246,7 @@ void ShowItemGainInChatHandler::handle(InPacket& recv) const
                   << std::flush;
         break;
     case 10: { // "show own recovery", used for e.g. chairs
-        std::int8_t amount = recv.read_byte();
+        [[maybe_unused]] std::int8_t amount = recv.read_byte();
         std::cout << "ShowItemGainInChatHandler: show own recovery\n"
                   << std::flush;
         break;
@@ -262,7 +263,7 @@ void ShowItemGainInChatHandler::handle(InPacket& recv) const
                   << std::flush;
         break;
     case 16: { // maker effect
-        bool success = recv.read_int() == 0;
+        [[maybe_unused]] bool success = recv.read_int() == 0;
         std::cout << "ShowItemGainInChatHandler: maker effect\n" << std::flush;
         break;
     }
@@ -271,7 +272,7 @@ void ShowItemGainInChatHandler::handle(InPacket& recv) const
         std::cout << "ShowItemGainInChatHandler: intro effect\n" << std::flush;
         break;
     case 21: { // "show wheels left"
-        auto wheels_left = recv.read_byte();
+        [[maybe_unused]] auto wheels_left = recv.read_byte();
         std::cout << "ShowItemGainInChatHandler: show wheels left\n"
                   << std::flush;
         break;

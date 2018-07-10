@@ -76,7 +76,7 @@ public:
     template<typename KeyboardMapping>
     ChangeKeymapPacket(
         const std::unordered_map<std::uint8_t, KeyboardMapping>& maplekeys)
-        : OutPacket(CHANGE_KEYMAP)
+        : OutPacket{CHANGE_KEYMAP}
     {
         // Mode
         write_int(0);

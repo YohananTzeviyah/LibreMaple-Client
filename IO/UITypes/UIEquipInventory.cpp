@@ -106,10 +106,11 @@ Button::State UIEquipInventory::button_pressed(std::uint16_t button_id)
 void UIEquipInventory::update_slot(Equipslot::Id slot)
 {
     if (std::int32_t item_id
-        = inventory.get_item_id(InventoryType::EQUIPPED, slot)) {
+        = inventory.get_item_id(InventoryType::EQUIPPED, slot);
+        item_id) {
         const Texture& texture = ItemData::get(item_id).get_icon(false);
         icons[slot] = std::make_unique<Icon>(
-            std::make_unique<EquipIcon>(slot), texture, -1);
+            std::make_unique<EquipIcon>(item_id, slot), texture, -1);
     } else if (icons[slot]) {
         icons[slot].release();
     }
@@ -127,18 +128,18 @@ void UIEquipInventory::load_icons()
 }
 
 Cursor::State UIEquipInventory::send_cursor(bool pressed,
-                                            Point<std::int16_t> cursorpos)
+                                            Point<std::int16_t> cursor_pos)
 {
-    Cursor::State dstate = UIDragElement::send_cursor(pressed, cursorpos);
+    Cursor::State dstate = UIDragElement::send_cursor(pressed, cursor_pos);
     if (dragged) {
         clear_tooltip();
         return dstate;
     }
 
-    Equipslot::Id slot = slot_by_position(cursorpos);
-    if (auto icon = icons[slot].get()) {
+    Equipslot::Id slot = slot_by_position(cursor_pos);
+    if (auto icon = icons[slot].get(); icon) {
         if (pressed) {
-            icon->start_drag(cursorpos - position - icon_positions[slot]);
+            icon->start_drag(cursor_pos - position - icon_positions[slot]);
             UI::get().drag_icon(icon);
 
             clear_tooltip();
@@ -153,21 +154,22 @@ Cursor::State UIEquipInventory::send_cursor(bool pressed,
     }
 }
 
-void UIEquipInventory::double_click(Point<std::int16_t> cursorpos)
+void UIEquipInventory::double_click(Point<std::int16_t> cursor_pos)
 {
-    Equipslot::Id slot = slot_by_position(cursorpos);
+    Equipslot::Id slot = slot_by_position(cursor_pos);
     if (icons[slot]) {
         if (std::int16_t free_slot
-            = inventory.find_free_slot(InventoryType::EQUIP)) {
+            = inventory.find_free_slot(InventoryType::EQUIP);
+            free_slot) {
             UnequipItemPacket{slot, free_slot}.dispatch();
         }
     }
 }
 
 void UIEquipInventory::send_icon(const Icon& icon,
-                                 Point<std::int16_t> cursorpos)
+                                 Point<std::int16_t> cursor_pos)
 {
-    if (Equipslot::Id slot = slot_by_position(cursorpos)) {
+    if (Equipslot::Id slot = slot_by_position(cursor_pos); slot) {
         icon.drop_on_equips(slot);
     }
 }
@@ -219,7 +221,9 @@ UIEquipInventory::slot_by_position(Point<std::int16_t> cursor_pos) const
     return Equipslot::NONE;
 }
 
-UIEquipInventory::EquipIcon::EquipIcon(std::int16_t s) noexcept : source(s)
+UIEquipInventory::EquipIcon::EquipIcon(std::int32_t iid,
+                                       std::int16_t s) noexcept
+    : item_id{iid}, source{s}
 {
 }
 
@@ -244,5 +248,10 @@ void UIEquipInventory::EquipIcon::drop_on_items(InventoryType::Id tab,
     } else {
         UnequipItemPacket{source, slot}.dispatch();
     }
+}
+
+std::int32_t UIEquipInventory::EquipIcon::get_action_id() const noexcept
+{
+    return item_id;
 }
 } // namespace jrc

@@ -196,7 +196,7 @@ UICharCreation::UICharCreation()
     position = {0, 0};
     dimension = {Constants::VIEW_WIDTH, Constants::VIEW_HEIGHT};
     active = true;
-    cloud_fx = 200.0f;
+    cloud_fx = 200;
 }
 
 void UICharCreation::randomize_look()
@@ -476,11 +476,11 @@ void UICharCreation::draw(float alpha) const
         }
     }
 
-    std::int16_t cloudx
-        = static_cast<std::int16_t>(cloud_fx) % Constants::VIEW_WIDTH;
-    cloud.draw(Point<std::int16_t>{cloudx - cloud.width(), 300});
-    cloud.draw(Point<std::int16_t>{cloudx, 300});
-    cloud.draw(Point<std::int16_t>{cloudx + cloud.width(), 300});
+    std::int16_t cloud_x = static_cast<std::int16_t>(
+        cloud_fx / 4u % static_cast<std::uint32_t>(Constants::VIEW_WIDTH));
+    cloud.draw(Point<std::int16_t>{cloud_x - cloud.width(), 300});
+    cloud.draw(Point<std::int16_t>{cloud_x, 300});
+    cloud.draw(Point<std::int16_t>{cloud_x + cloud.width(), 300});
 
     if (!named) {
         name_board.draw(Point<std::int16_t>{455, 115});
@@ -521,7 +521,7 @@ void UICharCreation::update()
     new_char.update(Constants::TIMESTEP);
     name_char.update(position);
 
-    cloud_fx += 0.25f;
+    ++cloud_fx;
 }
 
 std::string_view UICharCreation::get_equip_name(Equipslot::Id slot) const

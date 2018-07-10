@@ -54,6 +54,30 @@ public:
     void enable_sort();
     void enable_gather();
 
+    class ItemIcon : public Icon::Type
+    {
+    public:
+        ItemIcon(std::int32_t item_id_,
+                 InventoryType::Id source_tab_,
+                 Equipslot::Id eq_source_,
+                 std::int16_t source_) noexcept;
+
+        void drop_on_stage() const override;
+        void drop_on_equips(Equipslot::Id eq_slot) const override;
+        void drop_on_items(InventoryType::Id tab,
+                           Equipslot::Id,
+                           std::int16_t slot,
+                           bool) const override;
+
+        std::int32_t get_action_id() const noexcept override;
+
+    private:
+        std::int32_t item_id;
+        InventoryType::Id source_tab;
+        Equipslot::Id eq_source;
+        std::int16_t source;
+    };
+
 protected:
     Button::State button_pressed(std::uint16_t buttonid) override;
 
@@ -69,26 +93,6 @@ private:
     Point<std::int16_t> get_slot_pos(std::int16_t slot) const;
     Point<std::int16_t> get_tab_pos(InventoryType::Id tab) const;
     Icon* get_icon(std::int16_t slot);
-
-    class ItemIcon : public Icon::Type
-    {
-    public:
-        ItemIcon(InventoryType::Id sourcetab,
-                 Equipslot::Id eqsource,
-                 std::int16_t source);
-
-        void drop_on_stage() const override;
-        void drop_on_equips(Equipslot::Id eq_slot) const override;
-        void drop_on_items(InventoryType::Id tab,
-                           Equipslot::Id,
-                           std::int16_t slot,
-                           bool) const override;
-
-    private:
-        InventoryType::Id source_tab;
-        Equipslot::Id eq_source;
-        std::int16_t source;
-    };
 
     enum Buttons {
         BT_TAB_EQUIP,

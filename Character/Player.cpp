@@ -138,21 +138,21 @@ void Player::recalc_stats(bool equip_changed)
 
 void Player::change_equip(std::int16_t slot)
 {
-    if (std::int32_t itemid
+    if (std::int32_t item_id
         = inventory.get_item_id(InventoryType::EQUIPPED, slot)) {
-        look.add_equip(itemid);
+        look.add_equip(item_id);
     } else {
         look.remove_equip(Equipslot::by_id(slot));
     }
 }
 
-void Player::use_item(std::int32_t itemid)
+void Player::use_item(std::int32_t item_id)
 {
-    InventoryType::Id type = InventoryType::by_item_id(itemid);
-    if (std::int16_t slot = inventory.find_item(type, itemid)) {
+    InventoryType::Id type = InventoryType::by_item_id(item_id);
+    if (std::int16_t slot = inventory.find_item(type, item_id); slot) {
         switch (type) {
         case InventoryType::USE:
-            UseItemPacket(slot, itemid).dispatch();
+            UseItemPacket{slot, item_id}.dispatch();
             break;
         default:
             return;

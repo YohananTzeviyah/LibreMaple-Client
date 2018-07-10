@@ -34,7 +34,7 @@ constexpr Point<std::int16_t> UISkillbook::SKILL_OFFSET;
 constexpr Point<std::int16_t> UISkillbook::ICON_OFFSET;
 constexpr Point<std::int16_t> UISkillbook::LINE_OFFSET;
 
-SkillIcon::SkillIcon(std::int32_t i, std::int32_t lv) : id(i)
+SkillIcon::SkillIcon(std::int32_t i, std::int32_t lv) : id{i}
 {
     const SkillData& data = SkillData::get(id);
 
@@ -76,11 +76,12 @@ void SkillIcon::draw(const DrawArgument& args) const
     level.draw(args + Point<std::int16_t>{38, -16});
 }
 
-Cursor::State SkillIcon::send_cursor(Point<std::int16_t> cursorpos,
+Cursor::State SkillIcon::send_cursor(Point<std::int16_t> cursor_pos,
                                      bool clicked)
 {
     static constexpr const Rectangle<std::int16_t> bounds{0, 32, 0, 32};
-    bool in_range = bounds.contains(cursorpos);
+    bool in_range = bounds.contains(cursor_pos);
+
     switch (state) {
     case NORMAL:
     case DISABLED:
@@ -99,6 +100,10 @@ Cursor::State SkillIcon::send_cursor(Point<std::int16_t> cursorpos,
         if (in_range) {
             if (clicked) {
                 state = MOUSE_OVER;
+
+                // this->start_drag(cursor_pos);
+                // UI::get().drag_icon(this);
+
                 return Cursor::GRABBING;
             } else {
                 state = MOUSE_OVER;
@@ -120,10 +125,10 @@ std::int32_t SkillIcon::get_id() const
 
 UISkillbook::UISkillbook(const CharStats& in_stats,
                          const Skillbook& in_skillbook)
-    : UIDragElement({174, 20}),
-      stats(in_stats),
-      skillbook(in_skillbook),
-      tab(0)
+    : UIDragElement{{174, 20}},
+      stats{in_stats},
+      skillbook{in_skillbook},
+      tab{0}
 {
     nl::node main = nl::nx::ui["UIWindow2.img"]["Skill"]["main"];
 
@@ -135,8 +140,9 @@ UISkillbook::UISkillbook(const CharStats& in_stats,
     skill_e = main["skill1"];
     line = main["line"];
 
-    nl::node tab_e = main["Tab"]["enabled"];
-    nl::node tab_d = main["Tab"]["disabled"];
+    auto tab_src = main["Tab"];
+    nl::node tab_e = tab_src["enabled"];
+    nl::node tab_d = tab_src["disabled"];
 
     for (std::uint16_t i = BT_TAB0; i <= BT_TAB4; ++i) {
         std::uint16_t tab_id = i - BT_TAB0;
@@ -225,10 +231,10 @@ Button::State UISkillbook::button_pressed(std::uint16_t id)
     }
 }
 
-void UISkillbook::double_click(Point<std::int16_t> cursorpos)
+void UISkillbook::double_click(Point<std::int16_t> cursor_pos)
 {
-    const SkillIcon* icon = icon_by_position(cursorpos - position);
-    if (icon) {
+    if (const SkillIcon* icon = icon_by_position(cursor_pos - position);
+        icon) {
         std::int32_t skill_id = icon->get_id();
         std::int32_t skill_level = skillbook.get_level(skill_id);
         if (skill_level > 0) {
@@ -237,9 +243,9 @@ void UISkillbook::double_click(Point<std::int16_t> cursorpos)
     }
 }
 
-bool UISkillbook::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
+bool UISkillbook::remove_cursor(bool clicked, Point<std::int16_t> cursor_pos)
 {
-    if (UIDragElement::remove_cursor(clicked, cursorpos)) {
+    if (UIDragElement::remove_cursor(clicked, cursor_pos)) {
         return true;
     }
 
@@ -247,17 +253,18 @@ bool UISkillbook::remove_cursor(bool clicked, Point<std::int16_t> cursorpos)
 }
 
 Cursor::State UISkillbook::send_cursor(bool clicked,
-                                       Point<std::int16_t> cursorpos)
+                                       Point<std::int16_t> cursor_pos)
 {
-    Cursor::State dstate = UIDragElement::send_cursor(clicked, cursorpos);
+    Cursor::State dstate = UIDragElement::send_cursor(clicked, cursor_pos);
     if (dragged) {
         return dstate;
     }
 
-    Point<std::int16_t> cursor_relative = cursorpos - position;
+    Point<std::int16_t> cursor_relative = cursor_pos - position;
     if (slider.is_enabled()) {
         if (Cursor::State new_state
-            = slider.send_cursor(cursor_relative, clicked)) {
+            = slider.send_cursor(cursor_relative, clicked);
+            new_state) {
             clear_tooltip();
             return new_state;
         }
@@ -276,7 +283,7 @@ Cursor::State UISkillbook::send_cursor(bool clicked,
     Point<std::int16_t> skill_position = position + SKILL_OFFSET;
     for (auto iter = begin; iter != end; ++iter) {
         if (Cursor::State state
-            = iter->send_cursor(cursorpos - skill_position, clicked);
+            = iter->send_cursor(cursor_pos - skill_position, clicked);
             state) {
             switch (state) {
             case Cursor::GRABBING:
@@ -314,7 +321,7 @@ void UISkillbook::update_stat(Maplestat::Id stat, std::int16_t value)
 
 void UISkillbook::update_skills(std::int32_t skill_id)
 {
-    if (skill_id / 10000 == job.get_id()) {
+    if (skill_id / 10'000 == job.get_id()) {
         change_tab(tab);
     }
 }

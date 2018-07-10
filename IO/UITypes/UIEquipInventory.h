@@ -58,7 +58,7 @@ private:
     class EquipIcon : public Icon::Type
     {
     public:
-        EquipIcon(std::int16_t source) noexcept;
+        EquipIcon(std::int32_t item_id_, std::int16_t source_) noexcept;
 
         void drop_on_stage() const override;
         void drop_on_equips(Equipslot::Id) const override
@@ -69,7 +69,10 @@ private:
                            std::int16_t slot,
                            bool equip) const override;
 
+        std::int32_t get_action_id() const noexcept override;
+
     private:
+        std::int32_t item_id;
         std::int16_t source;
     };
 

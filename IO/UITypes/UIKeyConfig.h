@@ -62,6 +62,9 @@ private:
     void adjust_mapping(Slot slot, std::int32_t action) noexcept;
     std::optional<Slot> slot_by_position(Point<std::int16_t> p) const noexcept;
     std::optional<std::uint8_t> empty_palette_slot() const noexcept;
+    nullable_ptr<Icon> get_icon(KeyAction::Id action_id) noexcept;
+    nullable_ptr<Icon> get_icon(std::int32_t action_id) noexcept;
+    nullable_ptr<Icon> add_icon(std::int32_t action_id) noexcept;
     static Point<std::int16_t> slot_pos(Slot slot) noexcept;
 
     class KeyIcon : public Icon::Type
@@ -96,9 +99,8 @@ private:
     };
 
     bimap::unordered_bimap<std::uint8_t, std::int32_t> slot_mappings;
-    std::unordered_map<KeyAction::Id, std::unique_ptr<Icon>> icons;
-    // std::unordered_map<std::int32_t, std::unique_ptr<Icon>> misc_icons;
-    bimap::unordered_bimap<std::uint8_t, KeyAction::Id> palette_slots;
+    bimap::unordered_bimap<std::uint8_t, std::int32_t> palette_slots;
+    std::unordered_map<std::int32_t, std::unique_ptr<Icon>> icons;
     Slot dragged_from;
     bool dirty;
 

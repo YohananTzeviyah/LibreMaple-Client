@@ -38,7 +38,7 @@ public:
                                    Equipslot::Id eqslot,
                                    std::int16_t slot,
                                    bool equip) const = 0;
-        virtual KeyAction::Id get_action_id() const noexcept
+        virtual std::int32_t get_action_id() const noexcept
         {
             return KeyAction::NO_ACTION;
         }
@@ -71,7 +71,7 @@ public:
                        Equipslot::Id eqslot,
                        std::int16_t slot,
                        bool equip) const;
-    KeyAction::Id get_action_id() const noexcept;
+    std::int32_t get_action_id() const noexcept;
     void start_drag(Point<std::int16_t> offset);
     void reset();
     void set_count(std::int16_t count);

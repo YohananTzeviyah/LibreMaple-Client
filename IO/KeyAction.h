@@ -91,7 +91,18 @@ enum Id : std::int32_t {
     LAST
 };
 
-inline Id action_by_id(std::int32_t id) noexcept
+constexpr bool is_key_action(std::int32_t id) noexcept
+{
+    return id >= 0 && id < static_cast<std::int32_t>(LAST);
+}
+
+#ifdef NDEBUG
+constexpr
+#else
+inline
+#endif
+    Id
+    action_by_id(std::int32_t id) noexcept
 {
 #ifndef NDEBUG
     if (!is_key_action(id)) {
@@ -103,20 +114,15 @@ inline Id action_by_id(std::int32_t id) noexcept
     return static_cast<Id>(id);
 }
 
-inline bool is_item(std::int32_t id) noexcept
+constexpr bool is_item(std::int32_t id) noexcept
 {
     return id >= 1'000'000;
 }
 
 //! We use negative numbers to represent skill IDs, e.g. a skill with ID
 //! 1,000,001 is represented as `-1'000'001`.
-inline bool is_skill(std::int32_t id) noexcept
+constexpr bool is_skill(std::int32_t id) noexcept
 {
     return id < 0;
-}
-
-inline bool is_key_action(std::int32_t id) noexcept
-{
-    return id >= 0 && id < static_cast<std::int32_t>(LAST);
 }
 } // namespace jrc::KeyAction

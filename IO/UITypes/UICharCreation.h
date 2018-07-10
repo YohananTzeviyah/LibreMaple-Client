@@ -77,7 +77,8 @@ private:
     std::vector<Sprite> sprites_look_board;
     Texture sky;
     Texture cloud;
-    float cloud_fx;
+    //! Measured in quarters of a pixel.
+    std::uint32_t cloud_fx;
     Texture name_board;
     Textfield name_char;
     CharLook new_char;

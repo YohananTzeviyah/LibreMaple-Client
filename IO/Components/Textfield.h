@@ -42,7 +42,7 @@ public:
 
     void draw(Point<std::int16_t> position) const;
     void update(Point<std::int16_t> parentpos) noexcept;
-    void send_key(KeyType::Id type, KeyAction::Id code, bool down) noexcept;
+    void send_key(KeyType::Id type, std::int32_t code, bool down) noexcept;
     void add_string(std::string_view str) noexcept;
 
     void set_state(State state) noexcept;
@@ -51,7 +51,7 @@ public:
 
     void set_enter_callback(
         std::function<void(const std::string&)> on_ret) noexcept;
-    void set_key_callback(KeyAction::Id key,
+    void set_key_callback(std::int32_t key,
                           std::function<void()> action) noexcept;
 
     Cursor::State send_cursor(Point<std::int16_t> cursorpos,
@@ -78,7 +78,7 @@ private:
     char crypt;
     State state;
 
-    std::unordered_map<KeyAction::Id, std::function<void()>> callbacks;
+    std::unordered_map<std::int32_t, std::function<void()>> callbacks;
     std::function<void(const std::string&)> on_return;
 };
 } // namespace jrc
