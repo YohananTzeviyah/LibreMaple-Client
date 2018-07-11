@@ -90,6 +90,31 @@ private:
         KeyAction::Id action_id;
     };
 
+    //! Dummy `Icon::Type` for skills to avoid using the heavier-weight
+    //! `UISkillBook::SkillIcon`.
+    class SkillIcon : public Icon::Type
+    {
+    public:
+        SkillIcon(std::int32_t action_id) noexcept;
+
+        void drop_on_stage() const override
+        {
+        }
+        void drop_on_equips(Equipslot::Id) const override
+        {
+        }
+        void drop_on_items(InventoryType::Id,
+                           Equipslot::Id,
+                           std::int16_t,
+                           bool) const override
+        {
+        }
+        std::int32_t get_action_id() const noexcept override;
+
+    private:
+        std::int32_t action_id;
+    };
+
     enum Buttons : std::uint16_t {
         BT_CANCEL,
         BT_DEFAULT,

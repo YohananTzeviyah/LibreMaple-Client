@@ -78,12 +78,11 @@ public:
     std::int16_t get_count() const;
 
 private:
-    std::unique_ptr<Type> type;
     Texture texture;
-    bool showcount;
-    std::int16_t count;
-
-    bool dragged;
+    std::unique_ptr<Type> type;
     Point<std::int16_t> cursoroffset;
+    std::int16_t count;
+    bool showcount;
+    bool dragged;
 };
 } // namespace jrc

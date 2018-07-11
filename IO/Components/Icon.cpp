@@ -23,14 +23,14 @@
 namespace jrc
 {
 Icon::Icon(std::unique_ptr<Type> t, Texture tx, std::int16_t c)
-    : type(std::move(t)), texture(tx), count(c)
+    : texture{tx}, type{std::move(t)}, count{c}
 {
     texture.shift({0, 32});
     showcount = c > -1;
     dragged = false;
 }
 
-Icon::Icon() : Icon(std::make_unique<NullType>(), {}, -1)
+Icon::Icon() : Icon{std::make_unique<NullType>(), {}, -1}
 {
 }
 

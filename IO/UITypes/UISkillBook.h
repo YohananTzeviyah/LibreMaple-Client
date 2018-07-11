@@ -24,6 +24,7 @@
 #include "../UIDragElement.h"
 #include "../UIElement.h"
 
+#include <utility>
 #include <vector>
 
 namespace jrc
@@ -33,31 +34,37 @@ class SkillIcon : public Icon::Type
 public:
     SkillIcon(std::int32_t id, std::int32_t level);
 
-    void drop_on_stage() const override;
+    void drop_on_stage() const override
+    {
+    }
     void drop_on_equips(Equipslot::Id) const override
     {
     }
-    void drop_on_items(InventoryType::Id tab,
-                       Equipslot::Id eqslot,
-                       std::int16_t slot,
-                       bool equip) const override;
+    void drop_on_items(InventoryType::Id,
+                       Equipslot::Id,
+                       std::int16_t,
+                       bool) const override
+    {
+    }
 
     std::int32_t get_action_id() const noexcept override;
 
     void draw(const DrawArgument& args) const;
 
-    Cursor::State send_cursor(Point<std::int16_t> cursorpos, bool clicked);
+    Cursor::State send_cursor(Point<std::int16_t> cursor_pos, bool clicked);
 
-    std::int32_t get_id() const;
+    std::int32_t get_id() const noexcept;
 
 private:
-    enum State { NORMAL, DISABLED, MOUSE_OVER };
+    enum State : std::uint8_t { NORMAL, DISABLED, MOUSE_OVER };
+
+    Text name;
+    Text level;
 
     Texture normal;
     Texture disabled;
     Texture mouse_over;
-    Text name;
-    Text level;
+
     std::int32_t id;
 
     State state;
@@ -118,7 +125,7 @@ private:
     static constexpr const std::int16_t ROWS = 4;
     static constexpr const std::int16_t ROW_HEIGHT = 40;
     static constexpr const Point<std::int16_t> SKILL_OFFSET{11, 93};
-    static constexpr const Point<std::int16_t> ICON_OFFSET{2, 33};
+    static constexpr const Point<std::int16_t> ICON_OFFSET{2, 34};
     static constexpr const Point<std::int16_t> LINE_OFFSET{2, 37};
 
     const CharStats& stats;
@@ -139,6 +146,6 @@ private:
     std::uint16_t skill_count;
     std::uint16_t offset;
 
-    std::vector<SkillIcon> icons;
+    std::vector<std::pair<SkillIcon*, std::unique_ptr<Icon>>> icons;
 };
 } // namespace jrc

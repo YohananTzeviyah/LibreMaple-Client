@@ -233,8 +233,10 @@ void UIKeyConfig::double_click(Point<std::int16_t>)
 
 void UIKeyConfig::send_icon(const Icon& icon, Point<std::int16_t> cursor_pos)
 {
-    /* Console::get().print("sending icon at "
-                         + (cursor_pos - position).to_string()); */
+    /*
+    Console::get().print("sending icon at "
+                         + (cursor_pos - position).to_string());
+    */
     if (auto slot = slot_by_position(cursor_pos); slot) {
         /*
         std::cout << "icon.get_action_id(): " << icon.get_action_id() << '\n'
@@ -305,7 +307,7 @@ Button::State UIKeyConfig::button_pressed(std::uint16_t button_id)
     case Buttons::BT_DEFAULT:
         UI::get().emplace<UIKeyConfigNotice>(
             UIKeyConfigNotice::RESET_TO_DEFAULT,
-            [this](bool ok) noexcept {
+            [this](bool ok) {
                 if (ok) {
                     reset_to_default();
                 }
@@ -318,7 +320,7 @@ Button::State UIKeyConfig::button_pressed(std::uint16_t button_id)
         if (dirty) {
             UI::get().emplace<UIKeyConfigNotice>(
                 UIKeyConfigNotice::SAVE_CHANGES,
-                [this](bool yes) noexcept {
+                [this](bool yes) {
                     if (yes) {
                         commit_mappings();
                     }
@@ -339,7 +341,7 @@ Button::State UIKeyConfig::button_pressed(std::uint16_t button_id)
     case Buttons::BT_DELETE:
         UI::get().emplace<UIKeyConfigNotice>(
             UIKeyConfigNotice::CLEAR_ALL_SHORTCUTS,
-            [this](bool yes) noexcept {
+            [this](bool yes) {
                 if (yes) {
                     clear_mappings();
                 }
@@ -586,12 +588,11 @@ nullable_ptr<Icon> UIKeyConfig::get_icon(std::int32_t action_id) noexcept
 nullable_ptr<Icon> UIKeyConfig::add_icon(std::int32_t action_id) noexcept
 {
     if (KeyAction::is_skill(action_id)) {
-        // TODO: unimplemented
-        /*
-        return (icons[action_id]
-                = std::make_unique<Icon>(std::make_unique<>(), texture, -1))
+        return (icons[action_id] = std::make_unique<Icon>(
+                    std::make_unique<SkillIcon>(action_id),
+                    SkillData::get(-action_id).get_icon(SkillData::NORMAL),
+                    -1))
             .get();
-        */
     } else if (KeyAction::is_item(action_id)) {
         return (icons[action_id] = std::make_unique<Icon>(
                     std::make_unique<UIItemInventory::ItemIcon>(
@@ -621,12 +622,20 @@ Point<std::int16_t> UIKeyConfig::slot_pos(Slot slot) noexcept
     }
 }
 
-UIKeyConfig::KeyIcon::KeyIcon(KeyAction::Id action_id) noexcept
-    : action_id(action_id)
+UIKeyConfig::KeyIcon::KeyIcon(KeyAction::Id a_id) noexcept : action_id{a_id}
 {
 }
 
 std::int32_t UIKeyConfig::KeyIcon::get_action_id() const noexcept
+{
+    return action_id;
+}
+
+UIKeyConfig::SkillIcon::SkillIcon(std::int32_t a_id) noexcept : action_id{a_id}
+{
+}
+
+std::int32_t UIKeyConfig::SkillIcon::get_action_id() const noexcept
 {
     return action_id;
 }
