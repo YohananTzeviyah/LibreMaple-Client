@@ -22,6 +22,7 @@
 #include "UITypes/UIBuffList.h"
 #include "UITypes/UIEquipInventory.h"
 #include "UITypes/UIItemInventory.h"
+#include "UITypes/UIKeyConfig.h"
 #include "UITypes/UINpcTalk.h"
 #include "UITypes/UIShop.h"
 #include "UITypes/UISkillBook.h"
@@ -31,7 +32,7 @@
 #include "UITypes/UISystemMenu.h"
 #include "Window.h"
 
-#include <IO/UITypes/UIKeyConfig.h>
+#include <cmath>
 
 namespace jrc
 {
@@ -128,8 +129,10 @@ void UIStateGame::send_key(KeyType::Id type, std::int32_t action, bool pressed)
     case KeyType::ACTION:
     case KeyType::FACE:
     case KeyType::ITEM:
-    case KeyType::SKILL:
         Stage::get().send_key(type, action, pressed);
+        break;
+    case KeyType::SKILL:
+        Stage::get().send_key(type, -action, pressed);
         break;
     default:
         break;

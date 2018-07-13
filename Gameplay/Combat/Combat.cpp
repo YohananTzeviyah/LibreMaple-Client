@@ -323,8 +323,9 @@ void Combat::show_player_buff(std::int32_t skill_id)
 
 const SpecialMove& Combat::get_move(std::int32_t move_id)
 {
-    if (move_id == 0)
+    if (move_id == 0) {
         return regular_attack;
+    }
 
     auto iter = skills.find(move_id);
     if (iter == skills.end()) {

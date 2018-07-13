@@ -25,13 +25,13 @@ MapleButton::MapleButton(nl::node src, Point<std::int16_t> pos)
     textures[MOUSE_OVER] = src["mouseOver"]["0"];
     textures[NORMAL] = src["normal"]["0"];
     textures[DISABLED] = src["disabled"]["0"];
+
     position = pos;
     state = NORMAL;
     active = true;
 }
 
-MapleButton::MapleButton(nl::node src)
-    : MapleButton(src, Point<std::int16_t>{})
+MapleButton::MapleButton(nl::node src) : MapleButton{src, {}}
 {
 }
 

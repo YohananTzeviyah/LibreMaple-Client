@@ -18,20 +18,24 @@
 #pragma once
 #include "../Template/EnumMap.h"
 
-namespace jrc
+#include <string_view>
+
+namespace jrc::CharEffect
 {
-namespace CharEffect
-{
-// Character effects from Effect.wz
+//! Character effects from Effect.nx
 enum Id {
     LEVELUP,
     JOBCHANGE,
     SCROLL_SUCCESS,
     SCROLL_FAILURE,
     MONSTER_CARD,
+
     LENGTH
 };
 
-extern const EnumMap<Id, const char*> PATHS;
-} // namespace CharEffect
-} // namespace jrc
+constexpr const EnumMap<Id, std::string_view> PATHS{"LevelUp",
+                                                    "JobChanged",
+                                                    "Enchant/Success",
+                                                    "Enchant/Failure",
+                                                    "MonsterBook/cardGet"};
+} // namespace jrc::CharEffect

@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/license-AGPL%20v3.0%2B-brightgreen.svg)](https://www.gnu.org/licenses/agpl-3.0.html)
 [![C++ standard](https://img.shields.io/badge/C%2B%2B-17-blue.svg)](https://en.wikipedia.org/wiki/C%2B%2B17)
-[![clang++ version](https://img.shields.io/badge/clang%2B%2B-6.0.0+-dd66aa.svg)](http://clang.llvm.org/)
+[![clang++ version](https://img.shields.io/badge/clang%2B%2B-6.0.1+-dd66aa.svg)](http://clang.llvm.org/)
 [![Maplestory version](https://img.shields.io/badge/Maplestory-GMS_v83-orange.svg)](https://en.wikipedia.org/wiki/MapleStory)
 
 ## JourneyClient
@@ -63,7 +63,7 @@ The client is currently compatible with GMS version 83 servers. For the UI file
 * xorg / xorg-dev / xorg-server-devel (Xorg development libraries)
 * build-essential (for users of Debian-based distibutions only)
 * [ninja](https://ninja-build.org/) (technically optional, you can simply *not*
-  pass `-G Ninja` to cmake to use Make instead)
+  pass `-GNinja` to cmake to use Make instead)
 * [ccache](https://ccache.samba.org/) (optional, for faster build times)
 
 (**Note for [Solus](https://solus-project.com/) users:**
@@ -150,7 +150,7 @@ $ cd build
 # only build (`-march=native`).
 #
 # Specify `-DCMAKE_CXX_COMPILER_LAUNCHER=ccache` if you are using ccache.
-$ cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+$ cmake -DCMAKE_BUILD_TYPE=Debug -GNinja ..
 # Or `ninja -jN` with N being the number of CPU cores you wish to utilize.
 $ ninja
 # For `Release` and `MinSizeRel` builds only:
@@ -184,7 +184,7 @@ directory (`LibreMaple-Client/build`).
   `brew cask install xquartz`)
 * [freetype](https://www.freetype.org/) (`brew install freetype`)
 * [ninja](https://ninja-build.org/) (`brew install ninja`; technically
-  optional, you can simply *not* pass `-G Ninja` to cmake to use Make instead)
+  optional, you can simply *not* pass `-GNinja` to cmake to use Make instead)
 * [ccache](https://ccache.samba.org/) (optional, for faster build times;
   `brew install ccache`)
 
@@ -252,7 +252,7 @@ $ cd build
 # only build (`-march=native`).
 #
 # Specify `-DCMAKE_CXX_COMPILER_LAUNCHER=ccache` if you are using ccache.
-$ cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja..
+$ cmake -DCMAKE_BUILD_TYPE=Debug -GNinja..
 # Or `ninja -jN` with N being the number of CPU cores you wish to utilize.
 $ ninja
 # For `Release` and `MinSizeRel` builds only:

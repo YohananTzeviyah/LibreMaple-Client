@@ -71,19 +71,6 @@ template<typename T>
     }
 }
 
-/*
-template<typename... Args>
-[[nodiscard]] std::string concat(const Args&... args) noexcept
-{
-    std::string::size_type total_len = (0 + ... + get_len(args));
-
-    std::string s;
-    s.reserve(total_len);
-
-    ((s += args), ...);
-    return s;
-}
-*/
 template<typename... Args>
 [[nodiscard]] std::string concat(Args&&... args) noexcept
 {

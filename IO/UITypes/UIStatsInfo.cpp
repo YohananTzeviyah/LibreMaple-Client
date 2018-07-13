@@ -27,12 +27,11 @@
 namespace jrc
 {
 UIStatsinfo::UIStatsinfo(const CharStats& st)
-    : UIDragElement<Configuration::PositionOf::STATS>(
-          Point<std::int16_t>(212, 20)),
-      stats(st)
+    : UIDragElement<Configuration::PositionOf::STATS>{{212, 20}}, stats{st}
 {
-    nl::node src = nl::nx::ui["UIWindow4.img"]["Stat"]["main"];
-    nl::node detail = nl::nx::ui["UIWindow4.img"]["Stat"]["detail"];
+    nl::node base_src = nl::nx::ui["UIWindow4.img"]["Stat"];
+    nl::node src = base_src["main"];
+    nl::node detail = base_src["detail"];
 
     sprites.emplace_back(src["backgrnd"]);
     sprites.emplace_back(src["backgrnd2"]);
@@ -42,11 +41,12 @@ UIStatsinfo::UIStatsinfo(const CharStats& st)
     textures_detail.emplace_back(detail["backgrnd2"]);
     textures_detail.emplace_back(detail["backgrnd3"]);
 
-    abilities[RARE] = detail["abilityTitle"]["rare"]["0"];
-    abilities[EPIC] = detail["abilityTitle"]["epic"]["0"];
-    abilities[UNIQUE] = detail["abilityTitle"]["unique"]["0"];
-    abilities[LEGENDARY] = detail["abilityTitle"]["legendary"]["0"];
-    abilities[NONE] = detail["abilityTitle"]["normal"]["0"];
+    auto ability_title_src = detail["abilityTitle"];
+    abilities[RARE] = ability_title_src["rare"]["0"];
+    abilities[EPIC] = ability_title_src["epic"]["0"];
+    abilities[UNIQUE] = ability_title_src["unique"]["0"];
+    abilities[LEGENDARY] = ability_title_src["legendary"]["0"];
+    abilities[NONE] = ability_title_src["normal"]["0"];
 
     buttons[BT_HP] = std::make_unique<MapleButton>(src["BtHpUp"]);
     buttons[BT_MP] = std::make_unique<MapleButton>(src["BtMpUp"]);
@@ -64,41 +64,41 @@ UIStatsinfo::UIStatsinfo(const CharStats& st)
     update_ap();
 
     for (std::size_t i = 0; i < NUMLABELS; ++i) {
-        statlabels[i] = Text(Text::A11M, Text::LEFT, Text::LIGHTGREY);
+        statlabels[i] = {Text::A11M, Text::LEFT, Text::LIGHTGREY};
     }
-    statoffsets[NAME] = Point<std::int16_t>(73, 27);
-    statoffsets[JOB] = Point<std::int16_t>(73, 45);
-    statoffsets[GUILD] = Point<std::int16_t>(73, 63);
-    statoffsets[FAME] = Point<std::int16_t>(73, 81);
-    statoffsets[DAMAGE] = Point<std::int16_t>(73, 99);
-    statoffsets[HP] = Point<std::int16_t>(73, 117);
-    statoffsets[MP] = Point<std::int16_t>(73, 135);
-    statoffsets[AP] = Point<std::int16_t>(70, 177);
-    statoffsets[STR] = Point<std::int16_t>(73, 204);
-    statoffsets[DEX] = Point<std::int16_t>(73, 222);
-    statoffsets[INT] = Point<std::int16_t>(73, 240);
-    statoffsets[LUK] = Point<std::int16_t>(73, 258);
-    statoffsets[ATTACK] = Point<std::int16_t>(73, 37);
-    statoffsets[CRIT] = Point<std::int16_t>(73, 55);
-    statoffsets[MINCRIT] = Point<std::int16_t>(73, 73);
-    statoffsets[MAXCRIT] = Point<std::int16_t>(168, 73);
-    statoffsets[BDM] = Point<std::int16_t>(73, 91);
-    statoffsets[IGNOREDEF] = Point<std::int16_t>(168, 91);
-    statoffsets[RESIST] = Point<std::int16_t>(73, 109);
-    statoffsets[STANCE] = Point<std::int16_t>(168, 109);
-    statoffsets[WDEF] = Point<std::int16_t>(73, 127);
-    statoffsets[MDEF] = Point<std::int16_t>(73, 145);
-    statoffsets[ACCURACY] = Point<std::int16_t>(73, 163);
-    statoffsets[AVOID] = Point<std::int16_t>(73, 199);
-    statoffsets[SPEED] = Point<std::int16_t>(73, 235);
-    statoffsets[JUMP] = Point<std::int16_t>(168, 235);
-    statoffsets[HONOR] = Point<std::int16_t>(73, 353);
+    statoffsets[NAME] = {73, 27};
+    statoffsets[JOB] = {73, 45};
+    statoffsets[GUILD] = {73, 63};
+    statoffsets[FAME] = {73, 81};
+    statoffsets[DAMAGE] = {73, 99};
+    statoffsets[HP] = {73, 117};
+    statoffsets[MP] = {73, 135};
+    statoffsets[AP] = {70, 177};
+    statoffsets[STR] = {73, 204};
+    statoffsets[DEX] = {73, 222};
+    statoffsets[INT] = {73, 240};
+    statoffsets[LUK] = {73, 258};
+    statoffsets[ATTACK] = {73, 37};
+    statoffsets[CRIT] = {73, 55};
+    statoffsets[MINCRIT] = {73, 73};
+    statoffsets[MAXCRIT] = {168, 73};
+    statoffsets[BDM] = {73, 91};
+    statoffsets[IGNOREDEF] = {168, 91};
+    statoffsets[RESIST] = {73, 109};
+    statoffsets[STANCE] = {168, 109};
+    statoffsets[WDEF] = {73, 127};
+    statoffsets[MDEF] = {73, 145};
+    statoffsets[ACCURACY] = {73, 163};
+    statoffsets[AVOID] = {73, 199};
+    statoffsets[SPEED] = {73, 235};
+    statoffsets[JUMP] = {168, 235};
+    statoffsets[HONOR] = {73, 353};
 
     update_all_stats();
     update_stat(Maplestat::JOB);
     update_stat(Maplestat::FAME);
 
-    dimension = Point<std::int16_t>(212, 318);
+    dimension = {212, 318};
     showdetail = false;
 }
 
@@ -107,7 +107,7 @@ void UIStatsinfo::draw(float alpha) const
     UIElement::draw(alpha);
 
     if (showdetail) {
-        Point<std::int16_t> detail_pos(position + Point<std::int16_t>(213, 0));
+        auto detail_pos = position + Point<std::int16_t>{213, 0};
         for (auto& texture : textures_detail) {
             texture.draw(detail_pos);
         }
@@ -116,7 +116,7 @@ void UIStatsinfo::draw(float alpha) const
 
     std::size_t last = showdetail ? NUMLABELS : NUMNORMAL;
     for (std::size_t i = 0; i < last; ++i) {
-        Point<std::int16_t> labelpos = position + statoffsets[i];
+        auto labelpos = position + statoffsets[i];
         if (i >= NUMNORMAL) {
             labelpos.shift_x(213);
         }
@@ -132,7 +132,7 @@ void UIStatsinfo::update_all_stats()
         update_ap();
     }
 
-    statlabels[NAME].change_text(std::string{stats.get_name()});
+    statlabels[NAME].change_text(std::string(stats.get_name()));
     statlabels[GUILD].change_text("");
 
     statlabels[HP].change_text(
@@ -199,7 +199,7 @@ void UIStatsinfo::update_stat(Maplestat::Id stat)
 {
     switch (stat) {
     case Maplestat::JOB:
-        statlabels[JOB].change_text(std::string{stats.get_job_name()});
+        statlabels[JOB].change_text(std::string(stats.get_job_name()));
         break;
     case Maplestat::FAME:
         update_simple(FAME, Maplestat::FAME);
@@ -248,41 +248,23 @@ Button::State UIStatsinfo::button_pressed(std::uint16_t id)
 
 void UIStatsinfo::send_apup(Maplestat::Id stat) const
 {
-    SpendApPacket(stat).dispatch();
+    SpendApPacket{stat}.dispatch();
     UI::get().disable();
 }
 
 void UIStatsinfo::update_ap()
 {
-    Button::State newstate;
-    bool nowap = stats.get_stat(Maplestat::AP) > 0;
-    if (nowap) {
-        newstate = Button::NORMAL;
+    const bool now_ap = stats.get_stat(Maplestat::AP) > 0;
+    const Button::State new_state = now_ap ? Button::NORMAL : Button::DISABLED;
 
-        buttons[BT_HP]->set_position(Point<std::int16_t>(20, -36));
-        buttons[BT_MP]->set_position(Point<std::int16_t>(20, -18));
-        buttons[BT_STR]->set_position(Point<std::int16_t>(20, 51));
-        buttons[BT_DEX]->set_position(Point<std::int16_t>(20, 69));
-        buttons[BT_INT]->set_position(Point<std::int16_t>(20, 87));
-        buttons[BT_LUK]->set_position(Point<std::int16_t>(20, 105));
-    } else {
-        newstate = Button::DISABLED;
+    buttons[BT_HP]->set_state(new_state);
+    buttons[BT_MP]->set_state(new_state);
+    buttons[BT_STR]->set_state(new_state);
+    buttons[BT_DEX]->set_state(new_state);
+    buttons[BT_LUK]->set_state(new_state);
+    buttons[BT_INT]->set_state(new_state);
 
-        buttons[BT_HP]->set_position(Point<std::int16_t>(-48, 14));
-        buttons[BT_MP]->set_position(Point<std::int16_t>(-48, 32));
-        buttons[BT_STR]->set_position(Point<std::int16_t>(-48, 101));
-        buttons[BT_DEX]->set_position(Point<std::int16_t>(-48, 119));
-        buttons[BT_INT]->set_position(Point<std::int16_t>(-48, 137));
-        buttons[BT_LUK]->set_position(Point<std::int16_t>(-48, 155));
-    }
-    buttons[BT_HP]->set_state(newstate);
-    buttons[BT_MP]->set_state(newstate);
-    buttons[BT_STR]->set_state(newstate);
-    buttons[BT_DEX]->set_state(newstate);
-    buttons[BT_LUK]->set_state(newstate);
-    buttons[BT_INT]->set_state(newstate);
-
-    hasap = nowap;
+    hasap = now_ap;
 }
 
 void UIStatsinfo::update_simple(StatLabel label, Maplestat::Id stat)

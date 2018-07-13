@@ -47,7 +47,7 @@ Error NxFiles::init()
         return {Error::NLNX, message.c_str()};
     }
 
-    constexpr const char* POSTCHAOS_BITMAP
+    constexpr const std::string_view POSTCHAOS_BITMAP
         = "Login.img/WorldSelect/BtChannel/layer:bg";
     auto postChaosBitmapType
         = nl::nx::ui.resolve(POSTCHAOS_BITMAP).data_type();

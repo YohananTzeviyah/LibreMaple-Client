@@ -21,7 +21,7 @@
 
 namespace jrc
 {
-//! A standard maplestory-button with 4 states and a texture for each state.
+//! A standard Maplestory button with 4 states and a texture for each state.
 class MapleButton : public Button
 {
 public:
@@ -29,6 +29,7 @@ public:
     MapleButton(nl::node src);
 
     void draw(Point<std::int16_t> parent_pos) const override;
+
     Rectangle<std::int16_t>
     bounds(Point<std::int16_t> parent_pos) const override;
 

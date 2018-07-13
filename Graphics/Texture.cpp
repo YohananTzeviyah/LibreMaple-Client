@@ -26,18 +26,19 @@ namespace jrc
 Texture::Texture(nl::node src)
 {
     if (src.data_type() == nl::node::type::bitmap) {
-        nl::node src_origin = src["origin"];
-        Point<std::int16_t> original_origin = src_origin;
-        bool use_original_origin
+        const nl::node src_origin = src["origin"];
+        const Point<std::int16_t> original_origin = src_origin;
+        const bool use_original_origin
             = src_origin.data_type() == nl::node::type::vector;
 
-        std::string link = src["source"];
+        const std::string link = src["source"];
         if (!link.empty()) {
             nl::node src_file = src;
             while (src_file != src_file.root()) {
                 src_file = src_file.root();
             }
-            src = src_file.resolve(link.substr(link.find('/') + 1));
+            src = src_file.resolve(
+                std::string_view{link}.substr(link.find('/') + 1));
         }
 
         bitmap = src;
@@ -49,9 +50,7 @@ Texture::Texture(nl::node src)
 }
 
 Texture::Texture(nl::bitmap bm, Point<std::int16_t> orig)
-    : bitmap{bm},
-      origin{orig},
-      dimensions{Point<std::int16_t>{bm.width(), bm.height()}}
+    : bitmap{bm}, origin{orig}, dimensions{bm.width(), bm.height()}
 {
 }
 
